@@ -1,6 +1,6 @@
 # PiStorms
 
-To install and run this repo on your Pi,
-download the files in folder 'PiStorms', then:
-  cd PiStorms/setup
-  ./setup.sh
+To install and run this repo on your Pi,<br>
+download the files in folder 'PiStorms', then:<br>
+  cd PiStorms/setup<br>
+  ./setup.sh<br>
