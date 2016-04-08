@@ -711,10 +711,12 @@ class PiStormsCom():
                 self.bankB.writeArray(self.PS_R, array)
         except AttributeError:
             self.led(lednum,red,green,blue)
-        time.sleep(.001)   
+        time.sleep(.001)
     def isKeyPressed(self):
         return int(0x01&self.bankA.readByte(self.PS_KeyPress))
-    def getKeyPressCount(self):
+    def getKeyPressValue(self):
+        return self.bankA.readByte(self.PS_KeyPress)
+    def getKeyPressCountx(self):
         return self.bankA.readByte(self.PS_Key1Count)
     def resetKeyPressCount(self):
         self.bankA.writeByte(self.PS_Key1Count,0)

@@ -869,6 +869,81 @@ class PiStorms:
     #  @endcode    
     def isKeyPressed(self):
         return self.psc.isKeyPressed()
+
+    ## Check if any Function button is pressed
+    #  @param self The object pointer.
+    #  @remark
+    #  To use this function in your program:
+    #  @code
+    #  from PiStorms import PiStorms 
+    #  ...
+    #  psm = PiStorms()
+    #  key = psm.getKeyValue()
+    #  if(key == 40):
+    #      # (40 is F4), do some task
+    #  @endcode    
+    def getKeyPressValue(self):
+        return self.psc.getKeyPressValue()
+
+    ## Check if F1 Function button is pressed
+    #  @param self The object pointer.
+    #  @remark
+    #  To use this function in your program:
+    #  @code
+    #  from PiStorms import PiStorms 
+    #  ...
+    #  psm = PiStorms()
+    #  key = psm.isF1Pressed()
+    #  if(key == True):
+    #      # F1 is pressed, do some task
+    #  @endcode    
+    def isF1Pressed(self):
+        return (self.psc.getKeyPressValue() == 8)
+
+    ## Check if F2 Function button is pressed
+    #  @param self The object pointer.
+    #  @remark
+    #  To use this function in your program:
+    #  @code
+    #  from PiStorms import PiStorms 
+    #  ...
+    #  psm = PiStorms()
+    #  key = psm.isF2Pressed()
+    #  if(key == True):
+    #      # F2 is pressed, do some task
+    #  @endcode    
+    def isF2Pressed(self):
+        return (self.psc.getKeyPressValue() == 16)
+
+    ## Check if F3 Function button is pressed
+    #  @param self The object pointer.
+    #  @remark
+    #  To use this function in your program:
+    #  @code
+    #  from PiStorms import PiStorms 
+    #  ...
+    #  psm = PiStorms()
+    #  key = psm.isF3Pressed()
+    #  if(key == True):
+    #      # F3 is pressed, do some task
+    #  @endcode    
+    def isF3Pressed(self):
+        return (self.psc.getKeyPressValue() == 24)
+
+    ## Check if F4 Function button is pressed
+    #  @param self The object pointer.
+    #  @remark
+    #  To use this function in your program:
+    #  @code
+    #  from PiStorms import PiStorms 
+    #  ...
+    #  psm = PiStorms()
+    #  key = psm.isF4Pressed()
+    #  if(key == True):
+    #      # F4 is pressed, do some task
+    #  @endcode    
+    def isF4Pressed(self):
+        return (self.psc.getKeyPressValue() == 40)
     
     ## Returns the GO button press count
     #  @param self The object pointer.
