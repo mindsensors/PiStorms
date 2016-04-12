@@ -17,3 +17,5 @@ To install and run this repo on your Pi,<br>
    $ ./setup.sh
 </pre>
 
+setup.sh will take several minutes to download files, and configure<br>
+When it configures VNC server, it would ask for password, please provide a password that you will remember (e.g. raspberry).<br>Later, you would use this password to login to your Pi from a VNC client.
