@@ -39,6 +39,8 @@ echo "Updating installations files. This may take several minutes..."
 sudo apt-get update -qq
 echo "Installing packages..."
 sudo apt-get install -qq tightvncserver mpg123 build-essential python-dev python-smbus python-pip python-imaging python-numpy git nmap
+sudo apt-get install -qq python-opencv
+sudo pip install -qq imutils
 #
 #
 
@@ -67,6 +69,7 @@ sudo pip install -qq mindsensors_i2c
 sudo pip install -qq wireless
 sudo pip install -qq wifi
 sudo pip install -qq ws4py
+sudo pip install -qq cv2
 
 sudo cp ../sys/PiStormsDriver.py /usr/local/bin/
 sudo cp ../sys/PiStormsBrowser.py /usr/local/bin/
