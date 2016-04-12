@@ -105,6 +105,8 @@ sudo cp ../programs/x_red.png /usr/local/mindsensors_images/
 sudo cp ../programs/wifi_green.png /usr/local/mindsensors_images/
 sudo chmod a+r /usr/local/mindsensors_images/*
 
+echo "copying artworks ... "
+sudo cp ../artwork/* /usr/share/raspberrypi-artwork
 
 echo "copying scratch programs ... "
 mkdir -p /home/pi/Documents/Scratch\ Projects/PiStorms
