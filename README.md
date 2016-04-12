@@ -7,9 +7,10 @@ To install and run this repo on your Pi,<br>
 3) Start your Raspberry Pi and login to your Pi as user 'pi'.<br>
 4) downlaod and configure this repo on your Pi with following commands<br>
 <br>
+<pre>
    $ git clone https://github.com/mindsensors/PiStorms.git
    $ cd PiStorms/setup
    $ chmod +x setup.sh
    $ ./setup.sh
-
+</pre>
 
