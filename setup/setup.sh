@@ -71,6 +71,9 @@ sudo pip install -qq ws4py
 sudo cp ../sys/PiStormsDriver.py /usr/local/bin/
 sudo cp ../sys/PiStormsBrowser.py /usr/local/bin/
 sudo cp ../sys/swarmserver /usr/local/bin/
+sudo cp ../sys/pistorms-diag.sh /usr/local/bin/
+sudo chmod +x /usr/local/bin/swarmserver
+sudo chmod +x /usr/local/bin/pistorms-diag.sh
 
 echo "copying library files ... "
 sudo cp ../sys/rmap.py /usr/local/lib/python2.7/dist-packages/
@@ -112,6 +115,9 @@ sudo chown -R pi:pi /home/pi/Documents/Scratch\ Projects
 sudo cp PiStormsDriver.sh /etc/init.d
 sudo cp PiStormsBrowser.sh /etc/init.d
 sudo cp SwarmServer.sh /etc/init.d
+sudo chmod +x /etc/init.d/PiStormsDriver.sh
+sudo chmod +x /etc/init.d/PiStormsBrowser.sh
+sudo chmod +x /etc/init.d/SwarmServer.sh
 mkdir -p /home/pi/.config/autostart
 cp tightvnc.desktop /home/pi/.config/autostart
 
