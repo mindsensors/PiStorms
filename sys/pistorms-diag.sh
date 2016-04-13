@@ -1,6 +1,7 @@
 #!/bin/bash
 
 
+python /home/pi/PiStorms/programs/tests/msg-to-screen.py "Loading Raspbian" "Please wait"
 echo "PiStorms Diagnostics tests"
 echo "--------------------------"
 echo ""
@@ -45,6 +46,8 @@ then
 else
     echo "psm-info.py is missing"
 fi
+
+python /home/pi/PiStorms/programs/tests/msg-to-screen.py "Loading PiStorms" "Please wait"
 
 echo ""
 echo "uname ...."
