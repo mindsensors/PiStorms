@@ -84,6 +84,7 @@ sudo cp ../sys/rmapcfg.py /usr/local/lib/python2.7/dist-packages/
 sudo cp ../sys/scratch.py /usr/local/lib/python2.7/dist-packages/
 sudo cp ../sys/PiStorms.py /usr/local/lib/python2.7/dist-packages/
 sudo cp ../sys/PiStormsCom.py /usr/local/lib/python2.7/dist-packages/
+sudo cp ../sys/PiStormsInput.py /usr/local/lib/python2.7/dist-packages/
 sudo cp ../sys/mindsensorsUI.py /usr/local/lib/python2.7/dist-packages/
 sudo cp ../sys/mindsensors.py /usr/local/lib/python2.7/dist-packages/
 sudo cp ../sys/swarmclient.py /usr/local/lib/python2.7/dist-packages/
