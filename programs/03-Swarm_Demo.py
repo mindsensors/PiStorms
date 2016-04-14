@@ -67,7 +67,14 @@ if __name__ == '__main__':
             print "System Message: ", msg_array['message']
 
     psm.screen.drawAutoText("Searching Swarm neighbors ...", 15, 218, fill=(255, 255, 255), size = 18) 
-    nbrs_list = find_swarm_neighbors()
+    nbrs_list = []
+    try:
+        nbrs_list = find_swarm_neighbors()
+    except:
+        m = ["Swarm-Demo", "Network unreachable",
+              "Attach Ethernet cable or configure WiFi" ]
+        psm.screen.askQuestion(m,["OK"])
+        
     if ( len(nbrs_list) == 0 ):
         m = ["Swarm-Demo", "A swarm requires at least two PiStorms", "robots.",
                            "Get another PiStorms robot to add to", "your swarm."]
