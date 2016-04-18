@@ -24,11 +24,12 @@
 # 04/15/16   Deepak     Initial development.
 #
 
+import time
 from PiStorms import PiStorms
 print "running program"
 psm = PiStorms()
 
-m = ["Motor-Demo", "Connect motor to Bank A M1.",
+m = ["Motor-Demo", "Connect NXT motor to Bank A M1.",
  "Turn the motor by hand and see ",
  "the encoder values on screen.",
  "Press Go to stop program",
@@ -49,8 +50,8 @@ while (doExit == False):
     # print value only if it was changed.
     if (old_pos != encoder_pos):
         psm.screen.clearScreen()
-        psm.screen.drawAutoText(msg, 35, 200, fill=(255, 255, 255), size = 18) 
-        psm.screen.drawAutoText("Press Go to stop program", 15, 218, fill=(255, 255, 255), size = 18) 
+        psm.screen.drawAutoText(msg, 15, 200, fill=(255, 255, 255), size = 18) 
+        psm.screen.drawAutoText("Touch screen to reset counter", 15, 218, fill=(255, 255, 255), size = 18) 
     
     if(psm.isKeyPressed() == True): # if the GO button is pressed
         psm.screen.clearScreen()
@@ -58,6 +59,11 @@ while (doExit == False):
         psm.screen.termPrintln("Exiting to menu")
         doExit = True 
 
-
-
+    #
+    # check if screen touched.
+    #
+    if(psm.screen.checkButton(0,0,320,320)):
+        # if scren was touched, 
+        psm.BAM1.resetPos()
+        time.sleep(.001)
 

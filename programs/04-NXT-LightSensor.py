@@ -74,7 +74,6 @@ while(not doExit):
     #
     if(psm.screen.checkButton(0,0,320,320)):
         # if scren was touched, 
-        # reset BAS1 touch count
         if ( reflectiveMode == False):
             reflectiveMode = True
         else:
