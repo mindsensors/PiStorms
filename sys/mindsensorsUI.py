@@ -688,7 +688,11 @@ class mindsensorsUI():
             xbuff = 20
             ybuff = 20
             #self.fillRect(xbuff,ybuff,self.screenWidth()-(2*xbuff),self.screenHeight()-(2*ybuff),fill = (127,127,127), outline = (255,255,255))
-            self.fillBmp(xbuff,ybuff,self.screenWidth()-(2*xbuff),self.screenHeight()-(2*ybuff), "dialogbg.png", display = False)
+            try:
+                self.fillBmp(xbuff,ybuff,self.screenWidth()-(2*xbuff),self.screenHeight()-(2*ybuff), "dialogbg.png", display = False)
+            except:
+                self.fillRect(xbuff,ybuff,self.screenWidth()-(2*xbuff),self.screenHeight()-(2*ybuff),fill = (127,127,127), outline = (255,255,255))
+                
             numButts = len(self.buttonText)
             spacing = 10
             room = self.screenWidth()-(xbuff + ybuff)
