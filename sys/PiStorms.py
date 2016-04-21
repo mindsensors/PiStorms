@@ -547,8 +547,18 @@ class PiStormsMotor():
     def pos(self):
         return self.psmotor.pos()
         
-    #def resPos(self, bnk):
-    #    return self.psmotor.resPos(bnk)
+    ## Resets the encoder position of the specified motor
+    #  @param self The object pointer.  
+    #  @remark
+    #  To use this function in your program:
+    #  @code
+    #  from PiStorms import PiStorms 
+    #  ...
+    #  psm = PiStorms()
+    #  psm.BAM1.resetPos()
+    #  @endcode
+    def resetPos(self):
+        self.psmotor.resetPos()
     
     ## Run the motor at a set speed for an unlimited duration
     #  @param self The object pointer.
@@ -563,7 +573,60 @@ class PiStormsMotor():
     #  @endcode   
     def setSpeed(self,speed):
         self.psmotor.setSpeed(speed)
+
+    ## Run the two motors of the said bank in sync with each other.
+    #  at a set speed for an unlimited duration
+    #  You can call this function on any motor of that bank
+    #  and it will work on both motors of that bank.
+    #  @param self The object pointer.
+    #  @param speed The speed at which to turn the motors
+    #  @remark
+    #  To use this function in your program:
+    #  @code
+    #  from PiStorms import PiStorms 
+    #  ...
+    #  psm = PiStorms()
+    #  #run both motors of BankA in sync:
+    #  psm.BAM1.setSpeedSync(100)
+    #  @endcode   
+    def setSpeedSync(self, speed):
+        self.psmotor.setSpeedSync(speed)
     
+    ## Stop both the motors of said bank at the same time.
+    #  motors are stopped smoothly with float
+    #  You can call this function on any motor of that bank
+    #  and it will work on both motors of that bank.
+    #  @param self The object pointer.
+    #  @remark
+    #  To use this function in your program:
+    #  @code
+    #  from PiStorms import PiStorms 
+    #  ...
+    #  psm = PiStorms()
+    #  #stop both motors of BankA synchronized.
+    #  psm.BAM1.floatSync()
+    #  @endcode   
+    def floatSync(self):
+        self.psmotor.floatSync()
+
+    
+    ## Stop both the motors of said bank at the same time.
+    #  motors are stopped with a  brake.
+    #  You can call this function on any motor of that bank
+    #  and it will work on both motors of that bank.
+    #  @param self The object pointer.
+    #  @remark
+    #  To use this function in your program:
+    #  @code
+    #  from PiStorms import PiStorms 
+    #  ...
+    #  psm = PiStorms()
+    #  #stop both motors of BankA synchronized.
+    #  psm.BAM1.brakeSync()
+    #  @endcode   
+    def brakeSync(self):
+        self.psmotor.brakeSync()
+
     ## Stop the motor abruptly with brake
     #  @param self The object pointer.
     #  @remark
@@ -751,11 +814,7 @@ class PiStorms:
     def command (self, cmd, bank):
         self.psc.command(cmd, bank)
         
-    #Shutdown command not yet implemented 
-    # def Shutdown(self):
-        # self.psc.Shutdown()
-        
-    ## Resets encoders for motors on BankA
+    ## Shutdown the Raspberry Pi
     #  @param self The object pointer.
     #  @remark
     #  To use this function in your program:
@@ -763,23 +822,10 @@ class PiStorms:
     #  from PiStorms import PiStorms 
     #  ...
     #  psm = PiStorms()
-    #  psm.resPosA()
-    #  @endcode        
-    def resPosA(self):
-        self.psc.resPosA() 
-        
-    ## Resets encoders for motors on BankB
-    #  @param self The object pointer.
-    #  @remark
-    #  To use this function in your program:
-    #  @code
-    #  from PiStorms import PiStorms 
-    #  ...
-    #  psm = PiStorms()
-    #  psm.resPosA()
-    #  @endcode        
-    def resPosB(self):
-        self.psc.resPosB()
+    #  psm.Shutdown()
+    #  @endcode    
+    def Shutdown(self):
+        self.psc.Shutdown()
         
     ## Returns the input battery voltage
     #  @param self The object pointer.

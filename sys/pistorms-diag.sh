@@ -25,16 +25,16 @@ else
     echo "print-battery-voltage.py is missing"
 fi
 
-echo ""
-echo "Screen test....."
-echo "----------------"
-
-if [ -f /home/pi/PiStorms/programs/tests/screen-test.py ]
-then
-    python /home/pi/PiStorms/programs/tests/screen-test.py
-else
-    echo "screen-test.py is missing"
-fi
+#echo ""
+#echo "Screen test....."
+#echo "----------------"
+#
+#if [ -f /home/pi/PiStorms/programs/tests/screen-test.py ]
+#then
+#    python /home/pi/PiStorms/programs/tests/screen-test.py
+#else
+#    echo "screen-test.py is missing"
+#fi
 
 echo ""
 echo "PiStorms info "

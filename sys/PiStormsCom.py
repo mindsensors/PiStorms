@@ -396,6 +396,7 @@ class PSSensor():
     
 class PSMotor():
     
+    #bank = 0
     motornum = 0
     def __init__(self, bank, num):
         self.bank = bank
@@ -408,9 +409,31 @@ class PSMotor():
         elif(self.motornum == 2):
             return self.bank.readLongSigned(PiStormsCom.PS_Position_M2)
             
-    #def resPos(self, bnk):
-    #    PiStormsCom.command(82, bnk) 
+    def resetPos(self):
+        if(self.motornum == 1):
+            self.bank.writeByte(PiStormsCom.PS_Command, 114)
+            
+        elif(self.motornum == 2):
+            self.bank.writeByte(PiStormsCom.PS_Command, 115)
          
+    def setSpeedSync(self, speed):
+        ctrl = 0
+        ctrl |= PiStormsCom.PS_CONTROL_SPEED
+        speed = int(speed)
+        array = [speed, 0, 0, ctrl]
+        self.bank.writeArray( PiStormsCom.PS_Speed_M1, array)
+        self.bank.writeArray( PiStormsCom.PS_Speed_M2, array)
+        # issue command 'S'
+        self.bank.writeByte(PiStormsCom.PS_Command,PiStormsCom.S)
+
+    def floatSync(self):
+        self.bank.writeByte(PiStormsCom.PS_Command,PiStormsCom.c)
+
+    def brakeSync(self):
+        # Break while stopping; command C
+        self.bank.writeByte(PiStormsCom.PS_Command,PiStormsCom.C)
+
+
     def setSpeed( self, speed):
         if(speed == 0):
             self.float()
@@ -454,6 +477,7 @@ class PSMotor():
         else:
             self.bank.writeArray(PiStormsCom.PS_SetPoint_M2, [0,0,0,0])
             self.bank.writeByte(PiStormsCom.PS_CMDA_M2, ctrl)
+
     def runSecs(self,secs,speed, brakeOnCompletion = False):
         ctrl = 0
         ctrl |= PiStormsCom.PS_CONTROL_SPEED
@@ -467,6 +491,7 @@ class PSMotor():
         if(self.motornum == 2):
             array = [speed,secs,0,ctrl]
             self.bank.writeArray(PiStormsCom.PS_Speed_M2,array)
+
     def status(self):
         if(self.motornum == 1):
             return self.bank.readByte(PiStormsCom.PS_Status_M1)
@@ -665,12 +690,6 @@ class PiStormsCom():
         else:
             self.bankA.writeByte(self.PS_Command,self.R)
             self.bankB.writeByte(self.PS_Command,self.R)
-            
-    def resPosA(self):
-        self.bankA.writeByte(self.PS_Command,self.R)
-        
-    def resPosB(self):
-        self.bankB.writeByte(self.PS_Command,self.R)
         
     def Shutdown(self):
         self.bankA.writeByte(self.PS_Command,self.H)
