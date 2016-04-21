@@ -24,5 +24,5 @@ When it configures VNC server, it would ask for password, please provide a passw
 <br>
 As a next step, follow the examples from PiStorms/programs folder. 
 
-To write your own programs, start with a tutorial here: http://www.mindsensors.com/blog/how-to/pistorms-python-programming-tutorial
+To write your own programs, start with a tutorial here: http://www.mindsensors.com/blog/how-to/pistorms-python-programming-tutorial<br>
 and then refer to online API reference here: http://www.mindsensors.com/reference/PiStorms/html/
