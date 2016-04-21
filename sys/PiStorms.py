@@ -33,10 +33,11 @@
 #
 #  At the time of this writing, PiStorms and this library can be used with the following boards:
 #
-#    <b>Raspberry Pi boards:</b>\n
-#    model A+\n
-#    model B+\n
-#    2 model B
+#    <b>Supported Raspberry Pi boards:</b>\n
+#    - Raspberry Pi 1 Model A+
+#    - Raspberry Pi 1 Model B+
+#    - Raspberry Pi 2 model B
+#    - Raspberry Pi 3 model B
 #
 #  @section more_info  More Information
 #  More information about PiStorms is available at: http://www.mindsensors.com/stem-education/13-pistorms-base-kit
@@ -59,6 +60,17 @@
 #  ./setup.sh
 #  
 #  It will take a few minutes to install the software.
+#
+#
+#  @section for_developers For Developers
+#
+#  <b>Fork from GitHub:</b> https://github.com/mindsensors/PiStorms<br>
+#  <br>
+# To include your changes in main distribution:<br>
+#  commit your changes to your github branch and create a merge request.
+#
+#
+#
 
 from PiStormsCom import PiStormsCom
 from mindsensorsUI import mindsensorsUI
