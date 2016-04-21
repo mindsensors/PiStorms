@@ -20,3 +20,9 @@ To install and run this repo on your Pi,<br>
 
 setup.sh will take several minutes to download files, and configure<br>
 When it configures VNC server, it would ask for password, please provide a password that you will remember (e.g. raspberry).<br>Later, you would use this password to login to your Pi from a VNC client.
+<br>
+<br>
+As a next step, follow the examples from PiStorms/programs folder. 
+
+To write your own programs, start with a tutorial here: http://www.mindsensors.com/blog/how-to/pistorms-python-programming-tutorial<br>
+and then refer to online API reference here: http://www.mindsensors.com/reference/PiStorms/html/
