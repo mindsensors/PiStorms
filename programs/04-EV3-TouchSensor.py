@@ -28,7 +28,7 @@ from PiStorms import PiStorms
 print "running program"
 psm = PiStorms()
 
-m = ["TouchSensor-Demo", "Connect EV3 Touch sensor",
+m = ["EV3TouchSensor-Demo", "Connect EV3 Touch sensor",
  "to BAS1, and Press OK to continue"]
 psm.screen.askQuestion(m,["OK"])
 
@@ -58,16 +58,17 @@ while(not doExit):
     if (old_touch != touch) or (old_touch_count != touch_count):
         msg = "Sensor Touched:  " + str(touch)
         msg2 = "Touch Count: " + str(touch_count)
-        psm.screen.clearScreen()
-        psm.screen.drawAutoText(msg, 15, 164, fill=(255, 255, 255), size = 18) 
-        psm.screen.drawAutoText(msg2, 15, 182, fill=(255, 255, 255), size = 18) 
-        psm.screen.drawAutoText("Touch screen to Reset Touch Count", 15, 200, fill=(255, 255, 255), size = 18) 
-        psm.screen.drawAutoText("Press Go to stop program", 15, 218, fill=(255, 255, 255), size = 18) 
     
+        psm.screen.termPrintAt(2, "")
+        psm.screen.termPrintAt(3, msg)
+        psm.screen.termPrintAt(4, msg2)
+
+        psm.screen.termPrintAt(7, "Touch screen to reset Count")
+        psm.screen.termPrintAt(8, "Press GO to stop program")
+
     if(psm.isKeyPressed() == True): # if the GO button is pressed
         psm.screen.clearScreen()
-        psm.screen.termPrintln("")
-        psm.screen.termPrintln("Exiting to menu")
+        psm.screen.termPrintAt(8, "Exiting to menu")
         doExit = True 
 
     #

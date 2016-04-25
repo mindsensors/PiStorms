@@ -24,15 +24,45 @@
 # Apr 2016  Deepak      install from github created environment
 
 #setup i2c and spi 
-if [ -e /boot/config.txt ]
+cp /boot/config.txt /tmp/config.txt
+
+ff=/tmp/config.txt
+
+grep "^dtparam=i2c_arm=on" $ff > /dev/null
+if [ $? == 0 ]
 then
-    echo "Updating config files..."
-    sudo rm -f /boot/config.txt
-    sudo cp config.txt /boot/config.txt
+    echo "i2c_arm is already enabled"
 else
-    echo "Copying config files..."
-    sudo cp config.txt /boot/config.txt
+    sudo sed -i -e '$i \dtparam=i2c_arm=on' $ff
 fi
+
+grep "^dtparam=i2c1=on" $ff > /dev/null
+if [ $? == 0 ]
+then
+    echo "i2c1 is already enabled"
+else
+    sudo sed -i -e '$i \dtparam=i2c1=on' $ff
+fi
+
+grep "^dtparam=i2c_baudrate" $ff > /dev/null
+if [ $? == 0 ]
+then
+    echo "i2c_baudrate is already configured, changing it to 50000"
+    sed -i 's/^dtparam=i2c_baudrate.*$/dtparam=i2c_baudrate=50000/g' $ff
+else
+    sudo sed -i -e '$i \dtparam=i2c_baudrate=50000' $ff
+fi
+
+grep "^dtparam=spi=on" $ff > /dev/null
+if [ $? == 0 ]
+then
+    echo "spi is already enabled"
+else
+    sudo sed -i -e '$i \dtparam=spi=on' $ff
+fi
+
+sudo cp /tmp/config.txt /boot/config.txt
+
 #
 #
 echo "Updating installations files. This may take several minutes..."
@@ -51,7 +81,6 @@ then
     echo "i2c-bcm2708 already installed"
 else
     sudo sed -i -e '$i \i2c-bcm2708\n' /etc/modules
-    #sudo echo 'i2c-bcm2708' >> /etc/modules
 fi
 
 grep i2c-dev /etc/modules > /dev/null
@@ -60,7 +89,6 @@ then
     echo "i2c-dev already installed"
 else
     sudo sed -i -e '$i \i2c-dev\n' /etc/modules
-    #sudo echo 'i2c-dev' >> /etc/modules
 fi
 
 echo "installing required python packages ... "
@@ -77,6 +105,7 @@ sudo cp ../sys/swarmserver /usr/local/bin/
 sudo cp ../sys/pistorms-diag.sh /usr/local/bin/
 sudo chmod +x /usr/local/bin/swarmserver
 sudo chmod +x /usr/local/bin/pistorms-diag.sh
+sudo chmod +x ../programs/addresschange
 
 echo "copying library files ... "
 sudo cp ../sys/rmap.py /usr/local/lib/python2.7/dist-packages/
