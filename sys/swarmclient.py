@@ -46,7 +46,7 @@ def fff(xxx):
 def find_swarm_neighbors():
     global my_ip
     my_ip = my_ip_address()
-    cmd_str = "sudo nmap -p 9000 " + my_ip + "/24" + " -oG /tmp/scout.out > /dev/null "
+    cmd_str = "sudo -u pi nmap -p 9000 " + my_ip + "/24" + " -oG /tmp/scout.out > /dev/null "
     output = os.system( cmd_str )
     cmd_str = "grep \"9000\/open\" /tmp/scout.out | cut -d\" \" -f2 > /tmp/peer_ips"
     output = os.system( cmd_str )
