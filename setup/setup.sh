@@ -101,6 +101,13 @@ sudo pip install -qq cv2
 
 sudo cp ../sys/PiStormsDriver.py /usr/local/bin/
 sudo cp ../sys/PiStormsBrowser.py /usr/local/bin/
+if [ -f /etc/init.d/SwarmServer.sh ]
+then
+    sudo /etc/init.d/SwarmServer.sh stop
+else
+	sudo kill -9 `ps -ef | grep swarmserver |grep -v grep| cut -c11-16`
+fi
+sleep 2
 sudo cp ../sys/swarmserver /usr/local/bin/
 sudo cp ../sys/pistorms-diag.sh /usr/local/bin/
 sudo chmod +x /usr/local/bin/swarmserver
