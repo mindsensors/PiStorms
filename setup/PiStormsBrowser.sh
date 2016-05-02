@@ -14,11 +14,12 @@ PATH=/sbin:/usr/sbin:/bin:/usr/bin
 . /lib/init/vars.sh
 
 do_start () {
-	sudo /usr/local/bin/pistorms-diag.sh > /var/tmp/psm-diag.txt
-        cp /var/tmp/psm-diag.txt /boot
-	sudo python /usr/local/bin/PiStormsBrowser.py /home/pi/PiStorms/programs >/var/tmp/psmb.out 2>&1 &
+    sudo /usr/local/bin/pistorms-diag.sh > /var/tmp/psm-diag.txt
+    cp /var/tmp/psm-diag.txt /boot
+	sudo python /home/pi/PiStorms/programs/tests/print-hw-version.py >/var/tmp/.hw_version
+    sudo python /usr/local/bin/PiStormsBrowser.py /home/pi/PiStorms/programs >/var/tmp/psmb.out 2>&1 &
     chmod a+rw /dev/i2c* > /dev/null 2>&1
-	sleep 2
+    sleep 2
 }
 
 do_status () {

@@ -174,8 +174,11 @@ sudo update-rc.d SwarmServer.sh defaults 94 06
 #setup messenger
 echo "Setting up messenger...."
 sudo cp ../sys/ps_messenger_check.py /usr/local/bin
+sudo cp ../sys/ps_updater.py /usr/local/bin
 sudo touch /var/tmp/ps_data.json
 sudo chmod a+rw /var/tmp/ps_data.json
+sudo touch /var/tmp/ps_versions.json
+sudo chmod a+rw /var/tmp/ps_versions.json
 # setup crontab entry for root
 sudo crontab -l -u root | grep ps_messenger_check > /dev/null
 if [ $? != 0 ]
@@ -184,6 +187,15 @@ then
 fi
 # run the messenger once
 python /usr/local/bin/ps_messenger_check.py > /dev/null
+
+# setup crontab entry for root
+sudo crontab -l -u root | grep ps_updater > /dev/null
+if [ $? != 0 ]
+then
+    (sudo crontab -l -u root 2>/dev/null; echo "* */6 * * * python /usr/local/bin/ps_updater.py") | sudo crontab - -u root
+fi
+# run the updater once
+python /usr/local/bin/ps_updater.py > /dev/null
 
 
 echo "Installing image libraries..."

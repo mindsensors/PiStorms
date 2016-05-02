@@ -27,10 +27,12 @@
 from PiStorms import PiStorms
 from mindsensors_i2c import mindsensors_i2c
 import sys, os, time, json
+from datetime import datetime
 
 print str(sys.argv[1])
 PROGRAM_DIRECTORY = str(sys.argv[1])
 json_file = '/var/tmp/ps_data.json'
+version_json_file = '/var/tmp/ps_versions.json'
 rotation = 3 
 if(os.getenv("PSREVERSE","0")=="1"):
     rotation = 3
@@ -61,6 +63,27 @@ def listPrograms(directory):
 
     return sorted(files)
 
+def checkIfUpdateNeeded():
+    try:
+        f = open(version_json_file, 'r')
+        try:
+            data = json.loads(f.read())
+            s = data['status']
+            u = data['update']
+            f.close()
+        except:
+            # no json in the file (or file missing)
+            s = ""
+            u = ""
+    except:
+            # no json in the file (or file missing)
+            s = ""        
+            u = ""
+    if ( s == 'New' and u != 'none' ):
+        return u
+    else:
+        return 'none'
+    
 def newMessageExists():
     try:
         f = open(json_file, 'r')
@@ -78,6 +101,15 @@ def newMessageExists():
         return True
     else:
         return False
+
+def version_json_update_field(field, new_value):
+    f = open(version_json_file, 'r')
+    json_data = json.loads(f.read())
+    f.close()
+    f = open(version_json_file, 'w')
+    json_data[field] = new_value
+    json.dump(json_data, f)
+    f.close()
 
 def message_update_status( json_data, new_status ):
     f = open(json_file, 'w')
@@ -111,6 +143,11 @@ def displaySmallFileList(fileList, displayLeft = True):
 
     psm.screen.drawButton((320-pageXPos)-pageWidth, pageYPos, pageWidth, pageHeight, text=">", display=False)
 
+    updateReqd = checkIfUpdateNeeded()
+    print "updateReqd: " + str(updateReqd)
+    if ( updateReqd != 'none' ):
+        psm.screen.fillBmp(280,55,34,34, "Exclamation-mark-icon.png", False);
+    
     newMessage = newMessageExists()
     if ( newMessage == True ):
         psm.screen.fillBmp(220,7,34,34, "Exclamation-mark-icon.png", False);
@@ -120,6 +157,12 @@ def displaySmallFileList(fileList, displayLeft = True):
 
     while(True):
         
+        if ( updateReqd ):
+            # handle the exclamation button
+            if ( psm.screen.checkButton(278,53,38,38)):
+                # exclamation button was clicked
+                return "update:"+updateReqd
+
         if ( newMessage ):
             # handle the exclamation button
             if ( psm.screen.checkButton(218,5,38,38)):
@@ -174,6 +217,48 @@ try:
         file_id = displayFullFileList(files)
         if ( isinstance( file_id, int ) ):
             result = runProgram(files[file_id],PROGRAM_DIRECTORY)
+        elif ( "update:" in file_id  and file_id != "update:none"):
+            #
+            # check what kind of update is available
+            # and prompt message in dialog box
+            #
+            msg = ""
+            msg2 = ""
+            if ( file_id == "update:hardware" ):
+                msg = "New Firmware for Pistorms is available"
+                msg2 = ""
+            if ( file_id == "update:software" ):
+                msg = "New Software, libraries and sample programs"
+                msg2 = "for Pistorms are available"
+            if ( file_id == "update:both" ):
+                msg = "New Firmware, Software, libraries and"
+                msg2 = "samples for Pistorms are available"
+            msg3 = "Install Updates?"
+            answer = psm.screen.askQuestion(["Software Update", msg, msg2, "", msg3],["Yes", "Later", "Never"])
+
+            if ( answer == 0 ):
+                print "User clicked OK"
+                # perform update
+                result = os.system("sudo python " +   PROGRAM_DIRECTORY +
+                          "/" + "utils/updater.py " + file_id)
+                print "updater result: " + str(result)
+                version_json_update_field('status', 'Done')
+
+            if ( answer == 1 ):
+                print "User clicked Later"
+                # User clicked Later, 
+                # write the current time & status in the json file,
+                # json updates will be deferred for some time
+                # length of that time is defined in cron script
+                version_json_update_field('status', 'Later')
+                now = datetime.now()
+                dd = now.strftime("%Y:%m:%d:%H:%M")
+                version_json_update_field('date', dd)
+            if ( answer == 2 ):
+                print "User clicked Never"
+                # cron script will never update the json
+                version_json_update_field('status', 'Never')
+
         elif ( file_id == "message"):
             f = open(json_file, 'r')
             try:
