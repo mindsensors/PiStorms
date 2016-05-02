@@ -241,8 +241,8 @@ try:
                 # perform update
                 result = os.system("sudo python " +   PROGRAM_DIRECTORY +
                           "/" + "utils/updater.py " + file_id)
-                print "updater result: " + str(result)
-                version_json_update_field('status', 'Done')
+                if (result == 0):
+                    version_json_update_field('status', 'Done')
 
             if ( answer == 1 ):
                 print "User clicked Later"

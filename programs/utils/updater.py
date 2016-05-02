@@ -40,11 +40,23 @@ print "updater program"
 
 psm = PiStorms()
     
-print "ip address:" + str(get_ip_address('wlan0'))
+def available():
+    try:
+        socket.setdefaulttimeout(5)
+        socket.socket(socket.AF_INET, socket.SOCK_STREAM).connect(("8.8.8.8", 53))
+        return True
+    except Exception as e: pass
+    return False
 
 opt = str(sys.argv[1])
 
-m = ["Software Updater", "Not yet implemented.",
-  "option: " + opt]
-psm.screen.askQuestion(m,["OK"])
+#m = ["Software Updater", "Not yet implemented.",
+#  "option: " + opt]
+#psm.screen.askQuestion(m,["OK"])
 
+isConnected = available()
+if (isConnected == False):
+    m = ["Software Updater", "You are not connected to Internet.",
+      "Internet connection required"]
+    psm.screen.askQuestion(m,["OK"])
+    sys.exit(-1)
