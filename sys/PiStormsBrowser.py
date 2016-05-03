@@ -144,9 +144,8 @@ def displaySmallFileList(fileList, displayLeft = True):
     psm.screen.drawButton((320-pageXPos)-pageWidth, pageYPos, pageWidth, pageHeight, text=">", display=False)
 
     updateReqd = checkIfUpdateNeeded()
-    print "updateReqd: " + str(updateReqd)
     if ( updateReqd != 'none' ):
-        psm.screen.fillBmp(280,55,34,34, "Exclamation-mark-icon.png", False);
+        psm.screen.fillBmp(220,7,34,34, "Exclamation-mark-icon.png", False);
     
     newMessage = newMessageExists()
     if ( newMessage == True ):
@@ -157,17 +156,18 @@ def displaySmallFileList(fileList, displayLeft = True):
 
     while(True):
         
-        if ( updateReqd ):
-            # handle the exclamation button
-            if ( psm.screen.checkButton(278,53,38,38)):
-                # exclamation button was clicked
-                return "update:"+updateReqd
-
         if ( newMessage ):
             # handle the exclamation button
             if ( psm.screen.checkButton(218,5,38,38)):
                 # exclamation button was clicked
                 return "message"
+        elif ( updateReqd ):
+            # handle the exclamation button
+            #if ( psm.screen.checkButton(278,53,38,38)):
+            if ( psm.screen.checkButton(218,5,38,38)):
+                # exclamation button was clicked
+                return "update:"+updateReqd
+
 
         if(displayLeft and psm.screen.checkButton(pageXPos,pageYPos,pageWidth,pageHeight)):
             return 4
@@ -217,6 +217,7 @@ try:
         file_id = displayFullFileList(files)
         if ( isinstance( file_id, int ) ):
             result = runProgram(files[file_id],PROGRAM_DIRECTORY)
+
         elif ( "update:" in file_id  and file_id != "update:none"):
             #
             # check what kind of update is available
@@ -258,6 +259,11 @@ try:
                 print "User clicked Never"
                 # cron script will never update the json
                 version_json_update_field('status', 'Never')
+
+            # All errors must be gracefully handled by our updater script.
+            # Force the result to be zero, so that even if there was error
+            # browser does not show error dialog
+            result = 0
 
         elif ( file_id == "message"):
             f = open(json_file, 'r')
