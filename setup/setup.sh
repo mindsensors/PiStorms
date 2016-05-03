@@ -24,7 +24,7 @@
 # Apr 2016  Deepak      install from github created environment
 
 #setup i2c and spi 
-cp /boot/config.txt /tmp/config.txt
+cp -p /boot/config.txt /tmp/config.txt
 
 ff=/tmp/config.txt
 
@@ -61,7 +61,7 @@ else
     sudo sed -i -e '$i \dtparam=spi=on' $ff
 fi
 
-sudo cp /tmp/config.txt /boot/config.txt
+sudo cp -p /tmp/config.txt /boot/config.txt
 
 #
 #
@@ -99,8 +99,8 @@ sudo pip install -qq wifi
 sudo pip install -qq ws4py
 sudo pip install -qq cv2
 
-sudo cp ../sys/PiStormsDriver.py /usr/local/bin/
-sudo cp ../sys/PiStormsBrowser.py /usr/local/bin/
+sudo cp -p ../sys/PiStormsDriver.py /usr/local/bin/
+sudo cp -p ../sys/PiStormsBrowser.py /usr/local/bin/
 if [ -f /etc/init.d/SwarmServer.sh ]
 then
     sudo /etc/init.d/SwarmServer.sh stop
@@ -108,60 +108,60 @@ else
 	sudo kill -9 `ps -ef | grep swarmserver |grep -v grep| cut -c11-16`
 fi
 sleep 2
-sudo cp ../sys/swarmserver /usr/local/bin/
-sudo cp ../sys/pistorms-diag.sh /usr/local/bin/
+sudo cp -p ../sys/swarmserver /usr/local/bin/
+sudo cp -p ../sys/pistorms-diag.sh /usr/local/bin/
 sudo chmod +x /usr/local/bin/swarmserver
 sudo chmod +x /usr/local/bin/pistorms-diag.sh
 sudo chmod +x ../programs/addresschange
 
 echo "copying library files ... "
-sudo cp ../sys/rmap.py /usr/local/lib/python2.7/dist-packages/
-sudo cp ../sys/rmapcfg.py /usr/local/lib/python2.7/dist-packages/
-sudo cp ../sys/scratch.py /usr/local/lib/python2.7/dist-packages/
-sudo cp ../sys/PiStorms.py /usr/local/lib/python2.7/dist-packages/
-sudo cp ../sys/PiStormsCom.py /usr/local/lib/python2.7/dist-packages/
-sudo cp ../sys/PiStormsInput.py /usr/local/lib/python2.7/dist-packages/
-sudo cp ../sys/mindsensorsUI.py /usr/local/lib/python2.7/dist-packages/
-sudo cp ../sys/mindsensors.py /usr/local/lib/python2.7/dist-packages/
-sudo cp ../sys/swarmclient.py /usr/local/lib/python2.7/dist-packages/
+sudo cp -p ../sys/rmap.py /usr/local/lib/python2.7/dist-packages/
+sudo cp -p ../sys/rmapcfg.py /usr/local/lib/python2.7/dist-packages/
+sudo cp -p ../sys/scratch.py /usr/local/lib/python2.7/dist-packages/
+sudo cp -p ../sys/PiStorms.py /usr/local/lib/python2.7/dist-packages/
+sudo cp -p ../sys/PiStormsCom.py /usr/local/lib/python2.7/dist-packages/
+sudo cp -p ../sys/PiStormsInput.py /usr/local/lib/python2.7/dist-packages/
+sudo cp -p ../sys/mindsensorsUI.py /usr/local/lib/python2.7/dist-packages/
+sudo cp -p ../sys/mindsensors.py /usr/local/lib/python2.7/dist-packages/
+sudo cp -p ../sys/swarmclient.py /usr/local/lib/python2.7/dist-packages/
 
 # copy system images.
 echo "copying system images ... "
 sudo mkdir -p /usr/local/mindsensors_images
-sudo cp ../programs/btns_center.png /usr/local/mindsensors_images/
-sudo cp ../programs/btns_left.png /usr/local/mindsensors_images/
-sudo cp ../programs/btns_right.png /usr/local/mindsensors_images/
-sudo cp ../programs/button.png /usr/local/mindsensors_images/
-sudo cp ../programs/dialogbg.png /usr/local/mindsensors_images/
-sudo cp ../programs/Exclamation-mark-icon.png /usr/local/mindsensors_images/
-sudo cp ../programs/Pane1.png /usr/local/mindsensors_images/
-sudo cp ../programs/lock.png /usr/local/mindsensors_images/
-sudo cp ../programs/ulock.png /usr/local/mindsensors_images/
-sudo cp ../programs/load.png /usr/local/mindsensors_images/
-sudo cp ../programs/x_red.png /usr/local/mindsensors_images/
-sudo cp ../programs/wifi_green.png /usr/local/mindsensors_images/
+sudo cp -p ../programs/btns_center.png /usr/local/mindsensors_images/
+sudo cp -p ../programs/btns_left.png /usr/local/mindsensors_images/
+sudo cp -p ../programs/btns_right.png /usr/local/mindsensors_images/
+sudo cp -p ../programs/button.png /usr/local/mindsensors_images/
+sudo cp -p ../programs/dialogbg.png /usr/local/mindsensors_images/
+sudo cp -p ../programs/Exclamation-mark-icon.png /usr/local/mindsensors_images/
+sudo cp -p ../programs/Pane1.png /usr/local/mindsensors_images/
+sudo cp -p ../programs/lock.png /usr/local/mindsensors_images/
+sudo cp -p ../programs/ulock.png /usr/local/mindsensors_images/
+sudo cp -p ../programs/load.png /usr/local/mindsensors_images/
+sudo cp -p ../programs/x_red.png /usr/local/mindsensors_images/
+sudo cp -p ../programs/wifi_green.png /usr/local/mindsensors_images/
 sudo chmod a+r /usr/local/mindsensors_images/*
 
 echo "copying artworks ... "
-sudo cp ../artwork/* /usr/share/raspberrypi-artwork
+sudo cp -p ../artwork/* /usr/share/raspberrypi-artwork
 
 echo "copying scratch programs ... "
 mkdir -p /home/pi/Documents/Scratch\ Projects/PiStorms
-sudo cp ../scratch/* /home/pi/Documents/Scratch\ Projects/PiStorms
+sudo cp -p ../scratch/* /home/pi/Documents/Scratch\ Projects/PiStorms
 
 echo "Changing ownerships"
 sudo chown -R pi:pi /home/pi/PiStorms
 sudo chown -R pi:pi /home/pi/Documents/Scratch\ Projects
 
 #copy the initialization scripts
-sudo cp PiStormsDriver.sh /etc/init.d
-sudo cp PiStormsBrowser.sh /etc/init.d
-sudo cp SwarmServer.sh /etc/init.d
+sudo cp -p PiStormsDriver.sh /etc/init.d
+sudo cp -p PiStormsBrowser.sh /etc/init.d
+sudo cp -p SwarmServer.sh /etc/init.d
 sudo chmod +x /etc/init.d/PiStormsDriver.sh
 sudo chmod +x /etc/init.d/PiStormsBrowser.sh
 sudo chmod +x /etc/init.d/SwarmServer.sh
 mkdir -p /home/pi/.config/autostart
-cp tightvnc.desktop /home/pi/.config/autostart
+cp -p tightvnc.desktop /home/pi/.config/autostart
 
 #
 # insert into startup scripts for subsequent use
@@ -173,8 +173,8 @@ sudo update-rc.d SwarmServer.sh defaults 94 06
 
 #setup messenger
 echo "Setting up messenger...."
-sudo cp ../sys/ps_messenger_check.py /usr/local/bin
-sudo cp ../sys/ps_updater.py /usr/local/bin
+sudo cp -p ../sys/ps_messenger_check.py /usr/local/bin
+sudo cp -p ../sys/ps_updater.py /usr/local/bin
 sudo touch /var/tmp/ps_data.json
 sudo chmod a+rw /var/tmp/ps_data.json
 sudo touch /var/tmp/ps_versions.json
