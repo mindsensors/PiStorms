@@ -1,7 +1,6 @@
 #!/usr/bin/env python
-#!/usr/bin/env python
 #
-# Copyright (c) 2015 mindsensors.com
+# Copyright (c) 2016 mindsensors.com
 # 
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 2 as
@@ -26,15 +25,9 @@
 
 from PiStorms import PiStorms
 import sys
-import socket,fcntl,struct
-
-def get_ip_address(ifname):
-    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-    return socket.inet_ntoa(fcntl.ioctl(
-        s.fileno(),
-        0x8915,  # SIOCGIFADDR
-        struct.pack('256s', ifname[:15])
-    )[20:24])
+import socket
+#,fcntl,struct
+import subprocess
 
 print "updater program"
 
@@ -60,3 +53,34 @@ if (isConnected == False):
       "Internet connection required"]
     psm.screen.askQuestion(m,["OK"])
     sys.exit(-1)
+
+if ( opt == "update:hardware" ):
+	script = "hardware_update.py"
+
+if ( opt == "update:software" ):
+	script = "software_update.py"
+
+if ( opt == "update:both" ):
+	script = "both_update.py"
+
+cmd = "rm -rf /var/tmp/upd"
+subprocess.call(cmd, shell=True)
+
+cmd = "mkdir -p /var/tmp/upd"
+subprocess.call(cmd, shell=True)
+
+cmd = "cd /var/tmp/upd; wget http://www.mindsensors.com/largefiles/updater/" + script
+subprocess.call(cmd, shell=True)
+
+cmd = "cd /var/tmp/upd;chmod +x " + script
+subprocess.call(cmd, shell=True)
+
+cmd = "cd /var/tmp/upd; python " + script + " " + opt
+subprocess.call(cmd, shell=True)
+
+#m = ["Software Updater", "Not yet implemented.",
+#  "option: " + opt]
+#psm.screen.askQuestion(m,["OK"])
+
+
+exit(-1)
