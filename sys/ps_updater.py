@@ -31,8 +31,7 @@ import time
 version_json_file = '/var/tmp/ps_versions.json'
 sw_version_file = '/home/pi/PiStorms/.version'
 hw_version_file = '/var/tmp/.hw_version'
-link = 'http://olive2.ddns.net/versions.php'
-#link = 'http://pistorms.mindsensors.com/versions.php'
+link = 'http://pistorms.mindsensors.com/versions.php'
 
 cmd = 'cat /proc/cpuinfo | grep Serial | cut -d":" -f2 |awk \'{$1=$1};1\''
 serial = commands.getstatusoutput(cmd)[1]
