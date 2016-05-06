@@ -126,7 +126,7 @@ sudo cp -p ../sys/mindsensors.py /usr/local/lib/python2.7/dist-packages/
 sudo cp -p ../sys/swarmclient.py /usr/local/lib/python2.7/dist-packages/
 
 echo "copying config file ... "
-sudo cp -p ../sys/msdev.cfg /usr/local/mindsensors/conf
+sudo cp -p ../sys/msdev.cfg /usr/local/mindsensors/conf/
 
 # copy system images.
 echo "copying system images ... "
