@@ -99,8 +99,15 @@ sudo pip install -qq wifi
 sudo pip install -qq ws4py
 sudo pip install -qq cv2
 
-sudo cp -p ../sys/PiStormsDriver.py /usr/local/bin/
-sudo cp -p ../sys/PiStormsBrowser.py /usr/local/bin/
+# clean up renamed legacy files.
+sudo rm -f /usr/local/bin/PiStormsDriver.py
+sudo rm -f /usr/local/bin/PiStormsBrowser.py
+sudo update-rc.d -f PiStormsDriver.sh remove
+sudo update-rc.d -f PiStormsBrowser.sh remove
+
+# copy startup scripts.
+sudo cp -p ../sys/MSDriver.py /usr/local/bin/
+sudo cp -p ../sys/MSBrowser.py /usr/local/bin/
 if [ -f /etc/init.d/SwarmServer.sh ]
 then
     sudo /etc/init.d/SwarmServer.sh stop
@@ -154,11 +161,11 @@ sudo chown -R pi:pi /home/pi/PiStorms
 sudo chown -R pi:pi /home/pi/Documents/Scratch\ Projects
 
 #copy the initialization scripts
-sudo cp -p PiStormsDriver.sh /etc/init.d
-sudo cp -p PiStormsBrowser.sh /etc/init.d
+sudo cp -p MSDriver.sh /etc/init.d
+sudo cp -p MSBrowser.sh /etc/init.d
 sudo cp -p SwarmServer.sh /etc/init.d
-sudo chmod +x /etc/init.d/PiStormsDriver.sh
-sudo chmod +x /etc/init.d/PiStormsBrowser.sh
+sudo chmod +x /etc/init.d/MSDriver.sh
+sudo chmod +x /etc/init.d/MSBrowser.sh
 sudo chmod +x /etc/init.d/SwarmServer.sh
 mkdir -p /home/pi/.config/autostart
 cp -p tightvnc.desktop /home/pi/.config/autostart
@@ -167,8 +174,8 @@ cp -p tightvnc.desktop /home/pi/.config/autostart
 # insert into startup scripts for subsequent use
 #
 echo "Updating Startup scripts..."
-sudo update-rc.d PiStormsDriver.sh defaults 95 05
-sudo update-rc.d PiStormsBrowser.sh defaults 96 04
+sudo update-rc.d MSDriver.sh defaults 95 05
+sudo update-rc.d MSBrowser.sh defaults 96 04
 sudo update-rc.d SwarmServer.sh defaults 94 06
 
 #setup messenger
