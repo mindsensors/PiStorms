@@ -287,7 +287,7 @@ class mindsensorsUI():
     #  @param display Choose to immediately push the drawing to the screen.
     # disabled by Deepak
     #def drawButton(self,x,y,width = 150,height = 50, text = "OK", display = True):
-    #    self.fillBmp(x,y,width,height,path = "/usr/local/mindsensors_images/button.png", display = False)
+    #    self.fillBmp(x,y,width,height,path = "/usr/local/mindsensors/images/button.png", display = False)
     #    self.drawAutoText(text, x + 10,y + 15, fill = (0,0,0), display = display)
     
     ## Draw forward and back arrows on the screen
@@ -466,7 +466,7 @@ class mindsensorsUI():
     #  ...
     #  screen.screen.fillBmp(30, 0, 240, 240, path = currentdir+'/'+"dog.png", True)
     #  @endcode    
-    def fillBmp(self, x, y, width, height, path = "/usr/local/mindsensors_images/Pane1.png",display = True):
+    def fillBmp(self, x, y, width, height, path = "/usr/local/mindsensors/images/Pane1.png",display = True):
 
         self.mutex.acquire()
 
@@ -476,7 +476,7 @@ class mindsensorsUI():
             acty = self.screenYFromImageCoords(x,y)
             # if the caller only provided icon name, assume it is in our system repository
             if ( path[0] != "/" ):
-                path = "/usr/local/mindsensors_images/" + path
+                path = "/usr/local/mindsensors/images/" + path
             image = Image.open(path)
             non_transparent = Image.new('RGBA',image.size,(255,255,255,255))
             #changed by Deepak.
