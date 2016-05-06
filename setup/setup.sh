@@ -127,20 +127,15 @@ sudo cp -p ../sys/swarmclient.py /usr/local/lib/python2.7/dist-packages/
 
 # copy system images.
 echo "copying system images ... "
-sudo mkdir -p /usr/local/mindsensors_images
-sudo cp -p ../programs/btns_center.png /usr/local/mindsensors_images/
-sudo cp -p ../programs/btns_left.png /usr/local/mindsensors_images/
-sudo cp -p ../programs/btns_right.png /usr/local/mindsensors_images/
-sudo cp -p ../programs/button.png /usr/local/mindsensors_images/
-sudo cp -p ../programs/dialogbg.png /usr/local/mindsensors_images/
-sudo cp -p ../programs/Exclamation-mark-icon.png /usr/local/mindsensors_images/
-sudo cp -p ../programs/Pane1.png /usr/local/mindsensors_images/
-sudo cp -p ../programs/lock.png /usr/local/mindsensors_images/
-sudo cp -p ../programs/ulock.png /usr/local/mindsensors_images/
-sudo cp -p ../programs/load.png /usr/local/mindsensors_images/
-sudo cp -p ../programs/x_red.png /usr/local/mindsensors_images/
-sudo cp -p ../programs/wifi_green.png /usr/local/mindsensors_images/
-sudo chmod a+r /usr/local/mindsensors_images/*
+sudo mkdir -p /usr/local/mindsensors/images
+sudo cp -p ../programs/btns_center.png /usr/local/mindsensors/images/
+sudo cp -p ../programs/btns_left.png /usr/local/mindsensors/images/
+sudo cp -p ../programs/btns_right.png /usr/local/mindsensors/images/
+sudo cp -p ../programs/button.png /usr/local/mindsensors/images/
+sudo cp -p ../programs/dialogbg.png /usr/local/mindsensors/images/
+sudo cp -p ../programs/Exclamation-mark-icon.png /usr/local/mindsensors/images/
+sudo cp -p ../programs/Pane1.png /usr/local/mindsensors/images/
+sudo chmod a+r /usr/local/mindsensors/images/*
 
 echo "copying artworks ... "
 sudo cp -p ../artwork/* /usr/share/raspberrypi-artwork
