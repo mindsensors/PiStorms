@@ -226,14 +226,14 @@ try:
             msg = ""
             msg2 = ""
             if ( file_id == "update:hardware" ):
-                msg = "New Firmware for Pistorms is available"
+                msg = "New Firmware for PiStorms is available"
                 msg2 = ""
             if ( file_id == "update:software" ):
-                msg = "New Software, libraries and sample programs"
-                msg2 = "for Pistorms are available"
+                msg = "New Software, libraries and samples"
+                msg2 = "for PiStorms are available"
             if ( file_id == "update:both" ):
                 msg = "New Firmware, Software, libraries and"
-                msg2 = "samples for Pistorms are available"
+                msg2 = "samples for PiStorms are available"
             msg3 = "Install Updates?"
             answer = psm.screen.askQuestion(["Software Update", msg, msg2, "", msg3],["Yes", "Later", "Never"])
 
