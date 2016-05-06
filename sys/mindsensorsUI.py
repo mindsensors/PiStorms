@@ -123,7 +123,7 @@ class mindsensorsUI():
     #  ...
     #  screen = mindsensorsUI()
     #  @endcode    
-    def __init__(self,name = "PiStorms", rotation = 3,device = Dev_PiStorms ):
+    def __init__(self,name = "PiStorms", rotation = 3, device = Dev_PiStorms ):
         if  device == Dev_SensorShield :
             self.PS_ADDRESS =  0x16
             self.PS_TSX =  0x56
@@ -143,7 +143,7 @@ class mindsensorsUI():
             self.currentRotation = rotation
         self.refresh()
         self.myname = name
-        self.drawDisplay(name,display = False)
+        #self.drawDisplay(name,display = False)
     
     ### @cond
     ## Dumps the screen buffer
@@ -275,7 +275,7 @@ class mindsensorsUI():
     #  @param name The display title that will appear at the top of the LCD touchscreen.
     #  @param display Choose to immediately push the drawing to the screen.
     def drawDisplay(self, name,display = True):
-        self.drawAutoText(name,50,0,fill = (0,255,255), size = 40, display = display)
+        self.drawAutoText(name,0,5,fill = (0,255,255), size = 30, display = display, align="center")
         
     ## Draw a labeled button on the screen
     #  @param self The object pointer.
@@ -548,20 +548,24 @@ class mindsensorsUI():
     #  @endcode    
     def drawAutoText(self,text,x,y,fill = (255,255,255), size = 20, display = True, align="left"):
         font = ImageFont.truetype("/usr/share/fonts/truetype/freefont/FreeSans.ttf", size)
-        linew,lineh = font.getsize(text)
+        #linew,lineh = font.getsize(text)
         width, height = ImageDraw.Draw(self.disp.buffer).textsize(text, font=font)
         tempx = self.screenXFromImageCoords(x,y)
         tempy = self.screenYFromImageCoords(x,y)
         cr = self.currentRotation
+        # FIXME: the center aligned text is not quite right.
+        # also implement it for other orientations.
         if(cr == 1):
             tempx -= height
         if(cr == 2):
             tempy -= height
             tempx -= width
-        if(cr ==3):
-            tempy -= width
+        if(cr == 3):
             if ( align == "center" ):
-                tempy -= linew/2
+                tempy = (tempy - width)/2 + 10
+            else:
+                tempy -= width
+
         angletemp = 0
         angletemp -= 90*self.currentRotation
         
@@ -675,7 +679,7 @@ class mindsensorsUI():
         
         if(self.currentMode == self.PS_MODE_TERMINAL):
             self.clearScreen(False)
-            self.drawDisplay("",False)
+            #self.drawDisplay("",False)
             if(self.drawArrowsbool):
                 self.drawArrows(False)
             temp = 0

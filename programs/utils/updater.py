@@ -26,10 +26,16 @@
 from PiStorms import PiStorms
 import sys
 import socket
-#,fcntl,struct
 import subprocess
+import ConfigParser
+
+cfg_file = '/usr/local/mindsensors/conf/msdev.cfg'
 
 print "updater program"
+config = ConfigParser.RawConfigParser()
+config.read(cfg_file)
+
+download_url = config.get('servers', 'download_url') 
 
 psm = PiStorms()
     
@@ -69,7 +75,7 @@ subprocess.call(cmd, shell=True)
 cmd = "mkdir -p /var/tmp/upd"
 subprocess.call(cmd, shell=True)
 
-cmd = "cd /var/tmp/upd; wget http://www.mindsensors.com/largefiles/updater/" + script
+cmd = "cd /var/tmp/upd; wget " + download_url +"/" + script
 subprocess.call(cmd, shell=True)
 
 cmd = "cd /var/tmp/upd;chmod +x " + script

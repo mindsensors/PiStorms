@@ -3,8 +3,15 @@
 from PiStorms import PiStorms
 import sys, subprocess, json
 import socket
+import ConfigParser
 
 version_json_file = '/var/tmp/ps_versions.json'
+cfg_file = '/usr/local/mindsensors/conf/msdev.cfg'
+
+config = ConfigParser.RawConfigParser()
+config.read(cfg_file)
+
+download_url = config.get('servers', 'download_url') 
 
 psm = PiStorms()
     
@@ -44,7 +51,7 @@ psm.screen.termPrintAt(3, "Downloading the update")
 psm.screen.termPrintAt(4, "Please wait...")
 
 sw_file_name = "PiStorms." + sw_version + ".tar.gz"
-cmd = "wget http://www.mindsensors.com/largefiles/updater/" + sw_file_name
+cmd = "wget " + download_url + "/" + sw_file_name
 status = subprocess.call(cmd, shell=True)
 
 if ( status != 0 ):

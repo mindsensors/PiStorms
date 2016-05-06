@@ -33,8 +33,8 @@ cfg_file = '/usr/local/mindsensors/conf/msdev.cfg'
 config = ConfigParser.RawConfigParser()
 config.read(cfg_file)
 
-update_server = config.get('servers', 'update_server') 
-link = update_server + "/messenger.php"
+message_server = config.get('servers', 'message_server') 
+link = message_server + "/messenger.php"
 
 cmd = 'cat /proc/cpuinfo | grep Serial | cut -d":" -f2 |awk \'{$1=$1};1\''
 
