@@ -104,6 +104,8 @@ sudo rm -f /usr/local/bin/PiStormsDriver.py
 sudo rm -f /usr/local/bin/PiStormsBrowser.py
 sudo update-rc.d -f PiStormsDriver.sh remove
 sudo update-rc.d -f PiStormsBrowser.sh remove
+sudo rm -f /etc/init.d/PiStormsDriver.sh
+sudo rm -f /etc/init.d/PiStormsBrowser.sh
 
 # copy startup scripts.
 sudo cp -p ../sys/MSDriver.py /usr/local/bin/
