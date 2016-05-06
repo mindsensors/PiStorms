@@ -27,11 +27,19 @@ import urllib, json
 import commands
 from datetime import datetime, timedelta
 import time
+import ConfigParser
 
 version_json_file = '/var/tmp/ps_versions.json'
 sw_version_file = '/home/pi/PiStorms/.version'
 hw_version_file = '/var/tmp/.hw_version'
-link = 'http://pistorms.mindsensors.com/versions.php'
+cfg_file = '/usr/local/mindsensors/conf/msdev.cfg'
+
+config = ConfigParser.RawConfigParser()
+config.read(cfg_file)
+
+update_server = config.get('servers', 'update_server') 
+
+link = update_server + "/versions.php"
 
 cmd = 'cat /proc/cpuinfo | grep Serial | cut -d":" -f2 |awk \'{$1=$1};1\''
 serial = commands.getstatusoutput(cmd)[1]

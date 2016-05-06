@@ -25,9 +25,16 @@
 
 import urllib, json
 import commands
+import ConfigParser
 
 json_file = '/var/tmp/ps_data.json'
-link = 'http://pistorms.mindsensors.com/messenger.php'
+cfg_file = '/usr/local/mindsensors/conf/msdev.cfg'
+
+config = ConfigParser.RawConfigParser()
+config.read(cfg_file)
+
+update_server = config.get('servers', 'update_server') 
+link = update_server + "/messenger.php"
 
 cmd = 'cat /proc/cpuinfo | grep Serial | cut -d":" -f2 |awk \'{$1=$1};1\''
 
