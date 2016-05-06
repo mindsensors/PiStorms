@@ -179,7 +179,11 @@ sudo touch /var/tmp/ps_data.json
 sudo chmod a+rw /var/tmp/ps_data.json
 sudo touch /var/tmp/ps_versions.json
 sudo chmod a+rw /var/tmp/ps_versions.json
-# setup crontab entry for root
+
+# delete previous messenger entry
+sudo crontab -u root -l | grep -v 'ps_messenger_check.py'  | sudo crontab -u root -
+
+# setup crontab entry of messenger for root
 sudo crontab -l -u root | grep ps_messenger_check > /dev/null
 if [ $? != 0 ]
 then
@@ -188,7 +192,10 @@ fi
 # run the messenger once
 python /usr/local/bin/ps_messenger_check.py > /dev/null
 
-# setup crontab entry for root
+# delete previous updater entry
+sudo crontab -u root -l | grep -v 'ps_updater.py'  | sudo crontab -u root -
+
+# setup crontab entry of updater for root
 sudo crontab -l -u root | grep ps_updater > /dev/null
 if [ $? != 0 ]
 then
