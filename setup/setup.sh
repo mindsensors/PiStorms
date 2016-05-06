@@ -130,6 +130,7 @@ sudo cp -p ../sys/msdev.cfg /usr/local/mindsensors/conf/
 
 # copy system images.
 echo "copying system images ... "
+sudo rm -rf /usr/local/mindsensors_images
 sudo mkdir -p /usr/local/mindsensors/images
 sudo mkdir -p /usr/local/mindsensors/conf
 sudo cp -p ../programs/btns_center.png /usr/local/mindsensors/images/
@@ -191,7 +192,7 @@ python /usr/local/bin/ps_messenger_check.py > /dev/null
 sudo crontab -l -u root | grep ps_updater > /dev/null
 if [ $? != 0 ]
 then
-    (sudo crontab -l -u root 2>/dev/null; echo "* */6 * * * python /usr/local/bin/ps_updater.py") | sudo crontab - -u root
+    (sudo crontab -l -u root 2>/dev/null; echo "2 */6 * * * python /usr/local/bin/ps_updater.py") | sudo crontab - -u root
 fi
 # run the updater once
 python /usr/local/bin/ps_updater.py > /dev/null
