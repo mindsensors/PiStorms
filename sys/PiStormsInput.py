@@ -81,10 +81,10 @@ class PiStormsInput:
         if start < 0: start = len(used) + start
         
         # Draw buttons
-        self.psm.screen.drawButton(self.lm + self.w, 195, width = self.w, height = 45, text=used[start%len(used)], display=False, align="center")
-        self.psm.screen.drawButton(self.lm + self.w * 2, 195, width = self.w, height = 45, text=used[(start+1)%len(used)], display=False, align="center")
-        self.psm.screen.drawButton(self.lm + self.w * 3, 195, width = self.w, height = 45, text=used[(start+2)%len(used)], display=False, align="center")
-        self.psm.screen.drawButton(self.lm + self.w * 4, 195, width = self.w, height = 45, text=used[(start+3)%len(used)], display=False, align="center")
+        self.psm.screen.drawButton(self.lm + self.w, 195, width = self.w, height = 45, text=used[start%len(used)], display=False, align="xcenter")
+        self.psm.screen.drawButton(self.lm + self.w * 2, 195, width = self.w, height = 45, text=used[(start+1)%len(used)], display=False, align="xcenter")
+        self.psm.screen.drawButton(self.lm + self.w * 3, 195, width = self.w, height = 45, text=used[(start+2)%len(used)], display=False, align="xcenter")
+        self.psm.screen.drawButton(self.lm + self.w * 4, 195, width = self.w, height = 45, text=used[(start+3)%len(used)], display=False, align="xcenter")
         self.psm.screen.fillRect(0, 0, 1, 1, fill = (0,0,0), display = True)
         # Return the list of current keys
         return [used[(start+i)%len(used)] for i in xrange(4)]
@@ -110,8 +110,8 @@ class PiStormsInput:
         self.psm.screen.drawButton(self.lm + self.w * 4, 150, self.w, 45, text="Clr", display=False, align="left")
         self.psm.screen.drawButton(self.lm + self.w * 5, 150, self.w, 45, text="Bsp", display=False, align="left")
         # Bottom Row
-        self.psm.screen.drawButton(self.lm, 195, self.w, 45, text=" <", display=False, align="center")
-        self.psm.screen.drawButton(self.lm + self.w * 5, 195, self.w, 45, text=" >", display=False, align="center")
+        self.psm.screen.drawButton(self.lm, 195, self.w, 45, text=" <", display=False, align="xcenter")
+        self.psm.screen.drawButton(self.lm + self.w * 5, 195, self.w, 45, text=" >", display=False, align="xcenter")
 
         exit = False
         usr_input = ""
