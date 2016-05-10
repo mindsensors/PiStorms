@@ -21,7 +21,7 @@
 #
 # History:
 # Date          Author          Comments
-# March 2016    Roman Bohuk     Initial Authoring
+# May 2016    Deepak            Initial authoring
 
 # Setup (to be present in all programs)
 import os,sys,inspect,time,thread
@@ -40,23 +40,20 @@ psm = PiStorms()
 # Create an instance of the PiStormsInput class
 textbox = PiStormsInput(psm)
 
-# Take user input
-userInput = textbox.getInput()
+doExit = False
+while (doExit != True):
+    # Take user input
+    userInput = textbox.getInput()
 
-# Take user input while hiding the characters (replaces with *)
-userInput = textbox.getInput(hide = True)
+    # Take user input while hiding the characters (replaces with *)
+    #userInput = textbox.getInput(hide = True)
 
-if userInput["submitted"]:
-    print "User entered: " + userInput["response"]
-else:
-    print "User cancelled the operation, but he entered: " + userInput["response"]
+    if userInput["submitted"]:
+        m2 = "User Submitted"
+    else:
+        m2 = "User Cancelled"
 
-# By default, the widget has a 20px margin on the left
-# Set left_padding to False so that the widget takes up the whole screen
-textbox2 = PiStormsInput(psm, left_padding = False)
-
-userInput = textbox2.getInput()
-
-userInput = textbox2.getInput(hide = True)
-
-
+    m = ["User Input", m2, "Entry: " + userInput["response"]]
+    choice = psm.screen.askQuestion(m,["OK", "Exit"])
+    if ( choice == 1):
+        doExit = True
