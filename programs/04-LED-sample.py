@@ -21,7 +21,7 @@
 #
 # History:
 # Date      Author      Comments
-#  July 2015  Henry     Initial Authoring from SensorShield import SensorShield
+# July 2015  Henry     Initial Authoring from SensorShield import SensorShield
 
 import os,sys,inspect,time,thread
 
@@ -32,12 +32,18 @@ from PiStorms import PiStorms
 print "running program"
 psm = PiStorms()
 
-psm.screen.termPrintln("LED blinking program")
-psm.screen.termPrintln("Touch screen to exit")
+m = ["LED-sample", "This feature is not yet",
+ "implemented on the PiStorms.",
+ "   ",
+ "Click OK to exit."]
+psm.screen.askQuestion(m,["OK"])
 
-exit = False
+#psm.screen.termPrintln("LED blinking program")
+#psm.screen.termPrintln("Hold screen to exit")
+
+exit = True
 while(not exit):
-	
+    
     #psm.led(1,0,255,0)
     #time.sleep(2)
     psm.led(1,0,255,0)
@@ -54,10 +60,10 @@ while(not exit):
     if(psm.screen.checkButton(0,0,320,320)):
         psm.screen.termPrintln("")
         psm.screen.termPrintln("Exiting to menu")
-        time.sleep (1)
+        time.sleep(1)
         psm.led(1,0,0,0)
-        time.sleep (1)
-        psm.led(2,0,0,0)
-        time.sleep (1)
+        time.sleep(1)
+        #psm.led(2,0,0,0)
+        #time.sleep (1)
         exit = True
-		
+        
