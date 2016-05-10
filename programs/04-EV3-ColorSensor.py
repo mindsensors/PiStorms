@@ -21,9 +21,12 @@
 #
 # History:
 # Date      Author      Comments
-# 04/18/16   Deepak     Initial development.
+# 04/18/16  Deepak      Initial development.
+# 05/10/16  Michael     Support for 3 modes 
 #
 
+
+import time
 from PiStorms import PiStorms
 print "running program"
 psm = PiStorms()
@@ -37,7 +40,7 @@ psm.screen.askQuestion(m,["OK"])
 doExit = False
 old_colorValue = True
 colorValue = True
-ambientMode = False
+count = 0
 
 #main loop
 while(not doExit):
@@ -46,19 +49,22 @@ while(not doExit):
     #
     # read from EV3 Color Sensor
     #
-    if ( ambientMode == True):
+    if (count == 1):
         colorValue = psm.BAS1.ambientLightSensorEV3()
-        msg = "Color Seen:  " + str(colorValue) + " (ambient)"
-    else:
+        msg = "Light Seen:  " + str(colorValue) + " (ambient)"
+    elif (count == 0):
+        colorValue = psm.BAS1.reflectedLightSensorEV3()
+        msg = "Light Seen:  " + str(colorValue) + " (reflected)"
+    else:   
         colorValue = psm.BAS1.colorSensorEV3()
-        msg = "Color Seen:  " + str(colorValue) + " (reflected)"
+        msg = "Color Seen:  " + str(colorValue) + " (color)"
 
     # print value only if it was changed.
     if (old_colorValue != colorValue):
         psm.screen.clearScreen()
         psm.screen.drawAutoText(msg, 15, 164, fill=(255, 255, 255), size = 18) 
         psm.screen.drawAutoText("Touch screen to change mode", 15, 182, fill=(255, 255, 255), size = 18) 
-        psm.screen.drawAutoText("between ambient/reflected", 15, 200, fill=(255, 255, 255), size = 18) 
+        psm.screen.drawAutoText("between reflected/ambient/color", 15, 200, fill=(255, 255, 255), size = 18) 
         psm.screen.drawAutoText("Press Go to stop program", 15, 218, fill=(255, 255, 255), size = 18) 
     
     if(psm.isKeyPressed() == True): # if the GO button is pressed
@@ -71,11 +77,9 @@ while(not doExit):
     # check if screen touched.
     #
     if(psm.screen.checkButton(0,0,320,320)):
-        # if scren was touched, 
+        # if screen was touched, 
         # reset BAS1 touch count
-        if ( ambientMode == False):
-            ambientMode = True
-        else:
-            ambientMode = False
-
-
+        count = count + 1
+        if ( count > 2):
+            count = 0
+        time.sleep(.5)
