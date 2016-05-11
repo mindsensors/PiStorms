@@ -32,13 +32,13 @@ sys.path.insert(0,parentdir)
 
 # PiStorms and Input classes
 from PiStorms import PiStorms
-from PiStormsInput import PiStormsInput
+from TouchScreenInput import TouchScreenInput
 
 # Create an instance of PiStorms class
 psm = PiStorms()
 
-# Create an instance of the PiStormsInput class
-textbox = PiStormsInput(psm.screen)
+# Create an instance of the TouchScreenInput class
+textbox = TouchScreenInput(psm.screen)
 
 doExit = False
 while (doExit != True):

@@ -195,7 +195,7 @@ except Exception as e:
 
 current = wifi.current() # Currently connected network
 available = Cell.all(wlan_interface) # Available networks
-box = PiStormsInput(psm)
+box = TouchScreenInput(psm.screen)
 
 # Writes wifi configuration to wpa_supplicant.conf
 def write_to_config(new):

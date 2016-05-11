@@ -31,7 +31,7 @@ parentdir = os.path.dirname(currentdir)
 sys.path.insert(0,parentdir)
 
 from PiStorms import PiStorms
-from PiStormsInput import PiStormsInput
+from TouchScreenInput import TouchScreenInput
 from wireless import Wireless
 from wifi import Cell
 import re, subprocess
@@ -58,7 +58,7 @@ except Exception as e:
 
 current = wifi.current() # Currently connected network
 available = Cell.all(wlan_interface) # Available networks
-box = PiStormsInput(psm)
+box = TouchScreenInput(psm.screen)
 
 # Writes wifi configuration to wpa_supplicant.conf
 def write_to_config(new):

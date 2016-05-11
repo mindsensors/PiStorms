@@ -129,7 +129,7 @@ sudo cp -p ../sys/rmapcfg.py /usr/local/lib/python2.7/dist-packages/
 sudo cp -p ../sys/scratch.py /usr/local/lib/python2.7/dist-packages/
 sudo cp -p ../sys/PiStorms.py /usr/local/lib/python2.7/dist-packages/
 sudo cp -p ../sys/PiStormsCom.py /usr/local/lib/python2.7/dist-packages/
-sudo cp -p ../sys/PiStormsInput.py /usr/local/lib/python2.7/dist-packages/
+sudo cp -p ../sys/TouchScreenInput.py /usr/local/lib/python2.7/dist-packages/
 sudo cp -p ../sys/mindsensorsUI.py /usr/local/lib/python2.7/dist-packages/
 sudo cp -p ../sys/mindsensors.py /usr/local/lib/python2.7/dist-packages/
 sudo cp -p ../sys/swarmclient.py /usr/local/lib/python2.7/dist-packages/
