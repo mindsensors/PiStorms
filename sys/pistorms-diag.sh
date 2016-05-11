@@ -1,7 +1,20 @@
 #!/bin/bash
 
+echo ""
+echo "config file"
+echo "----------------"
+if [ -f /usr/local/mindsensors/conf/msdev.cfg ]
+then
+    cat /usr/local/mindsensors/conf/msdev.cfg
+    homefolder=`grep homefolder /usr/local/mindsensors/conf/msdev.cfg | cut -d"=" -f2`
+else
+    echo "config file is missing"
+    homefolder=/home/pi/PiStorms
+fi
+echo "homefolder: $homefolder"
 
-python /home/pi/PiStorms/programs/tests/msg-to-screen.py "Loading Raspbian" "Please wait"
+
+python $homefolder/programs/tests/msg-to-screen.py "Loading Raspbian" "Please wait"
 echo "PiStorms Diagnostics tests"
 echo "--------------------------"
 echo ""
@@ -18,9 +31,9 @@ echo ""
 echo "Voltage check..."
 echo "----------------"
 
-if [ -f /home/pi/PiStorms/programs/tests/print-battery-voltage.py ]
+if [ -f $homefolder/programs/tests/print-battery-voltage.py ]
 then
-    python /home/pi/PiStorms/programs/tests/print-battery-voltage.py
+    python $homefolder/programs/tests/print-battery-voltage.py
 else
     echo "print-battery-voltage.py is missing"
 fi
@@ -40,14 +53,14 @@ echo ""
 echo "PiStorms info "
 echo "--------------"
 
-if [ -f /home/pi/PiStorms/programs/tests/psm-info.py ]
+if [ -f $homefolder/programs/tests/psm-info.py ]
 then
-    python /home/pi/PiStorms/programs/tests/psm-info.py
+    python $homefolder/programs/tests/psm-info.py
 else
     echo "psm-info.py is missing"
 fi
 
-python /home/pi/PiStorms/programs/tests/msg-to-screen.py "Loading PiStorms" "Please wait"
+python $homefolder/programs/tests/msg-to-screen.py "Loading PiStorms" "Please wait"
 
 echo ""
 echo "uname ...."
