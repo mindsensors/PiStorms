@@ -111,7 +111,7 @@ class mindsensorsUI():
     touchIgnoreY = 0
     ### @endcond
     
-    ## Initialize the PiStorms motor and sensor ports
+    ## Initialize the UI device.
     #  @param self The object pointer.
     #  @param name The display title that will appear at the top of the LCD touchscreen.
     #  @param rotation The rotation of the LCD touchscreen.
