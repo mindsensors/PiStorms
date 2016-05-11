@@ -30,7 +30,6 @@ import time
 import ConfigParser
 
 version_json_file = '/var/tmp/ps_versions.json'
-sw_version_file = '/home/pi/PiStorms/.version'
 hw_version_file = '/var/tmp/.hw_version'
 cfg_file = '/usr/local/mindsensors/conf/msdev.cfg'
 
@@ -38,6 +37,8 @@ config = ConfigParser.RawConfigParser()
 config.read(cfg_file)
 
 message_server = config.get('servers', 'message_server') 
+home_folder = config.get('msdev', 'homefolder')
+sw_version_file = home_folder+'/.version'
 
 link = message_server + "/versions.php"
 
