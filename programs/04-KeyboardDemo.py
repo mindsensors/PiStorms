@@ -38,7 +38,7 @@ from PiStormsInput import PiStormsInput
 psm = PiStorms()
 
 # Create an instance of the PiStormsInput class
-textbox = PiStormsInput(psm)
+textbox = PiStormsInput(psm.screen)
 
 doExit = False
 while (doExit != True):
