@@ -811,7 +811,7 @@ class PiStorms:
     #  @endcode    
     def __init__(self, name = "PiStorms", rotation = 3 ):
         
-        self.screen = mindsensorsUI(name ,rotation)
+        self.screen = mindsensorsUI(name, rotation)
         self.psc = PiStormsCom()
         self.BAS1 = PiStormsSensor(self.psc.BAS1)
         self.BAS2 = PiStormsSensor(self.psc.BAS2)

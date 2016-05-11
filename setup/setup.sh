@@ -149,6 +149,7 @@ sudo cp -p ../programs/button.png /usr/local/mindsensors/images/
 sudo cp -p ../programs/dialogbg.png /usr/local/mindsensors/images/
 sudo cp -p ../programs/Exclamation-mark-icon.png /usr/local/mindsensors/images/
 sudo cp -p ../programs/Pane1.png /usr/local/mindsensors/images/
+sudo cp -p ../programs/ms-logo-w320-h240.png /usr/local/mindsensors/images/
 sudo chmod a+r /usr/local/mindsensors/images/*
 
 echo "copying artworks ... "
