@@ -27,8 +27,9 @@
 # i2cdump -y -r 0x00-0x04 1 0x1a | grep "^00:" | cut -c 56-60
 #
 
-from PiStorms import PiStorms
-psm = PiStorms()
+from PiStormsCom import PiStormsCom
+#psm = PiStorms()
+psm_comm = PiStormsCom()
 
-print str(psm.GetFirmwareVersion() )[:5]
+print str(psm_comm.GetFirmwareVersion() )[:5]
    

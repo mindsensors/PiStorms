@@ -14,19 +14,30 @@ PATH=/sbin:/usr/sbin:/bin:/usr/bin
 . /lib/init/vars.sh
 
 do_start () {
-    sudo /usr/local/bin/pistorms-diag.sh > /var/tmp/psm-diag.txt
-    cp /var/tmp/psm-diag.txt /boot
     if [ -f /usr/local/mindsensors/conf/msdev.cfg ]
     then
         homefolder=`grep homefolder /usr/local/mindsensors/conf/msdev.cfg | cut -d"=" -f2`
     else
         homefolder=/home/pi/PiStorms
     fi
+    python $homefolder/programs/tests/msg-to-screen.py "Loading PiStorms" "Please wait"
+
+    #
+    # query the hardware for its version
     sudo python $homefolder/programs/tests/print-hw-version.py >/var/tmp/.hw_version
-    sudo python /usr/local/bin/ps_updater.py
-    sudo python /usr/local/bin/MSBrowser.py $homefolder/programs >/var/tmp/psmb.out 2>&1 &
     chmod a+rw /dev/i2c* > /dev/null 2>&1
-    sleep 2
+
+    #
+    # start the browser
+    sudo python /usr/local/bin/MSBrowser.py $homefolder/programs >/var/tmp/psmb.out 2>&1 &
+    sleep 1
+    sudo python /usr/local/bin/ps_updater.py
+    sleep 1
+    #
+    # diagnostic tests
+    sudo /usr/local/bin/pistorms-diag.sh > /var/tmp/psm-diag.txt 2>&1
+    cp /var/tmp/psm-diag.txt /boot
+    sleep 1
 }
 
 do_status () {

@@ -36,13 +36,13 @@ def get_ip_address(ifname):
     
     
 
-from PiStorms import PiStorms
+from PiStormsCom import PiStormsCom
 print "running psm-info.py"
-psm = PiStorms()
+psm_comm = PiStormsCom()
 
-print " Version : "+ str(psm.GetFirmwareVersion() )[:5]
-print " Vendor  : "+ str(psm.GetVendorName() )
-print " Device : "+ str(psm.GetDeviceId() )
+print " Version : "+ str(psm_comm.GetFirmwareVersion() )[:5]
+print " Vendor  : "+ str(psm_comm.GetVendorName() )
+print " Device : "+ str(psm_comm.GetDeviceId() )
 print " HostName :     "   + socket.gethostname()
    
 try:

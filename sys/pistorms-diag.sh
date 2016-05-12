@@ -14,7 +14,7 @@ fi
 echo "homefolder: $homefolder"
 
 
-python $homefolder/programs/tests/msg-to-screen.py "Loading Raspbian" "Please wait"
+#python $homefolder/programs/tests/msg-to-screen.py "Loading Raspbian" "Please wait"
 echo "PiStorms Diagnostics tests"
 echo "--------------------------"
 echo ""
@@ -33,6 +33,7 @@ echo "----------------"
 
 if [ -f $homefolder/programs/tests/print-battery-voltage.py ]
 then
+    echo "voltage check"
     python $homefolder/programs/tests/print-battery-voltage.py
 else
     echo "print-battery-voltage.py is missing"
@@ -60,7 +61,6 @@ else
     echo "psm-info.py is missing"
 fi
 
-python $homefolder/programs/tests/msg-to-screen.py "Loading PiStorms" "Please wait"
 
 echo ""
 echo "uname ...."
