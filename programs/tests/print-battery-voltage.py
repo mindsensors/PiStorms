@@ -25,16 +25,16 @@
 
 import time
 
-from PiStorms import PiStorms
+from PiStormsCom import PiStormsCom
 print ""
 print "Running program 5 times, press Ctrl-C to terminate"
 print ""
-psm = PiStorms()
+psm_comm = PiStormsCom()
 
 exit = False
 a = 0
 while(a < 5):
-    voltVal = psm.battVoltage()
+    voltVal = psm_comm.battVoltage()
     print "PiStorms voltage: " + str(voltVal)
     time.sleep(2)
     a = a + 1
