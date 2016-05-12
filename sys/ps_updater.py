@@ -42,6 +42,8 @@ sw_version_file = home_folder+'/.version'
 
 link = message_server + "/versions.php"
 
+cmd = 'cat /proc/cpuinfo | grep Revision | cut -d":" -f2 |awk \'{$1=$1};1\''
+rev = commands.getstatusoutput(cmd)[1]
 cmd = 'cat /proc/cpuinfo | grep Serial | cut -d":" -f2 |awk \'{$1=$1};1\''
 serial = commands.getstatusoutput(cmd)[1]
 
@@ -88,13 +90,13 @@ try:
 except:
     hw_version = "0.000"
 
-print "hw_version: " + str(hw_version)
+#print "hw_version: " + str(hw_version)
 #
 # connect to server and get the message
 # and save the json file.
 #
 
-link2 = link+"?serial="+str(serial)+"&sw_ver="+str(sw_version)+"&hw_ver="+str(hw_version) 
+link2 = link+"?serial="+str(serial)+"?rev="+str(rev)+"&sw_ver="+str(sw_version)+"&hw_ver="+str(hw_version) 
 try:
     h = urllib.urlopen(link2)
     new_json = json.loads(h.readline())
