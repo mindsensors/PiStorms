@@ -16,14 +16,14 @@ PATH=/sbin:/usr/sbin:/bin:/usr/bin
 do_start () {
     sudo /usr/local/bin/pistorms-diag.sh > /var/tmp/psm-diag.txt
     cp /var/tmp/psm-diag.txt /boot
-    sudo python /home/pi/PiStorms/programs/tests/print-hw-version.py >/var/tmp/.hw_version
-    sudo python /usr/local/bin/ps_updater.py
     if [ -f /usr/local/mindsensors/conf/msdev.cfg ]
     then
         homefolder=`grep homefolder /usr/local/mindsensors/conf/msdev.cfg | cut -d"=" -f2`
     else
         homefolder=/home/pi/PiStorms
     fi
+    sudo python $homefolder/programs/tests/print-hw-version.py >/var/tmp/.hw_version
+    sudo python /usr/local/bin/ps_updater.py
     sudo python /usr/local/bin/MSBrowser.py $homefolder/programs >/var/tmp/psmb.out 2>&1 &
     chmod a+rw /dev/i2c* > /dev/null 2>&1
     sleep 2

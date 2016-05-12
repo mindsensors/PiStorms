@@ -77,6 +77,8 @@ try:
 except:
     sw_version = "0.000"
 
+#print "sw_version: " + str(sw_version)
+
 # find hw version on this pi.
 try:
     f = open(hw_version_file, 'r')
@@ -86,6 +88,7 @@ try:
 except:
     hw_version = "0.000"
 
+print "hw_version: " + str(hw_version)
 #
 # connect to server and get the message
 # and save the json file.
