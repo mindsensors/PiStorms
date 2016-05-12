@@ -48,27 +48,17 @@
 #
 #  @section install_sec Installation Instructions
 #  To download PiStorms libary and features to your Raspberry Pi:\n
-#  navigate to /home/pi\n 
-#  sudo wget http://www.mindsensors.com/largefiles/PiStorms.tar.gz
-#
-#  Untar the file using command:\n
-#  cd /home/pi\n 
-#  tar -zxvf PiStorms.tar.gz
-#
-#  Install using following commands:\n
-#  cd PiStorms\n
-#  ./setup.sh
-#  
-#  It will take a few minutes to install the software.
-#
+#  follow instructions from following post:
+#  http://www.mindsensors.com/blog/news/upgrade-your-pistorms-software-tutorial
 #
 #  @section for_developers For Developers
 #
 #  <b>Fork from GitHub:</b> https://github.com/mindsensors/PiStorms<br>
 #  <br>
-# To include your changes in main distribution:<br>
-#  commit your changes to your github branch and create a merge request.
-#
+#  To include your changes in main distribution:<br>
+#     - fork the above mentioned repo, 
+#     - commit your changes to your fork and 
+#     - create a merge request.
 #
 #
 

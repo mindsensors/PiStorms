@@ -31,12 +31,27 @@ currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentfram
 parentdir = os.path.dirname(currentdir)
 sys.path.insert(0,parentdir) 
 
+## Create a TextBox with virtual keyboard for user Input.
+# Use in your program as:
+# @code
+# from PiStorms import PiStorms
+# from TouchScreenInput import TouchScreenInput
+# ...
+# psm = PiStorms()
+# textbox = TouchScreenInput(psm.screen)
+# userInput = textbox.getInput()
+# print str(userInput["response"])
+# @endcode
+# @remark
+# For example, see 04-KeyboardDemo.py
+
 class TouchScreenInput:
     led_on_func = None
     led_off_func = None
     
     def __init__(self, screen, left_padding = True):
-        #self.psm = screen
+        ##the screen where you will be drawing the dialog box\n
+        # you do not need to access this variable in your program
         self.scrn = screen
         if left_padding:
             self.lm = 20
@@ -45,12 +60,20 @@ class TouchScreenInput:
             self.lm = 1
             self.w = 53
 
-    def bind_led_off_func(self, x):
-        self.led_off_func = x
+    ##  To bind a function to turn off the LEDs\n
+    #   If you want to be real fancy and provide a visual feedback
+    #   using LED, bind a function to turn them off.
+    def bind_led_off_func(self, func_name):
+        self.led_off_func = func_name
 
-    def bind_led_on_func(self, x):
-        self.led_on_func = x
+    ##  To bind a function to turn on the LEDs\n
+    #   If you want to be real fancy and provide a visual feedback
+    #   using LED, bind a function to turn them on.
+    def bind_led_on_func(self, func_name):
+        self.led_on_func = func_name
 
+    ## force an update to the text box
+    #  You don't need to call this function in your program
     def update_textbox(self, txt, hide):
         # Replace with asterics if hide is set to true
         if hide:
@@ -73,7 +96,9 @@ class TouchScreenInput:
             self.scrn.drawAutoText(txt, self.lm+8, top, fill = (0,0,0), size = sz, display = False)
         self.scrn.fillRect(0, 0, 1, 1, fill = (0,0,0), display = True)
     
-    # Draws the keyboard
+    ## Draw the keyboard
+    # the keyboard could change based on shift/numeric modifiers 
+    # this function redraws when modifier is applied.
     def redraw(self, layout, start):
         # Available symbols
         symbols = "., !?@#$%^&*()_-+=[]{}<>\\/|~`'\""
@@ -98,6 +123,11 @@ class TouchScreenInput:
         # Return the list of current keys
         return [used[(start+i)%len(used)] for i in xrange(4)]
     
+    ## Call this function to get input from the user.
+    # @returns a tuple containing 'submitted' & 'response'\n
+    # submitted is True when user pressed Submit.\n
+    # submitted is False when user pressed Cancel.\n
+    # response contains any text that user entered.
     def getInput(self, hide=False):
         #self.psm.led(2,0,0,0)
         if (self.led_off_func != None):
