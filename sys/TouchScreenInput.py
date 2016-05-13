@@ -50,7 +50,7 @@ class TouchScreenInput:
     led_off_func = None
     
     def __init__(self, screen, left_padding = True):
-        ##the screen where you will be drawing the dialog box\n
+        ##The screen where you will be drawing the dialog box\n
         # you do not need to access this variable in your program
         self.scrn = screen
         if left_padding:
@@ -62,13 +62,17 @@ class TouchScreenInput:
 
     ##  To bind a function to turn off the LEDs\n
     #   If you want to be real fancy and provide a visual feedback
-    #   using LED, bind a function to turn them off.
+    #   using LED, bind a function to turn them off.\n
+    #   This function is optional, but if you bind one,
+    #   be sure also to bind off function.
     def bind_led_off_func(self, func_name):
         self.led_off_func = func_name
 
     ##  To bind a function to turn on the LEDs\n
     #   If you want to be real fancy and provide a visual feedback
-    #   using LED, bind a function to turn them on.
+    #   using LED, bind a function to turn them on.\n
+    #   This function is optional, but if you bind one,
+    #   be sure also to bind off function.
     def bind_led_on_func(self, func_name):
         self.led_on_func = func_name
 
@@ -96,8 +100,8 @@ class TouchScreenInput:
             self.scrn.drawAutoText(txt, self.lm+8, top, fill = (0,0,0), size = sz, display = False)
         self.scrn.fillRect(0, 0, 1, 1, fill = (0,0,0), display = True)
     
-    ## Draw the keyboard
-    # the keyboard could change based on shift/numeric modifiers 
+    ## Draw the keyboard\n
+    # The keyboard could change based on shift/numeric modifiers,
     # this function redraws when modifier is applied.
     def redraw(self, layout, start):
         # Available symbols
@@ -209,11 +213,11 @@ class TouchScreenInput:
                 if len(usr_input) == 0:
                     for i in xrange(3):
                         #self.psm.led(2,255,0,0) # flash LED 1 red
-                        if (self.led_on_func != None):
+                        if (self.led_on_func != None and self.led_off_func != None):
                             self.led_on_func()
                         time.sleep(0.1)
                         #self.psm.led(2,0,0,0)
-                        if (self.led_off_func != None):
+                        if (self.led_off_func != None and self.led_on_func != None):
                             self.led_off_func()
                         time.sleep(0.1)
                 else:

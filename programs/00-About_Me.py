@@ -44,6 +44,9 @@ from PiStorms import PiStorms
 print "running program"
 psm = PiStorms()
 
+psm.screen.termPrintln("                     About Me")
+psm.screen.termPrintln(" ")
+
 version_file = parentdir + "/.version"
 if (os.path.isfile(version_file)):
     f = open(version_file, 'r')
@@ -53,28 +56,28 @@ if (os.path.isfile(version_file)):
 else:
     version_no = "unknown"
 
-psm.screen.termPrintln("                     About Me")
-psm.screen.termPrintln(" ")
 
 exit = False
 lastled = 0
-psm.screen.termPrintAt(1," Vendor  : "+ str(psm.GetVendorName() ))
-psm.screen.termPrintAt(2," Device : "+ str(psm.GetDeviceId() ))
-psm.screen.termPrintAt(3," h/w version : "+ str(psm.GetFirmwareVersion() )[:5])
-psm.screen.termPrintAt(4," s/w version : "+ version_no)
-psm.screen.termPrintAt(5," HostName :     "   + socket.gethostname() )
+#psm.screen.termPrintAt(1," Vendor  : "+ str(psm.GetVendorName() ))
+psm.screen.termPrintAt(1," Device : "+ str(psm.GetDeviceId() ))
+psm.screen.termPrintAt(2," f/w version : "+ str(psm.GetFirmwareVersion() )[:5])
+psm.screen.termPrintAt(3," s/w version : "+ version_no)
+psm.screen.termPrintAt(4," Hostname :     "   + socket.gethostname() )
+voltVal = psm.battVoltage()
+psm.screen.termPrintAt(5," Battery :     "   + str(voltVal)+"V" )
 while(not exit):
    
     try:
         psm.screen.termPrintAt(6," eth0 :     "   + get_ip_address('eth0'))
     except:
-        psm.screen.termPrintAt(6," eth0 : not present")
+        psm.screen.termPrintAt(6," eth0 :     not present")
     try:    
         psm.screen.termPrintAt(7," wlan0 :    "+ get_ip_address('wlan0'))
     except:
-        psm.screen.termPrintAt(7," wlan0 : not present")
+        psm.screen.termPrintAt(7," wlan0 :     not present")
    
-    if(psm.screen.checkButton(0,0,320,320)):
+    if( psm.isKeyPressed() == True or psm.screen.checkButton(0,0,320,320)):
         psm.screen.termPrintln("")
         psm.screen.termPrintln("Exiting to menu")
         exit = True
