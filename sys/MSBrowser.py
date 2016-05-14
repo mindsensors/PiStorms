@@ -31,7 +31,9 @@ from datetime import datetime
 import ConfigParser
 
 if (len(sys.argv) > 1):
-    PROGRAM_DIRECTORY = str(sys.argv[1])
+    # normalize the path that was provided
+    # to remove extra slash if there is.
+    PROGRAM_DIRECTORY = os.path.normpath(str(sys.argv[1]))
 else:
     print "  ERROR: not enough arguments supplied"
     print "  Usage: "
@@ -78,19 +80,25 @@ except:
 
 #sudo 
 def listPrograms(directory):
-    files =  os.listdir( directory)
+    files =  os.listdir(directory)
     x = 0
-    while(x<len(files)):
-        if(not files[x].endswith(".py")) or (not files[x][0:2].isdigit()):
-            del files[x]
-           
-        else:
-            #if not(files[x][0:2].isdigit()):
-            #    files[x] =  '0' + files[x][0:]
-            files[x] = files[x][0:len(files[x])-3]
-            x += 1
+    returnFiles = list()
 
-    return sorted(files)
+    while(x<len(files)):
+        if (os.path.isfile(directory+"/"+files[x])):
+            # if it's a file, strip the extension to display.
+            if(files[x].endswith(".py")) and (files[x][0:2].isdigit()):
+                f = files[x][0:len(files[x])-3]
+                returnFiles.append(f)
+        elif (os.path.isdir(directory+"/"+files[x]) and files[x][0:2].isdigit()):
+        # if it is a folder, display it
+            returnFiles.append(files[x])
+
+        x += 1
+            
+    #print "returnFiles: " + str(returnFiles)
+
+    return sorted(returnFiles)
 
 def checkIfUpdateNeeded():
     try:
@@ -160,13 +168,16 @@ def displaySmallFileList(fileList, displayLeft = True):
     scrn.clearScreen(display=False)
     scrn.drawDisplay(host_name, display=False)
     counter = 0
+
     while(counter<4 and counter<len(fileList)):
         scrn.drawButton(xpos,initialYpos + (height*counter),width=width,height=height,text=fileList[counter], display=False)
         counter += 1
+
     pageXPos = 0
     pageYPos = 0
     pageWidth = 50
     pageHeight = 50
+
     if(displayLeft):
         scrn.drawButton(pageXPos, pageYPos, width=pageWidth, height=pageHeight, text="<", display=False)
 
@@ -208,44 +219,96 @@ def displaySmallFileList(fileList, displayLeft = True):
                 return counter
             counter += 1
             
-def displayFullFileList(fileList,index = 0):
+def displayFullFileList(folder, fileList, index, isSubFolder):
+
+    newPath = folder
     if(index*4>len(fileList)):
-        return displayFullFileList(fileList,0)
+        return displayFullFileList(folder, fileList, 0, isSubFolder)
     if(index <0):
-        return displayFullFileList(fileList,0)
+        return displayFullFileList(folder, fileList, 0, isSubFolder)
     
     result = 0
-    displayLeft = index != 0
-    if(index*4+4<len(fileList)):
-        result = displaySmallFileList(fileList[index*4:index*4+4],displayLeft)
+    #displayLeft = index != 0
+    if (index != 0):
+        displayLeft = True
     else:
-        result = displaySmallFileList(fileList[index*4:len(fileList)],displayLeft)
+        displayLeft = False
+
+    if (isSubFolder == True):
+        displayLeft = True
+
+    if(index*4+4<len(fileList)):
+        result = displaySmallFileList(fileList[index*4:index*4+4], displayLeft)
+    else:
+        result = displaySmallFileList(fileList[index*4:len(fileList)], displayLeft)
+
     if(result == 4):
-        return displayFullFileList(fileList,index - 1)
+        # User clicked left arrow
+        if ( isSubFolder == True):
+            if (index == 0):
+                # if the index is zero, then go back to parent folder.
+                if ( not os.path.samefile(folder, PROGRAM_DIRECTORY) ):
+                    # go back oly if we are already not at the home folder
+                    newPath = os.path.dirname(folder)
+                    f2 = listPrograms(newPath)
+                    # On home directory, don't show left icon
+                    if ( os.path.samefile(newPath, PROGRAM_DIRECTORY) ):
+                        showLeftIcon = False
+                    else:
+                        showLeftIcon = True
+                    return displayFullFileList(newPath, f2, 0, showLeftIcon)
+                else:
+                    return displayFullFileList(newPath, fileList, 0, False)
+            else:
+                # if index is not zero, just go to previous page.
+                return displayFullFileList(folder, fileList,index - 1, isSubFolder)
+        else:
+            return displayFullFileList(folder, fileList,index - 1, isSubFolder)
+
     if(result == 5):
-        return displayFullFileList(fileList,index + 1)
+        # User clicked right arrow
+        return displayFullFileList(folder, fileList,index + 1, isSubFolder)
     
     try:
         newResult = result + (index*4)
     except TypeError:
         newResult = result
 
-    return newResult
+    ff = folder+"/"+fileList[newResult]
+    if (os.path.isdir(ff)):
+        newPath = ff
+        f2 = listPrograms(newPath)
+        return displayFullFileList(newPath, f2, 0, True)
+    else:
+        newFile = fileList[newResult]
+        
+    return [newResult, newPath, newFile]
 
 #
 # main program loop
 #
 try:
+    folder = PROGRAM_DIRECTORY
     while(True):
         result = 0
         #if(psm.battVoltage()<=6.5):
         #    scrn.askQuestion(["LOW BATTERY","Your battery is low","Change or charge your batteries"],["Ignore"])
         #if(psm.isKeyPressed()):
         #     scrn.refresh()
-        files = listPrograms(PROGRAM_DIRECTORY)
-        file_id = displayFullFileList(files)
+        #files = listPrograms(PROGRAM_DIRECTORY)
+        files = listPrograms(folder)
+        if ( os.path.samefile(folder, PROGRAM_DIRECTORY) ):
+            showLeftIcon = False
+        else:
+            showLeftIcon = True
+        x = displayFullFileList(folder, files, 0, showLeftIcon)
+        file_id = x[0]
+        folder = x[1]
+        fileName = x[2]
         if ( isinstance( file_id, int ) ):
-            result = runProgram(files[file_id],PROGRAM_DIRECTORY)
+            # if the value returned was integer
+            #result = runProgram(files[file_id], folder)
+            result = runProgram(fileName, folder)
 
         elif ( "update:" in file_id  and file_id != "update:none"):
             #
@@ -267,15 +330,15 @@ try:
             answer = scrn.askQuestion(["Software Update", msg, msg2, "", msg3],["Yes", "Later", "Never"])
 
             if ( answer == 0 ):
-                print "User clicked OK"
-                # perform update
+                #print "User clicked OK"
+                # perform the update
                 result = os.system("sudo python " +   PROGRAM_DIRECTORY +
                           "/" + "utils/updater.py " + file_id)
                 if (result == 0):
                     version_json_update_field('status', 'Done')
 
             if ( answer == 1 ):
-                print "User clicked Later"
+                #print "User clicked Later"
                 # User clicked Later, 
                 # write the current time & status in the json file,
                 # json updates will be deferred for some time
@@ -285,7 +348,7 @@ try:
                 dd = now.strftime("%Y:%m:%d:%H:%M")
                 version_json_update_field('date', dd)
             if ( answer == 2 ):
-                print "User clicked Never"
+                #print "User clicked Never"
                 # cron script will never update the json
                 version_json_update_field('status', 'Never')
 
