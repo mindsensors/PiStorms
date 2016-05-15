@@ -275,16 +275,16 @@ def displayFullFileList(folder, fileList, index, isSubFolder):
     
     try:
         newResult = result + (index*4)
+        ff = folder+"/"+fileList[newResult]
+        if (os.path.isdir(ff)):
+            newPath = ff
+            f2 = listPrograms(newPath)
+            return displayFullFileList(newPath, f2, 0, True)
+        else:
+            newFile = fileList[newResult]
     except TypeError:
         newResult = result
-
-    ff = folder+"/"+fileList[newResult]
-    if (os.path.isdir(ff)):
-        newPath = ff
-        f2 = listPrograms(newPath)
-        return displayFullFileList(newPath, f2, 0, True)
-    else:
-        newFile = fileList[newResult]
+        newFile = ""
         
     return [newResult, newPath, newFile]
 
