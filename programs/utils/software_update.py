@@ -105,5 +105,7 @@ status = subprocess.call(cmd, shell=True)
 psm.screen.termPrintAt(3, "Update complete.")
 psm.screen.termPrintAt(4, "Please restart your Pi.")
 
-
+m = ["Software Updater", "Update Complete.",
+  "Please restart your Pi"]
+psm.screen.askQuestion(m,["OK"])
 
