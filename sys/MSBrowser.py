@@ -183,9 +183,9 @@ def displaySmallFileList(folder, fileList, displayLeft = True):
     pageHeight = 50
 
     if(displayLeft):
-        scrn.drawButton(pageXPos, pageYPos, width=pageWidth, height=pageHeight, text="<", display=False)
+        scrn.drawButton(pageXPos, pageYPos, width=pageWidth, height=pageHeight, image="leftarrow.png", text="", display=False, imageX=8)
 
-    scrn.drawButton((320-pageXPos)-pageWidth, pageYPos, pageWidth, pageHeight, text=">", display=False)
+    scrn.drawButton((320-pageXPos)-pageWidth, pageYPos, pageWidth, pageHeight, image="rightarrow.png", text="", display=False, imageX=(320-pageXPos)-pageWidth+8)
 
     updateReqd = checkIfUpdateNeeded()
     if ( updateReqd != 'none' ):

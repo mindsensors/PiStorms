@@ -152,6 +152,8 @@ sudo cp -p ../programs/Pane1.png /usr/local/mindsensors/images/
 sudo cp -p ../programs/ms-logo-w320-h240.png /usr/local/mindsensors/images/
 sudo cp -p ../programs/python.png /usr/local/mindsensors/images/
 sudo cp -p ../programs/folder.png /usr/local/mindsensors/images/
+sudo cp -p ../programs/leftarrow.png /usr/local/mindsensors/images/
+sudo cp -p ../programs/rightarrow.png /usr/local/mindsensors/images/
 sudo chmod a+r /usr/local/mindsensors/images/*
 
 echo "copying artworks ... "
