@@ -159,7 +159,7 @@ def runProgram(progName,progDir):
     return os.system("sudo python " +   progDir + "/" + progName + ".py")
     
     
-def displaySmallFileList(fileList, displayLeft = True):
+def displaySmallFileList(folder, fileList, displayLeft = True):
     initialYpos = 50
     xpos = 50
     height = 45
@@ -170,7 +170,11 @@ def displaySmallFileList(fileList, displayLeft = True):
     counter = 0
 
     while(counter<4 and counter<len(fileList)):
-        scrn.drawButton(xpos,initialYpos + (height*counter),width=width,height=height,text=fileList[counter], display=False)
+        if (os.path.isdir(folder+"/"+fileList[counter])):
+            img="folder.png"
+        elif (os.path.isfile(folder+"/"+fileList[counter]+".py")):
+            img="python.png"
+        scrn.drawButton(xpos,initialYpos + (height*counter),width=width,height=height,text=fileList[counter], image=img, display=False)
         counter += 1
 
     pageXPos = 0
@@ -238,9 +242,9 @@ def displayFullFileList(folder, fileList, index, isSubFolder):
         displayLeft = True
 
     if(index*4+4<len(fileList)):
-        result = displaySmallFileList(fileList[index*4:index*4+4], displayLeft)
+        result = displaySmallFileList(folder, fileList[index*4:index*4+4], displayLeft)
     else:
-        result = displaySmallFileList(fileList[index*4:len(fileList)], displayLeft)
+        result = displaySmallFileList(folder, fileList[index*4:len(fileList)], displayLeft)
 
     if(result == 4):
         # User clicked left arrow

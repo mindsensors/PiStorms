@@ -660,11 +660,18 @@ class mindsensorsUI():
             self.drawAutoText(self.terminalBuffer[lineNum],10,lineNum*20 + 40, (255,255,255), display = display)
     
     ## drawButton
-    def drawButton(self, x, y, width, height, prefix="btns_",text="OK", display=True, align="left"):
+    def drawButton(self, x, y, width, height, prefix="btns_",text="OK", display=True, align="left", image=None):
         self.fillBmp(x, y, 14, height, prefix+"left.png", display=display)
         self.fillBmp(x+14, y, width-28, height, prefix+"center.png", display=display)
         self.fillBmp(x+width-14, y, 14, height, prefix+"right.png", display=display)
-        self.drawAutoText(text,x + 10, y+(height/2)-10, fill = (0,0,0), display=display, align=align)
+
+        if (image == None):
+            textX = x+10
+        else:
+            textX = x+42
+            self.fillBmp(x+4, y+4, 32, 32, image, display=display)
+
+        self.drawAutoText(text,textX, y+(height/2)-10, size=16, fill = (0,0,0), display=display, align=align)
 
 
     ## Refresh the screen (Slow)
