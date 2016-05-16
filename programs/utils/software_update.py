@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 from PiStorms import PiStorms
-import sys, subprocess, json
+import sys, subprocess, json, os
 import socket
 import ConfigParser
 
@@ -120,3 +120,4 @@ m = ["Software Updater", "Update Complete.",
   "Please restart your Pi"]
 psm.screen.askQuestion(m,["OK"])
 
+sys.exit(0)
