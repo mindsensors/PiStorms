@@ -68,6 +68,7 @@ else:
 # rename the prior folder with old version prefix
 # Extract the new update in its place
 #
+cmd = "sudo rm -rf /home/pi/old_PiStorms"
 cmd = "sudo -u pi mv /home/pi/PiStorms /home/pi/old_PiStorms"
 status = subprocess.call(cmd, shell=True)
 if ( status != 0 ):
