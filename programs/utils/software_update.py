@@ -23,6 +23,16 @@ def available():
     except Exception as e: pass
     return False
 
+def renameFolder(prefix, index):
+    if (os.path.isdir(prefix+"."+str(index))):
+        # folder exists
+        # increment index and call the function again.
+        index = index + 1
+        return renameFolder(prefix, index)
+    else:
+        cmd = "sudo mv " + prefix +" " + prefix"."str(index)
+        status = subprocess.call(cmd, shell=True)
+
 opt = str(sys.argv[1])
 
 isConnected = available()
@@ -65,13 +75,13 @@ else:
     psm.screen.termPrintAt(4, "              ")
 
 #
-# rename the prior folder with old version prefix
+# rename the prior folder with an indremental suffix
 # Extract the new update in its place
 #
-cmd = "sudo rm -rf /home/pi/old_PiStorms"
-cmd = "sudo -u pi mv /home/pi/PiStorms /home/pi/old_PiStorms"
-status = subprocess.call(cmd, shell=True)
-if ( status != 0 ):
+renameFolder("/home/pi/PiStorms", 0)
+
+if (os.path.isdir("/home/pi/PiStorms")):
+    # if the folder is still there, don't install
     m = ["Software Updater", "Error while renaming PiStorms folder" ]
     psm.screen.askQuestion(m,["OK"])
     psm.screen.clearScreen()
