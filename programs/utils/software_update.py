@@ -30,7 +30,7 @@ def renameFolder(prefix, index):
         index = index + 1
         return renameFolder(prefix, index)
     else:
-        cmd = "sudo mv " + prefix +" " + prefix"."str(index)
+        cmd = "sudo mv " + prefix +" " + prefix+"."+str(index)
         status = subprocess.call(cmd, shell=True)
 
 opt = str(sys.argv[1])
