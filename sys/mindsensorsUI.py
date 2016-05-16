@@ -477,7 +477,10 @@ class mindsensorsUI():
             # if the caller only provided icon name, assume it is in our system repository
             if ( path[0] != "/" ):
                 path = "/usr/local/mindsensors/images/" + path
-            image = Image.open(path)
+            if ( os.path.isfile(path)):
+                image = Image.open(path)
+            else:
+                image = Image.open("/usr/local/mindsensors/images/missing.png")
             non_transparent = Image.new('RGBA',image.size,(255,255,255,255))
             #changed by Deepak.
             non_transparent.paste(image,(0,0))
