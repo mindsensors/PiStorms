@@ -159,7 +159,7 @@ def runProgram(progName,progDir):
     return os.system("sudo python " +   progDir + "/" + progName + ".py")
     
     
-def displaySmallFileList(folder, fileList, displayLeft = True):
+def displaySmallFileList(folder, fileList, displayLeft = 1):
     initialYpos = 50
     xpos = 50
     height = 45
@@ -182,8 +182,10 @@ def displaySmallFileList(folder, fileList, displayLeft = True):
     pageWidth = 50
     pageHeight = 50
 
-    if(displayLeft):
+    if(displayLeft == 1):
         scrn.drawButton(pageXPos, pageYPos, width=pageWidth, height=pageHeight, image="leftarrow.png", text="", display=False, imageX=8)
+    elif(displayLeft == 2):
+        scrn.drawButton(pageXPos, pageYPos, width=pageWidth, height=pageHeight, image="uparrow.png", text="", display=False, imageX=8)
 
     scrn.drawButton((320-pageXPos)-pageWidth, pageYPos, pageWidth, pageHeight, image="rightarrow.png", text="", display=False, imageX=(320-pageXPos)-pageWidth+8)
 
@@ -213,7 +215,7 @@ def displaySmallFileList(folder, fileList, displayLeft = True):
                 return "update:"+updateReqd
 
 
-        if(displayLeft and scrn.checkButton(pageXPos,pageYPos,pageWidth,pageHeight)):
+        if(displayLeft != 0 and scrn.checkButton(pageXPos,pageYPos,pageWidth,pageHeight)):
             return 4
         if(scrn.checkButton((320-pageXPos)-pageWidth,pageYPos,pageWidth,pageHeight)):
             return 5
@@ -234,12 +236,15 @@ def displayFullFileList(folder, fileList, index, isSubFolder):
     result = 0
     #displayLeft = index != 0
     if (index != 0):
-        displayLeft = True
+        displayLeft = 1
     else:
-        displayLeft = False
+        displayLeft = 0
 
     if (isSubFolder == True):
-        displayLeft = True
+        if (index != 0):
+            displayLeft = 1
+        else:
+            displayLeft = 2
 
     if(index*4+4<len(fileList)):
         result = displaySmallFileList(folder, fileList[index*4:index*4+4], displayLeft)
