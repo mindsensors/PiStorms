@@ -368,7 +368,11 @@ class mindsensorsUI():
     #  x = screen.TS_X()
     #  @endcode 
     def TS_X(self):
-        return self.i2c.readInteger(self.PS_TSY)
+        try:
+            return self.i2c.readInteger(self.PS_TSY)
+        except:
+            print "Could not read Touch Screen X"
+            return -1
     
     ## Reads the y-coordinate of the touchscreen press
     #  @param self The object pointer.
@@ -378,7 +382,11 @@ class mindsensorsUI():
     #  y = screen.TS_Y()
     #  @endcode 
     def TS_Y(self):
-        return self.i2c.readInteger(self.PS_TSX)
+        try:
+            return self.i2c.readInteger(self.PS_TSX)
+        except:
+            print "Could not read Touch Screen Y"
+            return -1
     
     ## Detects touchscreen presses and prevents false positives 
     #  @param self The object pointer.
