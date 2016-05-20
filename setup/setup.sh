@@ -203,7 +203,7 @@ sudo crontab -u root -l | grep -v 'ps_messenger_check.py'  | sudo crontab -u roo
 sudo crontab -l -u root | grep ps_messenger_check > /dev/null
 if [ $? != 0 ]
 then
-    (sudo crontab -l -u root 2>/dev/null; echo "*/5 * * * * python /usr/local/bin/ps_messenger_check.py") | sudo crontab - -u root
+    (sudo crontab -l -u root 2>/dev/null; echo "* */1 * * * python /usr/local/bin/ps_messenger_check.py") | sudo crontab - -u root
 fi
 # run the messenger once
 python /usr/local/bin/ps_messenger_check.py > /dev/null
@@ -215,7 +215,7 @@ sudo crontab -u root -l | grep -v 'ps_updater.py'  | sudo crontab -u root -
 sudo crontab -l -u root | grep ps_updater > /dev/null
 if [ $? != 0 ]
 then
-    (sudo crontab -l -u root 2>/dev/null; echo "2 */6 * * * python /usr/local/bin/ps_updater.py") | sudo crontab - -u root
+    (sudo crontab -l -u root 2>/dev/null; echo "2 */2 * * * python /usr/local/bin/ps_updater.py") | sudo crontab - -u root
 fi
 # run the updater once
 python /usr/local/bin/ps_updater.py > /dev/null
