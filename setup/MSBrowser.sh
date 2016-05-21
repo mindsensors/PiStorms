@@ -41,11 +41,6 @@ do_start () {
 }
 
 do_status () {
-	#if [ -e /dev/servoblaster ] ; then
-	#	return 0
-	#else
-	#	return 4
-	#fi
     return 0
 }
 

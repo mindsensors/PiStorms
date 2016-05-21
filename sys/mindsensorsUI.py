@@ -476,19 +476,25 @@ class mindsensorsUI():
     #  @endcode    
     def fillBmp(self, x, y, width, height, path = "/usr/local/mindsensors/images/Pane1.png",display = True):
 
+        start_time = time.time()
         self.mutex.acquire()
+        #print("fillBmp:>01>> %s seconds ---" % (time.time() - start_time))
 
         try:
+            #print("fillBmp:>02>> %s seconds ---" % (time.time() - start_time))
             buff = self.disp.buffer
             actx = self.screenXFromImageCoords(x,y)
             acty = self.screenYFromImageCoords(x,y)
             # if the caller only provided icon name, assume it is in our system repository
             if ( path[0] != "/" ):
                 path = "/usr/local/mindsensors/images/" + path
+
+            # if the image is missing, use a default X image.
             if ( os.path.isfile(path)):
                 image = Image.open(path)
             else:
                 image = Image.open("/usr/local/mindsensors/images/missing.png")
+
             non_transparent = Image.new('RGBA',image.size,(255,255,255,255))
             #changed by Deepak.
             non_transparent.paste(image,(0,0))
@@ -507,13 +513,14 @@ class mindsensorsUI():
             if(cr ==3):
                 acty -= width
             
-            
             #changed by Deepak.
             buff.paste(tempimage,(actx,acty))
             if(display):
                 self.disp.display()
         finally:
             self.mutex.release()
+            #pass
+        #print("fillBmp:>03>> %s seconds ---" % (time.time() - start_time))
     
     ## Rotates the screen orientation 90 degrees to the right (-90 degrees)
     #  @param self The object pointer.
