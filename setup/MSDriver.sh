@@ -26,10 +26,11 @@ show_logo() {
 }
 
 do_start () {
-    show_logo
+    #show_logo
+	sleep 1
 	sudo python /usr/local/bin/MSDriver.py >/var/tmp/psmd.out 2>&1 &
     chmod a+rw /dev/i2c* > /dev/null 2>&1
-	sleep 2
+	sleep 1
 }
 
 do_status() {

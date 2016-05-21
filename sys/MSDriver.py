@@ -37,8 +37,6 @@ while (True):
             #print "sudo halt -p"
             if ( logoOn == False):
                 logoOn = True
-                #screen = mindsensorsUI("PiStorms",3)
-                #screen.fillBmp(0, 0, 320, 240, path = "/usr/local/mindsensors/images/ms-logo-w320-h240.png")
             os.system("sudo shutdown -h now")
             quit()
     except:
