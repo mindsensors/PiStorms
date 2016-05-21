@@ -23,7 +23,7 @@
 
 from mindsensors_i2c import mindsensors_i2c
 import sys,os,time
-from mindsensorsUI import mindsensorsUI
+#from mindsensorsUI import mindsensorsUI
 
 driver = mindsensors_i2c( 0x34 >> 1)
 count = 0
@@ -37,8 +37,8 @@ while (True):
             #print "sudo halt -p"
             if ( logoOn == False):
                 logoOn = True
-                screen = mindsensorsUI("PiStorms",3)
-                screen.fillBmp(0, 0, 320, 240, path = "/usr/local/mindsensors/images/ms-logo-w320-h240.png")
+                #screen = mindsensorsUI("PiStorms",3)
+                #screen.fillBmp(0, 0, 320, 240, path = "/usr/local/mindsensors/images/ms-logo-w320-h240.png")
             os.system("sudo shutdown -h now")
             quit()
     except:
