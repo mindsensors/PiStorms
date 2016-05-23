@@ -32,6 +32,7 @@ def renameFolder(prefix, index):
     else:
         cmd = "sudo mv " + prefix +" " + prefix+"."+str(index)
         status = subprocess.call(cmd, shell=True)
+        return (prefix+"."+str(index))
 
 opt = str(sys.argv[1])
 
@@ -78,7 +79,7 @@ else:
 # rename the prior folder with an indremental suffix
 # Extract the new update in its place
 #
-renameFolder("/home/pi/PiStorms", 0)
+newName = renameFolder("/home/pi/PiStorms", 0)
 
 if (os.path.isdir("/home/pi/PiStorms")):
     # if the folder is still there, don't install
@@ -117,6 +118,8 @@ psm.screen.termPrintAt(3, "Update complete.")
 psm.screen.termPrintAt(4, "Please restart your Pi.")
 
 m = ["Software Updater", "Update Complete.",
+  "Prior installation saved in:",
+  newName,
   "Please restart your Pi"]
 psm.screen.askQuestion(m,["OK"])
 
