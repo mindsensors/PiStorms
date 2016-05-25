@@ -396,7 +396,7 @@ class mindsensorsUI():
     #  touch = screen.isTouched()
     #  @endcode 
     def isTouched(self):
-        time.sleep(0.05)
+        time.sleep(0.001)
         firstTry = self.touchIgnoreX == self.TS_X() and self.touchIgnoreY == self.TS_Y()
         secondTry = self.touchIgnoreX == self.TS_X() and self.touchIgnoreY == self.TS_Y()
         thirdTry = self.touchIgnoreX == self.TS_X() and self.touchIgnoreY == self.TS_Y()
