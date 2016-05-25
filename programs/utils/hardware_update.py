@@ -1,13 +1,31 @@
 #!/usr/bin/env python
 
 from PiStorms import PiStorms
-import sys, subprocess, json
+import sys, subprocess, json, os
 import socket
+import ConfigParser
 
 version_json_file = '/var/tmp/ps_versions.json'
+hw_version_file = '/var/tmp/.hw_version'
+
+cfg_file = '/usr/local/mindsensors/conf/msdev.cfg'
+
+config = ConfigParser.RawConfigParser()
+config.read(cfg_file)
+
+download_url = config.get('servers', 'download_url') 
 
 psm = PiStorms()
     
+def version_json_update_field(field, new_value):
+    f = open(version_json_file, 'r')
+    json_data = json.loads(f.read())
+    f.close()
+    f = open(version_json_file, 'w')
+    json_data[field] = new_value
+    json.dump(json_data, f)
+    f.close()
+
 def available():
     try:
         socket.setdefaulttimeout(5)
@@ -27,9 +45,93 @@ if (isConnected == False):
 
 print "running hardware_update.py"
 
-m = ["Hardware Updater", "Not Yet Implemented.",
-  "Please refer to blog for manual steps:",
-  "",
-  "http://www.mindsensors.com/blog" ]
-psm.screen.askQuestion(m,["OK"])
-sys.exit(-1)
+# find hw version on this pi.
+try:
+    f = open(hw_version_file, 'r')
+    hw_version = f.read()
+    hw_version = hw_version.strip()
+    hw_version = hw_version.replace('V','')
+    f.close()
+except:
+    hw_version = "0.000"
+
+print "hw_version from file: " + str(hw_version)
+
+if ( hw_version < "1.7"):
+    print "Firmware unknown or too old for auto update"
+    m = ["Firmware Updater", "Current Firmware unkown or too old.",
+      "Can not auto update."]
+    psm.screen.askQuestion(m,["OK"])
+    sys.exit(-1)
+
+try:
+    f = open(version_json_file, 'r')
+    data = json.loads(f.read())
+    new_firmware = data['hw_ver']
+    new_firmware = new_firmware.replace('V','')
+    f.close()
+except:
+    # no local json
+    # this can happen on old systems, so upgrade them to 2.00
+    new_firmware = "2.00"
+
+#
+# Download the update from mindsensors server.
+#
+psm.screen.termPrintAt(3, "Downloading the update")
+psm.screen.termPrintAt(4, "Please wait...")
+
+#B_PiStormsV160.hex
+upgrader = "fwupgrader.tar.gz"
+cmd = "cd /var/tmp/upd/; wget " + download_url + "/" + upgrader
+status = subprocess.call(cmd, shell=True)
+if ( status != 0 ):
+    m = ["Firmware Updater", "Error while downloading upgrader.",
+      upgrader]
+    psm.screen.askQuestion(m,["OK"])
+    sys.exit(-1)
+
+cmd = "cd /var/tmp/upd/; tar -zxvf /var/tmp/upd/" + upgrader
+status = subprocess.call(cmd, shell=True)
+
+fw_file_name = "B_PiStormsV" + new_firmware + ".hex"
+cmd = "cd /var/tmp/upd/; wget " + download_url + "/" + fw_file_name
+status = subprocess.call(cmd, shell=True)
+
+if ( status != 0 ):
+    m = ["Firmware Updater", "Error while downloading update:",
+      fw_file_name]
+    psm.screen.askQuestion(m,["OK"])
+    sys.exit(-1)
+else:
+    psm.screen.termPrintAt(3, "Download complete")
+    psm.screen.termPrintAt(4, "              ")
+
+#
+# perform the update
+#
+psm.screen.termPrintAt(3, "Upgrade in process...")
+psm.screen.termPrintAt(4, "(this takes a while)")
+psm.screen.termPrintAt(5, "Please wait...")
+cmd = "cd /var/tmp/upd/;./fwupgrader PiStorms "+ fw_file_name + " -a"
+print "cmd: " + str(cmd)
+status = subprocess.call(cmd, shell=True)
+if ( status != 0 ):
+    m = ["Firmware Updater", "Error while performing update.",
+      "status: " + str(status)]
+    psm.screen.askQuestion(m,["OK"])
+    sys.exit(-1)
+else:
+    psm.screen.termPrintAt(3, "Update complete.")
+    psm.screen.termPrintAt(4, "new Firmware is: " + fw_file_name)
+    psm.screen.termPrintAt(5, "Restarting your Pi ...")
+    psm.screen.termPrintAt(6, "Please wait ...")
+
+    version_json_update_field('status', 'Done')
+    os.system("sudo shutdown -r now")
+    sys.exit(0)
+
+
+#
+#  screen calibration required
+#
