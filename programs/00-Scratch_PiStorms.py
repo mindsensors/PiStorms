@@ -213,8 +213,11 @@ while doExit == False:
             except scratch.ScratchError:
                 errorCounter += 1
                 rmap.rmap_print("Scratch is either not opened or remote sensor connections aren't enabled")
+                psm.screen.termPrintAt(5, "Is Scratch running?")
+                psm.screen.termPrintAt(6, "And ensure to enable:")
+                psm.screen.termPrintAt(7, "'Remote Sensor connections'")
                 if ( errorCounter > 10 ):
                     psm.screen.clearScreen()
-                    psm.screen.termPrintln("Scrach connection failed")
+                    psm.screen.termPrintAt(6, "Scrach connection failed")
                     time.sleep(10)
                     sys.exit(0)
