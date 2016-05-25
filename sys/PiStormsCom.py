@@ -667,6 +667,9 @@ class PiStormsCom():
     B = 0x42
     C = 0x43
     H = 0x48
+    E = 0x45
+    t = 0x74
+    T = 0x54
     
     
     bankA = mindsensors_i2c(PS_A_ADDRESS >> 1)
