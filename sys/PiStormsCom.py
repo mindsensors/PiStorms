@@ -701,22 +701,34 @@ class PiStormsCom():
             self.bankB.writeByte(self.PS_Command,cmd)
             
     def battVoltage(self):
-        return self.bankA.readByte(self.PS_BattV)*.040
+        try:
+            return self.bankA.readByte(self.PS_BattV)*.040
+        except:
+            return 0
     ##  Read the firmware version of the i2c device
     
     def GetFirmwareVersion(self):
-        ver = self.bankA.readString(0x00, 8)
-        return ver
+        try:
+            ver = self.bankA.readString(0x00, 8)
+            return ver
+        except:
+            return "ReadErr"
 
     ##  Read the vendor name of the i2c device
     def GetVendorName(self):
-        vendor = self.bankA.readString(0x08, 8)
-        return vendor
+        try:
+            vendor = self.bankA.readString(0x08, 8)
+            return vendor
+        except:
+            return "ReadErr"
 
     ##  Read the i2c device id
     def GetDeviceId(self):
-        device = self.bankA.readString(0x10, 8)
-        return device    
+        try:
+            device = self.bankA.readString(0x10, 8)
+            return device    
+        except:
+            return "ReadErr"
         
     def led(self,lednum,red,green,blue):
     
@@ -731,16 +743,36 @@ class PiStormsCom():
         except AttributeError:
             self.led(lednum,red,green,blue)
         time.sleep(.001)
+
     def isKeyPressed(self):
-        return int(0x01&self.bankA.readByte(self.PS_KeyPress))
+        x = 0
+        try:
+            x = self.bankA.readByte(self.PS_KeyPress)
+            return int(0x01&x)
+        except:
+            return 0
+
     def getKeyPressValue(self):
-        return self.bankA.readByte(self.PS_KeyPress)
-    def getKeyPressCountx(self):
-        return self.bankA.readByte(self.PS_Key1Count)
+        try:
+            return (self.bankA.readByte(self.PS_KeyPress))
+        except:
+            return 0
+
+    def getKeyPressCount(self):
+        try:
+            return(self.bankA.readByte(self.PS_Key1Count))
+        except:
+            return 0
+
     def resetKeyPressCount(self):
-        self.bankA.writeByte(self.PS_Key1Count,0)
+        try:
+            self.bankA.writeByte(self.PS_Key1Count,0)
+        except:
+            pass
+
     def ping(self):
         self.bankA.readByte(0x00)
+
 if __name__ == '__main__':
     psc = PiStormsCom()
     print "Version = "+ str(psc.GetFirmwareVersion())
