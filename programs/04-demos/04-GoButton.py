@@ -31,20 +31,20 @@ sys.path.insert(0,parentdir)
 from PiStorms import PiStorms
 
 psm = PiStorms()
-psm.screen.termPrintln("PiStorms ")
-psm.screen.termPrintln("GO button test:")
-psm.screen.termPrintln(" ")
+psm.screen.termPrintAt(2, "PiStorms ")
+psm.screen.termPrintAt(3, "GO button test:")
 
 exit = False
 print "Running Button Test"
 print "press anywhere in PiStorms Screen to exit"
-psm.screen.termPrintln("Touch Display to Exit")
+psm.screen.termPrintAt(8, "Touch Display to Exit")
 psm.screen.termPrintln(" ")
 while(not exit):
  
     pass
     
-    psm.screen.termReplaceLastLine("Go Button is = " +str(psm.isKeyPressed()))
+    psm.screen.termPrintAt(5, "GO Button is = " +str(psm.isKeyPressed()))
+    psm.screen.termPrintAt(6, "Press Count = " +str(psm.getKeyPressCount()))
     if (psm.screen.checkButton(0,0,320,320)):
         psm.screen.termPrintln(" ")
         psm.screen.termPrintln("Exiting .....")
