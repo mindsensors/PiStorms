@@ -67,7 +67,7 @@ if ( opt == "update:software" ):
 	script = "software_update.py"
 
 if ( opt == "update:both" ):
-	script = "both_update.py"
+	script = "software_update.py"
 
 cmd = "rm -rf /var/tmp/upd"
 subprocess.call(cmd, shell=True)
