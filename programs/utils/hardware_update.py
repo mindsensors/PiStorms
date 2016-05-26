@@ -150,12 +150,16 @@ if ( status != 0 ):
     psm.screen.askQuestion(m,["OK"])
     sys.exit(-1)
 else:
+    version_json_update_field('status', 'Done')
     psm.screen.termPrintAt(3, "Update complete.")
     psm.screen.termPrintAt(4, "new Firmware is: ")
     psm.screen.termPrintAt(5, fw_file_name)
     psm.screen.termPrintAt(7, "Now Calibrate screen ...")
-
-    version_json_update_field('status', 'Done')
+    psm.screen.termPrintAt(8, "Press GO button to continue")
+    doExit = False
+    while (doExit == False):
+        if(psm.isKeyPressed() == True): # if the GO button is pressed
+            doExit = True
 
     # screen calibration required after firmware change
     # force calibrations
