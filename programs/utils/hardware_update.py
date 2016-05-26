@@ -151,9 +151,9 @@ if ( status != 0 ):
     sys.exit(-1)
 else:
     psm.screen.termPrintAt(3, "Update complete.")
-    psm.screen.termPrintAt(4, "new Firmware is: " + fw_file_name)
-    psm.screen.termPrintAt(5, "Restarting your Pi ...")
-    psm.screen.termPrintAt(6, "Please wait ...")
+    psm.screen.termPrintAt(4, "new Firmware is: ")
+    psm.screen.termPrintAt(5, fw_file_name)
+    psm.screen.termPrintAt(7, "Now Calibrate screen ...")
 
     version_json_update_field('status', 'Done')
 
