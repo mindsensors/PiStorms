@@ -97,7 +97,6 @@ sudo pip install -qq mindsensors_i2c
 sudo pip install -qq wireless
 sudo pip install -qq wifi
 sudo pip install -qq ws4py
-sudo pip install -qq cv2
 
 # clean up renamed legacy files.
 sudo rm -f /usr/local/bin/PiStormsDriver.py
