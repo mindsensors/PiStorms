@@ -24,20 +24,48 @@
 # 05/25/16   Deepak     Initial development.
 #
 
-import time
+import time, sys
 from PiStorms import PiStorms
 
 psm = PiStorms()
 
 width=320
 height=240
+
+opt1 = ""
+
+if ( len(sys.argv) > 1 ):
+    opt1 = str(sys.argv[1])
+
+if ( opt1 != "force" ):
+    psm.screen.termPrintAt(1, "Touch Screen Calibration Program")
+    psm.screen.termPrintAt(3, "You should only calibrate if you")
+    psm.screen.termPrintAt(4, "upgraded PiStorms Firmware.")
+    psm.screen.termPrintAt(6, "Do you still want to calibrate?")
+
+    doCalibrate = False
+    count = 11
+    oldKeyPressCount = psm.getKeyPressCount()
+    while ( count > 0 ):
+        psm.screen.termPrintAt(8, "Press GO button within " + str(count) +" seconds")
+        count = count - 1
+        newKeyPressCount = psm.getKeyPressCount()
+        if ( newKeyPressCount > oldKeyPressCount ):
+            count = 0
+            doCalibrate = True
+        time.sleep(1)
+
+    if ( doCalibrate == False ):
+        psm.screen.disp.clear()
+        psm.screen.termPrintAt(8, "Not calibrating ...")
+        quit()
+
 psm.screen.disp.clear()
 psm.screen.termPrintAt(1, "Touch Screen Calibration Program")
 psm.screen.termPrintAt(3, "On next screen, click and hold on")
 psm.screen.termPrintAt(4, "the Cross-hair and Press GO button.")
 psm.screen.termPrintAt(6, "Then follow on screen instructions.")
 time.sleep(8)
-
 
 draw = psm.screen.disp.draw()
 w = width/4
