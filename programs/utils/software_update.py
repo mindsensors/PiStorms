@@ -132,11 +132,11 @@ else:
 cmd = "cd /home/pi/PiStorms/setup;chmod +x setup.sh"
 status = subprocess.call(cmd, shell=True)
 
-psm.screen.termPrintAt(3, "Configuration in process...")
-psm.screen.termPrintAt(4, "Please wait...")
+psm.screen.termPrintAt(3, "Configuration in process ...")
+psm.screen.termPrintAt(5, "(this takes a while)")
+psm.screen.termPrintAt(5, "Please wait ...")
 cmd = "cd /home/pi/PiStorms/setup;./setup.sh"
 status = subprocess.call(cmd, shell=True)
-
 
 psm.screen.termPrintAt(3, "Update complete.")
 psm.screen.termPrintAt(4, "Please restart your Pi.")
