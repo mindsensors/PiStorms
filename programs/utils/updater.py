@@ -56,7 +56,7 @@ opt = str(sys.argv[1])
 isConnected = available()
 if (isConnected == False):
     m = ["Software Updater", "You are not connected to Internet.",
-      "Internet connection required"]
+      "Internet connection required."]
     psm.screen.askQuestion(m,["OK"])
     sys.exit(-1)
 
@@ -69,10 +69,13 @@ if ( opt == "update:software" ):
 if ( opt == "update:both" ):
 	script = "software_update.py"
 
-cmd = "rm -rf /var/tmp/upd"
+cmd = "sudo rm -rf /var/tmp/upd"
 subprocess.call(cmd, shell=True)
 
 cmd = "mkdir -p /var/tmp/upd"
+subprocess.call(cmd, shell=True)
+
+cmd = "sudo chmod a+rwx /var/tmp/upd"
 subprocess.call(cmd, shell=True)
 
 cmd = "cd /var/tmp/upd; wget " + download_url +"/" + script
@@ -83,10 +86,5 @@ subprocess.call(cmd, shell=True)
 
 cmd = "cd /var/tmp/upd; python " + script + " " + opt
 subprocess.call(cmd, shell=True)
-
-#m = ["Software Updater", "Not yet implemented.",
-#  "option: " + opt]
-#psm.screen.askQuestion(m,["OK"])
-
 
 exit(-1)

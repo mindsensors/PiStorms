@@ -42,12 +42,13 @@ if ( opt1 != "force" ):
     psm.screen.termPrintAt(3, "You should only calibrate if you")
     psm.screen.termPrintAt(4, "upgraded PiStorms Firmware.")
     psm.screen.termPrintAt(6, "Do you still want to calibrate?")
+    psm.screen.termPrintAt(7, "To Confirm 'Yes':")
 
     doCalibrate = False
     count = 11
     oldKeyPressCount = psm.getKeyPressCount()
     while ( count > 0 ):
-        psm.screen.termPrintAt(8, "Press GO button within " + str(count) +" seconds")
+        psm.screen.termPrintAt(8, "press GO button within " + str(count) +" seconds")
         count = count - 1
         newKeyPressCount = psm.getKeyPressCount()
         if ( newKeyPressCount > oldKeyPressCount ):
@@ -62,10 +63,16 @@ if ( opt1 != "force" ):
 
 psm.screen.disp.clear()
 psm.screen.termPrintAt(1, "Touch Screen Calibration Program")
-psm.screen.termPrintAt(3, "On next screen, click and hold on")
-psm.screen.termPrintAt(4, "the Cross-hair and Press GO button.")
+psm.screen.termPrintAt(3, "On next screen, touch and hold")
+psm.screen.termPrintAt(4, "stylus PRECISELY on the")
+psm.screen.termPrintAt(5, "Cross-Hair and Press GO button.")
 psm.screen.termPrintAt(6, "Then follow on screen instructions.")
-time.sleep(8)
+psm.screen.termPrintAt(8, "Press GO button to continue")
+doExit = False
+while (doExit == False):
+    if(psm.isKeyPressed() == True): # if the GO button is pressed
+        doExit = True
+time.sleep(2)
 
 draw = psm.screen.disp.draw()
 w = width/4
@@ -76,7 +83,8 @@ draw.line((h-10, w, h+10, w), fill=(0,255,0))
 draw.line((h, w-10, h, w+10), fill=(0,255,0))
 psm.screen.disp.display()
 
-psm.screen.termPrintAt(8, "Touch and Hold the CrossHair")
+psm.screen.termPrintAt(7, "Touch & Hold Stylus")
+psm.screen.termPrintAt(8, "on the Cross-Hair")
 psm.screen.termPrintAt(9, "And press the GO button")
 doExit = False
 while (doExit == False):
