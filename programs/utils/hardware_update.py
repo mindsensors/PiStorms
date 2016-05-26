@@ -14,6 +14,7 @@ config = ConfigParser.RawConfigParser()
 config.read(cfg_file)
 
 download_url = config.get('servers', 'download_url') 
+homefolder = config.get('msdev', 'homefolder') 
 
 psm = PiStorms()
     
@@ -83,6 +84,9 @@ psm.screen.termPrintAt(4, "Please wait...")
 
 #B_PiStormsV160.hex
 upgrader = "fwupgrader.tar.gz"
+cmd = "sudo rm -f /var/tmp/upd/"+upgrader
+status = subprocess.call(cmd, shell=True)
+
 cmd = "cd /var/tmp/upd/; wget " + download_url + "/" + upgrader
 status = subprocess.call(cmd, shell=True)
 if ( status != 0 ):
@@ -128,7 +132,9 @@ else:
     psm.screen.termPrintAt(6, "Please wait ...")
 
     version_json_update_field('status', 'Done')
-    os.system("sudo shutdown -r now")
+    #os.system("sudo shutdown -r now")
+    # force calibrations
+    os.system("sudo python " +  homefolder + "/programs/utils/01-Calibrate.py force")
     sys.exit(0)
 
 
