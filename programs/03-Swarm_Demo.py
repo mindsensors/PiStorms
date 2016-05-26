@@ -54,17 +54,26 @@ if __name__ == '__main__':
         # the message received from peer.
         #
         if ('type' in msg_array) and (msg_array['type'] == 'peermessage'):
+            start_time = time.time()
             print "Peer says: ", msg_array['message']
+            sys.stdout.flush()
+            print(">00>> %s seconds ---" % (time.time() - start_time))
             msg =  json.loads(str(msg_array['message']))
+            print(">01>> %s seconds ---" % (time.time() - start_time))
             if (msg['action'] == "move"):
                 smiley_x = msg['x']
                 smiley_y = msg['y']
+                print(">02>> %s seconds ---" % (time.time() - start_time))
                 psm.screen.fillBmp(old_x, old_y, bmpw, bmpw, path = currentdir+'/'+"black-square.png")
+                print(">03>> %s seconds ---" % (time.time() - start_time))
                 psm.screen.fillBmp(smiley_x, smiley_y, bmpw, bmpw, path = currentdir+'/'+"smiley.png")
+                print(">04>> %s seconds ---" % (time.time() - start_time))
                 old_x = smiley_x
                 old_y = smiley_y
         else:
             print "System Message: ", msg_array['message']
+
+        sys.stdout.flush()
 
     psm.screen.drawAutoText("Searching Swarm neighbors ...", 15, 218, fill=(255, 255, 255), size = 18) 
     nbrs_list = []
@@ -91,12 +100,14 @@ if __name__ == '__main__':
     # SwarmClient(messageHandler, <optional server>)
     #
     print "creating SwarmClient " 
+    sys.stdout.flush()
     try:
         ws = SwarmClient(myHandler)
         #
         #
         if not ( ws.isRegistered ):
             print "registration failed"
+            sys.stdout.flush()
             m = ["Swarm-Demo", "Swarm server registration failed."]
             psm.screen.askQuestion(m,["OK"])
             exit()
@@ -105,6 +116,9 @@ if __name__ == '__main__':
         old_tsy = 0
         while doExit == False:
             if ( psm.screen.isTouched() ):
+                #
+                # someone touched on the screen.
+                #
                 tsx = psm.screen.TS_X()
                 tsy = psm.screen.TS_Y()
                 tsx_delta = abs(tsx - old_tsx)
@@ -124,8 +138,13 @@ if __name__ == '__main__':
                     m_array['action'] = "move"
                     m_array['x'] = image_x
                     m_array['y'] = image_y
+                    # send message to everyone
                     for neighbor in nbrs_list:
                         ws.SendMessageToPeer(neighbor, json.dumps(m_array))
+
+                    print "moving myself: x:" + str(image_x) + " y:" + str(image_y)
+                    sys.stdout.flush()
+                    # move my own smiley too.
                     psm.screen.fillBmp(old_x, old_y, bmpw, bmpw, path = currentdir+'/'+"black-square.png")
                     psm.screen.fillBmp(image_x, image_y, bmpw, bmpw, path = currentdir+'/'+"smiley.png")
                     old_x = image_x
