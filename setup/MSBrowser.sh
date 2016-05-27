@@ -20,11 +20,11 @@ do_start () {
     else
         homefolder=/home/pi/PiStorms
     fi
-    python $homefolder/programs/tests/msg-to-screen.py "Loading PiStorms" "Please wait"
+    python $homefolder/programs/utils/msg-to-screen.py "Loading PiStorms" "Please wait"
 
     #
     # query the hardware for its version
-    sudo python $homefolder/programs/tests/print-hw-version.py >/var/tmp/.hw_version
+    sudo python $homefolder/programs/utils/print-hw-version.py >/var/tmp/.hw_version
     chmod a+rw /dev/i2c* > /dev/null 2>&1
 
     #
@@ -36,7 +36,7 @@ do_start () {
     sudo python /usr/local/bin/ps_updater.py >> /var/tmp/ps_u 2>&1
     sleep 1
     #
-    # diagnostic tests
+    # run diagnostics
     sudo /usr/local/bin/pistorms-diag.sh > /var/tmp/psm-diag.txt 2>&1
     cp /var/tmp/psm-diag.txt /boot
     sleep 1

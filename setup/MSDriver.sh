@@ -13,6 +13,18 @@
 PATH=/sbin:/usr/sbin:/bin:/usr/bin
 #. /lib/init/vars.sh
 
+psm_shutdown() {
+  if [ -f /usr/local/mindsensors/conf/msdev.cfg ]
+  then
+      homefolder=`grep homefolder /usr/local/mindsensors/conf/msdev.cfg | cut -d"=" -f2`
+  else
+    echo "config file is missing"
+    homefolder=/home/pi/PiStorms
+  fi
+  python $homefolder/programs/utils/psm_shutdown.py
+
+}
+
 show_logo() {
   if [ -f /usr/local/mindsensors/conf/msdev.cfg ]
   then
@@ -21,7 +33,7 @@ show_logo() {
     echo "config file is missing"
     homefolder=/home/pi/PiStorms
   fi
-  python $homefolder/programs/tests/img-to-screen.py 0 0 320 240 /usr/local/mindsensors/images/ms-logo-w320-h240.png
+  python $homefolder/programs/utils/img-to-screen.py 0 0 320 240 /usr/local/mindsensors/images/ms-logo-w320-h240.png
 
 }
 
@@ -49,6 +61,7 @@ case "$1" in
 	;;
   stop)
     show_logo
+    psm_shutdown
 	;;
   status)
     do_status

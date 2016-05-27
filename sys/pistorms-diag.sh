@@ -14,8 +14,8 @@ fi
 echo "homefolder: $homefolder"
 
 
-#python $homefolder/programs/tests/msg-to-screen.py "Loading Raspbian" "Please wait"
-echo "PiStorms Diagnostics tests"
+#python $homefolder/programs/utils/msg-to-screen.py "Loading Raspbian" "Please wait"
+echo "Running PiStorms Diagnostics"
 echo "--------------------------"
 echo ""
 echo "Date..."
@@ -31,10 +31,10 @@ echo ""
 echo "Voltage check..."
 echo "----------------"
 
-if [ -f $homefolder/programs/tests/print-battery-voltage.py ]
+if [ -f $homefolder/programs/utils/print-battery-voltage.py ]
 then
     echo "voltage check"
-    python $homefolder/programs/tests/print-battery-voltage.py
+    python $homefolder/programs/utils/print-battery-voltage.py
 else
     echo "print-battery-voltage.py is missing"
 fi
@@ -43,9 +43,9 @@ fi
 #echo "Screen test....."
 #echo "----------------"
 #
-#if [ -f /home/pi/PiStorms/programs/tests/screen-test.py ]
+#if [ -f /home/pi/PiStorms/programs/utils/screen-test.py ]
 #then
-#    python /home/pi/PiStorms/programs/tests/screen-test.py
+#    python /home/pi/PiStorms/programs/utils/screen-test.py
 #else
 #    echo "screen-test.py is missing"
 #fi
@@ -54,9 +54,9 @@ echo ""
 echo "PiStorms info "
 echo "--------------"
 
-if [ -f $homefolder/programs/tests/psm-info.py ]
+if [ -f $homefolder/programs/utils/psm-info.py ]
 then
-    python $homefolder/programs/tests/psm-info.py
+    python $homefolder/programs/utils/psm-info.py
 else
     echo "psm-info.py is missing"
 fi
