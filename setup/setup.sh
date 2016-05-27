@@ -24,7 +24,7 @@
 # Apr 2016  Deepak      install from github created environment
 
 #setup i2c and spi 
-cp -p /boot/config.txt /tmp/config.txt
+sudo cp -p /boot/config.txt /tmp/config.txt
 
 ff=/tmp/config.txt
 
