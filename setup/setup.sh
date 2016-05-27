@@ -24,7 +24,7 @@
 # Apr 2016  Deepak      install from github created environment
 
 #setup i2c and spi 
-sudo cp -p /boot/config.txt /tmp/config.txt
+cp /boot/config.txt /tmp/config.txt
 
 ff=/tmp/config.txt
 
@@ -61,7 +61,7 @@ else
     sudo sed -i -e '$i \dtparam=spi=on' $ff
 fi
 
-sudo cp -p /tmp/config.txt /boot/config.txt
+sudo cp /tmp/config.txt /boot/config.txt
 
 #
 #
