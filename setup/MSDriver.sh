@@ -61,7 +61,15 @@ case "$1" in
 	;;
   stop)
     show_logo
-    psm_shutdown
+
+    lckfile=/tmp/.psm_shutdown.lck
+    line=`cat $lckfile|tr -d [:space:]`
+    if [ $line = halt ]
+    then
+      cp /dev/null $lckfile
+      rm -f $lckfile
+      psm_shutdown
+    fi
 	;;
   status)
     do_status
