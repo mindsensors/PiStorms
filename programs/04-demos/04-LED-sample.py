@@ -41,29 +41,33 @@ psm.screen.askQuestion(m,["OK"])
 #psm.screen.termPrintln("LED blinking program")
 #psm.screen.termPrintln("Hold screen to exit")
 
-exit = True
+d1 = 0.1
+d2 = 0.1
+exit = False
+psm.screen.termPrintAt(8, "Press Go button to exit")
+oldKeyPressCount = psm.getKeyPressCount()
 while(not exit):
     
-    #psm.led(1,0,255,0)
-    #time.sleep(2)
+    psm.led(2,0,255,0)
+    time.sleep(d1)
     psm.led(1,0,255,0)
-    time.sleep(2)
-    #psm.led(1,255,0,0)
-    #time.sleep(2)
+    time.sleep(d2)
+    psm.led(2,255,0,0)
+    time.sleep(d1)
     psm.led(1,255,0,0)
-    time.sleep(2)
-    #psm.led(1,0,0,255)
-    #time.sleep(2)
+    time.sleep(d2)
+    psm.led(2,0,0,255)
+    time.sleep(d1)
     psm.led(1,0,0,255)
-    time.sleep(2)
+    time.sleep(d2)
 
-    if(psm.screen.checkButton(0,0,320,320)):
+    newKeyPressCount = psm.getKeyPressCount()
+    if ( newKeyPressCount > oldKeyPressCount ):
         psm.screen.termPrintln("")
-        psm.screen.termPrintln("Exiting to menu")
+        psm.screen.termPrintAt(8, "Exiting to menu")
         time.sleep(1)
         psm.led(1,0,0,0)
+        psm.led(2,0,0,0)
         time.sleep(1)
-        #psm.led(2,0,0,0)
-        #time.sleep (1)
         exit = True
         

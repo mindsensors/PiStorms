@@ -100,6 +100,9 @@ except:
     # this can happen on old systems, so upgrade them to 2.00
     new_firmware = "2.00"
 
+m = ["Firmware Updater", "Remove all sensors and motors.",
+  "Then press OK to continue."]
+psm.screen.askQuestion(m,["OK"])
 #
 # Download the update from mindsensors server.
 #

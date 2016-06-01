@@ -109,6 +109,7 @@ sudo rm -f /etc/init.d/PiStormsBrowser.sh
 # copy startup scripts.
 sudo cp -p ../sys/MSDriver.py /usr/local/bin/
 sudo cp -p ../sys/MSBrowser.py /usr/local/bin/
+sudo cp -p ../sys/psm_shutdown /usr/local/bin/
 if [ -f /etc/init.d/SwarmServer.sh ]
 then
     sudo /etc/init.d/SwarmServer.sh stop
