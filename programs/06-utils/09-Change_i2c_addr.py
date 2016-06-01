@@ -103,7 +103,7 @@ def selectAddress():
     
 def changeAddress():
     psm.screen.termPrintAt(8, "Changing Address...")
-    command = "/home/pi/PiStormsprograms/addresschange " + str(hex(currAddr)) + " " + str(hex(nextAddr))
+    command = "/home/pi/PiStorms/programs/addresschange " + str(hex(currAddr)) + " " + str(hex(nextAddr))
     psm.screen.termPrintAt(9, command)
     #os.system
     subprocess.call(command, shell=True)  
