@@ -37,11 +37,14 @@ lckfile=/tmp/.psm_shutdown.lck
 cp /dev/null $lckfile
 rm -f $lckfile
 # only when halting machine, power off PiStorms
-if [[ $arg1 == "-H" || $arg1 == "-h" || $arg1 == "-halt" || $arg1 == "-P" || $arg1 == "--poweroff" ]]
+if [[ $arg1 == "-H" || $arg1 == "-h" || $arg1 == "--halt" || $arg1 == "-P" || $arg1 == "--poweroff" ]]
 then
     echo "halt the PiStorms"
     echo "halt" > $lckfile
     chmod a+rw $lckfile
+else
+    cp /dev/null $lckfile
+    sudo rm -f $lckfile
 fi
 
 /sbin/shutdown $*
