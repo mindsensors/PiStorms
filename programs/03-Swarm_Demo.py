@@ -57,17 +57,12 @@ if __name__ == '__main__':
             start_time = time.time()
             print "Peer says: ", msg_array['message']
             sys.stdout.flush()
-            print(">00>> %s seconds ---" % (time.time() - start_time))
             msg =  json.loads(str(msg_array['message']))
-            print(">01>> %s seconds ---" % (time.time() - start_time))
             if (msg['action'] == "move"):
                 smiley_x = msg['x']
                 smiley_y = msg['y']
-                print(">02>> %s seconds ---" % (time.time() - start_time))
                 psm.screen.fillBmp(old_x, old_y, bmpw, bmpw, path = currentdir+'/'+"black-square.png")
-                print(">03>> %s seconds ---" % (time.time() - start_time))
                 psm.screen.fillBmp(smiley_x, smiley_y, bmpw, bmpw, path = currentdir+'/'+"smiley.png")
-                print(">04>> %s seconds ---" % (time.time() - start_time))
                 old_x = smiley_x
                 old_y = smiley_y
         else:
@@ -94,6 +89,13 @@ if __name__ == '__main__':
     peers = len(nbrs_list)
     psm.screen.drawAutoText( str(peers) + " neighbor(s) found", 15, 200, fill=(255, 255, 255), size = 18) 
     psm.screen.drawAutoText("Press Go to Exit", 15, 218, fill=(255, 255, 255), size = 18) 
+
+    # print neighbor information on screen
+    nn = 7
+    for neighbor in nbrs_list:
+        if (nn > 0):
+            psm.screen.termPrintAt(nn, str(neighbor))
+            nn = nn - 1
     #
     # register with the swarm server
     # Function parameters:
@@ -127,11 +129,9 @@ if __name__ == '__main__':
                 if ((tsx != 0 and tsy != 0) and (tsx_delta > 8 or tsy_delta > 8)):
                     old_tsx = tsx
                     old_tsy = tsy
-                    #print "at: tsx: " + str(tsx) + " tsy: " + str(tsy)
                     # center the image where user touched.
                     image_x = psm.screen.TS_To_ImageCoords_X(tsx,tsy) - 20
                     image_y = psm.screen.TS_To_ImageCoords_Y(tsx,tsy) - 20
-                    #print "touched at: x: " + str(image_x) + " y: " + str(image_y)
 
                     #for each nbr in the list send message of new coordinates {x,y}
                     m_array = {}
@@ -142,7 +142,6 @@ if __name__ == '__main__':
                     for neighbor in nbrs_list:
                         ws.SendMessageToPeer(neighbor, json.dumps(m_array))
 
-                    print "moving myself: x:" + str(image_x) + " y:" + str(image_y)
                     sys.stdout.flush()
                     # move my own smiley too.
                     psm.screen.fillBmp(old_x, old_y, bmpw, bmpw, path = currentdir+'/'+"black-square.png")
@@ -153,8 +152,7 @@ if __name__ == '__main__':
 
             if(psm.isKeyPressed() == True): # if the GO button is pressed
                 psm.screen.clearScreen()
-                psm.screen.termPrintln("")
-                psm.screen.termPrintln("Exiting to menu")
+                psm.screen.termPrintAt(8, "Exiting to menu")
                 #time.sleep(0.2) 
                 doExit = True 
             pass
