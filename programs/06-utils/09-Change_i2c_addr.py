@@ -30,6 +30,12 @@ currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentfram
 parentdir = os.path.dirname(currentdir)
 sys.path.insert(0,parentdir) 
 from PiStorms import PiStorms
+import ConfigParser
+
+cfg_file = '/usr/local/mindsensors/conf/msdev.cfg'
+config = ConfigParser.RawConfigParser()
+config.read(cfg_file)
+homefolder = config.get('msdev', 'homefolder')
 
 print "running program"
 psm = PiStorms()
@@ -103,8 +109,9 @@ def selectAddress():
     
 def changeAddress():
     psm.screen.termPrintAt(8, "Changing Address...")
-    command = "/home/pi/PiStorms/programs/addresschange " + str(hex(currAddr)) + " " + str(hex(nextAddr))
-    psm.screen.termPrintAt(9, command)
+    command = homefolder + "/programs/addresschange " + str(hex(currAddr)) + " " + str(hex(nextAddr))
+    #psm.screen.termPrintAt(9, command)
+    psm.screen.termPrintAt(9, "Successful! Exiting to Main Menu")
     #os.system
     subprocess.call(command, shell=True)  
     time.sleep(2)
@@ -114,10 +121,6 @@ def changeAddress():
 while(not exit):
     action = psm.screen.checkButton(75, 95,width=85,height=40)
     bye = psm.screen.checkButton(175, 95,width=60,height=40)
-    #currAddr = 356
-    #nextAddr = 36
-    #command = './addresschange ' + str(hex(currAddr)) + " " + str(hex(nextAddr))
-    #subprocess.call(command, shell=True) 
     if(action == True): 
         explore()
         if(exit == False):

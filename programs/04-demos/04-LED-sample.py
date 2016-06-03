@@ -31,20 +31,22 @@ sys.path.insert(0,parentdir)
 from PiStorms import PiStorms
 print "running program"
 psm = PiStorms()
+version = float(psm.GetFirmwareVersion()[1:5])
 
-m = ["LED-sample", "This feature is not yet",
- "implemented on the PiStorms.",
- "   ",
+if(version < 2.05):
+    m = ["LED-sample", "This feature is not implemented on",
+ "PiStorms Firmware: V2.04 and earlier.",
+ "Please upgrade your PiStorms.",
+ "  ",
  "Click OK to exit."]
-psm.screen.askQuestion(m,["OK"])
+    psm.screen.askQuestion(m,["OK"])
+    exit = True
+else:
+    exit = False
+    psm.screen.termPrintAt(8, "Press Go button to exit")  
 
-#psm.screen.termPrintln("LED blinking program")
-#psm.screen.termPrintln("Hold screen to exit")
-
-d1 = 0.1
-d2 = 0.1
-exit = False
-psm.screen.termPrintAt(8, "Press Go button to exit")
+d1 = 0.2
+d2 = 0.2
 oldKeyPressCount = psm.getKeyPressCount()
 while(not exit):
     
