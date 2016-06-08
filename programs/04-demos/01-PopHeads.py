@@ -28,22 +28,25 @@ from picamera import PiCamera
 import os,sys,inspect,time#thread
 import cv2
 import imutils
+import ConfigParser
+cfg_file = '/usr/local/mindsensors/conf/msdev.cfg'
 currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
 parentdir = os.path.dirname(currentdir)
 sys.path.insert(0,parentdir) 
 from PiStorms import PiStorms
 psm = PiStorms()
 
+config = ConfigParser.RawConfigParser()
+config.read(cfg_file)
+
+homefolder = config.get('msdev', 'homefolder') 
 
 print "running program"
 psm.screen.termPrintln(" ")
 
-# Get user supplied values
-#cascPath = sys.argv[1]
-
 # Create the haar cascade
-#faceCascade = cv2.CascadeClassifier(cascPath)
-faceCascade = cv2.CascadeClassifier("/home/pi/PiStorms/programs/haarcascade_frontalface_default.xml")
+haar_path=currentdir+"/haarcascade_frontalface_default.xml"
+faceCascade = cv2.CascadeClassifier(haar_path)
 
 # initialize the camera and grab a reference to the raw camera capture
 #down size the image resolution for imporving speed. 
