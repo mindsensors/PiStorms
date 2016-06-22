@@ -223,7 +223,7 @@ class PiStormsSensor:
     def remoteRight(self,channel):
         return self.pssensor.remoteRight(channel)
     
-    ## Returns the EV3 Ultrasonic Sensor distance value in centimeters
+    ## Returns the EV3 Ultrasonic Sensor distance value in millimeters
     #  @param self The object pointer.
     #  @remark
     #  To use this function in your program:
@@ -238,7 +238,8 @@ class PiStormsSensor:
     def distanceUSEV3(self):
         return self.pssensor.distanceUSEV3cm()
     
-    ## Returns the EV3 Ultrasonic Sensor distance value in inches
+    ## Returns the EV3 Ultrasonic Sensor distance value in 'inches times 10'
+    # i.e. for an obstacle at 3 inches, you will get a reading of 30
     #  @param self The object pointer.
     #  @remark
     #  To use this function in your program:
