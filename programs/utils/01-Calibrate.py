@@ -37,6 +37,8 @@ opt1 = ""
 if ( len(sys.argv) > 1 ):
     opt1 = str(sys.argv[1])
 
+psm.resetKeyPressCount()
+
 if ( opt1 != "force" ):
     psm.screen.termPrintAt(1, "Touch Screen Calibration Program")
     psm.screen.termPrintAt(3, "You should only calibrate if you")
