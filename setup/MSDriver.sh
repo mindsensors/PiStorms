@@ -64,7 +64,7 @@ case "$1" in
 
     lckfile=/tmp/.psm_shutdown.lck
     line=`cat $lckfile|tr -d [:space:]`
-    if [ $line = halt ]
+    if [ x$line = xhalt ]
     then
       cp /dev/null $lckfile
       rm -f $lckfile
