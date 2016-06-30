@@ -30,13 +30,13 @@ psm = PiStorms()
 
 m = ["Motor-Demo", "Connect motor to Bank A M1.",
  "Motor will turn 360 degrees, and stop",
- "with brake and hold.",
+ "with brake.",
   "Click OK to continue"]
 psm.screen.askQuestion(m,["OK"])
 
 # run motor for 360 degrees, and at the completion, 
-# brake while stopping and hold position while stopped
-psm.BAM1.runDegs(360, 75, True, True)
+# brake while stopping 
+psm.BAM1.runDegs(360, 75, True, False)
 
 m = ["Motor-Demo", "Motor should have turned 360 degrees",
   "and stop with brake and hold.", "click EXIT to exit program"]
