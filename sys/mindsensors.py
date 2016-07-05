@@ -75,7 +75,7 @@ class ABSIMU(mindsensors_i2c):
     #  @param self The object pointer.
     #  @param commands Value to write to the command register.
     def command(self, command):
-        self.writeByte(COMMAND, int(cmd)) 
+        self.writeByte(COMMAND, int(command)) 
     
     ## Reads the tilt value along the x-axis
     #  @param self The object pointer.
@@ -1552,7 +1552,7 @@ class NXTCAM(mindsensors_i2c):
         try:
             self.command(65)
         except:
-            print "Error: Could write command to Cam."
+            print "Error: couldn't write command to Cam."
             return ""
             
     ## Track detected colors as objects
@@ -1561,7 +1561,7 @@ class NXTCAM(mindsensors_i2c):
         try:
             self.command(66)
         except:
-            print "Error: Could write command to Cam."
+            print "Error: couldn't write command to Cam."
             return ""
             
     ## Write to image sensor registers
@@ -1570,7 +1570,7 @@ class NXTCAM(mindsensors_i2c):
         try:
             self.command(67)
         except:
-            print "Error: Could write command to Cam."
+            print "Error: couldn't write command to Cam."
             return ""
             
     ## Disable tracking
@@ -1579,7 +1579,7 @@ class NXTCAM(mindsensors_i2c):
         try:
             self.command(68)
         except:
-            print "Error: Could write command to Cam."
+            print "Error: couldn't write command to Cam."
             return ""
             
     ## Enable tracking
@@ -1588,7 +1588,7 @@ class NXTCAM(mindsensors_i2c):
         try:
             self.command(69)
         except:
-            print "Error: Could write command to Cam."
+            print "Error: couldn't write command to Cam."
             return ""
        
     ## Get the color map from NXTCAM
@@ -1597,7 +1597,7 @@ class NXTCAM(mindsensors_i2c):
         try:
             self.command(71)
         except:
-            print "Error: Could write command to Cam."
+            print "Error: couldn't write command to Cam."
             return ""
             
 ##    ## Turn on illumination
@@ -1606,7 +1606,7 @@ class NXTCAM(mindsensors_i2c):
         try:
             self.command(73)
         except:
-            print "Error: Could write command to Cam."
+            print "Error: couldn't write command to Cam."
             return ""
             
     ## Read to image sensor registers
@@ -1615,7 +1615,7 @@ class NXTCAM(mindsensors_i2c):
         try:
             self.command(72)
         except:
-            print "Error: Could write command to Cam."
+            print "Error: couldn't write command to Cam."
             return ""
             
     ## Track detected colors as lines
@@ -1624,7 +1624,7 @@ class NXTCAM(mindsensors_i2c):
         try:
             self.command(76)
         except:
-            print "Error: Could write command to Cam."
+            print "Error: couldn't write command to Cam."
             return ""
             
     ## Ping the NXTCAM
@@ -1633,7 +1633,7 @@ class NXTCAM(mindsensors_i2c):
         try:
             self.command(80)
         except:
-            print "Error: Could write command to Cam."
+            print "Error: couldn't write command to Cam."
             return ""
             
     ## Reset the NXTCAM
@@ -1642,7 +1642,7 @@ class NXTCAM(mindsensors_i2c):
         try:
             self.command(82)
         except:
-            print "Error: Could write command to Cam."
+            print "Error: couldn't write command to Cam."
             return ""
       
     ## Send ColorMap to NXTCAM
@@ -1651,7 +1651,7 @@ class NXTCAM(mindsensors_i2c):
         try:
             self.command(83)
         except:
-            print "Error: Could write command to Cam."
+            print "Error: couldn't write command to Cam."
             return ""
             
     ## Turn off illumination
@@ -1660,7 +1660,7 @@ class NXTCAM(mindsensors_i2c):
         try:
             self.command(84)
         except:
-            print "Error: Could write command to Cam."
+            print "Error: couldn't write command to Cam."
             return ""
             
     ## Sort tracked objects by color
@@ -1669,7 +1669,7 @@ class NXTCAM(mindsensors_i2c):
         try:
             self.command(85)
         except:
-            print "Error: Could write command to Cam."
+            print "Error: couldn't write command to Cam."
             return ""
             
     ## Get the firmware version of the NXTCAM
@@ -1678,7 +1678,7 @@ class NXTCAM(mindsensors_i2c):
         try:
             self.command(86)
         except:
-            print "Error: Could write command to Cam."
+            print "Error: couldn't write command to Cam."
             return ""
             
     ## Do not sort tracked objects
@@ -1687,7 +1687,7 @@ class NXTCAM(mindsensors_i2c):
         try:
             self.command(88)
         except:
-            print "Error: Could write command to Cam."
+            print "Error: couldn't write command to Cam."
             return ""
             
     ## Read the number of objects detected (0-8)

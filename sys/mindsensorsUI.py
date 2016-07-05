@@ -31,7 +31,7 @@ import time, math ,os
 import Image
 import ImageDraw
 import ImageFont
-import Adafruit_ILI9341 as TFT
+import MS_ILI9341 as TFT
 import Adafruit_GPIO as GPIO
 import Adafruit_GPIO.SPI as SPI
 import sys,os
