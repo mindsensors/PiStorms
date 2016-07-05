@@ -37,7 +37,7 @@ psm.BAS1.activateCustomSensorI2C()
 
 
 # create our mux object for Channel C1
-#Channel addreses as follows:
+#Channel addresses as follows:
 #Channel 1: 0xA0
 #Channel 2: 0xA2
 #Channel 3: 0xA4
