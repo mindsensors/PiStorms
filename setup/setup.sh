@@ -66,10 +66,12 @@ sudo cp /tmp/config.txt /boot/config.txt
 #
 #
 echo "Updating installations files. This may take several minutes..."
-sudo apt-get update -qq
+sudo apt-get update -qq -y
 echo "Installing packages..."
-sudo apt-get install -qq tightvncserver mpg123 build-essential python-dev python-smbus python-pip python-imaging python-numpy git nmap
-sudo apt-get install -qq python-opencv
+sudo apt-get install -qq tightvncserver mpg123 build-essential python-dev python-smbus python-pip python-imaging python-numpy git nmap -y
+sudo apt-get install -qq python-opencv -y
+sudo apt-get install -qq apache2 php5 libapache2-mod-php5 -y
+sudo pip install -qq flask
 sudo pip install -qq imutils
 #
 #
@@ -135,6 +137,11 @@ sudo cp -p ../sys/MS_ILI9341.py /usr/local/lib/python2.7/dist-packages/
 sudo cp -p ../sys/mindsensors.py /usr/local/lib/python2.7/dist-packages/
 sudo cp -p ../sys/swarmclient.py /usr/local/lib/python2.7/dist-packages/
 
+echo "copying web interface files ..."
+sudo cp -r ../www/html /var/www/html
+sudo cp -r ../www/web_api /var/www/web_api
+
+
 echo "copying config file ... "
 sudo mkdir -p /usr/local/mindsensors/conf
 if [ -f /usr/local/mindsensors/conf/msdev.cfg ]
@@ -163,7 +170,9 @@ sudo cp -p ../programs/leftarrow.png /usr/local/mindsensors/images/
 sudo cp -p ../programs/rightarrow.png /usr/local/mindsensors/images/
 sudo cp -p ../programs/uparrow.png /usr/local/mindsensors/images/
 sudo cp -p ../programs/missing.png /usr/local/mindsensors/images/
+sudo cp -p ../artwork/* /usr/local/mindsensors/images/
 sudo chmod a+r /usr/local/mindsensors/images/*
+sudo mkdir -p /var/tmp/ps_images
 
 echo "copying artworks ... "
 sudo cp -p ../artwork/* /usr/share/raspberrypi-artwork
