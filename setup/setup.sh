@@ -138,7 +138,8 @@ sudo cp -p ../sys/mindsensors.py /usr/local/lib/python2.7/dist-packages/
 sudo cp -p ../sys/swarmclient.py /usr/local/lib/python2.7/dist-packages/
 
 echo "copying web interface files ..."
-sudo cp -r ../www/html /var/www/html
+sudo mkdir -p /var/www
+sudo cp -r ../www/html /var/www/
 sudo cp -r ../www/web_api /var/www/web_api
 
 
@@ -188,9 +189,11 @@ sudo chown -R pi:pi /home/pi/Documents/Scratch\ Projects
 #copy the initialization scripts
 sudo cp -p MSDriver.sh /etc/init.d
 sudo cp -p MSBrowser.sh /etc/init.d
+sudo cp -p MSWeb.sh /etc/init.d
 sudo cp -p SwarmServer.sh /etc/init.d
 sudo chmod +x /etc/init.d/MSDriver.sh
 sudo chmod +x /etc/init.d/MSBrowser.sh
+sudo chmod +x /etc/init.d/MSWeb.sh
 sudo chmod +x /etc/init.d/SwarmServer.sh
 mkdir -p /home/pi/.config/autostart
 cp -p tightvnc.desktop /home/pi/.config/autostart
@@ -201,6 +204,7 @@ cp -p tightvnc.desktop /home/pi/.config/autostart
 echo "Updating Startup scripts..."
 sudo update-rc.d MSDriver.sh defaults 95 05
 sudo update-rc.d MSBrowser.sh defaults 96 04
+sudo update-rc.d MSWeb.sh defaults 96 04
 sudo update-rc.d SwarmServer.sh defaults 94 06
 
 #setup messenger
