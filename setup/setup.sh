@@ -140,6 +140,7 @@ sudo cp -p ../sys/swarmclient.py /usr/local/lib/python2.7/dist-packages/
 echo "copying web interface files ..."
 sudo mkdir -p /var/www
 sudo cp -r ../www/html /var/www/
+sudo rm -f /var/www/html/index.html
 sudo cp -r ../www/web_api /var/www/web_api
 
 
