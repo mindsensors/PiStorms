@@ -49,7 +49,6 @@ haar_path=currentdir+"/haarcascade_frontalface_default.xml"
 faceCascade = cv2.CascadeClassifier(haar_path)
 
 # initialize the camera and grab a reference to the raw camera capture
-#down size the image resolution for imporving speed. 
 try:
     camera = PiCamera()
 except:
@@ -57,6 +56,7 @@ except:
     psm.screen.askQuestion(m,["OK"])
     exit()
     
+#down size the image resolution for improving speed. 
 camera.resolution = (320, 240)
 camera.framerate = 32
 rawCapture = PiRGBArray(camera, size=(320, 240))
@@ -89,7 +89,7 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
     )
     
     #print benchmarking information on Console
-    print time.time()*1000.0-lastTime," Found {0} faces!".format(len(faces))
+    #print time.time()*1000.0-lastTime," Found {0} faces!".format(len(faces))
     lastTime = time.time()*1000.0
     
     # Draw a rectangle around the faces
