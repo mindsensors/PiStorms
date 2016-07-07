@@ -23,6 +23,17 @@ echo "-------"
 date
 
 echo ""
+echo "PiStorms info "
+echo "--------------"
+
+if [ -f $homefolder/programs/utils/psm-info.py ]
+then
+    python $homefolder/programs/utils/psm-info.py
+else
+    echo "psm-info.py is missing"
+fi
+
+echo ""
 echo "i2cdetect output"
 echo "----------------"
 i2cdetect -y 1
@@ -49,18 +60,6 @@ fi
 #else
 #    echo "screen-test.py is missing"
 #fi
-
-echo ""
-echo "PiStorms info "
-echo "--------------"
-
-if [ -f $homefolder/programs/utils/psm-info.py ]
-then
-    python $homefolder/programs/utils/psm-info.py
-else
-    echo "psm-info.py is missing"
-fi
-
 
 echo ""
 echo "uname ...."
