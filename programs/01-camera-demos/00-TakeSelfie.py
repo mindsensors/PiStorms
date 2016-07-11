@@ -20,8 +20,9 @@
 #Learn more product option visit us @  http://www.mindsensors.com/
 #
 # History:
-# Date      Author      Comments
-# June 2016 Yug Rao     Initial Authoring
+# Date            Author      Comments
+# July 7, 2016    Yug Rao     Initial Authoring 
+
 
 from picamera.array import PiRGBArray
 from picamera import PiCamera
@@ -35,7 +36,12 @@ sys.path.insert(0,parentdir)
 from PiStorms import PiStorms
 psm = PiStorms()
 
-picam = PiCamera()
+try:
+    picam = PiCamera()
+except:
+     m = ["Take Selfie", "Camera not enabled.", "Run raspi-config and enable camera"]
+     psm.screen.askQuestion(m,["OK"])
+     exit()
 exitNow = 0
 time.sleep(.2)
 while not exitNow:
