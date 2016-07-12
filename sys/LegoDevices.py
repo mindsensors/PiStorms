@@ -21,7 +21,8 @@
 
 # History:
 # Date      Author      Comments
-# May 2016  Deepak      Initial wuthoring
+# May 2016  Deepak      Initial authoring
+# July 2016  Yug      Added OO functions.
 
 from mindsensors_i2c import mindsensors_i2c
 import time, math
@@ -29,351 +30,21 @@ import sys,os
 import ctypes
 import random
 
-class PSSensor():
+PS_SENSOR_MODE_EV3_COLOR_REFLECTED = 0
+PS_SENSOR_MODE_EV3_COLOR_AMBIENT = 1
+PS_SENSOR_MODE_EV3_COLOR_COLOR = 2
+PS_SENSOR_MODE_EV3_GYRO_ANGLE =  0
+PS_SENSOR_MODE_EV3_GYRO_RATE = 1
+PS_SENSOR_MODE_EV3_ULTRASONIC_DIST_CM = 0
+PS_SENSOR_MODE_EV3_ULTRASONIC_DIST_IN = 1
+PS_SENSOR_MODE_EV3_ULTRASONIC_DETECT = 2
+PS_SENSOR_MODE_EV3_IR_PROXIMITY = 0
+PS_SENSOR_MODE_EV3_IR_CHANNEL = 1
+PS_SENSOR_MODE_EV3_IR_REMOTE = 2
+PS_SENSOR_MODE_NXT_LIGHT_REFLECTED = 0
+PS_SENSOR_MODE_NXT_LIGHT_AMBIENT = 0
+PS_SENSOR_MODE_NXT_COLOR_COLOR = 0
 
-    sensornum = 0
-    def __init__(self,bank,num):
-        self.bank = bank
-        self.sensornum = num
-
-    
-    
-    sensornum = 0
-    def X__init__(self,bank,num):
-        self.bank = bank
-        self.sensornum = num
-        self.type = self.PS_SENSOR_TYPE_NONE
-        self.EV3Cache = [0,[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],0,0,[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]]
-    def setType(self,type):
-        if(type != self.type):
-            self.type = type
-            if(self.sensornum == 1):
-                self.bank.writeByte(PiStormsCom.PS_S1_Mode,type)
-            if(self.sensornum == 2):
-                self.bank.writeByte(PiStormsCom.PS_S2_Mode,type)
-            if(self.type != self.PS_SENSOR_TYPE_CUSTOM):
-                time.sleep(1)
-    def getType(self):
-        return self.type
-    def EV3Retrieve(self):
-        if(self.sensornum == 1):
-            self.EV3Cache[0] = self.bank.readByte(PiStormsCom.PS_S1EV_Ready)
-            self.EV3Cache[1] = self.bank.readArray(PiStormsCom.PS_S1EV_SensorID,16)
-            self.EV3Cache[2] = self.bank.readByte(PiStormsCom.PS_S1EV_Mode)
-            self.EV3Cache[3] = self.bank.readByte(PiStormsCom.PS_S1EV_Length)
-            self.EV3Cache[4] = self.bank.readArray(PiStormsCom.PS_S1EV_Data,32)
-        if(self.sensornum == 2):
-            self.EV3Cache[0] = self.bank.readByte(PiStormsCom.PS_S2EV_Ready)
-            self.EV3Cache[1] = self.bank.readArray(PiStormsCom.PS_S2EV_SensorID,16)
-            self.EV3Cache[2] = self.bank.readByte(PiStormsCom.PS_S2EV_Mode)
-            self.EV3Cache[3] = self.bank.readByte(PiStormsCom.PS_S2EV_Length)
-            self.EV3Cache[4] = self.bank.readArray(PiStormsCom.PS_S2EV_Data,32)
-    def isPressedEV3(self):
-        self.setType(self.PS_SENSOR_TYPE_EV3_SWITCH)
-        #self.EV3Retrieve()
-        #return self.EV3Cache[4][0] == 1
-        if(self.sensornum == 1):
-            return self.bank.readByte(PiStormsCom.PS_S1EV_Data) == 1
-        if(self.sensornum == 2):
-            return self.bank.readByte(PiStormsCom.PS_S2EV_Data) == 1     
-    def getBumpCountEV3(self):
-        self.setType(self.PS_SENSOR_TYPE_EV3_SWITCH)
-        #self.EV3Retrieve()
-        #return self.EV3Cache[4][1]
-        if(self.sensornum == 1):
-            return self.bank.readByte(PiStormsCom.PS_S1EV_Data+1)
-        if(self.sensornum == 2):
-            return self.bank.readByte(PiStormsCom.PS_S2EV_Data+1)
-    def resetBumpCountEV3(self):
-        self.setType(self.PS_SENSOR_TYPE_EV3_SWITCH)
-        if(self.sensornum == 1):
-            self.bank.writeByte(PiStormsCom.PS_S1EV_Data + 1,0)
-        if(self.sensornum == 2):
-            self.bank.writeByte(PiStormsCom.PS_S2EV_Data + 1,0)
-    def setModeEV3(self, mode):
-        if(self.sensornum == 1):
-            self.bank.writeByte(PiStormsCom.PS_S1EV_Mode,mode)
-        if(self.sensornum == 2):
-            self.bank.writeByte(PiStormsCom.PS_S2EV_Mode,mode)
-    def distanceIREV3(self):
-        self.setType(self.PS_SENSOR_TYPE_EV3)
-        self.setModeEV3(0)
-        #self.EV3Retrieve()
-        #raw1 = self.EV3Cache[4][0]
-        #raw2 = self.EV3Cache[4][1]
-        #return ctypes.c_short(raw1 | (raw2*256)).value
-        if(self.sensornum == 1):
-            return self.bank.readInteger(PiStormsCom.PS_S1EV_Data)
-        if(self.sensornum == 2):
-            return self.bank.readInteger(PiStormsCom.PS_S2EV_Data)
-    def rawIREV3(self,mode):
-        self.setType(self.PS_SENSOR_TYPE_EV3)
-        self.setModeEV3(mode)
-        #self.EV3Retrieve()
-        #return self.EV3Cache[4]
-        if(self.sensornum == 1):
-            return self.bank.readByte(PiStormsCom.PS_S1EV_Data)
-        if(self.sensornum == 2):
-            return self.bank.readByte(PiStormsCom.PS_S2EV_Data) 
-    def headingIREV3(self,channel):
-        self.setType(self.PS_SENSOR_TYPE_EV3)
-        self.setModeEV3(1)
-        #return ctypes.c_byte(self.rawIREV3(1)[(channel-1)*2]).value
-        if(self.sensornum == 1):
-            return self.bank.readByteSigned(PiStormsCom.PS_S1EV_Data + ((channel-1)*2))
-        if(self.sensornum == 2):
-            return self.bank.readByteSigned(PiStormsCom.PS_S2EV_Data + ((channel-1)*2))
-    def distanceRemoteIREV3(self,channel):
-        self.setType(self.PS_SENSOR_TYPE_EV3)
-        self.setModeEV3(1)
-        #return ctypes.c_byte(self.rawIREV3(1)[((channel-1)*2)+1]).value
-        if(self.sensornum == 1):
-            return self.bank.readByte(PiStormsCom.PS_S1EV_Data + (((channel-1)*2)+1))
-        if(self.sensornum == 2):
-            return self.bank.readByte(PiStormsCom.PS_S2EV_Data + (((channel-1)*2)+1))
-    def remoteLeft(self,channel):
-        self.setType(self.PS_SENSOR_TYPE_EV3)
-        self.setModeEV3(2)
-        #remote = self.rawIREV3(2)[channel-1]
-        if(self.sensornum == 1):
-            remote = self.bank.readByte(PiStormsCom.PS_S1EV_Data + (channel-1))
-        if(self.sensornum == 2):
-            remote = self.bank.readByte(PiStormsCom.PS_S2EV_Data + (channel-1))
-        if(remote == 0 or remote == 3 or remote == 4):
-            return 0
-        if(remote == 1 or remote == 5 or remote == 6):
-            return 1
-        if(remote == 2 or remote == 7 or remote == 8):
-            return -1
-    def remoteRight(self,channel):
-        self.setType(self.PS_SENSOR_TYPE_EV3)
-        self.setModeEV3(2)
-        #remote = self.rawIREV3(2)[channel-1]
-        if(self.sensornum == 1):
-            remote = self.bank.readByte(PiStormsCom.PS_S1EV_Data + (channel-1))
-        if(self.sensornum == 2):
-            remote = self.bank.readByte(PiStormsCom.PS_S2EV_Data + (channel-1))
-        if(remote == 0 or remote == 1 or remote == 2):
-            return 0
-        if(remote == 3 or remote == 7 or remote == 5):
-            return 1
-        if(remote == 4 or remote == 6 or remote == 8):
-            return -1
-    def distanceUSEV3cm(self):
-        self.setType(self.PS_SENSOR_TYPE_EV3)
-        self.setModeEV3(0)
-        #self.EV3Retrieve()
-        #raw1 = self.EV3Cache[4][0]
-        #raw2 = self.EV3Cache[4][1]
-        #return ctypes.c_short(raw1 | (raw2*256)).value
-        if(self.sensornum == 1):
-            return self.bank.readInteger(PiStormsCom.PS_S1EV_Data)
-        if(self.sensornum == 2):
-            return self.bank.readInteger(PiStormsCom.PS_S2EV_Data)
-    def distanceUSEV3in(self):
-        self.setType(self.PS_SENSOR_TYPE_EV3)
-        self.setModeEV3(1)
-        #self.EV3Retrieve()
-        #raw1 = self.EV3Cache[4][0]
-        #raw2 = self.EV3Cache[4][1]
-        #return ctypes.c_short(raw1 | (raw2*256)).value
-        if(self.sensornum == 1):
-            return self.bank.readInteger(PiStormsCom.PS_S1EV_Data)
-        if(self.sensornum == 2):
-            return self.bank.readInteger(PiStormsCom.PS_S2EV_Data)
-    def presenceUSEV3(self):
-        self.setType(self.PS_SENSOR_TYPE_EV3)
-        self.setModeEV3(2)
-        #self.EV3Retrieve()
-        #return self.EV3Cache[4][0] == 1
-        if(self.sensornum == 1):
-            return self.bank.readByte(PiStormsCom.PS_S1EV_Data) == 1
-        if(self.sensornum == 2):
-            return self.bank.readByte(PiStormsCom.PS_S2EV_Data) == 1
-    def rawGyro(self, mode):
-        self.setType(self.PS_SENSOR_TYPE_EV3)
-        self.setModeEV3(mode)
-        #self.EV3Retrieve()
-        #return self.EV3Cache[4]
-        if(self.sensornum == 1):
-            return self.bank.readByte(PiStormsCom.PS_S1EV_Data)
-        if(self.sensornum == 2):
-            return self.bank.readByte(PiStormsCom.PS_S2EV_Data)
-    def gyroAngleEV3(self):
-        self.setType(self.PS_SENSOR_TYPE_EV3)
-        self.setModeEV3(0)
-        #raw = self.rawGyro(0)
-        #raw1 = raw[0]
-        #raw2 = raw[1]
-        #return ctypes.c_short(raw1 | (raw2*256)).value
-        if(self.sensornum == 1):
-            return self.bank.readIntegerSigned(PiStormsCom.PS_S1EV_Data)
-        if(self.sensornum == 2):
-            return self.bank.readIntegerSigned(PiStormsCom.PS_S2EV_Data)
-    def gyroRateEV3(self):
-        self.setType(self.PS_SENSOR_TYPE_EV3)
-        self.setModeEV3(1)
-        #raw = self.rawGyro(1)
-        #raw1 = raw[0]
-        #raw2 = raw[1]
-        #return ctypes.c_short(raw1 | (raw2*256)).value
-        if(self.sensornum == 1):
-            return self.bank.readIntegerSigned(PiStormsCom.PS_S1EV_Data)
-        if(self.sensornum == 2):
-            return self.bank.readIntegerSigned(PiStormsCom.PS_S2EV_Data)
-    def reflectedLightSensorEV3(self):
-        self.setType(self.PS_SENSOR_TYPE_EV3)
-        self.setModeEV3(0)
-        #self.EV3Retrieve()
-        #return self.EV3Cache[4][0]
-        if(self.sensornum == 1):
-            return self.bank.readByte(PiStormsCom.PS_S1EV_Data)
-        if(self.sensornum == 2):
-            return self.bank.readByte(PiStormsCom.PS_S2EV_Data)
-    def ambientLightSensorEV3(self):
-        self.setType(self.PS_SENSOR_TYPE_EV3)
-        self.setModeEV3(1)
-        #self.EV3Retrieve()
-        #return self.EV3Cache[4][0]
-        if(self.sensornum == 1):
-            return self.bank.readByte(PiStormsCom.PS_S1EV_Data)
-        if(self.sensornum == 2):
-            return self.bank.readByte(PiStormsCom.PS_S2EV_Data)
-    PS_SENSOR_COLOR_NONE = 0
-    PS_SENSOR_COLOR_BLACK = 1
-    PS_SENSOR_COLOR_BLUE = 2
-    PS_SENSOR_COLOR_GREEN = 3
-    PS_SENSOR_COLOR_YELLOW = 4
-    PS_SENSOR_COLOR_RED = 5
-    PS_SENSOR_COLOR_WHITE = 6
-    PS_SENSOR_COLOR_BROWN = 7
-    def colorSensorEV3(self):
-        self.setType(self.PS_SENSOR_TYPE_EV3)
-        self.setModeEV3(2)
-        #self.EV3Retrieve()
-        #return self.EV3Cache[4][0]
-        if(self.sensornum == 1):
-            return self.bank.readByte(PiStormsCom.PS_S1EV_Data)
-        if(self.sensornum == 2):
-            return self.bank.readByte(PiStormsCom.PS_S2EV_Data)
-    def readNXT(self):
-        if(self.sensornum == 1):
-            return self.bank.readInt(PiStormsCom.PS_S1EV_Ready)
-        if(self.sensornum == 2):
-            return self.bank.readInt(PiStormsCom.PS_S2EV_Ready)
-    def isPressedNXT(self):
-        self.setType(self.PS_SENSOR_TYPE_SWITCH)
-        self.setModeEV3(0)
-        #self.EV3Retrieve()
-        #return self.EV3Cache[4][0] == 1
-        if(self.sensornum == 1):
-            return self.bank.readByte(PiStormsCom.PS_S1EV_Data) == 1
-        if(self.sensornum == 2):
-            return self.bank.readByte(PiStormsCom.PS_S2EV_Data) == 1
-    def getBumpCountNXT(self):
-        self.setType(self.PS_SENSOR_TYPE_SWITCH)
-        self.setModeEV3(0)
-        #self.EV3Retrieve()
-        #return self.EV3Cache[4][1]
-        if(self.sensornum == 1):
-            return self.bank.readByte(PiStormsCom.PS_S1EV_Data + 1)
-        if(self.sensornum == 2):
-            return self.bank.readByte(PiStormsCom.PS_S2EV_Data + 1)
-    def resetBumpCountNXT(self):
-        if(self.sensornum == 1):
-            self.bank.writeByte(PiStormsCom.PS_S1EV_Data+1,0)
-        if(self.sensornum == 2):
-            self.bank.writeByte(PiStormsCom.PS_S2EV_Data+1,0)
-    def lightSensorNXT(self, active=True):
-        if(active):
-            self.setType(self.PS_SENSOR_TYPE_LIGHT_ACTIVE)
-        else:
-            self.setType(self.PS_SENSOR_TYPE_LIGHT_INACTIVE)
-        self.setModeEV3(0)
-        #self.EV3Retrieve()
-        #return (self.EV3Cache[1][0]<<8 ) +self.EV3Cache[0]
-        if(self.sensornum == 1):
-            return self.bank.readInteger(PiStormsCom.PS_S1EV_Ready)
-        if(self.sensornum == 2):
-            return self.bank.readInteger(PiStormsCom.PS_S2EV_Ready)
-        
-    def SumoEyes(self, long = True):
-        self.SE_None = 0
-        self.SE_Front = 1
-        self.SE_Left = 2
-        self.SE_Right = 3
-        if(long):
-            self.setType(self.PS_SENSOR_TYPE_LIGHT_INACTIVE)
-        else:
-            self.setType(self.PS_SENSOR_TYPE_LIGHT_ACTIVE) 
-        self.setModeEV3(0)
-        #self.EV3Retrieve()
-        #if  self.SumoEyesisNear(465, 30,(self.EV3Cache[1][0]<<8 ) +self.EV3Cache[0]   ):
-        if(self.sensornum == 1):
-            if(self.SumoEyesisNear(465, 30, (self.bank.readInteger(PiStormsCom.PS_S1EV_Ready)))):
-                return self.SE_Front
-        #if  self.SumoEyesisNear(800, 30, (self.EV3Cache[1][0]<<8 ) +self.EV3Cache[0]  ):
-            elif(self.SumoEyesisNear(800, 30, (self.bank.readInteger(PiStormsCom.PS_S1EV_Ready)))):
-                return self.SE_Left
-        #if  self.SumoEyesisNear(555, 30, (self.EV3Cache[1][0]<<8 ) +self.EV3Cache[0]  ):
-            elif(self.SumoEyesisNear(800, 30, (self.bank.readInteger(PiStormsCom.PS_S1EV_Ready)))):
-                return self.SE_Right
-            else:
-                return self.SE_None 
-        if(self.sensornum == 2):
-            if(self.SumoEyesisNear(465, 30, (self.bank.readInteger(PiStormsCom.PS_S2EV_Ready)))):
-                return self.SE_Front
-        #if  self.SumoEyesisNear(800, 30, (self.EV3Cache[1][0]<<8 ) +self.EV3Cache[0]  ):
-            elif(self.SumoEyesisNear(800, 30, (self.bank.readInteger(PiStormsCom.PS_S2EV_Ready)))):
-                return self.SE_Left
-        #if  self.SumoEyesisNear(555, 30, (self.EV3Cache[1][0]<<8 ) +self.EV3Cache[0]  ):
-            elif(self.SumoEyesisNear(800, 30, (self.bank.readInteger(PiStormsCom.PS_S2EV_Ready)))):
-                return self.SE_Right
-            else:
-                return self.SE_None                  
-        
-    def SumoEyesisNear(self,reference, delta, comet):
-        if (comet > (reference - delta)) and (comet < (reference + delta)):
-            return True
-        else:
-            return False        
-        
-    def colorSensorRawNXT(self, smode = 13):
-        self.setType(smode)
-        self.setModeEV3(0)
-        self.EV3Retrieve()
-        return self.EV3Cache[0:1] + self.EV3Cache[1]
-    def colorSensorNXT(self, smode = 13):
-        self.setType(smode)
-        self.setModeEV3(0)
-        #self.EV3Retrieve()
-        #return self.EV3Cache[0]
-        if(self.sensornum == 1):
-            return self.bank.readByte(PiStormsCom.PS_S1EV_Ready)
-        if(self.sensornum == 2):
-            return self.bank.readByte(PiStormsCom.PS_S2EV_Ready)
-    def colorSensorNoneNXT(self):
-        return self.colorSensorRawNXT(self.PS_SENSOR_TYPE_COLORNONE)[0]
-    def colorSensorRedNXT(self):
-        return self.colorSensorRawNXT(self.PS_SENSOR_TYPE_COLORRED)[0]
-    def colorSensorGreenNXT(self):
-        return self.colorSensorRawNXT(self.PS_SENSOR_TYPE_COLORGREEN)[0]
-    def colorSensorBlueNXT(self):
-        return self.colorSensorRawNXT(self.PS_SENSOR_TYPE_COLORBLUE)[0]
-    def analogSensor(self): #untested
-        self.setType(self.PS_SENSOR_TYPE_ANALOG)
-        self.setModeEV3(0)
-        #self.EV3Retrieve()
-        #return self.EV3Cache[0]
-        if(self.sensornum == 1):
-            return self.bank.readByte(PiStormsCom.PS_S1EV_Ready)
-        if(self.sensornum == 2):
-            return self.bank.readByte(PiStormsCom.PS_S2EV_Ready)
-    def activateCustomSensorI2C(self):
-        self.setType(self.PS_SENSOR_TYPE_CUSTOM)
-        
-    
-    
 class PSMotor():
     
     #bank = 0
@@ -546,8 +217,8 @@ class PiStormsCom(object):
     PS_SENSOR_TYPE_NONE = 0
     PS_SENSOR_TYPE_SWITCH = 1
     PS_SENSOR_TYPE_ANALOG = 2
-    PS_SENSOR_TYPE_LIGHT_ACTIVE = 3
-    PS_SENSOR_TYPE_LIGHT_INACTIVE = 4
+    PS_SENSOR_TYPE_LIGHT_REFLECTED = 3
+    PS_SENSOR_TYPE_LIGHT_AMBIENT = 4
     PS_SENSOR_TYPE_SOUND_DB = 5
     PS_SENSOR_TYPE_SOUND_DBA = 6
     PS_SENSOR_TYPE_LOWSPEED_9V = 7
@@ -561,6 +232,21 @@ class PiStormsCom(object):
     PS_SENSOR_TYPE_EV3_SWITCH = 18
     PS_SENSOR_TYPE_EV3 = 19
 
+    PS_SENSOR_MODE_EV3_COLOR_REFLECTED = 0
+    PS_SENSOR_MODE_EV3_COLOR_AMBIENT = 1
+    PS_SENSOR_MODE_EV3_COLOR_COLOR = 2
+    PS_SENSOR_MODE_EV3_GYRO_ANGLE =  0
+    PS_SENSOR_MODE_EV3_GYRO_RATE = 1
+    PS_SENSOR_MODE_EV3_ULTRASONIC_DIST_CM = 0
+    PS_SENSOR_MODE_EV3_ULTRASONIC_DIST_IN = 1
+    PS_SENSOR_MODE_EV3_ULTRASONIC_DETECT = 2
+    PS_SENSOR_MODE_EV3_IR_PROXIMITY = 0
+    PS_SENSOR_MODE_EV3_IR_CHANNEL = 1
+    PS_SENSOR_MODE_EV3_IR_REMOTE = 2
+    PS_SENSOR_MODE_NXT_LIGHT_REFLECTED = 0
+    PS_SENSOR_MODE_NXT_LIGHT_AMBIENT = 0
+    PS_SENSOR_MODE_NXT_COLOR_COLOR = 0
+    
     PS_EV3CACHE_READY = 0
     PS_EV3CACHE_ID = 1
     PS_EV3CACHE_READY = 2
@@ -676,15 +362,15 @@ class PiStormsCom(object):
     bankA = mindsensors_i2c(PS_A_ADDRESS >> 1)
     bankB = mindsensors_i2c(PS_B_ADDRESS >> 1)
     
-    BAM1 = PSMotor(bankA,1)
-    BAM2 = PSMotor(bankA,2)
-    BBM1 = PSMotor(bankB,1)
-    BBM2 = PSMotor(bankB,2)
+    # BAM1 = PSMotor(bankA,1)
+    # BAM2 = PSMotor(bankA,2)
+    # BBM1 = PSMotor(bankB,1)
+    # BBM2 = PSMotor(bankB,2)
     
-    BAS1 = PSSensor(bankA,1)
-    BAS2 = PSSensor(bankA,2)
-    BBS1 = PSSensor(bankB,1)
-    BBS2 = PSSensor(bankB,2)
+    # BAS1 = PSSensor(bankA,1)
+    # BAS2 = PSSensor(bankA,2)
+    # BBS1 = PSSensor(bankB,1)
+    # BBS2 = PSSensor(bankB,2)
     
     def __init__(self):
         try:
@@ -786,13 +472,15 @@ if __name__ == '__main__':
         psc.BBM1.float()
         psc.BBM2.float()
 
-
 ## LegoSensor: This class provides functions for LEGOSensors
 # This class will have derived classes for each sensor.
 #  @remark
 # There is no need to use this class directly in your program.
 #
+
 class LegoSensor(PiStormsCom):
+    
+    
     def __init__(self, port):
         if ( port == "BAS1" ):
             self.bank = self.bankA
@@ -826,6 +514,15 @@ class LegoSensor(PiStormsCom):
             if(self.type != self.PS_SENSOR_TYPE_CUSTOM):
                 time.sleep(1)
 
+    def getType(self):
+        return self.type
+
+    def setMode(self, mode):
+        if(self.sensornum == 1):
+            self.bank.writeByte(PiStormsCom.PS_S1EV_Mode,mode)
+        if(self.sensornum == 2):
+            self.bank.writeByte(PiStormsCom.PS_S2EV_Mode,mode)
+    
     ##
     #  Retrieve the UART data buffer.
     #  This function is called internally when the UART data is needed.
@@ -844,6 +541,12 @@ class LegoSensor(PiStormsCom):
             self.EV3Cache[2] = self.bank.readByte(PiStormsCom.PS_S2EV_Mode)
             self.EV3Cache[3] = self.bank.readByte(PiStormsCom.PS_S2EV_Length)
             self.EV3Cache[4] = self.bank.readArray(PiStormsCom.PS_S2EV_Data,32)
+    
+    def readNXT(self): 
+        if(self.sensornum == 1):
+            return self.bank.readInt(PiStormsCom.PS_S1AN_Read)
+        if(self.sensornum == 2):
+            return self.bank.readInt(PiStormsCom.PS_S2AN_Read)
 
 ## This class implements NXT Touch Sensor
 # @code
@@ -970,48 +673,156 @@ class EV3TouchSensor(LegoSensor):
             self.bank.writeByte(PiStormsCom.PS_S2EV_Data+1,0)
 
 
-# FIXME: following classes are yet to be implemented.
-"""
+class NXTLightSensor(LegoSensor): 
+    def __init__(self, port, mode = PS_SENSOR_MODE_NXT_LIGHT_REFLECTED): #mode can be PS_SENSOR_MODE_NXT_LIGHT_[AMBIENT, REFLECTED]
+        super(self.__class__,self).__init__(port)
+        if mode==PS_SENSOR_MODE_NXT_LIGHT_AMBIENT:
+            self.setType(self.PS_SENSOR_TYPE_LIGHT_AMBIENT)
+        else:
+            self.setType(self.PS_SENSOR_TYPE_LIGHT_REFLECTED)
+        self.mode = mode
+        self.setMode(mode)
+    def getValue(self):
+        if(self.sensornum == 1):
+            return self.bank.readInteger(PiStormsCom.PS_S1AN_Read)
+        if(self.sensornum == 2):
+            return self.bank.readInteger(PiStormsCom.PS_S2AN_Read)
+
+class NXTColorSensor(LegoSensor):
+    def __init__(self, port, mode = PS_SENSOR_MODE_EV3_COLOR_REFLECTED): #mode can be PS_SENSOR_MODE_NXT_COLOR_COLOR
+        super(self.__class__,self).__init__(port)
+        self.setType(13)
+        self.mode = mode
+        self.setMode(mode)
+    def rawValue(self):
+        self.retrieveUARTData()
+        return self.EV3Cache[0:1] + self.EV3Cache[1]
+    def getColor(self): #test
+        self.retrieveUARTData()
+        raw = self.EV3Cache[0:1] + self.EV3Cache[1]
+        return raw[0]
+    def colorSensorNXT(self):#test
+        if(self.sensornum == 1):
+            return self.bank.readByte(PiStormsCom.PS_S1AN_Read)
+        if(self.sensornum == 2):
+            return self.bank.readByte(PiStormsCom.PS_S2AN_Read)
 
 class EV3ColorSensor(LegoSensor):
-
-    def __init__(self, port):
+    def __init__(self, port, mode = PS_SENSOR_MODE_EV3_COLOR_REFLECTED): #mode can be PS_SENSOR_MODE_EV3_COLOR_[AMBIENT, REFLECTED, COLOR]
         super(self.__class__,self).__init__(port)
         self.setType(self.PS_SENSOR_TYPE_EV3)
-    def getVal()
+        self.mode = mode
+        self.setMode(mode)
+    def getValue(self):
+        if(self.sensornum == 1):
+            return self.bank.readByte(PiStormsCom.PS_S1EV_Data)
+        if(self.sensornum == 2):
+            return self.bank.readByte(PiStormsCom.PS_S2EV_Data)
 
 class EV3GyroSensor(LegoSensor):
-
-    def __init__(self, port):
+    def __init__(self, port, mode=PS_SENSOR_MODE_EV3_GYRO_ANGLE): #mode can be PS_SENSOR_MODE_EV3_GYRO_[ANGLE, RATE]
         super(self.__class__,self).__init__(port)
         self.setType(self.PS_SENSOR_TYPE_EV3)
-    def getAngle()
-    def getRefAngle()
-    def setRef()
+        self.mode = mode
+        self.setMode(mode)
+    def rawValue(self):
+        if(self.sensornum == 1):
+            return self.bank.readByte(PiStormsCom.PS_S1EV_Data)
+        if(self.sensornum == 2):
+            return self.bank.readByte(PiStormsCom.PS_S2EV_Data)
+    def readValue(self):
+        if(self.sensornum == 1):
+            return self.bank.readIntegerSigned(PiStormsCom.PS_S1EV_Data)
+        if(self.sensornum == 2):
+            return self.bank.readIntegerSigned(PiStormsCom.PS_S2EV_Data)
+	
+class EV3UltrasonicSensor(LegoSensor):
+    def __init__(self, port, mode=PS_SENSOR_MODE_EV3_ULTRASONIC_DIST_CM): #mode can be PS_SENSOR_MODE_EV3_ULTRASONIC_[DETECT, DIST_CM, DIST_IN]
+        super(self.__class__,self).__init__(port)
+        self.setType(self.PS_SENSOR_TYPE_EV3)
+        self.mode = mode
+        self.setMode(mode)
+    def getDistance(self):
+        if(self.sensornum == 1):
+            return self.bank.readInteger(PiStormsCom.PS_S1EV_Data)
+        if(self.sensornum == 2):
+            return self.bank.readInteger(PiStormsCom.PS_S2EV_Data)
+    def detect(self):
+        if(self.sensornum == 1):
+            return self.bank.readByte(PiStormsCom.PS_S1EV_Data) == 1
+        if(self.sensornum == 2):
+            return self.bank.readByte(PiStormsCom.PS_S2EV_Data) == 1
 
 class EV3InfraredSensor(LegoSensor):
-
-    def __init__(self, port):
+    def __init__(self, port, mode=PS_SENSOR_MODE_EV3_IR_PROXIMITY): #mode can be PS_SENSOR_MODE_EV3_IR_[CHANNEL, PROXIMITY, REMOTE]
         super(self.__class__,self).__init__(port)
         self.setType(self.PS_SENSOR_TYPE_EV3)
-    def readproximity()
-    def readRaw()
+        self.mode = mode
+        self.setMode(mode)
+    def readProximity(self):#unit?
+        if(self.sensornum == 1):
+            return self.bank.readInteger(PiStormsCom.PS_S1EV_Data)
+        if(self.sensornum == 2):
+            return self.bank.readInteger(PiStormsCom.PS_S2EV_Data)
+    def readRaw(self):
+        if(self.sensornum == 1):
+            return self.bank.readByte(PiStormsCom.PS_S1EV_Data)
+        if(self.sensornum == 2):
+            return self.bank.readByte(PiStormsCom.PS_S2EV_Data) 
     def readChannelHeading(self,channel):
+        if(self.sensornum == 1):
+            return self.bank.readByteSigned(PiStormsCom.PS_S1EV_Data + ((channel-1)*2))
+        if(self.sensornum == 2):
+            return self.bank.readByteSigned(PiStormsCom.PS_S2EV_Data + ((channel-1)*2))
     def readChannelProximity(self,channel):
-    def readChannelButton(self,channel):
+        if(self.sensornum == 1):
+            return self.bank.readByte(PiStormsCom.PS_S1EV_Data + (((channel-1)*2)+1))
+        if(self.sensornum == 2):
+            return self.bank.readByte(PiStormsCom.PS_S2EV_Data + (((channel-1)*2)+1))
+    def readRemote(self,channel):
+        if(self.sensornum == 1):
+            remote = self.bank.readByte(PiStormsCom.PS_S1EV_Data + (channel-1))
+        if(self.sensornum == 2):
+            remote = self.bank.readByte(PiStormsCom.PS_S2EV_Data + (channel-1))
+        L = 999
+        R = 999
+        if(remote == 0 or remote == 3 or remote == 4):
+            L=0
+        if(remote == 1 or remote == 5 or remote == 6):
+            L=1
+        if(remote == 2 or remote == 7 or remote == 8):
+            L=-1
 
-class EV3UltrasonicSensor(LegoSensor):
+        if(remote == 0 or remote == 1 or remote == 2):
+            R=0
+        if(remote == 3 or remote == 7 or remote == 5):
+            R=1
+        if(remote == 4 or remote == 6 or remote == 8):
+            R=-1
+        return (L, R)
+            
 
-    def __init__(self, port):
-        super(self.__class__,self).__init__(port)
-        self.setType(self.PS_SENSOR_TYPE_EV3)
-    def getDistance()
-    def detect()
+#class SumoEyes
 
-class NXTColorSensor
-class NXTLightSensor
+# class analogSensor(self): #untested
+    # def __init__(self, port, mode=0):
+        # super(self.__class__,self).__init__(port)
+        # self.setType(self.PS_SENSOR_TYPE_ANALOG)
+        # self.setMode(mode)
+    # def getValue(self):
+        # if(self.sensornum == 1):
+            # return self.bank.readByte(PiStormsCom.PS_S1EV_Ready)
+        # if(self.sensornum == 2):
+            # return self.bank.readByte(PiStormsCom.PS_S2EV_Ready)
+
+# class I2CSensor(self): 
+    # def __init__(self):
+        # self.setType(self.PS_SENSOR_TYPE_CUSTOM)
+
+
+
+"""
 
 TODO: also implement motor class & its functions here.
 
 """
-
