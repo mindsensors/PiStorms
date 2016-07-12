@@ -138,7 +138,7 @@ def printBoard(board):
 		for place in row:
 			#psm.screen.drawButton((p*48), (r*40), width = 40, height = 48, text=str(board[r][p]), display=False)
 			if board[r][p] == 1:
-				img = "GemBlack.png"
+				img = "GemRed.png"
 			elif board[r][p] == 2:
 				img = "GemBlue.png"
 			elif board[r][p] == 3:
@@ -146,7 +146,7 @@ def printBoard(board):
 			elif board[r][p] == 4:
 				img = "GemYellow.png"
 			elif board[r][p] == 5:
-				img = "GemRed.png"
+				img = "GemBlack.png"
 			psm.screen.fillBmp((p*48), (r*40), width = 40, height = 48, path = currentdir+'/'+img)
 			p += 1
 		r += 1
@@ -183,7 +183,7 @@ while (not doExit):
 			p = touches[1][1]
 			r = touches[1][0]
 			if board[r][p] == 1:
-				img = "GemBlack.png"
+				img = "GemRed.png"
 			elif board[r][p] == 2:
 				img = "GemBlue.png"
 			elif board[r][p] == 3:
@@ -191,14 +191,14 @@ while (not doExit):
 			elif board[r][p] == 4:
 				img = "GemYellow.png"
 			elif board[r][p] == 5:
-				img = "GemRed.png"
+				img = "GemBlack.png"
 			psm.screen.fillBmp((p*48), (r*40), width = 40, height = 48, path = currentdir+'/Gem.png')
 			time.sleep(0.1)
 			psm.screen.fillBmp((p*48), (r*40), width = 40, height = 48, path = currentdir+'/'+img)
 			p = touches[2][1]
 			r = touches[2][0]
 			if board[r][p] == 1:
-				img = "GemBlack.png"
+				img = "GemRed.png"
 			elif board[r][p] == 2:
 				img = "GemBlue.png"
 			elif board[r][p] == 3:
@@ -206,7 +206,7 @@ while (not doExit):
 			elif board[r][p] == 4:
 				img = "GemYellow.png"
 			elif board[r][p] == 5:
-				img = "GemRed.png"
+				img = "GemBlack.png"
 			psm.screen.fillBmp((p*48), (r*40), width = 40, height = 48, path = currentdir+'/Gem.png')
 			time.sleep(0.1)
 			psm.screen.fillBmp((p*48), (r*40), width = 40, height = 48, path = currentdir+'/'+img)
