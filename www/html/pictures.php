@@ -1,41 +1,10 @@
 <?php
-#
-# Copyright (c) 2016 mindsensors.com
-# 
-# This program is free software; you can redistribute it and/or modify
-# it under the terms of the GNU General Public License version 2 as
-# published by the Free Software Foundation.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.    See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program; if not, write to the Free Software
-# Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-#
-#mindsensors.com invests time and resources providing this open source code, 
-#please support mindsensors.com  by purchasing products from mindsensors.com!
-#Learn more product option visit us @  http://www.mindsensors.com/
-#
-# History:
-# Date      Author      Comments
-# June-2016 Roman       Initial development.
-#
 include "api/config.php";
 
 if (!isset($_SESSION['logged_in']) || !$_SESSION['logged_in']) {
     header('Location: ./login.php');
 }
 
-$nf = false;
-$software_v = "Unknown";
-$file = fopen("/home/pi/PiStorms/.version", "r") or $nf = true;
-if (!$nf) {
-    $software_v = fread($file,filesize("/home/pi/PiStorms/.version"));
-    fclose($file);
-}
 
 ?><!DOCTYPE html>
 <html>
@@ -90,7 +59,7 @@ if (!$nf) {
   </header>
 
   <?php
-    include "nav.php";
+    include_once("./components/nav.php");
   ?>
 
   <div class="content-wrapper">
@@ -103,8 +72,8 @@ if (!$nf) {
               <h3 class="box-title">Take Screenshots</h3>
             </div>
             <div class="box-body">
-               <button id="srnb" style="margin:5px" class="btn btn-flat btn-danger"><i class="fa fa-play"></i>&nbsp;&nbsp;Start Recording</button>
                <button id="srwb" style="margin:5px" class="btn btn-flat btn-danger"><i class="fa fa-play"></i>&nbsp;&nbsp;Start Recording with Background</button>
+               <button id="srnb" style="margin:5px" class="btn btn-flat btn-danger"><i class="fa fa-play"></i>&nbsp;&nbsp;Start Recording</button>
                <button id="stpr" style="margin:5px" class="btn btn-flat btn-danger"><i class="fa fa-stop"></i>&nbsp;&nbsp;Stop Recording</button>
                <button id="chkr" style="margin:5px" class="btn btn-flat btn-info"><i class="fa fa-flag"></i>&nbsp;&nbsp;Check Recording Status</button>
                <button id="clar" style="margin:5px" class="btn btn-flat btn-warning"><i class="fa fa-ban"></i>&nbsp;&nbsp;Clear Screenshots</button>
@@ -134,12 +103,7 @@ if (!$nf) {
     </section>
   </div>
 
-  <footer class="main-footer">
-    <div class="pull-right hidden-xs">
-      <b>Software Version:</b> <?php echo $software_v; ?> / <b>Hardware Version:</b> <span class="firmware_version"><i class="fa fa-refresh fa-spin"></i> fetching</span>
-    </div>
-    <strong>PiStorms by <a href="http://mindsensors.com" target="_blank">mindsensors.com</a></strong>
-  </footer>
+<?php include_once("./components/footer.php"); ?>
 
 </div>
 

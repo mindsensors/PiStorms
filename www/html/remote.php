@@ -1,52 +1,10 @@
 <?php
-#
-# Copyright (c) 2016 mindsensors.com
-# 
-# This program is free software; you can redistribute it and/or modify
-# it under the terms of the GNU General Public License version 2 as
-# published by the Free Software Foundation.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.    See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program; if not, write to the Free Software
-# Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-#
-#mindsensors.com invests time and resources providing this open source code, 
-#please support mindsensors.com  by purchasing products from mindsensors.com!
-#Learn more product option visit us @  http://www.mindsensors.com/
-#
-# History:
-# Date      Author      Comments
-# June-2016 Roman       Initial development.
-#
-
 include "api/config.php";
 
 if (!isset($_SESSION['logged_in']) || !$_SESSION['logged_in']) {
     header('Location: ./login.php');
 }
 
-$nf = false;
-$software_v = "Unknown";
-$file = fopen("/home/pi/PiStorms/.version", "r") or $nf = true;
-if (!$nf) {
-    $software_v = fread($file,filesize("/home/pi/PiStorms/.version"));
-    fclose($file);
-}
-
-$versions = '{"update": "both"}';
-$file = fopen("/var/tmp/ps_versions.json", "r") or $nf = true;
-if (!$nf) {
-    $versions = fread($file,filesize("/var/tmp/ps_versions.json"));
-    fclose($file);
-}
-$updates = json_decode($versions, true)["update"];
-$uptodate = '<span class="pull-right badge bg-green">Up-to-date</span>';
-$needsupdate = '<span class="pull-right badge bg-red">Needs Update!</span>';
 ?><!DOCTYPE html>
 <html>
 <head>
@@ -59,6 +17,7 @@ $needsupdate = '<span class="pull-right badge bg-red">Needs Update!</span>';
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/admin-lte/2.3.3/css/AdminLTE.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pnotify/3.0.0/pnotify.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/admin-lte/2.3.3/css/skins/skin-red.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/jquery.minicolors/2.1.2/jquery.minicolors.css">
   <link rel="stylesheet" href="./slider.css">
   <style>
     .btn-sq {
@@ -100,13 +59,14 @@ $needsupdate = '<span class="pull-right badge bg-red">Needs Update!</span>';
   </header>
 
   <?php
-    include "nav.php";
+    include_once("./components/nav.php");
   ?>
 
   <div class="content-wrapper">
     <section class="content">
 
       <div class="row">
+        <!--
         <div class="col-md-4 col-sm-6 col-xs-12">
           <div class="box box-danger">
             <div class="box-header">
@@ -117,7 +77,7 @@ $needsupdate = '<span class="pull-right badge bg-red">Needs Update!</span>';
             </div>
           </div>
         </div>
-        
+        -->
         <div class="col-md-4 col-sm-6 col-xs-12">
           <div class="box box-danger">
             <div class="box-header">
@@ -136,7 +96,7 @@ $needsupdate = '<span class="pull-right badge bg-red">Needs Update!</span>';
         <div class="col-md-4 col-sm-6 col-xs-12">
           <div class="box box-danger">
             <div class="box-header">
-              <h3 class="box-title">Control LED #1</h3>
+              <h3 class="box-title">Bank A LED</h3>
             </div>
             <div class="box-body">
                   <input id="red_c1" type="text" value="" class="slider form-control" data-slider-min="0" data-slider-max="255" data-slider-step="1" data-slider-value="127" data-slider-orientation="horizontal" data-slider-selection="before" data-slider-tooltip="show" data-slider-id="red">
@@ -145,6 +105,9 @@ $needsupdate = '<span class="pull-right badge bg-red">Needs Update!</span>';
 
                   <input id="blue_c1" type="text" value="" class="slider form-control" data-slider-min="0" data-slider-max="255" data-slider-step="1" data-slider-value="127" data-slider-orientation="horizontal" data-slider-selection="before" data-slider-tooltip="show" data-slider-id="blue">
                   
+                  <div class="form-group">
+                    <input type="text" id="color1" class="form-control demo" value="#7F7F7F">
+                  </div>
                   <div class="text-center"><button class="btn btn-flat btn-danger" style="margin-top:5px" onclick="led(1)">Go!</button></div>
             </div>
           </div>
@@ -153,7 +116,7 @@ $needsupdate = '<span class="pull-right badge bg-red">Needs Update!</span>';
         <div class="col-md-4 col-sm-6 col-xs-12">
           <div class="box box-danger">
             <div class="box-header">
-              <h3 class="box-title">Control LED #2</h3>
+              <h3 class="box-title">Bank B LED</h3>
             </div>
             <div class="box-body">
                   <input id="red_c2" type="text" value="" class="slider form-control" data-slider-min="0" data-slider-max="255" data-slider-step="1" data-slider-value="127" data-slider-orientation="horizontal" data-slider-selection="before" data-slider-tooltip="show" data-slider-id="red">
@@ -161,6 +124,10 @@ $needsupdate = '<span class="pull-right badge bg-red">Needs Update!</span>';
                   <input id="green_c2" type="text" value="" class="slider form-control" data-slider-min="0" data-slider-max="255" data-slider-step="1" data-slider-value="127" data-slider-orientation="horizontal" data-slider-selection="before" data-slider-tooltip="show" data-slider-id="green">
 
                   <input id="blue_c2" type="text" value="" class="slider form-control" data-slider-min="0" data-slider-max="255" data-slider-step="1" data-slider-value="127" data-slider-orientation="horizontal" data-slider-selection="before" data-slider-tooltip="show" data-slider-id="blue">
+                  
+                  <div class="form-group">
+                    <input type="text" id="color2" class="form-control demo" value="#7F7F7F">
+                  </div>
                   
                   <div class="text-center"><button class="btn btn-flat btn-danger" style="margin-top:5px" onclick="led(2)">Go!</button></div>
             </div>
@@ -172,12 +139,7 @@ $needsupdate = '<span class="pull-right badge bg-red">Needs Update!</span>';
     </section>
   </div>
 
-  <footer class="main-footer">
-    <div class="pull-right hidden-xs">
-      <b>Software Version:</b> <?php echo $software_v; ?> / <b>Hardware Version:</b> <span class="firmware_version"><i class="fa fa-refresh fa-spin"></i> fetching</span>
-    </div>
-    <strong>PiStorms by <a href="http://mindsensors.com" target="_blank">mindsensors.com</a></strong>
-  </footer>
+  <?php include_once("./components/footer.php"); ?>
 
 </div>
 
@@ -187,6 +149,7 @@ $needsupdate = '<span class="pull-right badge bg-red">Needs Update!</span>';
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pnotify/3.0.0/pnotify.min.js"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jQuery-slimScroll/1.3.8/jquery.slimscroll.min.js"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/7.1.0/bootstrap-slider.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/jquery.minicolors/2.1.2/jquery.minicolors.min.js"></script>
 
 <script>
 PNotify.prototype.options.styling = "bootstrap3";
@@ -221,10 +184,72 @@ $('#red_c2').slider({});
 $('#blue_c2').slider({});
 $('#green_c2').slider({});
 
+function update_slider_1() {
+    var hex = rgbToHex($('#red_c1').slider('getValue'), $('#green_c1').slider('getValue'), $('#blue_c1').slider('getValue'));    
+    $('#color1').minicolors('value', hex);
+}
+
+function update_slider_2() {
+    var hex = rgbToHex($('#red_c2').slider('getValue'), $('#green_c2').slider('getValue'), $('#blue_c2').slider('getValue'));    
+    $('#color2').minicolors('value', hex);
+}
+
+$('#red_c1').change(function() {update_slider_1();});
+$('#blue_c1').change(function() {update_slider_1();});
+$('#green_c1').change(function() {update_slider_1();});
+
+$('#red_c2').change(function() {update_slider_2();});
+$('#blue_c2').change(function() {update_slider_2();});
+$('#green_c2').change(function() {update_slider_2();});
+
 $("#shut_btn").click(function(){$.get(api+"shutdown", function(data){});notify("Success","Shutdown Signal Sent","success");});
 $("#rebt_btn").click(function(){$.get(api+"reboot", function(data){});notify("Success","Restart Signal Sent","success");});
-</script>
 
+// http://stackoverflow.com/a/5624139/3600428
+function componentToHex(c) {
+    var hex = c.toString(16);
+    return hex.length == 1 ? "0" + hex : hex;
+}
+function rgbToHex(r, g, b) {
+    return "#" + componentToHex(r) + componentToHex(g) + componentToHex(b);
+}
+function hexToRgb(hex) {
+    var shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
+    hex = hex.replace(shorthandRegex, function(m, r, g, b) {
+        return r + r + g + g + b + b;
+    });
+    var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+    return result ? {
+        r: parseInt(result[1], 16),
+        g: parseInt(result[2], 16),
+        b: parseInt(result[3], 16)
+    } : null;
+}
+
+
+$('#color1').minicolors({
+  theme: 'bootstrap',
+  change: function(hex) {
+    if(!hex) return;
+    var rgb = hexToRgb(hex);
+    $("#red_c1").slider('setValue', rgb.r);
+    $("#blue_c1").slider('setValue', rgb.b);
+    $("#green_c1").slider('setValue', rgb.g);
+  }
+});
+
+$('#color2').minicolors({
+  theme: 'bootstrap',
+  change: function(hex) {
+    if(!hex) return;
+    var rgb = hexToRgb(hex);
+    $("#red_c2").slider('setValue', rgb.r);
+    $("#blue_c2").slider('setValue', rgb.b);
+    $("#green_c2").slider('setValue', rgb.g);
+  }
+});
+</script>
+<!--
 <script src="nipple.js"></script>
 <script>
     var static = nipplejs.create({
@@ -235,6 +260,6 @@ $("#rebt_btn").click(function(){$.get(api+"reboot", function(data){});notify("Su
     });
     
 </script>
-
+-->
 </body>
 </html>

@@ -1743,7 +1743,7 @@ class NXTSERVO(mindsensors_i2c):
     
     ## Default NXTServo I2C Address 
     NXTSERVO_ADDRESS = (0xB0)    
-    ## Constant Coltage Multiplier
+    ## Constant Voltage Multiplier
     NXTSERVO_VBATT_SCALER = 41    
     ## Command Register
     NXTSERVO_COMMAND = 0x41   

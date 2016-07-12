@@ -1,28 +1,3 @@
-#!/usr/bin/env python
-#
-# Copyright (c) 2016 mindsensors.com
-#
-# This program is free software; you can redistribute it and/or modify
-# it under the terms of the GNU General Public License version 2 as
-# published by the Free Software Foundation.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.    See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program; if not, write to the Free Software
-# Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-#
-#mindsensors.com invests time and resources providing this open source code,
-#please support mindsensors.com  by purchasing products from mindsensors.com!
-#Learn more product option visit us @  http://www.mindsensors.com/
-#
-# History:
-# Date         Author          Comments
-# June 2016    Roman Bohuk     Initial Authoring
-
 from datetime import timedelta  
 from flask import Flask, make_response, request, current_app  
 from functools import update_wrapper
@@ -77,8 +52,6 @@ import MS_ILI9341
 import Adafruit_GPIO.SPI as SPI
 disp = MS_ILI9341.ILI9341(24, rst=25, spi=SPI.SpiDev(0,0,max_speed_hz=64000000)) 
 
-
-
 import socket,fcntl,struct
 def get_ip_address(ifname):
     try:
@@ -91,18 +64,40 @@ def get_ip_address(ifname):
     except:
         return "not present"
 
+
+import json        
+import ConfigParser
+
+config = ConfigParser.ConfigParser()
+config.read("/usr/local/mindsensors/conf/msdev.cfg")
+home_folder = config.get("msdev","homefolder")
+
+message_file = '/var/tmp/ps_data.json'
+messages = {"date": "", "status": "None", "message": "none"}
+message_text = '{"date": "", "status": "None", "message": "none"}'
+with open(message_file, "r") as data_file:
+    message_text = data_file.read()
+    messages = json.loads(message_text)
+
+
 @app.route("/")
 def index():
     return "PiStorms Web API"
 
 @app.route("/firmware", methods=['GET', 'OPTIONS'])
 @crossdomain(origin='*')
-def firmware_version():
+def firmware():
     return str(psc.GetFirmwareVersion())
+
+@app.route("/software", methods=['GET', 'OPTIONS'])
+@crossdomain(origin='*')
+def software():
+    with open(os.path.join(home_folder, ".version"), "r") as f:
+        return f.read()
 
 @app.route("/device", methods=['GET', 'OPTIONS'])
 @crossdomain(origin='*')
-def device_id():
+def device():
     return str(psc.GetDeviceId())
 
 @app.route("/eth0", methods=['GET', 'OPTIONS'])
@@ -189,6 +184,50 @@ def clearimages():
         if os.path.isfile(file_path):
             os.system("sudo rm " + file_path)
     return "1"
+
+@app.route("/stopbrowser", methods=['GET', 'OPTIONS'])
+@crossdomain(origin='*')
+def stopbrowser():
+    disp.display()
+    os.system("sudo /etc/init.d/MSBrowser.sh stop")
+    return "1"
+
+@app.route("/startbrowser", methods=['GET', 'OPTIONS'])
+@crossdomain(origin='*')
+def startbrowser():
+    os.system("sudo /etc/init.d/MSBrowser.sh start")
+    return "1"
+
+@app.route("/calibrate", methods=['GET', 'OPTIONS'])
+@crossdomain(origin='*')
+def calibrate():
+    stopbrowser()
+    os.system("python " + os.path.join(home_folder, "01-Calibrate.py"))
+    return "1"
+    
+@app.route("/getapacheerrors", methods=['GET', 'OPTIONS'])
+@crossdomain(origin='*')
+def getapacheerrors():
+    return os.popen('tail /var/log/apache2/error.log -n 25').read()
+
+@app.route("/getmessage", methods=['GET', 'OPTIONS'])
+@crossdomain(origin='*')
+def getmessage():
+    return messages["message"]
+
+@app.route("/markmessageread", methods=['GET', 'OPTIONS'])
+@crossdomain(origin='*')
+def markmessageread():
+    messages["status"] = "Read"
+    f = open(message_file, 'w+')
+    json.dump(messages, f)
+    f.close()
+    return "1"
+
+@app.route("/getmessagejson", methods=['GET', 'OPTIONS'])
+@crossdomain(origin='*')
+def getmessagejson():
+    return message_text
 
 if __name__ == "__main__":
     app.run("0.0.0.0", 3141)
