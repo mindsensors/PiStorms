@@ -29,11 +29,12 @@ do_start () {
 
     #
     # start the browser
-    sudo python /usr/local/bin/ps_updater.py >> /var/tmp/ps_u 2>&1
-    sleep 1
+    sudo rm -f /var/tmp/ps_versions.json
     sudo python /usr/local/bin/MSBrowser.py $homefolder/programs >/var/tmp/psmb.out 2>&1 &
     sleep 1
     sudo python /usr/local/bin/ps_messenger_check.py >> /var/tmp/ps_m 2>&1
+    sleep 1
+    sudo python /usr/local/bin/ps_updater.py >> /var/tmp/ps_u 2>&1
     sleep 1
     #
     # run diagnostics

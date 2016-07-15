@@ -41,6 +41,7 @@ home_folder = config.get('msdev', 'homefolder')
 sw_version_file = home_folder+'/.version'
 
 link = message_server + "/versions.php"
+print "gathering info from: ", link
 
 cmd = 'cat /proc/cpuinfo | grep Revision | cut -d":" -f2 |awk \'{$1=$1};1\''
 rev = commands.getstatusoutput(cmd)[1]
@@ -86,9 +87,11 @@ try:
     f = open(hw_version_file, 'r')
     hw_version = f.read()
     hw_version = hw_version.strip()
+    if (hw_version == "ReadE"):
+        hw_version = "V0.00"
     f.close()
 except:
-    hw_version = "0.000"
+    hw_version = "V0.00"
 
 #print "hw_version: " + str(hw_version)
 #
@@ -109,7 +112,7 @@ try:
     if ( sw_version < new_json['sw_ver'] ):
         update_required = 1
 
-    if ( hw_version < new_json['hw_ver'] ):
+    if ( hw_version != "V0.00" and hw_version < new_json['hw_ver'] ):
         if ( update_required == 1 ):
             update_required = 4
         else:
@@ -131,7 +134,7 @@ try:
     json.dump(new_json, f)
     f.close()
 except:
-    #print "connection failed, exiting"
+    print "ps_updater.py connection failed"
     exit()
 
 
