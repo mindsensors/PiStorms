@@ -1,3 +1,28 @@
+#!/usr/bin/env python
+#
+# Copyright (c) 2016 mindsensors.com
+# 
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License version 2 as
+# published by the Free Software Foundation.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.    See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+#
+#mindsensors.com invests time and resources providing this open source code, 
+#please support mindsensors.com  by purchasing products from mindsensors.com!
+#Learn more product option visit us @  http://www.mindsensors.com/
+#
+# History:
+# Date         Author          Comments
+# July 2016    Roman Bohuk     Initial Authoring 
+
 from datetime import timedelta  
 from flask import Flask, make_response, request, current_app  
 from functools import update_wrapper
@@ -192,10 +217,25 @@ def stopbrowser():
     os.system("sudo /etc/init.d/MSBrowser.sh stop")
     return "1"
 
+def browserrunning():
+    print "Start Checking"
+    ps = os.popen('ps -ef').read().split("\n")
+    for i in ps:
+        print "__"+i
+        if "MSBrowser.py" in i:
+            print "End Checking Y"
+            return "1"
+    print "End Checking"
+    return "0"
+    
 @app.route("/startbrowser", methods=['GET', 'OPTIONS'])
 @crossdomain(origin='*')
 def startbrowser():
+    if browserrunning() == "1":
+        print "Browser Already Running"
+        return "0"
     os.system("sudo /etc/init.d/MSBrowser.sh start")
+    print "Started Browser"
     return "1"
 
 @app.route("/calibrate", methods=['GET', 'OPTIONS'])
@@ -228,6 +268,21 @@ def markmessageread():
 @crossdomain(origin='*')
 def getmessagejson():
     return message_text
+    
+@app.route("/getprograms", methods=['GET', 'OPTIONS'])
+@crossdomain(origin='*')
+def getprograms():
+    files = os.listdir(os.path.join(home_folder, "programs"))
+    out = []
+    for i in files:
+        dir = os.path.join(home_folder, "programs", i)
+        typ = ""
+        if os.path.isdir(dir): typ = "folder"
+        elif os.path.isfile(dir): typ = os.path.splitext(dir)[1][1::].lower()
+        if (typ == "folder" or typ == "py") and i[:2].isdigit():
+            out.append([i,dir,typ])
+    out.sort()
+    return json.dumps(out)
 
 if __name__ == "__main__":
-    app.run("0.0.0.0", 3141)
+    app.run("0.0.0.0", 3141, threaded=True)

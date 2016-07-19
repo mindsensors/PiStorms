@@ -1,4 +1,29 @@
 <?php
+/*
+# Copyright (c) 2016 mindsensors.com
+# 
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License version 2 as
+# published by the Free Software Foundation.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.    See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+#
+#mindsensors.com invests time and resources providing this open source code, 
+#please support mindsensors.com  by purchasing products from mindsensors.com!
+#Learn more product option visit us @  http://www.mindsensors.com/
+#
+# History:
+# Date         Author          Comments
+# July 2016    Roman Bohuk     Initial Authoring 
+*/
+
 include "api/config.php";
 
 if (!isset($_SESSION['logged_in']) || !$_SESSION['logged_in']) {
@@ -12,13 +37,13 @@ if (!isset($_SESSION['logged_in']) || !$_SESSION['logged_in']) {
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <title>PiStorms Web Interface</title>
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.6/css/bootstrap.min.css">  <!-- Font Awesome -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/css/font-awesome.min.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/admin-lte/2.3.3/css/AdminLTE.min.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pnotify/3.0.0/pnotify.min.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/admin-lte/2.3.3/css/skins/skin-red.min.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/jquery.minicolors/2.1.2/jquery.minicolors.css">
-  <link rel="stylesheet" href="./slider.css">
+  <link rel="stylesheet" href="assets/bootstrap.min.css">  <!-- Font Awesome -->
+  <link rel="stylesheet" href="assets/font-awesome.min.css">
+  <link rel="stylesheet" href="assets/AdminLTE.min.css">
+  <link rel="stylesheet" href="assets/pnotify.min.css">
+  <link rel="stylesheet" href="assets/skin-red.min.css">
+  <link rel="stylesheet" href="assets/jquery.minicolors.css">
+  <link rel="stylesheet" href="assets/slider.css">
   <style>
     .btn-sq {
       width: 50px !important;
@@ -36,7 +61,7 @@ if (!isset($_SESSION['logged_in']) || !$_SESSION['logged_in']) {
 <body class="hold-transition skin-red sidebar-mini">
 <div class="wrapper">
   <header class="main-header">
-    <a href="../../index2.html" class="logo">
+    <a href="./" class="logo">
       <span class="logo-mini"><b>PS</b></span>
       <span class="logo-lg"><b>PiStorms</b> Web</span>
     </a>
@@ -143,13 +168,13 @@ if (!isset($_SESSION['logged_in']) || !$_SESSION['logged_in']) {
 
 </div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.6/js/bootstrap.min.js"></script>
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/admin-lte/2.3.3/js/app.min.js"></script>
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pnotify/3.0.0/pnotify.min.js"></script>
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jQuery-slimScroll/1.3.8/jquery.slimscroll.min.js"></script>
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/7.1.0/bootstrap-slider.min.js"></script>
-<script type="text/javascript" src="https://cdn.jsdelivr.net/jquery.minicolors/2.1.2/jquery.minicolors.min.js"></script>
+<script src="assets/jquery.min.js"></script>
+<script src="assets/bootstrap.min.js"></script>
+<script type="text/javascript" src="assets/app.min.js"></script>
+<script type="text/javascript" src="assets/pnotify.min.js"></script>
+<script type="text/javascript" src="assets/jquery.slimscroll.min.js"></script>
+<script type="text/javascript" src="assets/bootstrap-slider.min.js"></script>
+<script type="text/javascript" src="assets/jquery.minicolors.min.js"></script>
 
 <script>
 PNotify.prototype.options.styling = "bootstrap3";
@@ -165,11 +190,6 @@ function notify(tt,tx,tp) {
 }
 
 var api = "http://<?=$_SERVER['SERVER_NAME']?>:3141/";
-
-$.get(api+"firmware", function(data){
-    $(".firmware_version").html(data);
-});
-
 
 function led(n) {
     $.post(api+"led", {led: n,red: $("#red_c"+n).val(),blue: $("#blue_c"+n).val(),green: $("#green_c"+n).val()}, function(data){
