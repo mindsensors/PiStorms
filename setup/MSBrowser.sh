@@ -24,8 +24,8 @@ do_start () {
 
     #
     # query the hardware for its version
-    sudo python $homefolder/programs/utils/print-hw-version.py >/var/tmp/.hw_version
     chmod a+rw /dev/i2c* > /dev/null 2>&1
+    sudo python $homefolder/programs/utils/print-hw-version.py >/var/tmp/.hw_version
 
     #
     # start the browser

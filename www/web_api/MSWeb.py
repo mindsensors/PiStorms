@@ -100,11 +100,12 @@ home_folder = config.get("msdev","homefolder")
 message_file = '/var/tmp/ps_data.json'
 messages = {"date": "", "status": "None", "message": "none"}
 message_text = '{"date": "", "status": "None", "message": "none"}'
-with open(message_file, "r") as data_file:
-    message_text = data_file.read()
-    messages = json.loads(message_text)
+try:
+    with open(message_file, "r") as data_file:
+        message_text = data_file.read()
+except: message_text = '{"date": "", "status": "None", "message": "none"}'
 
-
+messages = json.loads(message_text)
 @app.route("/")
 def index():
     return "PiStorms Web API"
@@ -117,8 +118,10 @@ def firmware():
 @app.route("/software", methods=['GET', 'OPTIONS'])
 @crossdomain(origin='*')
 def software():
-    with open(os.path.join(home_folder, ".version"), "r") as f:
-        return f.read()
+    try:
+        with open(os.path.join(home_folder, ".version"), "r") as f:
+            return f.read()
+    except: return "Undefined"
 
 @app.route("/device", methods=['GET', 'OPTIONS'])
 @crossdomain(origin='*')
@@ -218,14 +221,10 @@ def stopbrowser():
     return "1"
 
 def browserrunning():
-    print "Start Checking"
     ps = os.popen('ps -ef').read().split("\n")
     for i in ps:
-        print "__"+i
         if "MSBrowser.py" in i:
-            print "End Checking Y"
             return "1"
-    print "End Checking"
     return "0"
     
 @app.route("/startbrowser", methods=['GET', 'OPTIONS'])
@@ -259,9 +258,11 @@ def getmessage():
 @crossdomain(origin='*')
 def markmessageread():
     messages["status"] = "Read"
-    f = open(message_file, 'w+')
-    json.dump(messages, f)
-    f.close()
+    try:
+        f = open(message_file, 'w+')
+        json.dump(messages, f)
+        f.close()
+    except: return "0"
     return "1"
 
 @app.route("/getmessagejson", methods=['GET', 'OPTIONS'])
@@ -284,5 +285,21 @@ def getprograms():
     out.sort()
     return json.dumps(out)
 
+@app.route("/fetchscript", methods=['POST', 'OPTIONS'])
+@crossdomain(origin='*')
+def fetchscript():
+    try:
+        with open(request.form["path"],"r") as f:
+            return f.read()
+    except: return "0"
+        
+@app.route("/savescript", methods=['POST', 'OPTIONS'])
+@crossdomain(origin='*')
+def savescript():
+    try:
+        with open(request.form["path"],"w+") as f:
+            return f.write(request.form["contents"])
+    finally: return "0"
+    
 if __name__ == "__main__":
     app.run("0.0.0.0", 3141, threaded=True)

@@ -76,7 +76,7 @@ class ILI9341(Adafruit_ILI9341.ILI9341):
         if self.recordFileExists():
             with open(self.record_path, "r") as f:
                 return f.read().split("\n")
-        else: return ""
+        else: return ["",""]
     
     def isTakingFrames(self, fileContents):
         return fileContents == "-" or fileContents.isdigit()

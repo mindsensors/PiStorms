@@ -25,12 +25,19 @@
 */
 session_start();
 
-$versions = '{"update": "both"}';
-$file = fopen("/var/tmp/ps_versions.json", "r") or $nf = true;
+$versions = '{"update": "loading"}';
+
+$versions = file_get_contents("/var/tmp/ps_versions.json", FILE_USE_INCLUDE_PATH);
+/*$file = fopen("/var/tmp/ps_versions.json", "r") or $nf = true;
 if (!$nf) {
     $versions = fread($file,filesize("/var/tmp/ps_versions.json"));
     fclose($file);
 }
+*/
+if (!isset($versions) || !$versions) {
+    $versions = '{"update": "loading"}';
+}
+
 $updates = json_decode($versions, true)["update"];
 $uptodate = '<span class="pull-right badge bg-green">Up-to-date</span>';
 $needsupdate = '<span id="needs-update-tooltip" class="pull-right badge bg-red">Needs Update!&nbsp;&nbsp;<i data-toggle="tooltip" class="fa fa-question-circle" title="Please go to the mindsensors.com blog to see firmware and sofware update instructions, or click here to go to the GitHub page" aria-hidden="true"></i></span>';
