@@ -301,5 +301,29 @@ def savescript():
             return f.write(request.form["contents"])
     finally: return "0"
     
+@app.route("/setmotorspeed", methods=['POST', 'OPTIONS'])
+@crossdomain(origin='*')
+def setmotorspeed():
+    try:
+        psc.BAM1.setSpeed(-int(request.form["right"]))
+        psc.BAM2.setSpeed(-int(request.form["left"]))
+    except Exception as e:
+        pass
+    return "1"
+    
+@app.route("/floatmotors", methods=['GET', 'OPTIONS'])
+@crossdomain(origin='*')
+def floatmotors():
+    psc.BAM1.float()
+    psc.BAM2.float()
+    return "1"
+    
+@app.route("/brakemotors", methods=['GET', 'OPTIONS'])
+@crossdomain(origin='*')
+def brakemotors():
+    psc.BAM1.brake()
+    psc.BAM2.brake()
+    return "1"
+    
 if __name__ == "__main__":
     app.run("0.0.0.0", 3141, threaded=True)

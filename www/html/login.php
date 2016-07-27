@@ -27,6 +27,7 @@ include "api/config.php";
 
 if (isset($_SESSION['logged_in']) && $_SESSION['logged_in']) {
     header('Location: ./');
+    exit();
 }
 
 ?><!DOCTYPE html>

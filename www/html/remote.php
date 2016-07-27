@@ -28,6 +28,7 @@ include "api/config.php";
 
 if (!isset($_SESSION['logged_in']) || !$_SESSION['logged_in']) {
     header('Location: ./login.php');
+    exit();
 }
 
 ?><!DOCTYPE html>
@@ -49,6 +50,9 @@ if (!isset($_SESSION['logged_in']) || !$_SESSION['logged_in']) {
       width: 50px !important;
       height: 50px !important;
       font-size: 24px;
+    }
+    .btn-settings {
+        margin: 5px;
     }
   </style>
   <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -91,18 +95,22 @@ if (!isset($_SESSION['logged_in']) || !$_SESSION['logged_in']) {
     <section class="content">
 
       <div class="row">
-        <!--
+        
         <div class="col-md-4 col-sm-6 col-xs-12">
           <div class="box box-danger">
             <div class="box-header">
-              <h3 class="box-title">Control Motors</h3>
+              <h3 class="box-title"><span data-toggle="tooltip" title="Please connect the right motor to BANK A M1 socket and the left motor to BANK A M2 socket" aria-hidden="true">Control Motors&nbsp;&nbsp;<i class="fa fa-question-circle"></i></span></h3>
             </div>
             <div class="box-body">
-                  <h4 style="height:150px" id="static"></h4>
+                <h4 style="height:220px" id="static"></h4>
+            </div>
+            <div class="box-footer text-center">
+                <button type="button" id="brake_btn" class="btn btn-danger btn-flat btn-settings"><i class="fa fa-stop" aria-hidden="true"></i>&nbsp;&nbsp;Brake</button>
+                <button type="button" id="float_btn" class="btn btn-danger btn-flat btn-settings"><i class="fa fa-pause" aria-hidden="true"></i>&nbsp;&nbsp;Float</button>
             </div>
           </div>
         </div>
-        -->
+        <!--
         <div class="col-md-4 col-sm-6 col-xs-12">
           <div class="box box-danger">
             <div class="box-header">
@@ -117,7 +125,7 @@ if (!isset($_SESSION['logged_in']) || !$_SESSION['logged_in']) {
             </div>
           </div>
         </div>
-        
+        -->
         <div class="col-md-4 col-sm-6 col-xs-12">
           <div class="box box-danger">
             <div class="box-header">
@@ -222,8 +230,8 @@ $('#red_c2').change(function() {update_slider_2();});
 $('#blue_c2').change(function() {update_slider_2();});
 $('#green_c2').change(function() {update_slider_2();});
 
-$("#shut_btn").click(function(){$.get(api+"shutdown", function(data){});notify("Success","Shutdown Signal Sent","success");});
-$("#rebt_btn").click(function(){$.get(api+"reboot", function(data){});notify("Success","Restart Signal Sent","success");});
+$("#brake_btn").click(function(){$.get(api+"brakemotors", function(data){});});
+$("#float_btn").click(function(){$.get(api+"floatmotors", function(data){});});
 
 // http://stackoverflow.com/a/5624139/3600428
 function componentToHex(c) {
@@ -269,17 +277,61 @@ $('#color2').minicolors({
   }
 });
 </script>
-<!--
-<script src="nipple.js"></script>
+
+<script src="./assets/nipple.js"></script>
 <script>
-    var static = nipplejs.create({
+    
+    function n(minObserver,maxObserved,minNeeded,maxNeeded,value) {
+        return (maxNeeded-minNeeded)/(maxObserved)*(value-maxObserved)+maxNeeded;
+    }
+    
+    var manager = nipplejs.create({
         zone: document.getElementById('static'),
         mode: 'static',
         position: {left: '50%', top: '50%'},
-        color: 'green'
+        color: 'green',
+        size: 128
     });
     
+    var lt = 0;
+    manager.on('move dir start end', function (evt, data) {
+      var r = 0;
+      var l = 0;
+      if (data.distance) {
+        var d = data.angle.degree;
+        if (d >= 0 && d < 90) {
+            var rm = n(0,90,-127,127,d);
+            var lm = 127;
+            r = rm / 64 * data.distance;
+            l = lm / 64 * data.distance;
+        } else if (d >= 90 && d < 180) {
+            var rm = 127;
+            var lm = n(0,90,127,-127,d-90);
+            r = rm / 64 * data.distance;
+            l = lm / 64 * data.distance;
+        } else if (d >= 180 && d < 270) {
+            var rm = -127;
+            var lm = d < 225 ? n(0,45,-127,0,d-180) : n(0,45,0,-127,d-225);
+            r = rm / 64 * data.distance;
+            l = lm / 64 * data.distance;
+        } else {
+            var rm = d < 315 ? n(0,45,-127,0,d-270) : n(0,45,0,-127,d-315);
+            var lm = -127;
+            r = rm / 64 * data.distance;
+            l = lm / 64 * data.distance;
+        }
+      }
+      if (new Date().getTime() / 1000 - lt > 0.3 || evt.type == "end") {
+        $.post(api+"setmotorspeed", {right: Math.round(r), left: Math.round(l)}, function(result) {
+          console.log(r + " " + l);
+        });
+        if (evt.type != "start") {
+          lt = new Date().getTime() / 1000;
+        }
+      }
+    });
+
 </script>
--->
+
 </body>
 </html>
