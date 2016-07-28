@@ -54,6 +54,25 @@ if (!isset($_SESSION['logged_in']) || !$_SESSION['logged_in']) {
     .btn-settings {
         margin: 5px;
     }
+    .front {
+        background: url(assets/top.png) !important;
+        background-size: contain !important;
+        opacity: 1 !important;
+        z-score: 100 !important;
+        height: 85% !important;
+        width: 85% !important;
+        margin-left: -54.4px !important;
+        margin-top: -54.4px !important;
+    }
+    .back {
+        background: url(assets/bottom.png) !important;
+        background-size: contain !important;
+        opacity: 1 !important;
+        z-score: 100 !important;
+    }
+    .nipple {
+        opacity: 1 !important;
+    }
   </style>
   <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
   <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -102,7 +121,7 @@ if (!isset($_SESSION['logged_in']) || !$_SESSION['logged_in']) {
               <h3 class="box-title"><span data-toggle="tooltip" title="Please connect the right motor to BANK A M1 socket and the left motor to BANK A M2 socket" aria-hidden="true">Control Motors&nbsp;&nbsp;<i class="fa fa-question-circle"></i></span></h3>
             </div>
             <div class="box-body">
-                <h4 style="height:220px" id="static"></h4>
+                <div style="height:250px; vertical-align:middle;text-align: center" class="text-center"><div style="height:250px;width:250px;display:inline-block" id="static"></div></div>
             </div>
             <div class="box-footer text-center">
                 <button type="button" id="brake_btn" class="btn btn-danger btn-flat btn-settings"><i class="fa fa-stop" aria-hidden="true"></i>&nbsp;&nbsp;Brake</button>
@@ -290,8 +309,11 @@ $('#color2').minicolors({
         mode: 'static',
         position: {left: '50%', top: '50%'},
         color: 'green',
-        size: 128
+        size: 128,
+        catchDistance: 10
     });
+    
+    var movecnt = 0;
     
     var lt = 0;
     manager.on('move dir start end', function (evt, data) {
@@ -299,6 +321,7 @@ $('#color2').minicolors({
       var l = 0;
       if (data.distance) {
         var d = data.angle.degree;
+        //console.log(d + " " + data.distance);
         if (d >= 0 && d < 90) {
             var rm = n(0,90,-127,127,d);
             var lm = 127;
@@ -321,13 +344,19 @@ $('#color2').minicolors({
             l = lm / 64 * data.distance;
         }
       }
-      if (new Date().getTime() / 1000 - lt > 0.3 || evt.type == "end") {
+      if (movecnt > 1 && (new Date().getTime() / 1000 - lt > 0.3 || evt.type == "end") && evt.type != "start") {
         $.post(api+"setmotorspeed", {right: Math.round(r), left: Math.round(l)}, function(result) {
-          console.log(r + " " + l);
+          //console.log(r + " " + l);
         });
         if (evt.type != "start") {
           lt = new Date().getTime() / 1000;
         }
+      }
+      if (evt.type == "end") {
+        movecnt = 0;
+      }
+      if (evt.type == "move") {
+          movecnt ++;
       }
     });
 
