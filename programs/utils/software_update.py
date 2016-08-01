@@ -103,6 +103,22 @@ else:
 # rename the prior folder with an indremental suffix
 # Extract the new update in its place
 #
+newHtml = renameFolder("/var/www/html", 0)
+if (os.path.isdir("/var/www/html")):
+    # if the folder is still there, don't install
+    m = ["Software Updater", "Error while renaming html folder" ]
+    psm.screen.askQuestion(m,["OK"])
+    psm.screen.clearScreen()
+    sys.exit(-1)
+
+newWebapi = renameFolder("/var/www/web_api", 0)
+if (os.path.isdir("/var/www/web_api")):
+    # if the folder is still there, don't install
+    m = ["Software Updater", "Error while renaming web_api folder" ]
+    psm.screen.askQuestion(m,["OK"])
+    psm.screen.clearScreen()
+    sys.exit(-1)
+
 newName = renameFolder("/home/pi/PiStorms", 0)
 
 if (os.path.isdir("/home/pi/PiStorms")):
@@ -114,6 +130,7 @@ if (os.path.isdir("/home/pi/PiStorms")):
 else:
     psm.screen.termPrintAt(3, "Unzipping ...")
     psm.screen.termPrintAt(4, "              ")
+
 
 cmd = "cd /home/pi; tar -zxvf /var/tmp/upd/" + sw_file_name
 status = subprocess.call(cmd, shell=True)
@@ -141,9 +158,11 @@ status = subprocess.call(cmd, shell=True)
 psm.screen.termPrintAt(3, "Update complete.")
 psm.screen.termPrintAt(4, "Please restart your Pi.")
 
-m = ["Software Updater", "Update Complete.",
+m = ["Software Update Complete.",
   "Prior installation saved in:",
   newName,
+  newHtml,
+  newWebapi,
   "Please restart your Pi"]
 psm.screen.askQuestion(m,["OK"])
 
