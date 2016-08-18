@@ -35,6 +35,7 @@ if (!isset($_SESSION['logged_in']) || !$_SESSION['logged_in']) {
 <html>
 <head>
   <meta charset="utf-8">
+  <meta name="theme-color" content="#DD4B39">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <title>PiStorms Web Interface</title>
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
@@ -45,6 +46,7 @@ if (!isset($_SESSION['logged_in']) || !$_SESSION['logged_in']) {
   <link rel="stylesheet" href="assets/skin-red.min.css">
   <link rel="stylesheet" href="assets/jquery.minicolors.css">
   <link rel="stylesheet" href="assets/slider.css">
+  <link href="assets/bootstrap-toggle.min.css" rel="stylesheet">
   <style>
     .btn-sq {
       width: 50px !important;
@@ -124,8 +126,9 @@ if (!isset($_SESSION['logged_in']) || !$_SESSION['logged_in']) {
                 <div style="height:250px; vertical-align:middle;text-align: center" class="text-center"><div style="height:250px;width:250px;display:inline-block" id="static"></div></div>
             </div>
             <div class="box-footer text-center">
-                <button type="button" id="brake_btn" class="btn btn-danger btn-flat btn-settings"><i class="fa fa-stop" aria-hidden="true"></i>&nbsp;&nbsp;Brake</button>
-                <button type="button" id="float_btn" class="btn btn-danger btn-flat btn-settings"><i class="fa fa-pause" aria-hidden="true"></i>&nbsp;&nbsp;Float</button>
+                Stopping Action:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" checked data-toggle="toggle" data-size="small" data-onstyle="primary" data-offstyle="danger" data-width="70" data-on="Float" data-off="Brake" id="stopcheck">
+                <!--<button type="button" id="brake_btn" class="btn btn-danger btn-flat btn-settings"><i class="fa fa-stop" aria-hidden="true"></i>&nbsp;&nbsp;Brake</button>
+                <button type="button" id="float_btn" class="btn btn-danger btn-flat btn-settings"><i class="fa fa-pause" aria-hidden="true"></i>&nbsp;&nbsp;Float</button>-->
             </div>
           </div>
         </div>
@@ -202,6 +205,7 @@ if (!isset($_SESSION['logged_in']) || !$_SESSION['logged_in']) {
 <script type="text/javascript" src="assets/jquery.slimscroll.min.js"></script>
 <script type="text/javascript" src="assets/bootstrap-slider.min.js"></script>
 <script type="text/javascript" src="assets/jquery.minicolors.min.js"></script>
+<script src="assets/bootstrap-toggle.min.js"></script>
 
 <script>
 PNotify.prototype.options.styling = "bootstrap3";
@@ -345,9 +349,15 @@ $('#color2').minicolors({
         }
       }
       if (movecnt > 1 && (new Date().getTime() / 1000 - lt > 0.3 || evt.type == "end") && evt.type != "start") {
-        $.post(api+"setmotorspeed", {right: Math.round(r), left: Math.round(l)}, function(result) {
-          //console.log(r + " " + l);
-        });
+        if (evt.type != "end") {
+            $.post(api+"setmotorspeed", {right: Math.round(r), left: Math.round(l), stop: $("#stopcheck").is(':checked') ? "float" : "brake"}, function(result) {
+              //console.log(r + " " + l);
+            });
+        } else {
+            $.get(api+ ($("#stopcheck").is(':checked') ? "floatmotors" : "brakemotors"), function(data){});
+            $.get(api+ ($("#stopcheck").is(':checked') ? "floatmotors" : "brakemotors"), function(data){});
+            $.get(api+ ($("#stopcheck").is(':checked') ? "floatmotors" : "brakemotors"), function(data){});
+        }
         if (evt.type != "start") {
           lt = new Date().getTime() / 1000;
         }

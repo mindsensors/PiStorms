@@ -34,6 +34,7 @@ if (isset($_SESSION['logged_in']) && $_SESSION['logged_in']) {
 <html>
 <head>
   <meta charset="utf-8">
+  <meta name="theme-color" content="#DD4B39">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <title>PiStorms Login</title>
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">

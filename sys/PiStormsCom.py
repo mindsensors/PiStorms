@@ -559,7 +559,7 @@ class PSMotor():
         passcount = passcount
         tolerance = tolerance
         array = [Kp_t1 , Kp_t2 , Ki_t1, Ki_t2, Kd_t1, Kd_t2, Kp_s1, Kp_s2, Ki_s1, Ki_s2, Kd_s1, Kd_s2, passcount, tolerance]
-        self.bank.writeArray(self.PS_P_Kp, array)       
+        self.bank.writeArray(PiStormsCom.PS_P_Kp, array)       
     
 class PiStormsCom():
 

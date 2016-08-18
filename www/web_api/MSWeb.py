@@ -27,6 +27,7 @@ from datetime import timedelta
 from flask import Flask, make_response, request, current_app  
 from functools import update_wrapper
 import os
+import shutil
 
 # http://flask.pocoo.org/snippets/56/
 def crossdomain(origin=None, methods=None, headers=None, max_age=21600, attach_to_all=True, automatic_options=True):  
@@ -68,6 +69,14 @@ def crossdomain(origin=None, methods=None, headers=None, max_age=21600, attach_t
         return update_wrapper(wrapped_function, f)
     return decorator
 
+# http://stackoverflow.com/a/6803714/3600428
+def dirTraversal(file_name, current_directory):
+    requested_path = os.path.relpath(file_name, start=current_directory)
+    requested_path = os.path.abspath(requested_path)
+    common_prefix = os.path.commonprefix([requested_path, current_directory])
+    return common_prefix != current_directory
+    
+    
 app = Flask(__name__)
 
 from PiStormsCom import PiStormsCom
@@ -167,7 +176,6 @@ def led():
             red = int(red) % 256
             blue = int(blue) % 256
             green = int(green) % 256
-            print led, red, blue, green
             psc.led(int(led),red,green,blue)
     return "1"
 
@@ -270,17 +278,25 @@ def markmessageread():
 def getmessagejson():
     return message_text
     
-@app.route("/getprograms", methods=['GET', 'OPTIONS'])
+@app.route("/getprograms", methods=['POST', 'OPTIONS'])
 @crossdomain(origin='*')
 def getprograms():
-    files = os.listdir(os.path.join(home_folder, "programs"))
+    files = os.listdir(os.path.join(home_folder, "programs", request.form["path"]))
+    
+    if not request.form["path"].startswith(os.path.abspath(os.path.join(home_folder, "programs"))+'/'): return "0"
+    
     out = []
     for i in files:
-        dir = os.path.join(home_folder, "programs", i)
+        dir = os.path.join(home_folder, "programs", request.form["path"], i)
         typ = ""
         if os.path.isdir(dir): typ = "folder"
         elif os.path.isfile(dir): typ = os.path.splitext(dir)[1][1::].lower()
-        if (typ == "folder" or typ == "py") and i[:2].isdigit():
+        if typ == "py":
+            with open(dir) as f:
+                c = f.read()
+                if ("--BLOCKLY FILE--" in c):
+                    typ = "bl"
+        if (typ == "folder" or typ == "py" or typ == "bl") and i[:2].isdigit():
             out.append([i,dir,typ])
     out.sort()
     return json.dumps(out)
@@ -292,13 +308,54 @@ def fetchscript():
         with open(request.form["path"],"r") as f:
             return f.read()
     except: return "0"
+    
+@app.route("/removefile", methods=['POST', 'OPTIONS'])
+@crossdomain(origin='*')
+def removefile():
+    try:
+        if os.path.isfile(request.form["path"]) and request.form["path"].startswith(os.path.abspath(os.path.join(home_folder, "programs"))+'/'):
+            os.remove(request.form["path"])
+        return "1"
+    except: return "0"
+
+@app.route("/removedir", methods=['POST', 'OPTIONS'])
+@crossdomain(origin='*')
+def removedir():
+    try:
+        if os.path.isdir(request.form["path"]) and request.form["path"].startswith(os.path.abspath(os.path.join(home_folder, "programs"))+'/') and os.path.normpath(request.form["path"]) != os.path.normpath(os.path.abspath(os.path.join(home_folder, "programs"))):
+            shutil.rmtree(request.form["path"])
+        return "1"
+    except Exception as e:
+        return "0"
+
+@app.route("/addobject", methods=['POST', 'OPTIONS'])
+@crossdomain(origin='*')
+def addobject():
+    try:
+        if not (os.path.isdir(request.form["path"]) and request.form["type"] in ["folder","py","bl"] and request.form["path"] and request.form["path"].startswith(os.path.abspath(os.path.join(home_folder, "programs"))+'/')):
+            return "0";
+        filename = os.path.basename(request.form["filename"].rstrip(os.sep))
+        folderpath = os.path.join(request.form["path"], filename)
+        if request.form["type"] == "folder":
+            if not os.path.exists(folderpath):
+                os.makedirs(folderpath)
+        if request.form["type"] == "py" or request.form["type"] == "bl":
+            if not filename.endswith(".py"): filename += ".py"
+            folderpath = os.path.join(request.form["path"], filename)
+            with open(folderpath, "w+") as f:
+                if request.form["type"] == "bl": f.write('#!/usr/bin/env python\n\n"""\n--BLOCKLY FILE--\n--START BLOCKS--\nPHhtbCB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94aHRtbCI+PC94bWw+\n--END BLOCKS--\n"""\n\n')
+                if request.form["type"] == "py": f.write('#!/usr/bin/env python\n\n')
+        return "1"
+    except Exception as e:
+        return "0"
         
 @app.route("/savescript", methods=['POST', 'OPTIONS'])
 @crossdomain(origin='*')
 def savescript():
     try:
         with open(request.form["path"],"w+") as f:
-            return f.write(request.form["contents"])
+            f.write(request.form["contents"])
+            return "1"
     finally: return "0"
     
 @app.route("/setmotorspeed", methods=['POST', 'OPTIONS'])
@@ -324,6 +381,11 @@ def brakemotors():
     psc.BAM1.brake()
     psc.BAM2.brake()
     return "1"
+
+@app.route("/getprogramsdir", methods=['GET', 'OPTIONS'])
+@crossdomain(origin='*')
+def getprogramsdir():
+    return os.path.abspath(os.path.join(home_folder, "programs"))+'/'
     
 if __name__ == "__main__":
     app.run("0.0.0.0", 3141, threaded=True)

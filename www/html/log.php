@@ -35,6 +35,7 @@ if (!isset($_SESSION['logged_in']) || !$_SESSION['logged_in']) {
 <html>
 <head>
   <meta charset="utf-8">
+  <meta name="theme-color" content="#DD4B39">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <title>PiStorms Web Interface</title>
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
@@ -98,7 +99,8 @@ if (!isset($_SESSION['logged_in']) || !$_SESSION['logged_in']) {
               <li class="active"><a href="#tab_1" data-toggle="tab">psmb.out</a></li>
               <li><a href="#tab_2" data-toggle="tab">psmd.out</a></li>
               <li><a href="#tab_3" data-toggle="tab">sws.out</a></li>
-              <li><a href="#tab_4" data-toggle="tab">Apache error.log</a></li>
+              <li><a href="#tab_4" data-toggle="tab">webapi.out</a></li>
+              <li><a href="#tab_5" data-toggle="tab">Apache error.log</a></li>
               <li><a href="javascript:window.scrollTo(0,document.body.scrollHeight);">Scroll to the Bottom</a></li>
             </ul>
             <div class="tab-content">
@@ -145,6 +147,21 @@ if (!isset($_SESSION['logged_in']) || !$_SESSION['logged_in']) {
                 ?></pre>
               </div>
               <div class="tab-pane" id="tab_4">
+                <pre><?php
+                    $data = 'empty';
+                    $nf = false;
+                    $file = fopen("/var/tmp/webapi.out", "r") or $nf = true;
+                    if (!$nf) {
+                        $data = fread($file,filesize("/var/tmp/sws.out"));
+                        fclose($file);
+                    }
+                    if (strlen($data) == 0) {
+                        $data = "empty";
+                    }
+                    echo $data;
+                ?></pre>
+              </div>
+              <div class="tab-pane" id="tab_5">
                 <h4>Only the last 25 lines are displayed</h4>
                 <pre id="apacheerros"></pre>
               </div>

@@ -36,6 +36,7 @@ if (!isset($_SESSION['logged_in']) || !$_SESSION['logged_in']) {
 <html>
 <head>
   <meta charset="utf-8">
+  <meta name="theme-color" content="#DD4B39">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <title>PiStorms Web Interface</title>
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
@@ -45,6 +46,10 @@ if (!isset($_SESSION['logged_in']) || !$_SESSION['logged_in']) {
   <link rel="stylesheet" href="assets/pnotify.min.css">
   <link rel="stylesheet" href="assets/skin-red.min.css">
   <link rel="stylesheet" href="assets/slider.css">
+    <script src="assets/blockly/blockly_compressed.js"></script>
+  <script src="assets/blockly/blocks_compressed.js"></script>
+  <script src="assets/blockly/python_compressed.js"></script>
+  <script src="assets/blockly/msg/js/en.js"></script>
   <style>
     .btn-sq {
       width: 50px !important;
@@ -53,7 +58,7 @@ if (!isset($_SESSION['logged_in']) || !$_SESSION['logged_in']) {
     }
   </style>
   <style type="text/css" media="screen">
-    #editor { 
+    #blocklyeditor, #aceeditor { 
         position: absolute;
         top: 0;
         right: 0;
@@ -66,7 +71,7 @@ if (!isset($_SESSION['logged_in']) || !$_SESSION['logged_in']) {
     }
     
     @media (max-width: 600px) {
-        .editor-row {
+        .blocklyeditor-row, .aceeditor-row {
             padding-right:30px;
         }
     }
@@ -116,27 +121,35 @@ if (!isset($_SESSION['logged_in']) || !$_SESSION['logged_in']) {
             <div class="box-header">
               <h3 class="box-title">Your Programs</h3>
               <div class="box-tools pull-right">
-                <button type="button" class="btn btn-sm btn-flat btn-success"><i class="fa fa-plus"></i>&nbsp;&nbsp;File</button>
-                <button type="button" class="btn btn-sm btn-flat btn-primary"><i class="fa fa-plus"></i>&nbsp;&nbsp;Folder</button>
+                <button type="button" onclick="addfile('py');" class="btn btn-sm btn-flat btn-success"><i class="fa fa-plus"></i>&nbsp;&nbsp;File</button>
+                <button type="button" onclick="addfile('bl');" class="btn btn-sm btn-flat btn-info"><i class="fa fa-plus"></i>&nbsp;&nbsp;Blockly File</button>
+                <button type="button" onclick="addfile('folder');" class="btn btn-sm btn-flat btn-primary"><i class="fa fa-plus"></i>&nbsp;&nbsp;Folder</button>
               </div>
             </div>
-            <div class="box-body" id="programs_list">
+            <div class="box-body" id="programs_list" style="max-height:640px; overflow: auto;">
               <div class="text-center"><h4><i class="fa fa-refresh fa-spin"></i>&nbsp;&nbsp;Fetching</h4></div>
             </div>
           </div>
         </div>
         
-        <div class="col-md-6 col-lg-8">
+        <div class="col-md-6 col-lg-8" id="editorDash">
           <div class="box box-danger" style="margin-bottom:0px !important;padding-bottom:0px !important;">
             <div class="box-body" id="edit_options">
                 Please select a program on the left or create a new file
             </div>
           </div>
         </div>
-        <div class="col-md-6 col-lg-8 editor-row" style="display:none">
+        <div class="col-md-6 col-lg-8 aceeditor-row" style="display:none">
           <div class="box">
             <div class="box-body" style="height:630px;">
-               <div id="editor"># Please select a program to edit</div>
+               <div id="aceeditor" class="editor" style="height: 100%; width: 100%;"></div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-8 blocklyeditor-row" style="display:none">
+          <div class="box">
+            <div class="box-body" style="height:630px;">
+               <div id="blocklyeditor" class="editor" style="height: 100%; width: 100%;"></div>
             </div>
           </div>
         </div>
@@ -150,22 +163,44 @@ if (!isset($_SESSION['logged_in']) || !$_SESSION['logged_in']) {
 
 </div>
 
+
+<div class="modal fade" tabindex="-1" id="filenameModal" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">Enter Name</h4>
+      </div>
+      <div class="modal-body">
+        <input class="form-control" minlen="2" type="text" id="filenameinput" placeholder="Enter file/folder name here">
+        <input class="form-control" type="hidden" id="filetypeinput" value="">
+        <br>
+        File extension is not necessary for files<br>
+        The name must start with a number to be displayed. Example: <code>01-Sample</code>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" onclick="createobject()" class="btn btn-success">Create new <span id="objecttype"></span></button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
 <script src="assets/jquery.min.js"></script>
 <script src="assets/bootstrap.min.js"></script>
 <script type="text/javascript" src="assets/app.min.js"></script>
 <script type="text/javascript" src="assets/pnotify.min.js"></script>
 <script type="text/javascript" src="assets/jquery.slimscroll.min.js"></script>
 <script type="text/javascript" src="assets/bootstrap-slider.min.js"></script>
+<script type="text/javascript" src="assets/ps_blocks.js"></script>
+
+<?php include "components/blocks.php"; ?>
 
 <script src="assets/ace/ace.js"></script>
-<script>
-    var editor = ace.edit("editor");
-    editor.setTheme("ace/theme/monokai");
-    editor.getSession().setMode("ace/mode/python");
-    editor.setOptions({
-       autoScrollEditorIntoView: true 
-    });
-</script>
+
 <script>
 PNotify.prototype.options.styling = "bootstrap3";
 PNotify.prototype.options.delay = 3000;
@@ -179,53 +214,161 @@ function notify(tt,tx,tp) {
     });
 }
 
+var currentdir = "";
+var initdir = "";
 var api = "http://<?=$_SERVER['SERVER_NAME']?>:3141/";
 
 var tbl = '<table class="table table-striped">\
                 <tr>\
                   <th class="text-center">Type</th>\
                   <th class="text-center">Name</th>\
-                  <th class="text-center">Actions</th>\
+                  <th style="width:80px" class="text-center">Actions</th>\
                 </tr>';
-
-var row = '<tr>\
+var filerow = '<tr>\
                   <td class="text-center"><img src="assets/&&ft&&.png" alt="object" style="height:40px"></img></td>\
                   <td class="text-center"><b>&&fn&&</b></td>\
-                  <td class="text-center"><button onclick="edit(\'&&fn&&\',\'&&fl&&\')" style="width:35px;" class="btn btn-flat btn-success btn-sm"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button><button style="width:35px;" class="btn btn-flat btn-danger btn-sm"><i class="fa fa-trash" aria-hidden="true"></i></button></td>\
+                  <td class="text-right"><button onclick="edit(\'&&fn&&\',\'&&fl&&\',\'&&id&&\')" style="width:32px;" class="btn btn-flat btn-success btn-sm"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button><button style="width:32px;" onclick="deleteFile(&&id&&);" class="btn btn-flat btn-danger btn-sm"><i class="fa fa-trash" aria-hidden="true"></i></button></td>\
                 </tr>';
-                
-$.get(api + "getprograms", function(data){
-    data = $.parseJSON(data);
-    table = tbl;
-    for (var i = 0; i < data.length; i++) {
-        table += row.replace("&&ft&&", data[i][2] == "py" ? "python" : "folder").split("&&fn&&").join(data[i][0]).replace("&&fl&&",data[i][1]);
-    }
-    table += "</table>";
-    $("#programs_list").html(table);
-    $("#programs_list").addClass("no-padding");
-});
+var folderrow = '<tr>\
+                  <td class="text-center"><img src="assets/&&ft&&.png" alt="object" style="height:40px"></img></td>\
+                  <td class="text-center"><b>&&fn&&</b></td>\
+                  <td class="text-right"><button style="width:32px;" onclick="traverse(\'&&fn&&\');" class="btn btn-flat btn-info btn-sm"><i class="fa fa-level-down" aria-hidden="true"></i></button><button style="width:32px;" onclick="deleteDirectory(&&id&&);" class="btn btn-flat btn-danger btn-sm"><i class="fa fa-trash" aria-hidden="true"></i></button></td>\
+                </tr>';
+var backrow = '<tr style="cursor:pointer" onclick="traverseup();">\
+                  <td class="text-center"><img src="assets/updir.png" alt="object" style="height:34px;margin:3px;"></img></td>\
+                  <td class="text-center"><b>Go back up</b></td>\
+                </tr>';
 
-function edit(filename, location) {
-    $.post(api+"fetchscript", {path: location}, function(result){
-        editor.setValue(result);
-        editor.gotoLine(1);
-        $("#program_name").html("<b>" + filename + "</b>");
-        $("#edit_options").html('<span style="font-size:20px;padding-bottom:0px;margin-bottom:-10px;display:block;">Edit <b>' + filename + '</b></span><br><button type="button" class="btn btn-success btn-flat btn-settings" onclick="save(\'' + location + '\')"><i class="fa fa-save" aria-hidden="true"></i>&nbsp;&nbsp;Save</button><!--<button type="button" class="btn btn-danger btn-flat btn-settings"><i class="fa fa-ban" aria-hidden="true"></i>&nbsp;&nbsp;Cancel</button>-->');
-        $(".editor-row").fadeIn();
-        editor.session.setScrollTop(0)
-        /*
-        $(".ace_scrollbar").scrollTop();
-        $(".ace_scroller").scrollTop();
-        $("#editor").scrollTop();
-        */
+var progs = [];
+
+function fetchlist() {
+    $.post(api + "getprograms", {path:currentdir}, function(data){
+        data = $.parseJSON(data);
+        progs = data;
+        table = tbl;
+        if (currentdir != initdir) {
+            table += backrow;
+        }
+        for (var i = 0; i < data.length; i++) {
+            table += (data[i][2] == "py" || data[i][2] == "bl" ? filerow : folderrow).replace("&&ft&&", data[i][2] == "py" ? "python" : data[i][2] == "bl" ? "blockly" : "folder").split("&&fn&&").join(data[i][0]).replace("&&fl&&",data[i][1]).split("&&id&&").join(i);
+        }
+        table += "</table>";
+        $("#programs_list").html(table);
+        $("#programs_list").addClass("no-padding");
     });
 }
 
+$.get(api + "getprogramsdir", function(data){
+    currentdir = data;
+    initdir = data;
+    fetchlist();
+});
+
+
+var editor = ace.edit("aceeditor");
+editor.setTheme("ace/theme/monokai");
+editor.getSession().setMode("ace/mode/python");
+editor.setOptions({
+   autoScrollEditorIntoView: true 
+});
+var workspace = null;
+
+      
+var edittype = "";
+
+function blocklyedit(filename, location, id, content) {
+    $(".aceeditor-row").hide();
+    $(".blocklyeditor-row").show();
+    if (workspace != null) {workspace.dispose();}
+    workspace = Blockly.inject('blocklyeditor',
+      {toolbox: document.getElementById('toolbox')});
+    var xml_text = Base64.decode(content.split('--START BLOCKS--')[1].split('--END BLOCKS--')[0]);
+    var xml = Blockly.Xml.textToDom(xml_text);
+    Blockly.Xml.domToWorkspace(xml, workspace);
+}
+
+function aceedit(filename, location, id, content) {
+    if (workspace != null) {workspace.dispose();}
+    $(".blocklyeditor-row").hide();
+    editor.setValue(content);
+    editor.gotoLine(1);
+    $(".aceeditor-row").show();
+    editor.session.setScrollTop(0)
+}
+
+
+function edit(filename, location, id) {
+    $.post(api+"fetchscript", {path: location}, function(result){
+        edittype = progs[id][2];
+        $("#edit_options").html('<span style="font-size:20px;padding-bottom:0px;margin-bottom:-10px;display:block;">Edit <b>' + filename + '</b></span><br><button type="button" class="btn btn-success btn-flat btn-settings" onclick="save(\'' + location + '\')"><i class="fa fa-save" aria-hidden="true"></i>&nbsp;&nbsp;Save</button><!--<button type="button" class="btn btn-danger btn-flat btn-settings"><i class="fa fa-ban" aria-hidden="true"></i>&nbsp;&nbsp;Cancel</button>-->');
+        if (progs[id][2] == "bl") {
+            blocklyedit(filename, location, id, result);
+            return 0;
+        } else {
+            aceedit(filename, location, id, result);
+            return 1;
+        }
+    });
+    if ($(document).scrollTop() > $("#editorDash").offset().top - 10) {
+        $('html,body').animate({
+           scrollTop: $("#editorDash").offset().top - 10
+        });
+    }
+}
+
 function save(location) {
-    notify("Save","Save command sent","success");
-    $.post(api+"savescript", {path: location, contents:editor.getValue()}, function(result){
+    var content = "";
+    if (edittype == "bl") {
+        var xml = Blockly.Xml.workspaceToDom(workspace);
+        var blocks = Base64.encode(Blockly.Xml.domToText(xml));
+        var code = Blockly.Python.workspaceToCode(workspace);
+        content = '#!/usr/bin/env python\n"""\n--BLOCKLY FILE--\n--START BLOCKS--\n' + blocks + '\n--END BLOCKS--\n"""\n\n\n' + code;
+        
+    } else if (edittype == "py") {
+        content = editor.getValue();
+    }
+    //console.log(content);
+    $.post(api+"savescript", {path: location, contents:content}, function(result){
         notify("Saved","File successfully saved","success");
     });
+}
+
+function deleteFile(id) {
+    var location = progs[id][1];
+    if (progs[id][2] == "folder") {
+        notify("Error","An error has occured","error");
+        return 0;
+    }
+    if (confirm("Are you sure you want to delete this file?")) {
+        $.post(api+"removefile", {path: location}, function(result){
+            notify("Deleted","File successfully deleted","success");
+        });
+        fetchlist();
+    }
+}
+
+function deleteDirectory(id) {
+    var location = progs[id][1];
+    if (progs[id][2] != "folder") {
+        notify("Error","An error has occured","error");
+        return 0;
+    }
+    if (confirm("Are you sure you want to delete this folder?")) {
+        $.post(api+"removedir", {path: location}, function(result){
+            notify("Deleted","Folder successfully deleted","success");
+        });
+        fetchlist();
+    }
+}
+
+function traverse(path) {
+    currentdir += path;
+    fetchlist();
+}
+
+function traverseup() {
+    currentdir = currentdir.split("/").slice(0,currentdir.split("/").length-1).join("/") + "/";
+    fetchlist();
 }
 
 $("#srwb").click(function(){$.get(api+"startrecording/withBg", function(data){});notify("Success","Started taking frames with background","success");});
@@ -234,6 +377,54 @@ $("#chkr").click(function(){$.get(api+"readrecording", function(data){notify("Re
 $("#clar").click(function(){
     if (confirm("Are you sure you want to permanently remove all screenshots?")) {
         $.get(api+"clearimages", function(data){notify("Result","Images cleared","success");});
+    }
+});
+
+
+function addfile(type) {
+    $("#filenameinput").val("")
+    $('#objecttype').html(type == "folder" ? "Folder" : type == "bl" ? "Drag-and-drop program" : "Python program")
+    $("#filetypeinput").val(type);
+    $('#filenameModal').modal('show');
+}
+
+// https://scotch.io/tutorials/how-to-encode-and-decode-strings-with-base64-in-javascript
+var Base64={_keyStr:"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=",encode:function(e){var t="";var n,r,i,s,o,u,a;var f=0;e=Base64._utf8_encode(e);while(f<e.length){n=e.charCodeAt(f++);r=e.charCodeAt(f++);i=e.charCodeAt(f++);s=n>>2;o=(n&3)<<4|r>>4;u=(r&15)<<2|i>>6;a=i&63;if(isNaN(r)){u=a=64}else if(isNaN(i)){a=64}t=t+this._keyStr.charAt(s)+this._keyStr.charAt(o)+this._keyStr.charAt(u)+this._keyStr.charAt(a)}return t},decode:function(e){var t="";var n,r,i;var s,o,u,a;var f=0;e=e.replace(/[^A-Za-z0-9+/=]/g,"");while(f<e.length){s=this._keyStr.indexOf(e.charAt(f++));o=this._keyStr.indexOf(e.charAt(f++));u=this._keyStr.indexOf(e.charAt(f++));a=this._keyStr.indexOf(e.charAt(f++));n=s<<2|o>>4;r=(o&15)<<4|u>>2;i=(u&3)<<6|a;t=t+String.fromCharCode(n);if(u!=64){t=t+String.fromCharCode(r)}if(a!=64){t=t+String.fromCharCode(i)}}t=Base64._utf8_decode(t);return t},_utf8_encode:function(e){e=e.replace(/rn/g,"n");var t="";for(var n=0;n<e.length;n++){var r=e.charCodeAt(n);if(r<128){t+=String.fromCharCode(r)}else if(r>127&&r<2048){t+=String.fromCharCode(r>>6|192);t+=String.fromCharCode(r&63|128)}else{t+=String.fromCharCode(r>>12|224);t+=String.fromCharCode(r>>6&63|128);t+=String.fromCharCode(r&63|128)}}return t},_utf8_decode:function(e){var t="";var n=0;var r=c1=c2=0;while(n<e.length){r=e.charCodeAt(n);if(r<128){t+=String.fromCharCode(r);n++}else if(r>191&&r<224){c2=e.charCodeAt(n+1);t+=String.fromCharCode((r&31)<<6|c2&63);n+=2}else{c2=e.charCodeAt(n+1);c3=e.charCodeAt(n+2);t+=String.fromCharCode((r&15)<<12|(c2&63)<<6|c3&63);n+=3}}return t}}
+
+// http://stackoverflow.com/a/10834843/3600428
+function isInteger(str) {
+    var n = ~~Number(str);
+    return String(n) === str && n >= 0;
+}
+
+function createobject() {
+    var typein = $("#filetypeinput").val();
+    var namein = $("#filenameinput").val();
+    for (var i = 0; i < progs.length; i++) {
+        if (progs[i][0].toLowerCase() == namein.toLowerCase() || progs[i][0].toLowerCase() == namein.toLowerCase()+".py") {
+            notify("Error","An object with such name already exists!","error");
+            return 0;
+        }
+    }
+    if (namein.length <= 3) {
+            notify("Error","Filename is too short!","error");
+            return 0;
+        }
+    var n = isInteger(namein.substring(0,2).replace("0","1"));
+    if (n || confirm("Are you sure you want to create a hidden file?")) {
+        $.post(api+"addobject", {path: currentdir, type:typein, filename:namein}, function(result){
+            notify("Success","Object successfully created","success");
+            fetchlist();
+            $('#filenameModal').modal('hide');
+        });
+        
+    }
+    
+}
+
+$("#filenameinput").keyup(function (e) {
+    if (e.keyCode == 13) {
+        createobject();
     }
 });
 </script>

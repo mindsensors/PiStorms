@@ -26,6 +26,7 @@
 <html>
 <head>
   <meta charset="utf-8">
+  <meta name="theme-color" content="#DD4B39">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <title>PiStorms Web Interface</title>
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
@@ -45,7 +46,7 @@
 <body class="hold-transition login-page">
 <div style="margin-top:60px;">
   <div class="text-center" style="font-size:40px">
-    <b><?php echo gethostname(); ?> is being shutdown.</b><br><br>Please close this page.<br><br><i class="fa fa-power-off" style="font-size:100px" aria-hidden="true"></i>
+    <b><?php echo gethostname(); ?> is shutting down.</b><br><br>Please close this page.<br><br><i class="fa fa-power-off" style="font-size:100px" aria-hidden="true"></i>
   </div>
 </div>
 
