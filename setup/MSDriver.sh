@@ -59,7 +59,7 @@ case "$1" in
     do_start
 	exit 3
 	;;
-  stop)
+  stop_old)
     show_logo
 
     lckfile=/tmp/.psm_shutdown.lck
@@ -70,6 +70,31 @@ case "$1" in
       rm -f $lckfile
       psm_shutdown
     fi
+	;;
+  stop)
+    show_logo
+    SHUTDOWN=3
+    REBOOT=3
+    HALT=3
+    POWEROFF=3
+    systemctl list-jobs | egrep -q 'shutdown.target.*start' && SHUTDOWN=1 || SHUTDOWN=0
+    systemctl list-jobs | egrep -q 'reboot.target.*start' && REBOOT=1 || REBOOT=0
+    systemctl list-jobs | egrep -q 'halt.target.*start' && HALT=1 || HALT=0
+    systemctl list-jobs | egrep -q 'poweroff.target.*start' && POWEROFF=1 || POWEROFF=0
+    #Only power off PiStorms if Raspberry Pi is being shutdown (and not reboot)
+	if [ $SHUTDOWN -eq 1 ]
+	then
+		if [ $REBOOT -eq 1 ]
+		then
+		    echo "in reboot mode...."
+		else
+		    echo "in poweroff or halt mode...."
+		      echo "Shutting down SmartUPS"
+              psm_shutdown
+		fi
+	else
+		echo "in starting mode... "
+	fi
 	;;
   status)
     do_status
