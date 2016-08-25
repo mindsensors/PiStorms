@@ -396,15 +396,224 @@
         </value>
       </block>
     </category>
-    
-    <category name="System" colour="5">
-      <block type="system_sleep">
-        <value name="TIME">
+
+    <category name="Sensors" colour="60">
+      <block type="sensors_nxttouch"></block>
+      <sep gap="5"></sep>
+      <block type="sensors_ev3touch"></block>
+      <sep gap="5"></sep>
+      <block type="sensors_istouchpressed"></block>
+      <sep gap="5"></sep>
+      <block type="sensors_gettouchbumpcount"></block>
+      <sep gap="5"></sep>
+      <block type="sensors_resettouchbumpcount"></block>
+      <sep gap="20"></sep>
+      <block type="sensors_nxtlight"></block>
+      <sep gap="5"></sep>
+      <block type="sensors_nxtlightgetvalue"></block>
+      <sep gap="5"></sep>
+      <block type="sensors_nxtlightsetmode"></block>
+      <sep gap="20"></sep>
+      <block type="sensors_nxtcolor"></block>
+      <sep gap="5"></sep>
+      <block type="sensors_nxtcolorgetcolor"></block>
+      <sep gap="5"></sep>
+      <block type="sensors_nxtcolorsetmode"></block>
+      <sep gap="20"></sep>
+      <block type="sensors_ev3color"></block>
+      <sep gap="5"></sep>
+      <block type="sensors_ev3colorgetvalue"></block>
+      <sep gap="5"></sep>
+      <block type="sensors_ev3colorsetmode"></block>
+      <sep gap="20"></sep>
+      <block type="sensors_ev3gyro"></block>
+      <sep gap="5"></sep>
+      <block type="sensors_ev3gyrogetvalue"></block>
+      <sep gap="5"></sep>
+      <block type="sensors_ev3gyrosetmode"></block>
+      <sep gap="20"></sep>
+      <block type="sensors_ev3ultrasonic"></block>
+      <sep gap="5"></sep>
+      <block type="sensors_ev3ultrasonicgetvalue"></block>
+      <sep gap="5"></sep>
+      <block type="sensors_ev3ultrasonicdetect"></block>
+      <sep gap="5"></sep>
+      <block type="sensors_ev3ultrasonicsetmode"></block>
+      <sep gap="20"></sep>
+      <block type="sensors_ev3infrared"></block>
+      <sep gap="5"></sep>
+      <block type="sensors_ev3infraredgetproximity">
+        <value name="channel">
           <shadow type="math_number">
-            <field name="NUM">3</field>
+            <field name="NUM">1</field>
           </shadow>
         </value>
       </block>
+      <sep gap="5"></sep>
+      <block type="sensors_ev3infraredchannelheading">
+        <value name="channel">
+          <shadow type="math_number">
+            <field name="NUM">1</field>
+          </shadow>
+        </value>
+      </block>
+      <sep gap="5"></sep>
+      <block type="sensors_ev3infraredchannelproximity">
+        <value name="channel">
+          <shadow type="math_number">
+            <field name="NUM">1</field>
+          </shadow>
+        </value>
+      </block>
+      <sep gap="5"></sep>
+      <block type="sensors_ev3infraredgetremote">
+        <value name="channel">
+          <shadow type="math_number">
+            <field name="NUM">1</field>
+          </shadow>
+        </value>
+      </block>
+      <sep gap="5"></sep>
+      <block type="sensors_ev3infraredsetmode"></block>
+      <sep gap="20"></sep>
+      <block type="sensors_absoluteimu"></block>
+      <sep gap="5"></sep>
+      <block type="sensors_absoluteimugettilt"></block>
+      <sep gap="5"></sep>
+      <block type="sensors_absoluteimugetacceleration"></block>
+      <sep gap="5"></sep>
+      <block type="sensors_absoluteimugetmagnetometer"></block>
+      <sep gap="5"></sep>
+      <block type="sensors_absoluteimugetgyro"></block>
+      <sep gap="5"></sep>
+      <block type="sensors_absoluteimugetheading"></block>
+      <sep gap="5"></sep>
+      <block type="sensors_absoluteimusetaccel"></block>
+      <sep gap="5"></sep>
+      <block type="sensors_absoluteimustartcmpscal"></block>
+      <sep gap="5"></sep>
+      <block type="sensors_absoluteimustopcmpscal"></block>
+    </category>
+
+    <category name="Screen" colour="300">
+      <block type="screen_drawrect">
+        <value name="x">
+          <shadow type="math_number">
+            <field name="NUM">10</field>
+          </shadow>
+        </value>
+        <value name="y">
+          <shadow type="math_number">
+            <field name="NUM">10</field>
+          </shadow>
+        </value>
+        <value name="width">
+          <shadow type="math_number">
+            <field name="NUM">50</field>
+          </shadow>
+        </value>
+        <value name="height">
+          <shadow type="math_number">
+            <field name="NUM">50</field>
+          </shadow>
+        </value>
+      </block>
+      <block type="screen_drawcircle">
+        <value name="x">
+          <shadow type="math_number">
+            <field name="NUM">10</field>
+          </shadow>
+        </value>
+        <value name="y">
+          <shadow type="math_number">
+            <field name="NUM">10</field>
+          </shadow>
+        </value>
+        <value name="radius">
+          <shadow type="math_number">
+            <field name="NUM">25</field>
+          </shadow>
+        </value>
+      </block>
+      <block type="screen_drawroundedrect">
+        <value name="x">
+          <shadow type="math_number">
+            <field name="NUM">10</field>
+          </shadow>
+        </value>
+        <value name="y">
+          <shadow type="math_number">
+            <field name="NUM">10</field>
+          </shadow>
+        </value>
+        <value name="width">
+          <shadow type="math_number">
+            <field name="NUM">50</field>
+          </shadow>
+        </value>
+        <value name="height">
+          <shadow type="math_number">
+            <field name="NUM">50</field>
+          </shadow>
+        </value>
+        <value name="radius">
+          <shadow type="math_number">
+            <field name="NUM">5</field>
+          </shadow>
+        </value>
+      </block>
+      <block type="screen_drawbmp">
+        <value name="x">
+          <shadow type="math_number">
+            <field name="NUM">30</field>
+          </shadow>
+        </value>
+        <value name="y">
+          <shadow type="math_number">
+            <field name="NUM">0</field>
+          </shadow>
+        </value>
+        <value name="width">
+          <shadow type="math_number">
+            <field name="NUM">240</field>
+          </shadow>
+        </value>
+        <value name="height">
+          <shadow type="math_number">
+            <field name="NUM">240</field>
+          </shadow>
+        </value>
+        <value name="location">
+          <shadow type="text">
+            <field name="TEXT">/usr/local/mindsensors/images/Pane1.png</field>
+          </shadow>
+        </value>
+      </block>
+      <block type="screen_drawtitle">
+        <value name="TEXT">
+          <shadow type="text">
+            <field name="TEXT">Hello World</field>
+          </shadow>
+        </value>
+      </block>
+      <block type="screen_getwidthheight"></block>
+      <block type="screen_gettouchcoord"></block>
+      <block type="screen_rotate"></block>
+      <block type="screen_clear"></block>
+      <block type="screen_istouched"></block>
+    </category>
+    
+    <category name="LED" colour="140">
+      <block type="led_control"></block>
+    </category>
+    
+    <category name="Buttons" colour="200">
+      <block type="system_keypressed"></block>
+      <block type="system_getkeypresscount"></block>
+      <block type="system_resetkeypresscount"></block>
+    </category>
+        
+    <category name="System" colour="5">
       <block type="system_print">
         <value name="TEXT">
           <shadow type="text">
@@ -412,6 +621,18 @@
           </shadow>
         </value>
       </block>
+      <block type="system_sleep">
+        <value name="TIME">
+          <shadow type="math_number">
+            <field name="NUM">3</field>
+          </shadow>
+        </value>
+      </block>
       <block type="variable_pistorms"></block>
+      <block type="system_shutdown"></block>
+      <block type="system_getbattery"></block>
+      <block type="system_getfirmware"></block>
+      <block type="system_getvendor"></block>
+      <block type="system_getdeviceid"></block>
     </category>
   </xml>

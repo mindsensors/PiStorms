@@ -179,6 +179,12 @@ def led():
             psc.led(int(led),red,green,blue)
     return "1"
 
+@app.route("/starttouchrecording", methods=['GET', 'OPTIONS'])
+@crossdomain(origin='*')
+def starttouchrecording():
+    disp.startTouchRecording("-")
+    return "1"
+    
 @app.route("/startrecording", methods=['GET', 'OPTIONS'])
 @crossdomain(origin='*')
 def startrecording():
@@ -195,6 +201,12 @@ def startrecordingwithBg():
 @crossdomain(origin='*')
 def stoprecording():
     disp.stopRecording()
+    return "1"
+    
+@app.route("/stoptouchrecording", methods=['GET', 'OPTIONS'])
+@crossdomain(origin='*')
+def stoptouchrecording():
+    disp.stopTouchRecording()
     return "1"
 
 @app.route("/readrecording", methods=['GET', 'OPTIONS'])
@@ -343,8 +355,9 @@ def addobject():
             if not filename.endswith(".py"): filename += ".py"
             folderpath = os.path.join(request.form["path"], filename)
             with open(folderpath, "w+") as f:
-                if request.form["type"] == "bl": f.write('#!/usr/bin/env python\n\n"""\n--BLOCKLY FILE--\n--START BLOCKS--\nPHhtbCB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94aHRtbCI+PC94bWw+\n--END BLOCKS--\n"""\n\n')
+                if request.form["type"] == "bl": f.write('#!/usr/bin/env python\n\n# ATTENTION!\n# Please do not manually edit the contents of this file\n# Only use the web interface for editing\n# Otherwise, they file may no longer be editable using the web interface, or you changes may be lost\n\n"""\n--BLOCKLY FILE--\n--START BLOCKS--\nPHhtbCB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94aHRtbCI+PC94bWw+\ndcb89b3f89fc910d631112bf6140e47513c301e5bcf76a08a1b4d66ab1ca58d3\n--END BLOCKS--\n"""\n\n')
                 if request.form["type"] == "py": f.write('#!/usr/bin/env python\n\n')
+        os.system("sudo chown -R pi:pi %s" % folderpath)
         return "1"
     except Exception as e:
         return "0"

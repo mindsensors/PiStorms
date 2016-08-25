@@ -25,13 +25,16 @@
 # Oct. 2015  Nitin     Editing and improved functionality
 # Oct. 2015  Michael   Comments and documentation
 # 10/18/15   Deepak    UI improvements
+# 7/12/16    Roman     Touch screen record frame
 
 from mindsensors_i2c import mindsensors_i2c
 import time, math ,os
 import Image
 import ImageDraw
 import ImageFont
+#import Adafruit_ILI9341 as TFT
 import MS_ILI9341 as TFT
+
 import Adafruit_GPIO as GPIO
 import Adafruit_GPIO.SPI as SPI
 import sys,os
@@ -397,22 +400,20 @@ class mindsensorsUI():
     #  @endcode 
     def isTouched(self):
         time.sleep(0.001)
-        tolr = 5
-        firstTry = ((abs(self.touchIgnoreX - self.TS_X()) < tolr) and (abs(self.touchIgnoreY - self.TS_Y()) < 5))
-        secondTry = ((abs(self.touchIgnoreX - self.TS_X()) < tolr) and (abs(self.touchIgnoreY - self.TS_Y()) < 5))
-        thirdTry = ((abs(self.touchIgnoreX - self.TS_X()) < tolr) and (abs(self.touchIgnoreY - self.TS_Y()) < 5))
-        #print "self.touchIgnoreX: " + str(self.touchIgnoreX) + "self.touchIgnoreY:" + str(self.touchIgnoreY)
-        #print "firstTry: " + str(firstTry)
-        #print "secondTry: " + str(secondTry)
-        #print "thirdTry: " + str(thirdTry)
-        return (not firstTry) and (not secondTry) and (not thirdTry)
-    
-    def isTouched00(self):
-        time.sleep(0.001)
         firstTry = self.touchIgnoreX == self.TS_X() and self.touchIgnoreY == self.TS_Y()
         secondTry = self.touchIgnoreX == self.TS_X() and self.touchIgnoreY == self.TS_Y()
         thirdTry = self.touchIgnoreX == self.TS_X() and self.touchIgnoreY == self.TS_Y()
-        return (not firstTry) and (not secondTry) and (not thirdTry)
+        # return (not firstTry) and (not secondTry) and (not thirdTry)
+        # Modified
+        x = self.TS_X() # before everything else for speed
+        y = self.TS_Y()
+        
+        touch = (not firstTry) and (not secondTry) and (not thirdTry)
+        if touch:
+            self.disp.x = x
+            self.disp.y = y
+            self.disp.store = True
+        return touch
     
     ## Clears the LCD screen to defualt black
     #  @param self The object pointer.
@@ -494,6 +495,7 @@ class mindsensorsUI():
         #print("fillBmp:>01>> %s seconds ---" % (time.time() - start_time))
 
         try:
+            #print("fillBmp:>02>> %s seconds ---" % (time.time() - start_time))
             buff = self.disp.buffer
             actx = self.screenXFromImageCoords(x,y)
             acty = self.screenYFromImageCoords(x,y)
@@ -532,55 +534,7 @@ class mindsensorsUI():
         finally:
             self.mutex.release()
             #pass
-
-    ## Draw a  image on the screen using supplied image data
-    #  @param self The object pointer.
-    #  @param x The upper left x coordinate of the image.
-    #  @param y The upper left y coordinate of the image.
-    #  @param width The width of the image.
-    #  @param height The width of the image.
-    #  @param image data
-    #  @param display Choose to immediately push the drawing to the screen.
-    #  @remark
-    #  To use this function in your program:
-    #  @code
-    #  ...
-    #  screen.screen.fillBmp(30, 0, 240, 240, image, True)
-    #  @endcode    
-    def fillImgArray(self, x, y, width, height, image, display = True):
-        start_time = time.time()
-        self.mutex.acquire()
-
-        try:
-            buff = self.disp.buffer
-            actx = self.screenXFromImageCoords(x,y)
-            acty = self.screenYFromImageCoords(x,y)
-            
-            image = Image.fromarray(image)
-            non_transparent = Image.new('RGBA',image.size,(255,255,255,255))
-            non_transparent.paste(image,(0,0))
-            
-            tempimage = image
-            
-            tempimage = tempimage.resize((width,height),Image.ANTIALIAS)
-            tempimage = tempimage.rotate(-90*self.currentRotation)
-            
-            cr = self.currentRotation
-            if(cr == 1):
-                actx -= height
-            if(cr == 2):
-                acty -= height
-                actx -= width
-            if(cr ==3):
-                acty -= width
-            
-            buff.paste(tempimage,(actx,acty))
-            if(display):
-                self.disp.display()
-        finally:
-            self.mutex.release()
-            #pass
-
+        #print("fillBmp:>03>> %s seconds ---" % (time.time() - start_time))
     
     ## Rotates the screen orientation 90 degrees to the right (-90 degrees)
     #  @param self The object pointer.

@@ -56,7 +56,7 @@
           </div>
           <h4 style="margin-top:15px">Description:</h4>
           <div class="form-group">
-            <textarea id="messagein" class="form-control" rows="3" placeholder="Explain the bug in detail. Add and any other supporting information here as well. Please mention the version numbers, device used, and the page on which the bug occured." required></textarea>
+            <textarea id="messagein" class="form-control" rows="3" placeholder="Explain the bug in detail and add any other supporting information here as well. Please mention the version numbers, device used, and the page on which the bug occured." required></textarea>
           </div>
           <button type="submit" value="Submit" class="btn btn-flat btn-success">Submit</button>
         </form>

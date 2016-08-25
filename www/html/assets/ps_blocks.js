@@ -24,6 +24,24 @@
 */
 
 
+
+function hexToRgb(hex) {
+    var shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
+    hex = hex.replace(shorthandRegex, function(m, r, g, b) {
+        return r + r + g + g + b + b;
+    });
+    var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+    return result ? {
+        r: parseInt(result[1], 16),
+        g: parseInt(result[2], 16),
+        b: parseInt(result[3], 16)
+    } : null;
+}
+
+
+
+
+
 // ------------------- MOTORS -------------------
 Blockly.Blocks['motors_setspeed'] = {
   init: function() {
@@ -132,7 +150,7 @@ Blockly.Python['motors_getposition'] = function(block) {
   var dropdown_motor_selector = block.getFieldValue('motor_selector');
   Blockly.Python.definitions_.from_PiStorms_import_PiStorms = "from PiStorms import PiStorms";
   Blockly.Python.definitions_.psm_PiStorms = "psm = PiStorms()";
-  var code = 'psm.'+ dropdown_motor_selector + '.pos()\n';
+  var code = 'psm.'+ dropdown_motor_selector + '.pos()';
   return [code, Blockly.Python.ORDER_NONE];
 };
 
@@ -336,7 +354,7 @@ Blockly.Python['motors_isbusy'] = function(block) {
   var dropdown_motor_selector = block.getFieldValue('motor_selector');
   Blockly.Python.definitions_.from_PiStorms_import_PiStorms = "from PiStorms import PiStorms";
   Blockly.Python.definitions_.psm_PiStorms = "psm = PiStorms()";
-  var code = 'psm.'+ dropdown_motor_selector + '.isBusy()\n';
+  var code = 'psm.'+ dropdown_motor_selector + '.isBusy()';
   return [code, Blockly.Python.ORDER_NONE];
 };
 
@@ -357,7 +375,7 @@ Blockly.Python['motors_isstalled'] = function(block) {
   var dropdown_motor_selector = block.getFieldValue('motor_selector');
   Blockly.Python.definitions_.from_PiStorms_import_PiStorms = "from PiStorms import PiStorms";
   Blockly.Python.definitions_.psm_PiStorms = "psm = PiStorms()";
-  var code = 'psm.'+ dropdown_motor_selector + '.isStalled()\n';
+  var code = 'psm.'+ dropdown_motor_selector + '.isStalled()';
   return [code, Blockly.Python.ORDER_NONE];
 };
 
@@ -378,7 +396,7 @@ Blockly.Python['motors_isoverloaded'] = function(block) {
   var dropdown_motor_selector = block.getFieldValue('motor_selector');
   Blockly.Python.definitions_.from_PiStorms_import_PiStorms = "from PiStorms import PiStorms";
   Blockly.Python.definitions_.psm_PiStorms = "psm = PiStorms()";
-  var code = 'psm.'+ dropdown_motor_selector + '.isOverloaded()\n';
+  var code = 'psm.'+ dropdown_motor_selector + '.isOverloaded()';
   return [code, Blockly.Python.ORDER_NONE];
 };
 
@@ -481,9 +499,7 @@ Blockly.Blocks['system_print'] = {
   init: function() {
     this.appendValueInput("TEXT")
         .setCheck(null)
-        .appendField("send");
-    this.appendDummyInput()
-        .appendField("to log");
+        .appendField("print");
     this.setInputsInline(true);
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
@@ -498,10 +514,1253 @@ Blockly.Python['system_print'] = function(block) {
   return code;
 };
 
+Blockly.Blocks['system_shutdown'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField("shutdown PiStorms");
+    this.setInputsInline(true);
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(5);
+    this.setTooltip('');
+    this.setHelpUrl('http://www.example.com/');
+  }
+};
+Blockly.Python['system_shutdown'] = function(block) {
+  Blockly.Python.definitions_.from_PiStorms_import_PiStorms = "from PiStorms import PiStorms";
+  Blockly.Python.definitions_.psm_PiStorms = "psm = PiStorms()";
+  var code = 'psm.Shutdown()\n';
+  return code;
+};
+
+Blockly.Blocks['system_getbattery'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField("get battery voltage");
+    this.setInputsInline(true);
+    this.setOutput(true, "Number");
+    this.setColour(5);
+    this.setTooltip('');
+    this.setHelpUrl('http://www.example.com/');
+  }
+};
+Blockly.Python['system_getbattery'] = function(block) {
+  Blockly.Python.definitions_.from_PiStorms_import_PiStorms = "from PiStorms import PiStorms";
+  Blockly.Python.definitions_.psm_PiStorms = "psm = PiStorms()";
+  var code = 'psm.battVoltage()';
+  return [code, Blockly.Python.ORDER_NONE];
+};
+
+Blockly.Blocks['system_getfirmware'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField("get firmware version");
+    this.setInputsInline(true);
+    this.setOutput(true, "String");
+    this.setColour(5);
+    this.setTooltip('');
+    this.setHelpUrl('http://www.example.com/');
+  }
+};
+Blockly.Python['system_getfirmware'] = function(block) {
+  Blockly.Python.definitions_.from_PiStorms_import_PiStorms = "from PiStorms import PiStorms";
+  Blockly.Python.definitions_.psm_PiStorms = "psm = PiStorms()";
+  var code = 'psm.GetFirmwareVersion()';
+  return [code, Blockly.Python.ORDER_NONE];
+};
+
+Blockly.Blocks['system_getvendor'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField("get vendor name");
+    this.setInputsInline(true);
+    this.setOutput(true, "String");
+    this.setColour(5);
+    this.setTooltip('');
+    this.setHelpUrl('http://www.example.com/');
+  }
+};
+Blockly.Python['system_getvendor'] = function(block) {
+  Blockly.Python.definitions_.from_PiStorms_import_PiStorms = "from PiStorms import PiStorms";
+  Blockly.Python.definitions_.psm_PiStorms = "psm = PiStorms()";
+  var code = 'psm.GetVendorName()';
+  return [code, Blockly.Python.ORDER_NONE];
+};
+
+Blockly.Blocks['system_keypressed'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField("check if GO button is pressed");
+    this.setInputsInline(true);
+    this.setOutput(true, "Boolean");
+    this.setColour(200);
+    this.setTooltip('');
+    this.setHelpUrl('http://www.example.com/');
+  }
+};
+Blockly.Python['system_keypressed'] = function(block) {
+  Blockly.Python.definitions_.from_PiStorms_import_PiStorms = "from PiStorms import PiStorms";
+  Blockly.Python.definitions_.psm_PiStorms = "psm = PiStorms()";
+  var code = 'bool(psm.isKeyPressed())';
+  return [code, Blockly.Python.ORDER_NONE];
+};
+
+Blockly.Blocks['system_getdeviceid'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField("get device ID");
+    this.setInputsInline(true);
+    this.setOutput(true, "String");
+    this.setColour(5);
+    this.setTooltip('');
+    this.setHelpUrl('http://www.example.com/');
+  }
+};
+Blockly.Python['system_getdeviceid'] = function(block) {
+  Blockly.Python.definitions_.from_PiStorms_import_PiStorms = "from PiStorms import PiStorms";
+  Blockly.Python.definitions_.psm_PiStorms = "psm = PiStorms()";
+  var code = 'psm.GetDeviceId()';
+  return [code, Blockly.Python.ORDER_NONE];
+};
+
+Blockly.Blocks['system_getkeypresscount'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField("get key press count");
+    this.setInputsInline(true);
+    this.setOutput(true, "Number");
+    this.setColour(200);
+    this.setTooltip('');
+    this.setHelpUrl('http://www.example.com/');
+  }
+};
+Blockly.Python['system_getkeypresscount'] = function(block) {
+  Blockly.Python.definitions_.from_PiStorms_import_PiStorms = "from PiStorms import PiStorms";
+  Blockly.Python.definitions_.psm_PiStorms = "psm = PiStorms()";
+  var code = 'psm.getKeyPressCountx()';
+  return [code, Blockly.Python.ORDER_NONE];
+};
+
+Blockly.Blocks['system_resetkeypresscount'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField("reset key press count");
+    this.setInputsInline(true);
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(200);
+    this.setTooltip('');
+    this.setHelpUrl('http://www.example.com/');
+  }
+};
+Blockly.Python['system_resetkeypresscount'] = function(block) {
+  Blockly.Python.definitions_.from_PiStorms_import_PiStorms = "from PiStorms import PiStorms";
+  Blockly.Python.definitions_.psm_PiStorms = "psm = PiStorms()";
+  var code = 'psm.resetKeyPressCount()\n';
+  return code;
+};
+
+
+Blockly.Blocks['led_control'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField("turn LED")
+        .appendField(new Blockly.FieldDropdown([["1", "1"], ["2", "2"]]), "led_selector");
+    this.appendDummyInput()
+        .appendField("to color")
+        .appendField(new Blockly.FieldColour("#ff0000"), "COLOR");
+    this.setInputsInline(true);
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(140);
+    this.setTooltip('');
+    this.setHelpUrl('http://www.example.com/');
+  }
+};
+Blockly.Python['led_control'] = function(block) {
+  var dropdown_led_selector = block.getFieldValue('led_selector');
+  var colour_color = block.getFieldValue('COLOR');
+  Blockly.Python.definitions_.from_PiStorms_import_PiStorms = "from PiStorms import PiStorms";
+  Blockly.Python.definitions_.psm_PiStorms = "psm = PiStorms()";
+  var rgb = hexToRgb(colour_color);
+  var code = 'psm.led(' + dropdown_led_selector + ', ' + rgb.r + ', ' + rgb.g + ', ' + rgb.b + ')\n';
+  return code;
+};
+
+
+
+
+
+
+
+
+
+// Sensors
+
+Blockly.Blocks['sensors_nxttouch'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField("NXT Touch Sensor at")
+        .appendField(new Blockly.FieldDropdown([["BAS1", "BAS1"], ["BAS2", "BAS2"], ["BBS1", "BBS1"], ["BBS2", "BBS2"]]), "sensor_selector");
+    this.setInputsInline(true);
+    this.setOutput(true, "nxtev3touch");
+    this.setColour(0);
+    this.setTooltip('');
+    this.setHelpUrl('http://www.example.com/');
+  }
+};
+Blockly.Python['sensors_nxttouch'] = function(block) {
+  var dropdown_sensor_selector = block.getFieldValue('sensor_selector');
+  Blockly.Python.definitions_.import_LegoDevices = "import LegoDevices";
+  Blockly.Python.definitions_["nxttouch_" + dropdown_sensor_selector] = 'nxttouch_' + dropdown_sensor_selector + ' = LegoDevices.NXTTouchSensor("' + dropdown_sensor_selector + '")';
+  var code = 'nxttouch_' + dropdown_sensor_selector;
+  return [code, Blockly.Python.ORDER_NONE];
+};
+Blockly.Blocks['sensors_ev3touch'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField("EV3 Touch Sensor at")
+        .appendField(new Blockly.FieldDropdown([["BAS1", "BAS1"], ["BAS2", "BAS2"], ["BBS1", "BBS1"], ["BBS2", "BBS2"]]), "sensor_selector");
+    this.setInputsInline(true);
+    this.setOutput(true, "nxtev3touch");
+    this.setColour(0);
+    this.setTooltip('');
+    this.setHelpUrl('http://www.example.com/');
+  }
+};
+Blockly.Python['sensors_ev3touch'] = function(block) {
+  var dropdown_sensor_selector = block.getFieldValue('sensor_selector');
+  Blockly.Python.definitions_.import_LegoDevices = "import LegoDevices";
+  Blockly.Python.definitions_["ev3touch_" + dropdown_sensor_selector] = 'ev3touch_' + dropdown_sensor_selector + ' = LegoDevices.EV3TouchSensor("' + dropdown_sensor_selector + '")';
+  var code = 'ev3touch_' + dropdown_sensor_selector;
+  return [code, Blockly.Python.ORDER_NONE];
+};
+Blockly.Blocks['sensors_istouchpressed'] = {
+  init: function() {
+    this.appendValueInput("sensor")
+        .setCheck("nxtev3touch")
+        .appendField("is");
+    this.appendDummyInput()
+        .appendField("pressed");
+    this.setInputsInline(true);
+    this.setOutput(true, "Boolean");
+    this.setColour(0);
+    this.setTooltip('');
+    this.setHelpUrl('http://www.example.com/');
+  }
+};
+Blockly.Python['sensors_istouchpressed'] = function(block) {
+  var value_sensor = Blockly.Python.valueToCode(block, 'sensor', Blockly.Python.ORDER_ATOMIC);
+  code = value_sensor + ".isPressed()";
+  return [code, Blockly.Python.ORDER_NONE];
+};
+Blockly.Blocks['sensors_gettouchbumpcount'] = {
+  init: function() {
+    this.appendValueInput("sensor")
+        .setCheck("nxtev3touch")
+        .appendField("count bumps from");
+    this.setInputsInline(true);
+    this.setOutput(true, "Number");
+    this.setColour(0);
+    this.setTooltip('');
+    this.setHelpUrl('http://www.example.com/');
+  }
+};
+Blockly.Python['sensors_gettouchbumpcount'] = function(block) {
+  var value_sensor = Blockly.Python.valueToCode(block, 'sensor', Blockly.Python.ORDER_ATOMIC);
+  code = value_sensor + ".getBumpCount()";
+  return [code, Blockly.Python.ORDER_NONE];
+};
+Blockly.Blocks['sensors_resettouchbumpcount'] = {
+  init: function() {
+    this.appendValueInput("sensor")
+        .setCheck("nxtev3touch")
+        .appendField("reset bump count of");
+    this.setInputsInline(true);
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(0);
+    this.setTooltip('');
+    this.setHelpUrl('http://www.example.com/');
+  }
+};
+Blockly.Python['sensors_resettouchbumpcount'] = function(block) {
+  var value_sensor = Blockly.Python.valueToCode(block, 'sensor', Blockly.Python.ORDER_ATOMIC);
+  code = value_sensor + ".resetBumpCount()\n";
+  return code;
+};
+
+
+
+Blockly.Blocks['sensors_nxtlight'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField("NXT Light Sensor at")
+        .appendField(new Blockly.FieldDropdown([["BAS1", "BAS1"], ["BAS2", "BAS2"], ["BBS1", "BBS1"], ["BBS2", "BBS2"]]), "sensor_selector");
+    this.setInputsInline(true);
+    this.setOutput(true, "nxtlight");
+    this.setColour(20);
+    this.setTooltip('');
+    this.setHelpUrl('http://www.example.com/');
+  }
+};
+Blockly.Python['sensors_nxtlight'] = function(block) {
+  var dropdown_sensor_selector = block.getFieldValue('sensor_selector');
+  Blockly.Python.definitions_.import_LegoDevices = "import LegoDevices";
+  Blockly.Python.definitions_["nxtlight_" + dropdown_sensor_selector] = 'nxtlight_' + dropdown_sensor_selector + ' = LegoDevices.NXTLightSensor("' + dropdown_sensor_selector + '")';
+  var code = 'nxtlight_' + dropdown_sensor_selector;
+  return [code, Blockly.Python.ORDER_NONE];
+};
+Blockly.Blocks['sensors_nxtlightgetvalue'] = {
+  init: function() {
+    this.appendValueInput("sensor")
+        .setCheck("nxtlight")
+        .appendField("get value from");
+    this.setInputsInline(true);
+    this.setOutput(true, "Number");
+    this.setColour(20);
+    this.setTooltip('');
+    this.setHelpUrl('http://www.example.com/');
+  }
+};
+Blockly.Python['sensors_nxtlightgetvalue'] = function(block) {
+  var value_sensor = Blockly.Python.valueToCode(block, 'sensor', Blockly.Python.ORDER_ATOMIC);
+  code = value_sensor + ".getValue()";
+  return [code, Blockly.Python.ORDER_NONE];
+};
+Blockly.Blocks['sensors_nxtlightsetmode'] = {
+  init: function() {
+    this.appendValueInput("sensor")
+        .setCheck("nxtlight")
+        .appendField("set mode of");
+    this.appendDummyInput()
+        .appendField("to")
+        .appendField(new Blockly.FieldDropdown([["AMBIENT", "AMBIENT"], ["REFLECTED", "REFLECTED"]]), "mode_selector");
+    this.setInputsInline(true);
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(20);
+    this.setTooltip('');
+    this.setHelpUrl('http://www.example.com/');
+  }
+};
+Blockly.Python['sensors_nxtlightsetmode'] = function(block) {
+  var dropdown_mode_selector = block.getFieldValue('mode_selector');
+  var value_sensor = Blockly.Python.valueToCode(block, 'sensor', Blockly.Python.ORDER_ATOMIC);
+  code = value_sensor + ".setMode(LegoDevices.PS_SENSOR_MODE_NXT_LIGHT_" + dropdown_mode_selector + ")\n";
+  return code;
+};
+
+
+
+Blockly.Blocks['sensors_nxtcolor'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField("NXT Color Sensor at")
+        .appendField(new Blockly.FieldDropdown([["BAS1", "BAS1"], ["BAS2", "BAS2"], ["BBS1", "BBS1"], ["BBS2", "BBS2"]]), "sensor_selector");
+    this.setInputsInline(true);
+    this.setOutput(true, "nxtcolor");
+    this.setColour(40);
+    this.setTooltip('');
+    this.setHelpUrl('http://www.example.com/');
+  }
+};
+Blockly.Python['sensors_nxtcolor'] = function(block) {
+  var dropdown_sensor_selector = block.getFieldValue('sensor_selector');
+  Blockly.Python.definitions_.import_LegoDevices = "import LegoDevices";
+  Blockly.Python.definitions_["nxtcolor_" + dropdown_sensor_selector] = 'nxtcolor_' + dropdown_sensor_selector + ' = LegoDevices.NXTColorSensor("' + dropdown_sensor_selector + '")';
+  var code = 'nxtcolor_' + dropdown_sensor_selector;
+  return [code, Blockly.Python.ORDER_NONE];
+};
+Blockly.Blocks['sensors_nxtcolorgetcolor'] = {
+  init: function() {
+    this.appendValueInput("sensor")
+        .setCheck("nxtcolor")
+        .appendField("get color from");
+    this.setInputsInline(true);
+    this.setOutput(true, "String");
+    this.setColour(40);
+    this.setTooltip('');
+    this.setHelpUrl('http://www.example.com/');
+  }
+};
+Blockly.Python['sensors_nxtcolorgetcolor'] = function(block) {
+  var value_sensor = Blockly.Python.valueToCode(block, 'sensor', Blockly.Python.ORDER_ATOMIC);
+  code = value_sensor + ".getColor()";
+  return [code, Blockly.Python.ORDER_NONE];
+};
+Blockly.Blocks['sensors_nxtcolorsetmode'] = {
+  init: function() {
+    this.appendValueInput("sensor")
+        .setCheck("nxtcolor")
+        .appendField("set mode of");
+    this.appendDummyInput()
+        .appendField("to")
+        .appendField(new Blockly.FieldDropdown([["COLOR", "COLOR"], ["REFLECTED", "REFLECTED"]]), "mode_selector");
+    this.setInputsInline(true);
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(40);
+    this.setTooltip('');
+    this.setHelpUrl('http://www.example.com/');
+  }
+};
+Blockly.Python['sensors_nxtcolorsetmode'] = function(block) {
+  var dropdown_mode_selector = block.getFieldValue('mode_selector');
+  var value_sensor = Blockly.Python.valueToCode(block, 'sensor', Blockly.Python.ORDER_ATOMIC);
+  code = value_sensor + ".setMode(LegoDevices.PS_SENSOR_MODE_NXT_COLOR_" + dropdown_mode_selector + ")\n";
+  return code;
+};
+
+
+
+Blockly.Blocks['sensors_ev3color'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField("EV3 Color Sensor at")
+        .appendField(new Blockly.FieldDropdown([["BAS1", "BAS1"], ["BAS2", "BAS2"], ["BBS1", "BBS1"], ["BBS2", "BBS2"]]), "sensor_selector");
+    this.setInputsInline(true);
+    this.setOutput(true, "ev3color");
+    this.setColour(60);
+    this.setTooltip('');
+    this.setHelpUrl('http://www.example.com/');
+  }
+};
+Blockly.Python['sensors_ev3color'] = function(block) {
+  var dropdown_sensor_selector = block.getFieldValue('sensor_selector');
+  Blockly.Python.definitions_.import_LegoDevices = "import LegoDevices";
+  Blockly.Python.definitions_["ev3color_" + dropdown_sensor_selector] = 'ev3color_' + dropdown_sensor_selector + ' = LegoDevices.EV3ColorSensor("' + dropdown_sensor_selector + '")';
+  var code = 'ev3color_' + dropdown_sensor_selector;
+  return [code, Blockly.Python.ORDER_NONE];
+};
+Blockly.Blocks['sensors_ev3colorgetvalue'] = {
+  init: function() {
+    this.appendValueInput("sensor")
+        .setCheck("ev3color")
+        .appendField("get value from");
+    this.setInputsInline(true);
+    this.setOutput(true, "Number");
+    this.setColour(60);
+    this.setTooltip('');
+    this.setHelpUrl('http://www.example.com/');
+  }
+};
+Blockly.Python['sensors_ev3colorgetvalue'] = function(block) {
+  var value_sensor = Blockly.Python.valueToCode(block, 'sensor', Blockly.Python.ORDER_ATOMIC);
+  code = value_sensor + ".getValue()";
+  return [code, Blockly.Python.ORDER_NONE];
+};
+Blockly.Blocks['sensors_ev3colorsetmode'] = {
+  init: function() {
+    this.appendValueInput("sensor")
+        .setCheck("ev3color")
+        .appendField("set mode of");
+    this.appendDummyInput()
+        .appendField("to")
+        .appendField(new Blockly.FieldDropdown([["COLOR", "COLOR"], ["REFLECTED", "REFLECTED"], ["AMBIENT", "AMBIENT"]]), "mode_selector");
+    this.setInputsInline(true);
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(60);
+    this.setTooltip('');
+    this.setHelpUrl('http://www.example.com/');
+  }
+};
+Blockly.Python['sensors_ev3colorsetmode'] = function(block) {
+  var dropdown_mode_selector = block.getFieldValue('mode_selector');
+  var value_sensor = Blockly.Python.valueToCode(block, 'sensor', Blockly.Python.ORDER_ATOMIC);
+  code = value_sensor + ".setMode(LegoDevices.PS_SENSOR_MODE_EV3_COLOR_" + dropdown_mode_selector + ")\n";
+  return code;
+};
+
+
+Blockly.Blocks['sensors_ev3gyro'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField("EV3 Gyro Sensor at")
+        .appendField(new Blockly.FieldDropdown([["BAS1", "BAS1"], ["BAS2", "BAS2"], ["BBS1", "BBS1"], ["BBS2", "BBS2"]]), "sensor_selector");
+    this.setInputsInline(true);
+    this.setOutput(true, "ev3gyro");
+    this.setColour(80);
+    this.setTooltip('');
+    this.setHelpUrl('http://www.example.com/');
+  }
+};
+Blockly.Python['sensors_ev3gyro'] = function(block) {
+  var dropdown_sensor_selector = block.getFieldValue('sensor_selector');
+  Blockly.Python.definitions_.import_LegoDevices = "import LegoDevices";
+  Blockly.Python.definitions_["ev3gyro_" + dropdown_sensor_selector] = 'ev3gyro_' + dropdown_sensor_selector + ' = LegoDevices.EV3GyroSensor("' + dropdown_sensor_selector + '")';
+  var code = 'ev3gyro_' + dropdown_sensor_selector;
+  return [code, Blockly.Python.ORDER_NONE];
+};
+Blockly.Blocks['sensors_ev3gyrogetvalue'] = {
+  init: function() {
+    this.appendValueInput("sensor")
+        .setCheck("ev3gyro")
+        .appendField("get value from");
+    this.setInputsInline(true);
+    this.setOutput(true, "Number");
+    this.setColour(80);
+    this.setTooltip('');
+    this.setHelpUrl('http://www.example.com/');
+  }
+};
+Blockly.Python['sensors_ev3gyrogetvalue'] = function(block) {
+  var value_sensor = Blockly.Python.valueToCode(block, 'sensor', Blockly.Python.ORDER_ATOMIC);
+  code = value_sensor + ".readValue()";
+  return [code, Blockly.Python.ORDER_NONE];
+};
+Blockly.Blocks['sensors_ev3gyrosetmode'] = {
+  init: function() {
+    this.appendValueInput("sensor")
+        .setCheck("ev3gyro")
+        .appendField("set mode of");
+    this.appendDummyInput()
+        .appendField("to")
+        .appendField(new Blockly.FieldDropdown([["ANGLE", "ANGLE"], ["RATE", "RATE"]]), "mode_selector");
+    this.setInputsInline(true);
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(80);
+    this.setTooltip('');
+    this.setHelpUrl('http://www.example.com/');
+  }
+};
+Blockly.Python['sensors_ev3gyrosetmode'] = function(block) {
+  var dropdown_mode_selector = block.getFieldValue('mode_selector');
+  var value_sensor = Blockly.Python.valueToCode(block, 'sensor', Blockly.Python.ORDER_ATOMIC);
+  code = value_sensor + ".setMode(LegoDevices.PS_SENSOR_MODE_EV3_GYRO_" + dropdown_mode_selector + ")\n";
+  return code;
+};
+
+
+Blockly.Blocks['sensors_ev3ultrasonic'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField("EV3 Ultrasonic Sensor at")
+        .appendField(new Blockly.FieldDropdown([["BAS1", "BAS1"], ["BAS2", "BAS2"], ["BBS1", "BBS1"], ["BBS2", "BBS2"]]), "sensor_selector");
+    this.setInputsInline(true);
+    this.setOutput(true, "ev3ultrasonic");
+    this.setColour(100);
+    this.setTooltip('');
+    this.setHelpUrl('http://www.example.com/');
+  }
+};
+Blockly.Python['sensors_ev3ultrasonic'] = function(block) {
+  var dropdown_sensor_selector = block.getFieldValue('sensor_selector');
+  Blockly.Python.definitions_.import_LegoDevices = "import LegoDevices";
+  Blockly.Python.definitions_["ev3ultrasonic_" + dropdown_sensor_selector] = 'ev3ultrasonic_' + dropdown_sensor_selector + ' = LegoDevices.EV3UltrasonicSensor("' + dropdown_sensor_selector + '")';
+  var code = 'ev3ultrasonic_' + dropdown_sensor_selector;
+  return [code, Blockly.Python.ORDER_NONE];
+};
+Blockly.Blocks['sensors_ev3ultrasonicgetvalue'] = {
+  init: function() {
+    this.appendValueInput("sensor")
+        .setCheck("ev3ultrasonic")
+        .appendField("get distance from");
+    this.setInputsInline(true);
+    this.setOutput(true, "Number");
+    this.setColour(100);
+    this.setTooltip('');
+    this.setHelpUrl('http://www.example.com/');
+  }
+};
+Blockly.Python['sensors_ev3ultrasonicgetvalue'] = function(block) {
+  var value_sensor = Blockly.Python.valueToCode(block, 'sensor', Blockly.Python.ORDER_ATOMIC);
+  code = value_sensor + ".getDistance()";
+  return [code, Blockly.Python.ORDER_NONE];
+};
+Blockly.Blocks['sensors_ev3ultrasonicdetect'] = {
+  init: function() {
+    this.appendValueInput("sensor")
+        .setCheck("ev3ultrasonic")
+        .appendField("detect");
+    this.setInputsInline(true);
+    this.setOutput(true, "Boolean");
+    this.setColour(100);
+    this.setTooltip('');
+    this.setHelpUrl('http://www.example.com/');
+  }
+};
+Blockly.Python['sensors_ev3ultrasonicdetect'] = function(block) {
+  var value_sensor = Blockly.Python.valueToCode(block, 'sensor', Blockly.Python.ORDER_ATOMIC);
+  code = value_sensor + ".detect()";
+  return [code, Blockly.Python.ORDER_NONE];
+};
+Blockly.Blocks['sensors_ev3ultrasonicsetmode'] = {
+  init: function() {
+    this.appendValueInput("sensor")
+        .setCheck("ev3ultrasonic")
+        .appendField("set mode of");
+    this.appendDummyInput()
+        .appendField("to")
+        .appendField(new Blockly.FieldDropdown([["DETECT", "DETECT"], ["DIST_CM", "DIST_CM"], ["DIST_IN", "DIST_IN"]]), "mode_selector");
+    this.setInputsInline(true);
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(100);
+    this.setTooltip('');
+    this.setHelpUrl('http://www.example.com/');
+  }
+};
+Blockly.Python['sensors_ev3ultrasonicsetmode'] = function(block) {
+  var dropdown_mode_selector = block.getFieldValue('mode_selector');
+  var value_sensor = Blockly.Python.valueToCode(block, 'sensor', Blockly.Python.ORDER_ATOMIC);
+  code = value_sensor + ".setMode(LegoDevices.PS_SENSOR_MODE_EV3_ULTRASONIC_" + dropdown_mode_selector + ")\n";
+  return code;
+};
+
+
+
+
+
+
+
+
+Blockly.Blocks['sensors_ev3infrared'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField("EV3 Infrared Sensor at")
+        .appendField(new Blockly.FieldDropdown([["BAS1", "BAS1"], ["BAS2", "BAS2"], ["BBS1", "BBS1"], ["BBS2", "BBS2"]]), "sensor_selector");
+    this.setInputsInline(true);
+    this.setOutput(true, "ev3infrared");
+    this.setColour(120);
+    this.setTooltip('');
+    this.setHelpUrl('http://www.example.com/');
+  }
+};
+Blockly.Python['sensors_ev3infrared'] = function(block) {
+  var dropdown_sensor_selector = block.getFieldValue('sensor_selector');
+  Blockly.Python.definitions_.import_LegoDevices = "import LegoDevices";
+  Blockly.Python.definitions_["ev3infrared_" + dropdown_sensor_selector] = 'ev3infrared_' + dropdown_sensor_selector + ' = LegoDevices.EV3InfraredSensor("' + dropdown_sensor_selector + '")';
+  var code = 'ev3infrared_' + dropdown_sensor_selector;
+  return [code, Blockly.Python.ORDER_NONE];
+};
+Blockly.Blocks['sensors_ev3infraredgetproximity'] = {
+  init: function() {
+    this.appendValueInput("sensor")
+        .setCheck("ev3infrared")
+        .appendField("get proximity from");
+    this.setInputsInline(true);
+    this.setOutput(true, "Number");
+    this.setColour(120);
+    this.setTooltip('');
+    this.setHelpUrl('http://www.example.com/');
+  }
+};
+Blockly.Python['sensors_ev3infraredgetproximity'] = function(block) {
+  var value_sensor = Blockly.Python.valueToCode(block, 'sensor', Blockly.Python.ORDER_ATOMIC);
+  code = value_sensor + ".readProximity()";
+  return [code, Blockly.Python.ORDER_NONE];
+};
+Blockly.Blocks['sensors_ev3infraredchannelheading'] = {
+  init: function() {
+    this.appendValueInput("sensor")
+        .setCheck("ev3infrared")
+        .appendField("get channel heading from");
+    this.appendValueInput("channel")
+        .setCheck("Number")
+        .appendField("on channel");
+    this.setInputsInline(true);
+    this.setOutput(true, "Number");
+    this.setColour(120);
+    this.setTooltip('');
+    this.setHelpUrl('http://www.example.com/');
+  }
+};
+Blockly.Python['sensors_ev3infraredchannelheading'] = function(block) {
+  var value_sensor = Blockly.Python.valueToCode(block, 'sensor', Blockly.Python.ORDER_ATOMIC);
+  var value_channel = Blockly.Python.valueToCode(block, 'channel', Blockly.Python.ORDER_ATOMIC);
+  code = value_sensor + ".readChannelHeading(" + value_channel + ")";
+  return [code, Blockly.Python.ORDER_NONE];
+};
+Blockly.Blocks['sensors_ev3infraredchannelproximity'] = {
+  init: function() {
+    this.appendValueInput("sensor")
+        .setCheck("ev3infrared")
+        .appendField("get channel proximity from");
+    this.appendValueInput("channel")
+        .setCheck("Number")
+        .appendField("on channel");
+    this.setInputsInline(true);
+    this.setOutput(true, "Number");
+    this.setColour(120);
+    this.setTooltip('');
+    this.setHelpUrl('http://www.example.com/');
+  }
+};
+Blockly.Python['sensors_ev3infraredchannelproximity'] = function(block) {
+  var value_sensor = Blockly.Python.valueToCode(block, 'sensor', Blockly.Python.ORDER_ATOMIC);
+  var value_channel = Blockly.Python.valueToCode(block, 'channel', Blockly.Python.ORDER_ATOMIC);
+  code = value_sensor + ".readChannelProximity(" + value_channel + ")";
+  return [code, Blockly.Python.ORDER_NONE];
+};
+
+Blockly.Blocks['sensors_ev3infraredgetremote'] = {
+  init: function() {
+    this.appendValueInput("sensor")
+        .setCheck("ev3infrared")
+        .appendField("get remote position");
+    this.appendValueInput("channel")
+        .setCheck("Number")
+        .appendField("on channel");
+    this.setInputsInline(true);
+    this.setOutput(true, "Array");
+    this.setColour(120);
+    this.setTooltip('');
+    this.setHelpUrl('http://www.example.com/');
+  }
+};
+Blockly.Python['sensors_ev3infraredgetremote'] = function(block) {
+  var value_sensor = Blockly.Python.valueToCode(block, 'sensor', Blockly.Python.ORDER_ATOMIC);
+  var value_channel = Blockly.Python.valueToCode(block, 'channel', Blockly.Python.ORDER_ATOMIC);
+  code = value_sensor + ".readRemote(" + value_channel + ")";
+  return [code, Blockly.Python.ORDER_NONE];
+};
+Blockly.Blocks['sensors_ev3infraredsetmode'] = {
+  init: function() {
+    this.appendValueInput("sensor")
+        .setCheck("ev3infrared")
+        .appendField("set mode of");
+    this.appendDummyInput()
+        .appendField("to")
+        .appendField(new Blockly.FieldDropdown([["CHANNEL", "CHANNEL"], ["PROXIMITY", "PROXIMITY"], ["REMOTE", "REMOTE"]]), "mode_selector");
+    this.setInputsInline(true);
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(120);
+    this.setTooltip('');
+    this.setHelpUrl('http://www.example.com/');
+  }
+};
+Blockly.Python['sensors_ev3infraredsetmode'] = function(block) {
+  var dropdown_mode_selector = block.getFieldValue('mode_selector');
+  var value_sensor = Blockly.Python.valueToCode(block, 'sensor', Blockly.Python.ORDER_ATOMIC);
+  code = value_sensor + ".setMode(LegoDevices.PS_SENSOR_MODE_EV3_IR_" + dropdown_mode_selector + ")\n";
+  return code;
+};
+
+
+
+
+
+
+Blockly.Blocks['sensors_absoluteimu'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField("AbsoluteIMU Sensor at")
+        .appendField(new Blockly.FieldDropdown([["BAS1", "BAS1"], ["BAS2", "BAS2"], ["BBS1", "BBS1"], ["BBS2", "BBS2"]]), "sensor_selector");
+    this.setInputsInline(true);
+    this.setOutput(true, "absoluteimu");
+    this.setColour(140);
+    this.setTooltip('');
+    this.setHelpUrl('http://www.example.com/');
+  }
+};
+Blockly.Python['sensors_absoluteimu'] = function(block) {
+  var dropdown_sensor_selector = block.getFieldValue('sensor_selector');
+  Blockly.Python.definitions_.from_PiStorms_import_PiStorms = "from PiStorms import PiStorms";
+  Blockly.Python.definitions_.psm_PiStorms = "psm = PiStorms()";
+  Blockly.Python.definitions_.import_MsDevices = "import MsDevices";
+  Blockly.Python.definitions_["absoluteimu_" + dropdown_sensor_selector] = 'absoluteimu_' + dropdown_sensor_selector + ' = MsDevices.AbsoluteIMU(psm.' + dropdown_sensor_selector + ')';
+  var code = 'absoluteimu_' + dropdown_sensor_selector;
+  return [code, Blockly.Python.ORDER_NONE];
+};
+Blockly.Blocks['sensors_absoluteimugettilt'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField("get")
+        .appendField(new Blockly.FieldDropdown([["X", "x"], ["Y", "y"], ["Z", "z"]]), "axis_selector")
+        .appendField("tilt from");
+    this.appendValueInput("sensor")
+        .setCheck("absoluteimu")
+    this.setInputsInline(true);
+    this.setOutput(true, "Number");
+    this.setColour(140);
+    this.setTooltip('');
+    this.setHelpUrl('http://www.example.com/');
+  }
+};
+Blockly.Python['sensors_absoluteimugettilt'] = function(block) {
+  var dropdown_axis_selector = block.getFieldValue('axis_selector');
+  var value_sensor = Blockly.Python.valueToCode(block, 'sensor', Blockly.Python.ORDER_ATOMIC);
+  code = value_sensor + ".get_tilt" + dropdown_axis_selector + "()";
+  return [code, Blockly.Python.ORDER_NONE];
+};
+Blockly.Blocks['sensors_absoluteimugetacceleration'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField("get")
+        .appendField(new Blockly.FieldDropdown([["X", "x"], ["Y", "y"], ["Z", "z"]]), "axis_selector")
+        .appendField("acceleration from");
+    this.appendValueInput("sensor")
+        .setCheck("absoluteimu")
+    this.setInputsInline(true);
+    this.setOutput(true, "Number");
+    this.setColour(140);
+    this.setTooltip('');
+    this.setHelpUrl('http://www.example.com/');
+  }
+};
+Blockly.Python['sensors_absoluteimugetacceleration'] = function(block) {
+  var dropdown_axis_selector = block.getFieldValue('axis_selector');
+  var value_sensor = Blockly.Python.valueToCode(block, 'sensor', Blockly.Python.ORDER_ATOMIC);
+  code = value_sensor + ".get_accel" + dropdown_axis_selector + "()";
+  return [code, Blockly.Python.ORDER_NONE];
+};
+Blockly.Blocks['sensors_absoluteimugetheading'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField("get heading from");
+    this.appendValueInput("sensor")
+        .setCheck("absoluteimu")
+    this.setInputsInline(true);
+    this.setOutput(true, "Number");
+    this.setColour(140);
+    this.setTooltip('');
+    this.setHelpUrl('http://www.example.com/');
+  }
+};
+Blockly.Python['sensors_absoluteimugetheading'] = function(block) {
+  var value_sensor = Blockly.Python.valueToCode(block, 'sensor', Blockly.Python.ORDER_ATOMIC);
+  code = value_sensor + ".get_heading()";
+  return [code, Blockly.Python.ORDER_NONE];
+};
+Blockly.Blocks['sensors_absoluteimugetmagnetometer'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField("get")
+        .appendField(new Blockly.FieldDropdown([["X", "x"], ["Y", "y"], ["Z", "z"]]), "axis_selector")
+        .appendField("magnetometer value from");
+    this.appendValueInput("sensor")
+        .setCheck("absoluteimu")
+    this.setInputsInline(true);
+    this.setOutput(true, "Number");
+    this.setColour(140);
+    this.setTooltip('');
+    this.setHelpUrl('http://www.example.com/');
+  }
+};
+Blockly.Python['sensors_absoluteimugetmagnetometer'] = function(block) {
+  var dropdown_axis_selector = block.getFieldValue('axis_selector');
+  var value_sensor = Blockly.Python.valueToCode(block, 'sensor', Blockly.Python.ORDER_ATOMIC);
+  code = value_sensor + ".get_mag" + dropdown_axis_selector + "()";
+  return [code, Blockly.Python.ORDER_NONE];
+};
+Blockly.Blocks['sensors_absoluteimugetgyro'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField("get")
+        .appendField(new Blockly.FieldDropdown([["X", "x"], ["Y", "y"], ["Z", "z"]]), "axis_selector")
+        .appendField("gyroscope value from");
+    this.appendValueInput("sensor")
+        .setCheck("absoluteimu")
+    this.setInputsInline(true);
+    this.setOutput(true, "Number");
+    this.setColour(140);
+    this.setTooltip('');
+    this.setHelpUrl('http://www.example.com/');
+  }
+};
+Blockly.Python['sensors_absoluteimugetgyro'] = function(block) {
+  var dropdown_axis_selector = block.getFieldValue('axis_selector');
+  var value_sensor = Blockly.Python.valueToCode(block, 'sensor', Blockly.Python.ORDER_ATOMIC);
+  code = value_sensor + ".get_gyro" + dropdown_axis_selector + "()";
+  return [code, Blockly.Python.ORDER_NONE];
+};
+Blockly.Blocks['sensors_absoluteimusetaccel'] = {
+  init: function() {
+    this.appendValueInput("sensor")
+        .setCheck("absoluteimu")
+        .appendField("set accelerometer sensitivity of");
+    this.appendDummyInput()
+        .appendField("to")
+        .appendField(new Blockly.FieldDropdown([["2G", "2G"], ["4G", "4G"], ["8G", "8G"], ["16G", "16G"]]), "mode_selector");
+    this.setInputsInline(true);
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(140);
+    this.setTooltip('');
+    this.setHelpUrl('http://www.example.com/');
+  }
+};
+Blockly.Python['sensors_absoluteimusetaccel'] = function(block) {
+  var dropdown_mode_selector = block.getFieldValue('mode_selector');
+  var value_sensor = Blockly.Python.valueToCode(block, 'sensor', Blockly.Python.ORDER_ATOMIC);
+  code = value_sensor + ".accel_" + dropdown_mode_selector + "()\n";
+  return code;
+};
+Blockly.Blocks['sensors_absoluteimustartcmpscal'] = {
+  init: function() {
+    this.appendValueInput("sensor")
+        .setCheck("absoluteimu")
+        .appendField("start compass calibration of");
+    this.setInputsInline(true);
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(140);
+    this.setTooltip('');
+    this.setHelpUrl('http://www.example.com/');
+  }
+};
+Blockly.Python['sensors_absoluteimustartcmpscal'] = function(block) {
+  var value_sensor = Blockly.Python.valueToCode(block, 'sensor', Blockly.Python.ORDER_ATOMIC);
+  code = value_sensor + ".start_cmpscal()\n";
+  return code;
+};
+Blockly.Blocks['sensors_absoluteimustopcmpscal'] = {
+  init: function() {
+    this.appendValueInput("sensor")
+        .setCheck("absoluteimu")
+        .appendField("stop compass calibration of");
+    this.setInputsInline(true);
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(140);
+    this.setTooltip('');
+    this.setHelpUrl('http://www.example.com/');
+  }
+};
+Blockly.Python['sensors_absoluteimustopcmpscal'] = function(block) {
+  var value_sensor = Blockly.Python.valueToCode(block, 'sensor', Blockly.Python.ORDER_ATOMIC);
+  code = value_sensor + ".stop_cmpscal()\n";
+  return code;
+};
+
+
+Blockly.Blocks['screen'] = {
+  init: function() {
+    this.appendValueInput("sensor")
+        .setCheck("absoluteimu")
+        .appendField("stop compass calibration of");
+    this.setInputsInline(true);
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(140);
+    this.setTooltip('');
+    this.setHelpUrl('http://www.example.com/');
+  }
+};
+Blockly.Python['sensors_absoluteimustopcmpscal'] = function(block) {
+  var value_sensor = Blockly.Python.valueToCode(block, 'sensor', Blockly.Python.ORDER_ATOMIC);
+  code = value_sensor + ".stop_cmpscal()\n";
+  return code;
+};
+
+
+Blockly.Blocks['screen_drawroundedrect'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField("draw rounded rectangle");
+    this.appendValueInput("x")
+        .setCheck("Number")
+        .appendField("X");
+    this.appendValueInput("y")
+        .setCheck("Number")
+        .appendField("Y");
+    this.appendValueInput("width")
+        .setCheck("Number")
+        .appendField("Width");
+    this.appendValueInput("height")
+        .setCheck("Number")
+        .appendField("Height");
+    this.appendValueInput("radius")
+        .setCheck("Number")
+        .appendField("Radius");
+    this.appendDummyInput()
+        .appendField("Filled with ")
+        .appendField(new Blockly.FieldColour("#ff0000"), "COLOR")
+        .appendField(" color");
+    this.appendDummyInput()
+        .appendField("Display on completion")
+        .appendField(new Blockly.FieldCheckbox("TRUE"), "DISPLAY");
+    this.setInputsInline(false);
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(300);
+    this.setTooltip('');
+    this.setHelpUrl('http://www.example.com/');
+  }
+};
+Blockly.Python['screen_drawroundedrect'] = function(block) {
+  var value_x = Blockly.Python.valueToCode(block, 'x', Blockly.Python.ORDER_ATOMIC);
+  var value_y = Blockly.Python.valueToCode(block, 'y', Blockly.Python.ORDER_ATOMIC);
+  var value_width = Blockly.Python.valueToCode(block, 'width', Blockly.Python.ORDER_ATOMIC);
+  var value_height = Blockly.Python.valueToCode(block, 'height', Blockly.Python.ORDER_ATOMIC);
+  var value_radius = Blockly.Python.valueToCode(block, 'radius', Blockly.Python.ORDER_ATOMIC);
+  var colour_color = block.getFieldValue('COLOR');
+  var checkbox_display = block.getFieldValue('DISPLAY') == 'TRUE' ? 'True' : 'False';
+  var rgb = hexToRgb(colour_color);
+  Blockly.Python.definitions_.from_PiStorms_import_PiStorms = "from PiStorms import PiStorms";
+  Blockly.Python.definitions_.psm_PiStorms = "psm = PiStorms()";
+  var code = 'psm.screen.fillRoundRect(' + value_x + ', ' + value_y + ', ' + value_width + ', ' + value_height + ', ' + value_radius + ', (' + rgb.r + ', ' + rgb.g + ', ' + rgb.b + '), ' + checkbox_display + ')\n';
+  return code;
+};
+
+Blockly.Blocks['screen_drawrect'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField("draw rectangle");
+    this.appendValueInput("x")
+        .setCheck("Number")
+        .appendField("X");
+    this.appendValueInput("y")
+        .setCheck("Number")
+        .appendField("Y");
+    this.appendValueInput("width")
+        .setCheck("Number")
+        .appendField("Width");
+    this.appendValueInput("height")
+        .setCheck("Number")
+        .appendField("Height");
+    this.appendDummyInput()
+        .appendField("Filled with ")
+        .appendField(new Blockly.FieldColour("#ff0000"), "COLOR")
+        .appendField(" color");
+    this.appendDummyInput()
+        .appendField("Display on completion")
+        .appendField(new Blockly.FieldCheckbox("TRUE"), "DISPLAY");
+    this.setInputsInline(false);
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(300);
+    this.setTooltip('');
+    this.setHelpUrl('http://www.example.com/');
+  }
+};
+Blockly.Python['screen_drawrect'] = function(block) {
+  var value_x = Blockly.Python.valueToCode(block, 'x', Blockly.Python.ORDER_ATOMIC);
+  var value_y = Blockly.Python.valueToCode(block, 'y', Blockly.Python.ORDER_ATOMIC);
+  var value_width = Blockly.Python.valueToCode(block, 'width', Blockly.Python.ORDER_ATOMIC);
+  var value_height = Blockly.Python.valueToCode(block, 'height', Blockly.Python.ORDER_ATOMIC);
+  var colour_color = block.getFieldValue('COLOR');
+  var checkbox_display = block.getFieldValue('DISPLAY') == 'TRUE' ? 'True' : 'False';
+  var rgb = hexToRgb(colour_color);
+  Blockly.Python.definitions_.from_PiStorms_import_PiStorms = "from PiStorms import PiStorms";
+  Blockly.Python.definitions_.psm_PiStorms = "psm = PiStorms()";
+  var code = 'psm.screen.fillRect(' + value_x + ', ' + value_y + ', ' + value_width + ', ' + value_height + ', (' + rgb.r + ', ' + rgb.g + ', ' + rgb.b + '), display = ' + checkbox_display + ')\n';
+  return code;
+};
+Blockly.Blocks['screen_drawcircle'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField("draw circle");
+    this.appendValueInput("x")
+        .setCheck("Number")
+        .appendField("X");
+    this.appendValueInput("y")
+        .setCheck("Number")
+        .appendField("Y");
+    this.appendValueInput("radius")
+        .setCheck("Number")
+        .appendField("Width");
+    this.appendDummyInput()
+        .appendField("Filled with ")
+        .appendField(new Blockly.FieldColour("#ff0000"), "COLOR")
+        .appendField(" color");
+    this.appendDummyInput()
+        .appendField("Display on completion")
+        .appendField(new Blockly.FieldCheckbox("TRUE"), "DISPLAY");
+    this.setInputsInline(false);
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(300);
+    this.setTooltip('');
+    this.setHelpUrl('http://www.example.com/');
+  }
+};
+Blockly.Python['screen_drawcircle'] = function(block) {
+  var value_x = Blockly.Python.valueToCode(block, 'x', Blockly.Python.ORDER_ATOMIC);
+  var value_y = Blockly.Python.valueToCode(block, 'y', Blockly.Python.ORDER_ATOMIC);
+  var value_radius = Blockly.Python.valueToCode(block, 'radius', Blockly.Python.ORDER_ATOMIC);
+  var colour_color = block.getFieldValue('COLOR');
+  var checkbox_display = block.getFieldValue('DISPLAY') == 'TRUE' ? 'True' : 'False';
+  var rgb = hexToRgb(colour_color);
+  Blockly.Python.definitions_.from_PiStorms_import_PiStorms = "from PiStorms import PiStorms";
+  Blockly.Python.definitions_.psm_PiStorms = "psm = PiStorms()";
+  var code = 'psm.screen.fillCircle(' + value_x + ', ' + value_y + ', ' + value_radius + ', (' + rgb.r + ', ' + rgb.g + ', ' + rgb.b + '), display = ' + checkbox_display + ')\n';
+  return code;
+};
+
+Blockly.Blocks['screen_drawbmp'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField("draw image from file");
+    this.appendValueInput("x")
+        .setCheck("Number")
+        .appendField("X");
+    this.appendValueInput("y")
+        .setCheck("Number")
+        .appendField("Y");
+    this.appendValueInput("width")
+        .setCheck("Number")
+        .appendField("Width");
+    this.appendValueInput("height")
+        .setCheck("Number")
+        .appendField("Height");
+    this.appendValueInput("location")
+        .setCheck("String")
+        .appendField("Path to image");
+    this.appendDummyInput()
+        .appendField("Display on completion")
+        .appendField(new Blockly.FieldCheckbox("TRUE"), "DISPLAY");
+    this.setInputsInline(false);
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(300);
+    this.setTooltip('');
+    this.setHelpUrl('http://www.example.com/');
+  }
+};
+Blockly.Python['screen_drawbmp'] = function(block) {
+  var value_x = Blockly.Python.valueToCode(block, 'x', Blockly.Python.ORDER_ATOMIC);
+  var value_y = Blockly.Python.valueToCode(block, 'y', Blockly.Python.ORDER_ATOMIC);
+  var value_width = Blockly.Python.valueToCode(block, 'width', Blockly.Python.ORDER_ATOMIC);
+  var value_height = Blockly.Python.valueToCode(block, 'height', Blockly.Python.ORDER_ATOMIC);
+  var value_location = Blockly.Python.valueToCode(block, 'location', Blockly.Python.ORDER_ATOMIC);
+  var checkbox_display = block.getFieldValue('DISPLAY') == 'TRUE' ? 'True' : 'False';
+  Blockly.Python.definitions_.from_PiStorms_import_PiStorms = "from PiStorms import PiStorms";
+  Blockly.Python.definitions_.psm_PiStorms = "psm = PiStorms()";
+  var code = 'psm.screen.fillBmp(' + value_x + ', ' + value_y + ', ' + value_width + ', ' + value_height + ', path = ' + value_location + ', display = ' + checkbox_display + ')\n';
+  return code;
+};
+
+Blockly.Blocks['screen_getwidthheight'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField("get")
+        .appendField(new Blockly.FieldDropdown([["width", "Width"], ["height", "Height"]]), "mode_selector")
+        .appendField("of the screen");
+    this.setInputsInline(true);
+    this.setOutput(true, "Number");
+    this.setColour(300);
+    this.setTooltip('');
+    this.setHelpUrl('http://www.example.com/');
+  }
+};
+Blockly.Python['screen_getwidthheight'] = function(block) {
+  var dropdown_mode_selector = block.getFieldValue('mode_selector');
+  Blockly.Python.definitions_.from_PiStorms_import_PiStorms = "from PiStorms import PiStorms";
+  Blockly.Python.definitions_.psm_PiStorms = "psm = PiStorms()";
+  code = "psm.screen.screen" + dropdown_mode_selector + "()";
+  return [code, Blockly.Python.ORDER_NONE];
+};
+
+
+Blockly.Blocks['screen_drawtitle'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField("display title");
+    this.appendValueInput("TEXT")
+        .setCheck("String")
+        .appendField("Text");
+    this.appendDummyInput()
+        .appendField("Display on completion")
+        .appendField(new Blockly.FieldCheckbox("TRUE"), "DISPLAY");
+    this.setInputsInline(false);
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(300);
+    this.setTooltip('');
+    this.setHelpUrl('http://www.example.com/');
+  }
+};
+Blockly.Python['screen_drawtitle'] = function(block) {
+  var value = Blockly.Python.valueToCode(block, 'TEXT', Blockly.Python.ORDER_ATOMIC);
+  var checkbox_display = block.getFieldValue('DISPLAY') == 'TRUE' ? 'True' : 'False';
+  Blockly.Python.definitions_.from_PiStorms_import_PiStorms = "from PiStorms import PiStorms";
+  Blockly.Python.definitions_.psm_PiStorms = "psm = PiStorms()";
+  var code = 'psm.screen.drawDisplay(' + value + ', ' + checkbox_display + ')\n';
+  return code;
+};
+Blockly.Blocks['screen_clear'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField("clear the screen");
+    this.appendDummyInput()
+        .appendField("Display on completion")
+        .appendField(new Blockly.FieldCheckbox("TRUE"), "DISPLAY");
+    this.setInputsInline(false);
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(300);
+    this.setTooltip('');
+    this.setHelpUrl('http://www.example.com/');
+  }
+};
+Blockly.Python['screen_clear'] = function(block) {
+  var checkbox_display = block.getFieldValue('DISPLAY') == 'TRUE' ? 'True' : 'False';
+  Blockly.Python.definitions_.from_PiStorms_import_PiStorms = "from PiStorms import PiStorms";
+  Blockly.Python.definitions_.psm_PiStorms = "psm = PiStorms()";
+  var code = 'psm.screen.clearScreen(' + checkbox_display + ')\n';
+  return code;
+};
+
+Blockly.Blocks['screen_gettouchcoord'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField("get")
+        .appendField(new Blockly.FieldDropdown([["X", "X"], ["Y", "Y"]]), "mode_selector")
+        .appendField("coordinate of touchscreen press");
+    this.setInputsInline(true);
+    this.setOutput(true, "Number");
+    this.setColour(300);
+    this.setTooltip('');
+    this.setHelpUrl('http://www.example.com/');
+  }
+};
+Blockly.Python['screen_gettouchcoord'] = function(block) {
+  var dropdown_mode_selector = block.getFieldValue('mode_selector');
+  Blockly.Python.definitions_.from_PiStorms_import_PiStorms = "from PiStorms import PiStorms";
+  Blockly.Python.definitions_.psm_PiStorms = "psm = PiStorms()";
+  code = "psm.screen.TS_" + dropdown_mode_selector + "()";
+  return [code, Blockly.Python.ORDER_NONE];
+};
+Blockly.Blocks['screen_rotate'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField("rotate screen")
+        .appendField(new Blockly.FieldDropdown([["left", "Left"], ["right", "Right"]]), "mode_selector")
+    this.setInputsInline(false);
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(300);
+    this.setTooltip('');
+    this.setHelpUrl('http://www.example.com/');
+  }
+};
+Blockly.Python['screen_rotate'] = function(block) {
+  var dropdown_mode_selector = block.getFieldValue('mode_selector');
+  Blockly.Python.definitions_.from_PiStorms_import_PiStorms = "from PiStorms import PiStorms";
+  Blockly.Python.definitions_.psm_PiStorms = "psm = PiStorms()";
+  code = "psm.screen.rotate" + dropdown_mode_selector + "()\n";
+  return code;
+};
+
+Blockly.Blocks['screen_istouched'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField("is touched");
+    this.setInputsInline(true);
+    this.setOutput(true, "Boolean");
+    this.setColour(300);
+    this.setTooltip('');
+    this.setHelpUrl('http://www.example.com/');
+  }
+};
+Blockly.Python['screen_istouched'] = function(block) {
+  Blockly.Python.definitions_.from_PiStorms_import_PiStorms = "from PiStorms import PiStorms";
+  Blockly.Python.definitions_.psm_PiStorms = "psm = PiStorms()";
+  code = "psm.screen.isTouched()";
+  return [code, Blockly.Python.ORDER_NONE];
+};
+
 // Reference
-//https://blockly-demo.appspot.com/static/demos/blockfactory/index.html#kib8fq
-//https://blockly-demo.appspot.com/static/demos/blockfactory/index.html#t9v9id
-//https://blockly-demo.appspot.com/static/demos/blockfactory/index.html#4f7nyh
-//https://blockly-demo.appspot.com/static/demos/blockfactory/index.html#tsudab
+// pause for https://blockly-demo.appspot.com/static/demos/blockfactory/index.html#kib8fq
+// set speed of motor https://blockly-demo.appspot.com/static/demos/blockfactory/index.html#t9v9id
+// get position of https://blockly-demo.appspot.com/static/demos/blockfactory/index.html#4f7nyh
+// send to log https://blockly-demo.appspot.com/static/demos/blockfactory/index.html#tsudab
 // runsecs https://blockly-demo.appspot.com/static/demos/blockfactory/index.html#pynd89
 // set performace parameters https://blockly-demo.appspot.com/static/demos/blockfactory/index.html#duebh9
+
+// nxt touch at https://blockly-demo.appspot.com/static/demos/blockfactory/index.html#5xqcdm

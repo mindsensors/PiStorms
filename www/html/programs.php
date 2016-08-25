@@ -172,11 +172,14 @@ if (!isset($_SESSION['logged_in']) || !$_SESSION['logged_in']) {
         <h4 class="modal-title">Enter Name</h4>
       </div>
       <div class="modal-body">
-        <input class="form-control" minlen="2" type="text" id="filenameinput" placeholder="Enter file/folder name here">
+        Create an object in <code id="pathmodal">/home/pi/PiStorms/programs/</code>
+        <br><br>
+        <div id="modalinputgroup" class="form-group">
+            <input class="form-control" minlen="2" type="text" id="filenameinput" placeholder="Enter file name here">
+            <span id="modalinputhelp" class="help-block"></span>
+        </div>
         <input class="form-control" type="hidden" id="filetypeinput" value="">
-        <br>
-        File extension is not necessary for files<br>
-        The name must start with a number to be displayed. Example: <code>01-Sample</code>
+        The name must start with a 2-digit number to be displayed. Example: <code>01-Sample</code><br>Do not put a file extension
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -196,6 +199,7 @@ if (!isset($_SESSION['logged_in']) || !$_SESSION['logged_in']) {
 <script type="text/javascript" src="assets/jquery.slimscroll.min.js"></script>
 <script type="text/javascript" src="assets/bootstrap-slider.min.js"></script>
 <script type="text/javascript" src="assets/ps_blocks.js"></script>
+<script type="text/javascript" src="assets/sha256.min.js"></script>
 
 <?php include "components/blocks.php"; ?>
 
@@ -277,17 +281,29 @@ var workspace = null;
 var edittype = "";
 
 function blocklyedit(filename, location, id, content) {
+    var stored = content.split('--START BLOCKS--\n')[1].split('\n--END BLOCKS--')[0].split("\n");
+    var broken = stored.length != 2;
+    var hash = CryptoJS.SHA256(stored[0]).toString();
+    broken = broken || hash != stored[1];
+    if (broken) {
+        if (confirm("The blockly file is corrupted and the program can't restore the saved blocks. Do you want to edit the code in a text editor instead?")) {
+            edittype = "py";
+            aceedit(filename, location, id, content);
+            return 0;
+        }
+    }
+    var xml_text = Base64.decode(stored[0]);
     $(".aceeditor-row").hide();
     $(".blocklyeditor-row").show();
     if (workspace != null) {workspace.dispose();}
     workspace = Blockly.inject('blocklyeditor',
       {toolbox: document.getElementById('toolbox')});
-    var xml_text = Base64.decode(content.split('--START BLOCKS--')[1].split('--END BLOCKS--')[0]);
     var xml = Blockly.Xml.textToDom(xml_text);
     Blockly.Xml.domToWorkspace(xml, workspace);
 }
 
 function aceedit(filename, location, id, content) {
+    edittype = "py";
     if (workspace != null) {workspace.dispose();}
     $(".blocklyeditor-row").hide();
     editor.setValue(content);
@@ -309,9 +325,11 @@ function edit(filename, location, id) {
             return 1;
         }
     });
-    if ($(document).scrollTop() > $("#editorDash").offset().top - 10) {
+    var current = $(document).scrollTop();
+    var need = $("#editorDash").offset().top - 20;
+    if (current > need || Math.abs(current - need) > 70) {
         $('html,body').animate({
-           scrollTop: $("#editorDash").offset().top - 10
+           scrollTop: need
         });
     }
 }
@@ -322,15 +340,15 @@ function save(location) {
         var xml = Blockly.Xml.workspaceToDom(workspace);
         var blocks = Base64.encode(Blockly.Xml.domToText(xml));
         var code = Blockly.Python.workspaceToCode(workspace);
-        content = '#!/usr/bin/env python\n"""\n--BLOCKLY FILE--\n--START BLOCKS--\n' + blocks + '\n--END BLOCKS--\n"""\n\n\n' + code;
+        content = '#!/usr/bin/env python\n\n# ATTENTION!\n# Please do not manually edit the contents of this file\n# Only use the web interface for editing\n# Otherwise, they file may no longer be editable using the web interface, or you changes may be lost\n\n"""\n--BLOCKLY FILE--\n--START BLOCKS--\n' + blocks + '\n' + CryptoJS.SHA256(blocks).toString() + '\n--END BLOCKS--\n"""\n\n\n' + code;
         
     } else if (edittype == "py") {
         content = editor.getValue();
     }
-    //console.log(content);
     $.post(api+"savescript", {path: location, contents:content}, function(result){
         notify("Saved","File successfully saved","success");
     });
+    fetchlist();
 }
 
 function deleteFile(id) {
@@ -384,6 +402,17 @@ $("#clar").click(function(){
 function addfile(type) {
     $("#filenameinput").val("")
     $('#objecttype').html(type == "folder" ? "Folder" : type == "bl" ? "Drag-and-drop program" : "Python program")
+    if (type == "folder") {$('#filenameinput').attr("placeholder", "Enter folder name here.");}
+    $("#filetypeinput").val(type);
+    var pathtoadd = currentdir.charAt(currentdir.length-1) != "/" ? currentdir + "/" : currentdir;
+    $("#pathmodal").html(pathtoadd);
+    $('#filenameModal').modal('show');
+}
+
+function checkname(type) {
+    $("#filenameinput").val("")
+    $('#objecttype').html(type == "folder" ? "Folder" : type == "bl" ? "Drag-and-drop program" : "Python program")
+    if (type == "folder") {$('#filenameinput').attr("placeholder", "Enter folder name here.");}
     $("#filetypeinput").val(type);
     $('#filenameModal').modal('show');
 }
@@ -400,26 +429,46 @@ function isInteger(str) {
 function createobject() {
     var typein = $("#filetypeinput").val();
     var namein = $("#filenameinput").val();
+    
+    var grievances = [];
     for (var i = 0; i < progs.length; i++) {
         if (progs[i][0].toLowerCase() == namein.toLowerCase() || progs[i][0].toLowerCase() == namein.toLowerCase()+".py") {
-            notify("Error","An object with such name already exists!","error");
-            return 0;
+            grievances.push("An object with such name already exists!");
+            break;
         }
     }
     if (namein.length <= 3) {
-            notify("Error","Filename is too short!","error");
-            return 0;
+        grievances.push("Filename is too short!");
+    }
+    if (!isInteger(namein.substring(0,2).replace("0","1"))) {
+        grievances.push("The filename does not start with a 2-digit number!");
+    }
+    var legal = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    var ext = "()-_+ ";
+    for (var i = 0; i < namein.length; i++) {
+        if ((legal + ext).indexOf(namein.charAt(i)) < 0) {
+            grievances.push("The filename cannot contain special characters except <code>() -_</code>!");
+            break;
         }
-    var n = isInteger(namein.substring(0,2).replace("0","1"));
-    if (n || confirm("Are you sure you want to create a hidden file?")) {
+    }
+    if (legal.indexOf(namein.charAt(namein.length - 1)) < 0) {
+        grievances.push("The filename cannot end with a special character!");
+    }
+    
+    if (grievances.length <= 0) {
         $.post(api+"addobject", {path: currentdir, type:typein, filename:namein}, function(result){
             notify("Success","Object successfully created","success");
             fetchlist();
+            grievances = [];
             $('#filenameModal').modal('hide');
+            $('#filenameinput').val("");
+            $('#modalinputhelp').html('');
+            $('#modalinputgroup').removeClass('has-error');
         });
-        
+    } else {
+        $('#modalinputgroup').addClass('has-error');
+        $('#modalinputhelp').html(grievances.join('<br>'));
     }
-    
 }
 
 $("#filenameinput").keyup(function (e) {

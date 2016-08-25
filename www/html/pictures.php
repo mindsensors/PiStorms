@@ -99,10 +99,12 @@ if (!isset($_SESSION['logged_in']) || !$_SESSION['logged_in']) {
               <h3 class="box-title">Take Screenshots</h3>
             </div>
             <div class="box-body">
-               <button id="srwb" style="margin:5px" class="btn btn-flat btn-danger"><i class="fa fa-play"></i>&nbsp;&nbsp;Start Recording</button>
-               <button id="stpr" style="margin:5px" class="btn btn-flat btn-danger"><i class="fa fa-stop"></i>&nbsp;&nbsp;Stop Recording</button>
-               <button id="chkr" style="margin:5px" class="btn btn-flat btn-info"><i class="fa fa-flag"></i>&nbsp;&nbsp;Check Recording Status</button>
+               <button id="srwb" style="margin:5px" class="btn btn-flat btn-danger"><i class="fa fa-play"></i>&nbsp;&nbsp;Start Recording Screenshots</button>
+               <button id="stpr" style="margin:5px" class="btn btn-flat btn-danger"><i class="fa fa-stop"></i>&nbsp;&nbsp;Stop Recording Screenshots</button>
                <button id="clar" style="margin:5px" class="btn btn-flat btn-warning"><i class="fa fa-ban"></i>&nbsp;&nbsp;Clear Screenshots</button>
+               <br>
+               <button id="srwbt" style="margin:5px" class="btn btn-flat btn-success"><i class="fa fa-play"></i>&nbsp;&nbsp;Start Recording Touch Locations</button>
+               <button id="stprt" style="margin:5px" class="btn btn-flat btn-success"><i class="fa fa-stop"></i>&nbsp;&nbsp;Stop Recording Touch Locations</button>
             </div>
           </div>
         </div>
@@ -172,9 +174,11 @@ function update_pictures() {
 
 update_pictures();
 
-$("#srwb").click(function(){$.get(api+"startrecording/withBg", function(data){});notify("Success","Started taking frames with background","success");});
-$("#stpr").click(function(){$.get(api+"stoprecording", function(data){});notify("Success","Stopped recording","success");});
-$("#chkr").click(function(){$.get(api+"readrecording", function(data){notify("Result",data,"success");});});
+$("#srwb").click(function(){$.get(api+"startrecording/withBg", function(data){});notify("Success","Started taking screenshots","success");});
+$("#stpr").click(function(){$.get(api+"stoprecording", function(data){});notify("Success","Stopped taking screenshots","success");});
+$("#srwbt").click(function(){$.get(api+"starttouchrecording", function(data){});notify("Success","Started recording touch locations","success");});
+$("#stprt").click(function(){$.get(api+"stoptouchrecording", function(data){});notify("Success","Stopped recording touch locations","success");});
+//$("#chkr").click(function(){$.get(api+"readrecording", function(data){notify("Result",data,"success");});});
 $("#clar").click(function(){
     if (confirm("Are you sure you want to permanently remove all screenshots?")) {
         $.get(api+"clearimages", function(data){notify("Result","Images cleared","success");});

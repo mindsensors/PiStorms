@@ -26,15 +26,19 @@
 import Adafruit_ILI9341
 import os
 import datetime
-from PIL import Image
+from PIL import Image, ImageDraw
 
 class ILI9341(Adafruit_ILI9341.ILI9341):
     def __init__(self, dc, spi, rst=None, gpio=None, width=Adafruit_ILI9341.ILI9341_TFTWIDTH,
         height=Adafruit_ILI9341.ILI9341_TFTHEIGHT):
         Adafruit_ILI9341.ILI9341.__init__(self, dc, spi, rst, gpio, width,
         height)
+        self.touch_record_path = "/tmp/pistormstouchrecord"
         self.record_path = "/tmp/pistormsrecord"
         self.background_path = "/usr/local/mindsensors/images/artwork-for-images.png"
+        self.x = -1
+        self.y = -1
+        self.store = False
 
     def save(self, path=None, img=None, extension="PNG", includeBg=False):
         """Writes the buffer to a file"""
@@ -66,15 +70,30 @@ class ILI9341(Adafruit_ILI9341.ILI9341):
     def recordFileExists(self):
         return os.path.isfile(self.record_path)
         
+    def recordTouchFileExists(self):
+        return os.path.isfile(self.touch_record_path)
+    
     def startRecording(self, frames="-", includeBg=True):
         with open(self.record_path, "w+") as f: f.write(frames + "\n" + str(int(includeBg)))
+    
+    def startTouchRecording(self, frames="-"):
+        with open(self.touch_record_path, "w+") as f: f.write(frames + "\n1")
     
     def stopRecording(self):
         if self.recordFileExists(): os.remove(self.record_path)
     
+    def stopTouchRecording(self):
+        if self.recordTouchFileExists(): os.remove(self.touch_record_path)
+    
     def readRecordingCount(self):
         if self.recordFileExists():
             with open(self.record_path, "r") as f:
+                return f.read().split("\n")
+        else: return ["",""]
+    
+    def readTouchRecordingCount(self):
+        if self.recordTouchFileExists():
+            with open(self.touch_record_path, "r") as f:
                 return f.read().split("\n")
         else: return ["",""]
     
@@ -93,6 +112,15 @@ class ILI9341(Adafruit_ILI9341.ILI9341):
         if toWrite == "": self.stopRecording()
         else: self.startRecording(toWrite, includeBgIn)
     
+    def decrementTouchRecordingCount(self, fileContents, includeBgIn):
+        toWrite = ""
+        if fileContents == "-": toWrite = "-"
+        elif fileContents.isdigit():
+            temp = int(fileContents)-1
+            toWrite = str(temp) if temp > 0 else ""
+        if toWrite == "": self.stopTouchRecording()
+        else: self.startTouchRecording(toWrite, includeBgIn)
+    
     def display(self, image=None):
         content = self.readRecordingCount()
         if len(content) == 2 and self.isTakingFrames(content[0]):
@@ -103,6 +131,13 @@ class ILI9341(Adafruit_ILI9341.ILI9341):
         self.set_window()
         pixelbytes = list(Adafruit_ILI9341.image_to_data(image))
         self.data(pixelbytes)
+        if self.store and self.isTakingFrames(self.readTouchRecordingCount()[0]):
+            image = Image.new('RGBA',(568, 428))
+            draw = ImageDraw.Draw(image)
+            draw.ellipse((122+320-self.y, 12+self.x, 152+320-self.y, 42+self.x), fill = 'red', outline ='red')
+            self.save(img=image)
+            self.store = False
+            self.x, self.y = -1, -1
     
     def mergeBackground(self):
         bg = Image.open(self.background_path)
