@@ -46,6 +46,7 @@ if (!isset($_SESSION['logged_in']) || !$_SESSION['logged_in']) {
   <link rel="stylesheet" href="assets/pnotify.min.css">
   <link rel="stylesheet" href="assets/skin-red.min.css">
   <link rel="stylesheet" href="assets/slider.css">
+  <link href="assets/bootstrap-toggle.min.css" rel="stylesheet">
   <style>
     .btn-sq {
       width: 50px !important;
@@ -102,9 +103,11 @@ if (!isset($_SESSION['logged_in']) || !$_SESSION['logged_in']) {
                <button id="srwb" style="margin:5px" class="btn btn-flat btn-danger"><i class="fa fa-play"></i>&nbsp;&nbsp;Start Recording Screenshots</button>
                <button id="stpr" style="margin:5px" class="btn btn-flat btn-danger"><i class="fa fa-stop"></i>&nbsp;&nbsp;Stop Recording Screenshots</button>
                <button id="clar" style="margin:5px" class="btn btn-flat btn-warning"><i class="fa fa-ban"></i>&nbsp;&nbsp;Clear Screenshots</button>
-               <br>
+               <!--<br>
                <button id="srwbt" style="margin:5px" class="btn btn-flat btn-success"><i class="fa fa-play"></i>&nbsp;&nbsp;Start Recording Touch Locations</button>
-               <button id="stprt" style="margin:5px" class="btn btn-flat btn-success"><i class="fa fa-stop"></i>&nbsp;&nbsp;Stop Recording Touch Locations</button>
+               <button id="stprt" style="margin:5px" class="btn btn-flat btn-success"><i class="fa fa-stop"></i>&nbsp;&nbsp;Stop Recording Touch Locations</button>-->
+               <br>
+               <div id="touchdiv" style="margin:5px;display:none"><b>Record Touch Locations:</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" checked data-toggle="toggle" data-size="small" data-onstyle="success" data-offstyle="danger" data-width="70" data-on="ON" data-off="OFF" id="touchrecord"></div>
             </div>
           </div>
         </div>
@@ -141,6 +144,7 @@ if (!isset($_SESSION['logged_in']) || !$_SESSION['logged_in']) {
 <script type="text/javascript" src="assets/pnotify.min.js"></script>
 <script type="text/javascript" src="assets/jquery.slimscroll.min.js"></script>
 <script type="text/javascript" src="assets/bootstrap-slider.min.js"></script>
+<script src="assets/bootstrap-toggle.min.js"></script>
 
 <script>
 PNotify.prototype.options.styling = "bootstrap3";
@@ -174,10 +178,35 @@ function update_pictures() {
 
 update_pictures();
 
-$("#srwb").click(function(){$.get(api+"startrecording/withBg", function(data){});notify("Success","Started taking screenshots","success");});
-$("#stpr").click(function(){$.get(api+"stoprecording", function(data){});notify("Success","Stopped taking screenshots","success");});
-$("#srwbt").click(function(){$.get(api+"starttouchrecording", function(data){});notify("Success","Started recording touch locations","success");});
-$("#stprt").click(function(){$.get(api+"stoptouchrecording", function(data){});notify("Success","Stopped recording touch locations","success");});
+function refreshtoggle() {
+    $.get(api+"readrecordingtouch", function(data){
+        if (!($("#touchrecord").is(':checked') && data == '1' || !$("#touchrecord").is(':checked') && data != '1')) {
+            $('#touchrecord').bootstrapToggle(data == '1' ? 'on' : 'off');
+        }
+    });
+}
+function seteventtouggle() {
+    $('#touchrecord').change(function() {
+        $.get(api+ ($("#touchrecord").is(':checked') ? "starttouchrecording" : "stoptouchrecording"), function(data){notify("Success",($("#touchrecord").is(':checked') ? "Started" : "Stopped") + " recording touch locations","success");});
+    });
+}
+
+$("#srwb").click(function(){$.get(api+"startrecording/withBg", function(data){refreshtoggle();$("#touchdiv").fadeIn();notify("Success","Started taking screenshots","success");});});
+$("#stpr").click(function(){
+    $.get(api+"stoprecording", function(data){
+        $("#touchdiv").fadeOut();
+        notify("Success","Stopped taking screenshots","success");
+    });
+    $.get(api+"stoptouchrecording", function(data){});
+    if ($("#touchrecord").is(':checked')) {
+        $('#touchrecord').bootstrapToggle('off');
+    }
+});
+var orig = null;
+refreshtoggle();
+$.get(api+"readrecording", function(data){if(data == '1'){$("#touchdiv").fadeIn();}orig=data;seteventtouggle();});
+//$("#srwbt").click(function(){$.get(api+"starttouchrecording", function(data){});notify("Success","Started recording touch locations","success");});
+//$("#stprt").click(function(){$.get(api+"stoptouchrecording", function(data){});notify("Success","Stopped recording touch locations","success");});
 //$("#chkr").click(function(){$.get(api+"readrecording", function(data){notify("Result",data,"success");});});
 $("#clar").click(function(){
     if (confirm("Are you sure you want to permanently remove all screenshots?")) {
@@ -185,6 +214,5 @@ $("#clar").click(function(){
     }
 });
 </script>
-
 </body>
 </html>

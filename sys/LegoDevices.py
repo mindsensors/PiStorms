@@ -167,6 +167,7 @@ class PSMotor():
     def isOverloaded(self):
         return self.statusBit(5) == 1
     def runDegs(self,degs,speed = 100,brakeOnCompletion = False, holdOnCompletion = False):
+        holdOnCompletion = False
         ctrl = 0
         ctrl |= PiStormsCom.PS_CONTROL_SPEED
         ctrl |= PiStormsCom.PS_CONTROL_TACHO
@@ -194,6 +195,7 @@ class PSMotor():
         if(self.motornum == 2):
             array = [b1, b2, b3, b4, speed, 0, 0, ctrl]
             self.bank.writeArray(PiStormsCom.PS_SetPoint_M2, array) 
+
     def SetPerformanceParameters(self, Kp_tacho, Ki_tacho, Kd_tacho, Kp_speed, Ki_speed, Kd_speed, passcount, tolerance):#untested
         Kp_t1 = Kp_tacho%0x100
         Kp_t2 = Kp_tacho/0x100    

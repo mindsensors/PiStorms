@@ -334,13 +334,16 @@ function edit(filename, location, id) {
     }
 }
 
+
+var copyright = '\n# Copyright (c) ' + new Date().getFullYear() + ' mindsensors.com\n# \n# This program is free software; you can redistribute it and/or modify\n# it under the terms of the GNU General Public License version 2 as\n# published by the Free Software Foundation.\n#\n# This program is distributed in the hope that it will be useful,\n# but WITHOUT ANY WARRANTY; without even the implied warranty of\n# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.    See the\n# GNU General Public License for more details.\n#\n# You should have received a copy of the GNU General Public License\n# along with this program; if not, write to the Free Software\n# Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.\n#\n#mindsensors.com invests time and resources providing this open source code, \n#please support mindsensors.com  by purchasing products from mindsensors.com!\n#Learn more product option visit us @  http://www.mindsensors.com\n';
+
 function save(location) {
     var content = "";
     if (edittype == "bl") {
         var xml = Blockly.Xml.workspaceToDom(workspace);
         var blocks = Base64.encode(Blockly.Xml.domToText(xml));
         var code = Blockly.Python.workspaceToCode(workspace);
-        content = '#!/usr/bin/env python\n\n# ATTENTION!\n# Please do not manually edit the contents of this file\n# Only use the web interface for editing\n# Otherwise, they file may no longer be editable using the web interface, or you changes may be lost\n\n"""\n--BLOCKLY FILE--\n--START BLOCKS--\n' + blocks + '\n' + CryptoJS.SHA256(blocks).toString() + '\n--END BLOCKS--\n"""\n\n\n' + code;
+        content = '#!/usr/bin/env python\n\n# ATTENTION!\n# Please do not manually edit the contents of this file\n# Only use the web interface for editing\n# Otherwise, the file may no longer be editable using the web interface, or you changes may be lost\n' + copyright + '\n"""\n--BLOCKLY FILE--\n--START BLOCKS--\n' + blocks + '\n' + CryptoJS.SHA256(blocks).toString() + '\n--END BLOCKS--\n"""\n\n\n' + code;
         
     } else if (edittype == "py") {
         content = editor.getValue();

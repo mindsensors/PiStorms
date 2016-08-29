@@ -23,7 +23,7 @@
 # Date         Author          Comments
 # July 2016    Roman Bohuk     Initial Authoring 
 
-from datetime import timedelta  
+from datetime import timedelta, date
 from flask import Flask, make_response, request, current_app  
 from functools import update_wrapper
 import os
@@ -212,17 +212,13 @@ def stoptouchrecording():
 @app.route("/readrecording", methods=['GET', 'OPTIONS'])
 @crossdomain(origin='*')
 def readrecording():
-    v = disp.readRecordingCount()
-    if v == "" or len(v) != 2 or (v[0] != "-" and not v[0].isdigit()): return "Not recording"
-    out = ""
-    if v[0] == "-": out = "Recording frames indefinitely"
-    else: out = "Recording " + v[0] + " frames more"
-    
-    if v[1] == "1": out += " with the background image"
-    else: out += " without the background image"
-    
-    return out
+    return str(int(disp.isTakingFrames(disp.readRecordingCount()[0])))
 
+@app.route("/readrecordingtouch", methods=['GET', 'OPTIONS'])
+@crossdomain(origin='*')
+def readrecordingtouch():
+    return str(int(disp.isTakingFrames(disp.readTouchRecordingCount()[0])))
+    
 @app.route("/clearimages", methods=['GET', 'OPTIONS'])
 @crossdomain(origin='*')
 def clearimages():
@@ -340,6 +336,27 @@ def removedir():
     except Exception as e:
         return "0"
 
+copyright = """
+# Copyright (c) %i mindsensors.com
+# 
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License version 2 as
+# published by the Free Software Foundation.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.    See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+#
+#mindsensors.com invests time and resources providing this open source code, 
+#please support mindsensors.com  by purchasing products from mindsensors.com!
+#Learn more product option visit us @  http://www.mindsensors.com/
+""" % date.today().year
+
 @app.route("/addobject", methods=['POST', 'OPTIONS'])
 @crossdomain(origin='*')
 def addobject():
@@ -355,7 +372,7 @@ def addobject():
             if not filename.endswith(".py"): filename += ".py"
             folderpath = os.path.join(request.form["path"], filename)
             with open(folderpath, "w+") as f:
-                if request.form["type"] == "bl": f.write('#!/usr/bin/env python\n\n# ATTENTION!\n# Please do not manually edit the contents of this file\n# Only use the web interface for editing\n# Otherwise, they file may no longer be editable using the web interface, or you changes may be lost\n\n"""\n--BLOCKLY FILE--\n--START BLOCKS--\nPHhtbCB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94aHRtbCI+PC94bWw+\ndcb89b3f89fc910d631112bf6140e47513c301e5bcf76a08a1b4d66ab1ca58d3\n--END BLOCKS--\n"""\n\n')
+                if request.form["type"] == "bl": f.write('#!/usr/bin/env python\n\n# ATTENTION!\n# Please do not manually edit the contents of this file\n# Only use the web interface for editing\n# Otherwise, the file may no longer be editable using the web interface, or you changes may be lost\n' + copyright + '\n"""\n--BLOCKLY FILE--\n--START BLOCKS--\nPHhtbCB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94aHRtbCI+PC94bWw+\ndcb89b3f89fc910d631112bf6140e47513c301e5bcf76a08a1b4d66ab1ca58d3\n--END BLOCKS--\n"""\n\n')
                 if request.form["type"] == "py": f.write('#!/usr/bin/env python\n\n')
         os.system("sudo chown -R pi:pi %s" % folderpath)
         return "1"
