@@ -524,7 +524,7 @@ class LegoSensor(PiStormsCom):
             self.bank.writeByte(PiStormsCom.PS_S1EV_Mode,mode)
         if(self.sensornum == 2):
             self.bank.writeByte(PiStormsCom.PS_S2EV_Mode,mode)
-    
+
     ##
     #  Retrieve the UART data buffer.
     #  This function is called internally when the UART data is needed.
@@ -684,6 +684,7 @@ class NXTLightSensor(LegoSensor):
             self.setType(self.PS_SENSOR_TYPE_LIGHT_REFLECTED)
         self.mode = mode
         self.setMode(mode)
+    ## Read color value from the sensor
     def getValue(self):
         if(self.sensornum == 1):
             return self.bank.readInteger(PiStormsCom.PS_S1AN_Read)
@@ -696,18 +697,20 @@ class NXTColorSensor(LegoSensor):
         self.setType(13)
         self.mode = mode
         self.setMode(mode)
+    ## read raw value from the sensor
     def rawValue(self):
         self.retrieveUARTData()
         return self.EV3Cache[0:1] + self.EV3Cache[1]
+    ## read color value from the sensor
     def getColor(self): #test
         self.retrieveUARTData()
         raw = self.EV3Cache[0:1] + self.EV3Cache[1]
         return raw[0]
-    def colorSensorNXT(self):#test
-        if(self.sensornum == 1):
-            return self.bank.readByte(PiStormsCom.PS_S1AN_Read)
-        if(self.sensornum == 2):
-            return self.bank.readByte(PiStormsCom.PS_S2AN_Read)
+    #def colorSensorNXT(self):#test
+    #    if(self.sensornum == 1):
+    #        return self.bank.readByte(PiStormsCom.PS_S1AN_Read)
+    #    if(self.sensornum == 2):
+    #        return self.bank.readByte(PiStormsCom.PS_S2AN_Read)
 
 class EV3ColorSensor(LegoSensor):
     def __init__(self, port, mode = PS_SENSOR_MODE_EV3_COLOR_REFLECTED): #mode can be PS_SENSOR_MODE_EV3_COLOR_[AMBIENT, REFLECTED, COLOR]
@@ -715,6 +718,7 @@ class EV3ColorSensor(LegoSensor):
         self.setType(self.PS_SENSOR_TYPE_EV3)
         self.mode = mode
         self.setMode(mode)
+    ## Read value from the color sensor
     def getValue(self):
         if(self.sensornum == 1):
             return self.bank.readByte(PiStormsCom.PS_S1EV_Data)
@@ -727,11 +731,13 @@ class EV3GyroSensor(LegoSensor):
         self.setType(self.PS_SENSOR_TYPE_EV3)
         self.mode = mode
         self.setMode(mode)
+    # read the raw value from the sensor.
     def rawValue(self):
         if(self.sensornum == 1):
             return self.bank.readByte(PiStormsCom.PS_S1EV_Data)
         if(self.sensornum == 2):
             return self.bank.readByte(PiStormsCom.PS_S2EV_Data)
+    # read value from the sensor (signed integer).
     def readValue(self):
         if(self.sensornum == 1):
             return self.bank.readIntegerSigned(PiStormsCom.PS_S1EV_Data)
