@@ -59,7 +59,7 @@ case "$1" in
     do_start
 	exit 3
 	;;
-  stop_old)
+  stop)
     show_logo
 
     lckfile=/tmp/.psm_shutdown.lck
@@ -71,7 +71,7 @@ case "$1" in
       psm_shutdown
     fi
 	;;
-  stop)
+  stop_new)
     show_logo
     SHUTDOWN=3
     REBOOT=3
