@@ -31,14 +31,13 @@ if (!isset($_SESSION['logged_in']) || !$_SESSION['logged_in']) {
     exit();
 }
 
-
 ?><!DOCTYPE html>
 <html>
 <head>
   <meta charset="utf-8">
   <meta name="theme-color" content="#DD4B39">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>PiStorms Web Interface</title>
+  <title>Screenshots | PiStorms Web Interface</title>
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
   <link rel="stylesheet" href="assets/bootstrap.min.css">  <!-- Font Awesome -->
   <link rel="stylesheet" href="assets/font-awesome.min.css">
@@ -145,6 +144,7 @@ if (!isset($_SESSION['logged_in']) || !$_SESSION['logged_in']) {
 <script type="text/javascript" src="assets/jquery.slimscroll.min.js"></script>
 <script type="text/javascript" src="assets/bootstrap-slider.min.js"></script>
 <script src="assets/bootstrap-toggle.min.js"></script>
+<script src="assets/jszip.min.js"></script>
 
 <script>
 PNotify.prototype.options.styling = "bootstrap3";

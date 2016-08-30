@@ -533,6 +533,23 @@ Blockly.Python['system_shutdown'] = function(block) {
   return code;
 };
 
+Blockly.Blocks['system_exit'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField("exit out of the program");
+    this.setInputsInline(true);
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(5);
+    this.setTooltip('');
+    this.setHelpUrl('http://www.example.com/');
+  }
+};
+Blockly.Python['system_exit'] = function(block) {
+  var code = 'sys.exit(-1)\n';
+  return code;
+};
+
 Blockly.Blocks['system_getbattery'] = {
   init: function() {
     this.appendDummyInput()
@@ -1754,6 +1771,330 @@ Blockly.Python['screen_istouched'] = function(block) {
   code = "psm.screen.isTouched()";
   return [code, Blockly.Python.ORDER_NONE];
 };
+
+
+
+
+
+Blockly.Blocks['screen_drawautotxt'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField("draw text");
+    this.appendValueInput("str")
+        .setCheck("String")
+        .appendField("Text");
+    this.appendValueInput("x")
+        .setCheck("Number")
+        .appendField("X");
+    this.appendValueInput("y")
+        .setCheck("Number")
+        .appendField("Y");
+    this.appendValueInput("size")
+        .setCheck("Number")
+        .appendField("Size");
+    this.appendDummyInput()
+        .appendField("Fileld with ")
+        .appendField(new Blockly.FieldColour("#ff0000"), "COLOR")
+        .appendField(" color");
+    this.appendDummyInput()
+        .appendField("Display on completion")
+        .appendField(new Blockly.FieldCheckbox("TRUE"), "DISPLAY");
+    this.setInputsInline(false);
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(300);
+    this.setTooltip('');
+    this.setHelpUrl('http://www.example.com/');
+  }
+};
+Blockly.Python['screen_drawautotxt'] = function(block) {
+  var value_str = Blockly.Python.valueToCode(block, 'str', Blockly.Python.ORDER_ATOMIC);
+  var value_x = Blockly.Python.valueToCode(block, 'x', Blockly.Python.ORDER_ATOMIC);
+  var value_y = Blockly.Python.valueToCode(block, 'y', Blockly.Python.ORDER_ATOMIC);
+  var colour_color = block.getFieldValue('COLOR');
+  var value_size = Blockly.Python.valueToCode(block, 'size', Blockly.Python.ORDER_ATOMIC);
+  var checkbox_display = block.getFieldValue('DISPLAY') == 'TRUE' ? 'True' : 'False';
+  Blockly.Python.definitions_.from_PiStorms_import_PiStorms = "from PiStorms import PiStorms";
+  Blockly.Python.definitions_.psm_PiStorms = "psm = PiStorms()";
+  var rgb = hexToRgb(colour_color);
+  var code = 'psm.screen.drawAutoText(' + value_str + ', ' + value_x + ', ' + value_y + ', fill = (' + rgb.r + ', ' + rgb.g + ', ' + rgb.b + '), size = ' + value_size +  ', display = ' + checkbox_display + ')\n';
+  return code;
+};
+
+
+
+
+
+
+
+
+
+
+Blockly.Blocks['terminal_printatline'] = {
+  init: function() {
+    this.appendValueInput("text")
+        .setCheck("String")
+        .appendField("print");
+    this.appendValueInput("line")
+        .setCheck("Number")
+        .appendField("at line");
+    this.setInputsInline(true);
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(200);
+    this.setTooltip('');
+    this.setHelpUrl('http://www.example.com/');
+  }
+};
+Blockly.Python['terminal_printatline'] = function(block) {
+  var value_text = Blockly.Python.valueToCode(block, 'text', Blockly.Python.ORDER_ATOMIC);
+  var value_line = Blockly.Python.valueToCode(block, 'line', Blockly.Python.ORDER_ATOMIC);
+  Blockly.Python.definitions_.from_PiStorms_import_PiStorms = "from PiStorms import PiStorms";
+  Blockly.Python.definitions_.psm_PiStorms = "psm = PiStorms()";
+  var code = 'psm.screen.termPrintAt(' + value_line + ', ' + value_text + ')\n';
+  return code;
+};
+
+Blockly.Blocks['terminal_print'] = {
+  init: function() {
+    this.appendValueInput("text")
+        .setCheck("String")
+        .appendField("print");
+    this.setInputsInline(true);
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(200);
+    this.setTooltip('');
+    this.setHelpUrl('http://www.example.com/');
+  }
+};
+Blockly.Python['terminal_print'] = function(block) {
+  var value_text = Blockly.Python.valueToCode(block, 'text', Blockly.Python.ORDER_ATOMIC);
+  Blockly.Python.definitions_.from_PiStorms_import_PiStorms = "from PiStorms import PiStorms";
+  Blockly.Python.definitions_.psm_PiStorms = "psm = PiStorms()";
+  var code = 'psm.screen.termPrint(' + value_text + ')\n';
+  return code;
+};
+
+Blockly.Blocks['terminal_println'] = {
+  init: function() {
+    this.appendValueInput("text")
+        .setCheck("String")
+        .appendField("print");
+    this.appendDummyInput()
+        .appendField("with newline");
+    this.setInputsInline(true);
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(200);
+    this.setTooltip('');
+    this.setHelpUrl('http://www.example.com/');
+  }
+};
+Blockly.Python['terminal_println'] = function(block) {
+  var value_text = Blockly.Python.valueToCode(block, 'text', Blockly.Python.ORDER_ATOMIC);
+  Blockly.Python.definitions_.from_PiStorms_import_PiStorms = "from PiStorms import PiStorms";
+  Blockly.Python.definitions_.psm_PiStorms = "psm = PiStorms()";
+  var code = 'psm.screen.termPrintln(' + value_text + ')\n';
+  return code;
+};
+
+Blockly.Blocks['terminal_replacelastline'] = {
+  init: function() {
+    this.appendValueInput("text")
+        .setCheck("String")
+        .appendField("replace last line with");
+    this.setInputsInline(true);
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(200);
+    this.setTooltip('');
+    this.setHelpUrl('http://www.example.com/');
+  }
+};
+Blockly.Python['terminal_replacelastline'] = function(block) {
+  var value_text = Blockly.Python.valueToCode(block, 'text', Blockly.Python.ORDER_ATOMIC);
+  Blockly.Python.definitions_.from_PiStorms_import_PiStorms = "from PiStorms import PiStorms";
+  Blockly.Python.definitions_.psm_PiStorms = "psm = PiStorms()";
+  var code = 'psm.screen.termReplaceLastLine(' + value_text + ')\n';
+  return code;
+};
+
+Blockly.Blocks['terminal_gotoline'] = {
+  init: function() {
+    this.appendValueInput("line")
+        .setCheck("Number")
+        .appendField("go to line");
+    this.setInputsInline(true);
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(200);
+    this.setTooltip('');
+    this.setHelpUrl('http://www.example.com/');
+  }
+};
+Blockly.Python['terminal_gotoline'] = function(block) {
+  var value_line = Blockly.Python.valueToCode(block, 'line', Blockly.Python.ORDER_ATOMIC);
+  Blockly.Python.definitions_.from_PiStorms_import_PiStorms = "from PiStorms import PiStorms";
+  Blockly.Python.definitions_.psm_PiStorms = "psm = PiStorms()";
+  var code = 'psm.screen.termGotoLine(' + value_line + ')\n';
+  return code;
+};
+
+Blockly.Blocks['terminal_refreshline'] = {
+  init: function() {
+    this.appendValueInput("line")
+        .setCheck("Number")
+        .appendField("refresh line");
+    this.appendDummyInput()
+        .appendField("and ")
+        .appendField(new Blockly.FieldCheckbox("TRUE"), "display")
+        .appendField(" display");
+    this.setInputsInline(true);
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(200);
+    this.setTooltip('');
+    this.setHelpUrl('http://www.example.com/');
+  }
+};
+Blockly.Python['terminal_refreshline'] = function(block) {
+  var value_line = Blockly.Python.valueToCode(block, 'line', Blockly.Python.ORDER_ATOMIC);
+  var checkbox_display = block.getFieldValue('display') == 'TRUE';
+  Blockly.Python.definitions_.from_PiStorms_import_PiStorms = "from PiStorms import PiStorms";
+  Blockly.Python.definitions_.psm_PiStorms = "psm = PiStorms()";
+  var code = 'psm.screen.refreshLine(' + value_line + ', ' + checkbox_display + ')\n';
+  return code;
+};
+
+
+Blockly.Blocks['screen_askyesnoquestion'] = {
+  init: function() {
+    this.appendValueInput("text")
+        .setCheck("String")
+        .appendField("ask a yes/no question");
+    this.setInputsInline(true);
+    this.setOutput(true, "Boolean");
+    this.setColour(300);
+    this.setTooltip('');
+    this.setHelpUrl('http://www.example.com/');
+  }
+};
+Blockly.Python['screen_askyesnoquestion'] = function(block) {
+  var value_text = Blockly.Python.valueToCode(block, 'text', Blockly.Python.ORDER_ATOMIC);
+  Blockly.Python.definitions_.from_PiStorms_import_PiStorms = "from PiStorms import PiStorms";
+  Blockly.Python.definitions_.psm_PiStorms = "psm = PiStorms()";
+  var code = 'psm.screen.askYesOrNoQuestion([' + value_text + '])';
+  return [code, Blockly.Python.ORDER_NONE];
+};
+
+
+
+
+
+
+
+
+Blockly.Blocks['screen_refresh'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField("refresh the screen")
+    this.setInputsInline(true);
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(300);
+    this.setTooltip('');
+    this.setHelpUrl('http://www.example.com/');
+  }
+};
+Blockly.Python['screen_refresh'] = function(block) {
+  Blockly.Python.definitions_.from_PiStorms_import_PiStorms = "from PiStorms import PiStorms";
+  Blockly.Python.definitions_.psm_PiStorms = "psm = PiStorms()";
+  var code = 'psm.screen.refresh()\n';
+  return code;
+};
+
+
+
+
+Blockly.Blocks['screen_drawbutton'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField("draw button");
+    this.appendValueInput("x")
+        .setCheck("Number")
+        .appendField("X");
+    this.appendValueInput("y")
+        .setCheck("Number")
+        .appendField("Y");
+    this.appendValueInput("width")
+        .setCheck("Number")
+        .appendField("Width");
+    this.appendValueInput("height")
+        .setCheck("Number")
+        .appendField("Height");
+    this.appendValueInput("text")
+        .setCheck("String")
+        .appendField("Text");
+    this.appendDummyInput()
+        .appendField("Display on completion")
+        .appendField(new Blockly.FieldCheckbox("TRUE"), "DISPLAY");
+    this.setInputsInline(false);
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(300);
+    this.setTooltip('');
+    this.setHelpUrl('http://www.example.com/');
+  }
+};
+Blockly.Python['screen_drawbutton'] = function(block) {
+  var value_x = Blockly.Python.valueToCode(block, 'x', Blockly.Python.ORDER_ATOMIC);
+  var value_y = Blockly.Python.valueToCode(block, 'y', Blockly.Python.ORDER_ATOMIC);
+  var value_width = Blockly.Python.valueToCode(block, 'width', Blockly.Python.ORDER_ATOMIC);
+  var value_height = Blockly.Python.valueToCode(block, 'height', Blockly.Python.ORDER_ATOMIC);
+  var value_location = Blockly.Python.valueToCode(block, 'text', Blockly.Python.ORDER_ATOMIC);
+  var checkbox_display = block.getFieldValue('DISPLAY') == 'TRUE' ? 'True' : 'False';
+  Blockly.Python.definitions_.from_PiStorms_import_PiStorms = "from PiStorms import PiStorms";
+  Blockly.Python.definitions_.psm_PiStorms = "psm = PiStorms()";
+  var code = 'psm.screen.drawButton(' + value_x + ', ' + value_y + ', ' + value_width + ', ' + value_height + ', text = ' + value_location + ', display = ' + checkbox_display + ', align="xcenter")\n';
+  return code;
+};
+
+Blockly.Blocks['screen_checkbutton'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField("check button");
+    this.appendValueInput("x")
+        .setCheck("Number")
+        .appendField("X");
+    this.appendValueInput("y")
+        .setCheck("Number")
+        .appendField("Y");
+    this.appendValueInput("width")
+        .setCheck("Number")
+        .appendField("Width");
+    this.appendValueInput("height")
+        .setCheck("Number")
+        .appendField("Height");
+    this.setInputsInline(false);
+    this.setOutput(true, "Boolean");
+    this.setColour(300);
+    this.setTooltip('');
+    this.setHelpUrl('http://www.example.com/');
+  }
+};
+
+Blockly.Python['screen_checkbutton'] = function(block) {
+  var value_x = Blockly.Python.valueToCode(block, 'x', Blockly.Python.ORDER_ATOMIC);
+  var value_y = Blockly.Python.valueToCode(block, 'y', Blockly.Python.ORDER_ATOMIC);
+  var value_width = Blockly.Python.valueToCode(block, 'width', Blockly.Python.ORDER_ATOMIC);
+  var value_height = Blockly.Python.valueToCode(block, 'height', Blockly.Python.ORDER_ATOMIC);
+  Blockly.Python.definitions_.from_PiStorms_import_PiStorms = "from PiStorms import PiStorms";
+  Blockly.Python.definitions_.psm_PiStorms = "psm = PiStorms()";
+  var code = 'psm.screen.checkButton(' + value_x + ', ' + value_y + ', ' + value_width + ', ' + value_height + ')';
+  return [code, Blockly.Python.ORDER_NONE];
+};
+
 
 // Reference
 // pause for https://blockly-demo.appspot.com/static/demos/blockfactory/index.html#kib8fq

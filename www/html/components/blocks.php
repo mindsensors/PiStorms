@@ -561,6 +561,28 @@
           </shadow>
         </value>
       </block>
+      <block type="screen_drawautotxt">
+        <value name="x">
+          <shadow type="math_number">
+            <field name="NUM">10</field>
+          </shadow>
+        </value>
+        <value name="y">
+          <shadow type="math_number">
+            <field name="NUM">10</field>
+          </shadow>
+        </value>
+        <value name="size">
+          <shadow type="math_number">
+            <field name="NUM">20</field>
+          </shadow>
+        </value>
+        <value name="str">
+          <shadow type="text">
+            <field name="TEXT">Hello World</field>
+          </shadow>
+        </value>
+      </block>
       <block type="screen_drawroundedrect">
         <value name="x">
           <shadow type="math_number">
@@ -615,6 +637,55 @@
           </shadow>
         </value>
       </block>
+      <block type="screen_drawbutton">
+        <value name="x">
+          <shadow type="math_number">
+            <field name="NUM">10</field>
+          </shadow>
+        </value>
+        <value name="y">
+          <shadow type="math_number">
+            <field name="NUM">10</field>
+          </shadow>
+        </value>
+        <value name="width">
+          <shadow type="math_number">
+            <field name="NUM">50</field>
+          </shadow>
+        </value>
+        <value name="height">
+          <shadow type="math_number">
+            <field name="NUM">30</field>
+          </shadow>
+        </value>
+        <value name="text">
+          <shadow type="text">
+            <field name="TEXT">OK</field>
+          </shadow>
+        </value>
+      </block>
+      <block type="screen_checkbutton">
+        <value name="x">
+          <shadow type="math_number">
+            <field name="NUM">10</field>
+          </shadow>
+        </value>
+        <value name="y">
+          <shadow type="math_number">
+            <field name="NUM">10</field>
+          </shadow>
+        </value>
+        <value name="width">
+          <shadow type="math_number">
+            <field name="NUM">50</field>
+          </shadow>
+        </value>
+        <value name="height">
+          <shadow type="math_number">
+            <field name="NUM">30</field>
+          </shadow>
+        </value>
+      </block>
       <block type="screen_drawtitle">
         <value name="TEXT">
           <shadow type="text">
@@ -622,11 +693,72 @@
           </shadow>
         </value>
       </block>
-      <block type="screen_getwidthheight"></block>
+      <block type="screen_istouched"></block>
       <block type="screen_gettouchcoord"></block>
       <block type="screen_rotate"></block>
+      <block type="screen_getwidthheight"></block>
       <block type="screen_clear"></block>
-      <block type="screen_istouched"></block>
+      <block type="screen_askyesnoquestion">
+        <value name="text">
+          <shadow type="text">
+            <field name="TEXT">Continue?</field>
+          </shadow>
+        </value>
+      </block>
+      <block type="screen_refresh">
+        <value name="line">
+          <shadow type="math_number">
+            <field name="NUM">1</field>
+          </shadow>
+        </value>
+      </block>
+      <block type="terminal_gotoline">
+        <value name="line">
+          <shadow type="math_number">
+            <field name="NUM">1</field>
+          </shadow>
+        </value>
+      </block>
+      <block type="terminal_print">
+        <value name="text">
+          <shadow type="text">
+            <field name="TEXT">Hello World</field>
+          </shadow>
+        </value>
+      </block>
+      <block type="terminal_println">
+        <value name="text">
+          <shadow type="text">
+            <field name="TEXT">Hello World</field>
+          </shadow>
+        </value>
+      </block>
+      <block type="terminal_replacelastline">
+        <value name="text">
+          <shadow type="text">
+            <field name="TEXT">Hello World</field>
+          </shadow>
+        </value>
+      </block>
+      <block type="terminal_printatline">
+        <value name="text">
+          <shadow type="text">
+            <field name="TEXT">Hello World</field>
+          </shadow>
+        </value>
+        <value name="line">
+          <shadow type="math_number">
+            <field name="NUM">1</field>
+          </shadow>
+        </value>
+      </block>
+      <block type="terminal_refreshline">
+        <value name="line">
+          <shadow type="math_number">
+            <field name="NUM">1</field>
+          </shadow>
+        </value>
+      </block>
     </category>
     
     <category name="LED" colour="140">
@@ -654,6 +786,7 @@
           </shadow>
         </value>
       </block>
+      <block type="system_exit"></block>
       <block type="variable_pistorms"></block>
       <block type="system_shutdown"></block>
       <block type="system_getbattery"></block>
