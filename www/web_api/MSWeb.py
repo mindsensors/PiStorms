@@ -155,13 +155,13 @@ def battery():
 @app.route("/reboot", methods=['GET', 'OPTIONS'])
 @crossdomain(origin='*')
 def reboot():
-    os.system("sudo psm_shutdown -r now")
+    os.system("sleep 1; sudo psm_shutdown -r now")
     return "1"
 
 @app.route("/shutdown", methods=['GET', 'OPTIONS'])
 @crossdomain(origin='*')
 def shutdown():
-    os.system("sudo psm_shutdown -h now")
+    os.system("sleep 1; sudo psm_shutdown -h now")
     return "1"
 
 @app.route("/led", methods=['GET', 'OPTIONS', 'POST'])
@@ -418,4 +418,4 @@ def getprogramsdir():
     return os.path.abspath(os.path.join(home_folder, "programs"))+'/'
     
 if __name__ == "__main__":
-    app.run("0.0.0.0", 3141, threaded=True, debug=True)
+    app.run("0.0.0.0", 3141, threaded=True)
