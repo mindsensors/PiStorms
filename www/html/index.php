@@ -227,8 +227,18 @@ function update_battery_box(volt) {
 }
 update_voltage();
 
-$("#shut_btn").click(function(){$.get(api+"shutdown", function(data){});notify("Success","Shutdown Signal Sent","success");window.location = "./shutdown.php";});
-$("#rebt_btn").click(function(){$.get(api+"reboot", function(data){});notify("Success","Restart Signal Sent","success");window.location = "./reboot.php";});
+function redirectShutdown() {window.location = "./shutdown.php";}
+function redirectRestart() {window.location = "./reboot.php";}
+$("#shut_btn").click(function(){
+	$.get(api+"shutdown", function(data){});
+	notify("Success","Shutdown Signal Sent","success");
+	window.setTimeout(redirectShutdown, 1000);
+});
+$("#rebt_btn").click(function(){
+	$.get(api+"reboot", function(data){});
+	notify("Success","Restart Signal Sent","success");
+	window.setTimeout(redirectRestart, 1000);
+});
 $("#stop_br").click(function(){$.get(api+"stopbrowser", function(data){});notify("Success","Signal to stop browser sent","success");});
 $("#start_br").click(function(){$.get(api+"startbrowser", function(data){});notify("Success","Signal to start browser sent","success");});
 $("#calibrate_btn").click(function(){$.get(api+"calibrate", function(data){});notify("Success","Calibration started","success");});

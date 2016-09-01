@@ -418,4 +418,4 @@ def getprogramsdir():
     return os.path.abspath(os.path.join(home_folder, "programs"))+'/'
     
 if __name__ == "__main__":
-    app.run("0.0.0.0", 3141, threaded=True)
+    app.run("0.0.0.0", 3141, threaded=True, debug=True)
