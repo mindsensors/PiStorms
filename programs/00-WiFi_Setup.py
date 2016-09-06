@@ -136,9 +136,10 @@ def reload_adapter():
     show_loading(up=True)
     # Turn off and back on the wlan interface
     subprocess.call(["sudo","ifdown",wlan_interface])
+    time.sleep(2)
     subprocess.call(["sudo","ifup",wlan_interface])
     # Refresh the currently connected network
-    time.sleep(1.5)
+    time.sleep(2)
     update_current_connection()
 
 # Display the current network and UI options

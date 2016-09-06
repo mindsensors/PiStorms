@@ -93,6 +93,28 @@ else
     sudo sed -i -e '$i \i2c-dev\n' /etc/modules
 fi
 
+# configure pistormsclassroom 
+ff=/etc/wpa_supplicant/wpa_supplicant.conf
+if [ -f $ff ]
+then
+    grep "ssid=\"pistormsclassroom\"" $ff > /dev/null
+    if [ $? == 0 ]
+    then
+        echo "pistormsclassroom is already configured"
+    else
+        sudo sed -i -e '$a \network={\nssid="pistormsclassroom"\npsk="pistormsclassroom"\n}' $ff
+    fi
+else
+  # file doesn't exist, create it.
+  echo "ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev
+update_config=1
+
+network={
+ssid=\"pistormsclassroom\"
+psk=\"pistormsclassroom\"
+}" > $ff
+fi
+
 echo "installing required python packages ... "
 sudo pip install -qq RPi.GPIO
 sudo pip install -qq mindsensors_i2c
