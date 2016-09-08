@@ -106,13 +106,15 @@ then
     fi
 else
   # file doesn't exist, create it.
+  sudo mkdir -p /etc/wpa_supplicant
   echo "ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev
 update_config=1
 
 network={
 ssid=\"pistormsclassroom\"
 psk=\"pistormsclassroom\"
-}" > $ff
+}" > /tmp/wpa
+    sudo mv /tmp/wpa $ff
 fi
 
 echo "installing required python packages ... "
