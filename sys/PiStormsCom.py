@@ -516,6 +516,7 @@ class PSMotor():
     def isOverloaded(self):
         return self.statusBit(5) == 1
     def runDegs(self,degs,speed = 100,brakeOnCompletion = False, holdOnCompletion = False):
+        # holdOnCompletion is not supported on LEGO motors.
         holdOnCompletion = False
         ctrl = 0
         ctrl |= PiStormsCom.PS_CONTROL_SPEED
