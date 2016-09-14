@@ -122,10 +122,14 @@ try:
             upd = "software"
 
     if (update_required == 2):
-            upd = "hardware"
+            # for time being we won't auto update the hardware.
+            #upd = "hardware"
+            upd = "none"
 
     if (update_required == 4):
-            upd = "both"
+            # for time being we won't auto update the hardware.
+            #upd = "both"
+            upd = "software"
 
     if (update_required == 0):
             upd = "none"
