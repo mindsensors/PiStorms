@@ -33,5 +33,5 @@ m = ["PiStorms",
 res = psm.screen.askQuestion(m,["OK", "Cancel"])
 
 if (res == 0):
-    cmd = "sudo shutdown -h now"
+    cmd = "sudo psm_shutdown -h now"
     status = subprocess.call(cmd, shell=True)
