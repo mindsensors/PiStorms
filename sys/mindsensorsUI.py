@@ -536,6 +536,54 @@ class mindsensorsUI():
             #pass
         #print("fillBmp:>03>> %s seconds ---" % (time.time() - start_time))
     
+    ## Draw a  image on the screen using supplied image data
+    #  @param self The object pointer.
+    #  @param x The upper left x coordinate of the image.
+    #  @param y The upper left y coordinate of the image.
+    #  @param width The width of the image.
+    #  @param height The width of the image.
+    #  @param image data
+    #  @param display Choose to immediately push the drawing to the screen.
+    #  @remark
+    #  To use this function in your program:
+    #  @code
+    #  ...
+    #  screen.screen.fillBmp(30, 0, 240, 240, image, True)
+    #  @endcode    
+    def fillImgArray(self, x, y, width, height, image, display = True):
+        start_time = time.time()
+        self.mutex.acquire()
+
+        try:
+            buff = self.disp.buffer
+            actx = self.screenXFromImageCoords(x,y)
+            acty = self.screenYFromImageCoords(x,y)
+            
+            image = Image.fromarray(image)
+            non_transparent = Image.new('RGBA',image.size,(255,255,255,255))
+            non_transparent.paste(image,(0,0))
+            
+            tempimage = image
+            
+            tempimage = tempimage.resize((width,height),Image.ANTIALIAS)
+            tempimage = tempimage.rotate(-90*self.currentRotation)
+            
+            cr = self.currentRotation
+            if(cr == 1):
+                actx -= height
+            if(cr == 2):
+                acty -= height
+                actx -= width
+            if(cr ==3):
+                acty -= width
+            
+            buff.paste(tempimage,(actx,acty))
+            if(display):
+                self.disp.display()
+        finally:
+            self.mutex.release()
+            #pass
+
     ## Rotates the screen orientation 90 degrees to the right (-90 degrees)
     #  @param self The object pointer.
     #  @remark
