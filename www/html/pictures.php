@@ -144,7 +144,6 @@ if (!isset($_SESSION['logged_in']) || !$_SESSION['logged_in']) {
 <script type="text/javascript" src="assets/jquery.slimscroll.min.js"></script>
 <script type="text/javascript" src="assets/bootstrap-slider.min.js"></script>
 <script src="assets/bootstrap-toggle.min.js"></script>
-<script src="assets/jszip.min.js"></script>
 
 <script>
 PNotify.prototype.options.styling = "bootstrap3";
@@ -205,9 +204,7 @@ $("#stpr").click(function(){
 var orig = null;
 refreshtoggle();
 $.get(api+"readrecording", function(data){if(data == '1'){$("#touchdiv").fadeIn();}orig=data;seteventtouggle();});
-//$("#srwbt").click(function(){$.get(api+"starttouchrecording", function(data){});notify("Success","Started recording touch locations","success");});
-//$("#stprt").click(function(){$.get(api+"stoptouchrecording", function(data){});notify("Success","Stopped recording touch locations","success");});
-//$("#chkr").click(function(){$.get(api+"readrecording", function(data){notify("Result",data,"success");});});
+
 $("#clar").click(function(){
     if (confirm("Are you sure you want to permanently remove all screenshots?")) {
         $.get(api+"clearimages", function(data){notify("Result","Images cleared","success");});
