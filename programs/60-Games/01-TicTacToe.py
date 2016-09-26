@@ -58,11 +58,12 @@ def inputPlayerLetter():
     # Returns a list with the player's letter as the first item, and the
     # computer's letter as the second.
     psm.screen.fillRect(0,0, 360,240, (0,0,0))
-    psm.screen.drawAutoText('Do you want to be X or O?', 13,10, size=26)
-    psm.screen.fillRect(11,55, 144,182, (255,0,0))
-    psm.screen.fillRect(166,54, 147,180, (0,0,255))
-    psm.screen.drawAutoText('X', 74,127, size=36)
-    psm.screen.drawAutoText('O', 224,121, size=42)
+    psm.screen.drawAutoText('Want to play Tic-tac-toe?', 10,10, size=28)
+    psm.screen.drawAutoText('Pick X or O!', 92,50, size=26)
+    psm.screen.fillRect(11,91, 144,141, (255,0,0))
+    psm.screen.fillRect(166,89, 147,140, (0,0,255))
+    psm.screen.drawAutoText('X', 74,147, size=36)
+    psm.screen.drawAutoText('O', 224,141, size=42)
 
     letter = ''
     while not letter:
@@ -101,10 +102,7 @@ def playAgain():
     # it returns False.
     
     #psm.screen.fillRect(0,0, 360,240, (0,0,0))
-    
-    
-    psm.screen.askYesOrNoQuestion(['Do you want to play again?'])
-    return 1
+    return psm.screen.askYesOrNoQuestion(['Do you want to play again?'])
 
 def makeMove(board, letter, move):
     board[move] = letter

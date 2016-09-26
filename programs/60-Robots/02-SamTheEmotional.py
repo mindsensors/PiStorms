@@ -52,10 +52,10 @@ class Sam:
     NOTICE_WAVING_DISTANCE = 1000 # maximum distance, in millimeters, to look for someone waving
     NOTICE_WAVE_DELAY = 2 # after waving, how many seconds to wait before looking for a wave again
     WAVE_LENGTH = 0.5 # how long, in seconds, a hand must be seen or not seen to count as a wave
-    MIN_WAVES = 2 # how many waves to look for before waving back
+    MIN_WAVES = 3 # how many waves to look for before waving back
     
     
-    class Reaction:
+    class Reaction(object):
         '''
         Display an emoticon for a set amount of time, 
         then draw a exclamation and comment
@@ -78,19 +78,34 @@ class Sam:
             psm.screen.fillRect(0, 0, 320, 240) # clear the image
             psm.screen.drawAutoText(self.exclamation, self.exclamationOffset, 30, fill=(0, 0, 0), size = self.exclamationSize)
             psm.screen.drawAutoText(self.comment, self.commentOffset, 140, fill=(0, 0, 0), size = self.commentSize)
-            time.sleep(self.dialogDelay)
-            psm.screen.fillRect(0, 0, 320, 240) # clear dialog
+            #time.sleep(self.dialogDelay) # call in startled() instead so the overwritten method in LongReaction can draw its second line
+            #psm.screen.fillRect(0, 0, 320, 240) # clear dialog
     
-    
+    class LongReaction(Reaction):
+        '''
+        Display an emoticon for a set amount of time, 
+        then draw a exclamation and two lines of comments
+        '''
+        def __init__(self, image, imageDelay, exclamation, exclamationOffset, exclamationSize, 
+                     comment, commentOffset, commentSize, comment2, commentOffset2, commentSize2, dialogDelay):
+            super(self.__class__, self).__init__(image, imageDelay, exclamation, exclamationOffset, exclamationSize, 
+                     comment, commentOffset, commentSize, dialogDelay)
+            self.comment2 = comment2 # a second line of smaller text to print below the first
+            self.commentOffset2 = commentOffset2
+            self.commentSize2 = commentSize2
+        
+        def display(self):
+            super(self.__class__, self).display()
+            psm.screen.drawAutoText(self.comment2, self.commentOffset2, 180, fill=(0, 0, 0), size = self.commentSize2)
+            
+            
     REACTIONS = [
-        Reaction("frightened.png", 1, "Sorry,", 75, 70,   "you scared me", 67, 30, 3),
-        Reaction("exhausted.png", 1,  "Whew,", 70, 70,    "You scared me there", 25, 30, 3),
-        Reaction("shocked.png", 1,    "Yikes!", 70, 70,   "Didn't see you there", 35, 30, 3),
-        Reaction("eyeRoll.png", 1,    "Oh,", 100, 70,     "a human", 85, 40, 3),
-        Reaction("eyeRoll.png", 1,    "Oh.", 105, 70,     "It's you again", 75, 30, 3), # "It's _you_" would reference GLaDOS
-        Reaction("shocked.png", 1,    "AHHhH,", 45, 70,   "It's ugly!", 105, 30, 3),
-        Reaction("wink.png", 1,       "Hey now,", 25, 70, "why don't you go play outside", 15, 23, 3),
-        Reaction("wink.png", 1,       "Again?", 60, 70,   "Have you tried Blockly?", 13, 30, 3),
+        Reaction("frightened.png", 1,  "Sorry,", 75, 70,  "you scared me", 67, 30, 2),
+        Reaction("exhausted.png", 1,   "Whew,", 65, 70,   "You scared me there", 25, 30, 2),
+        Reaction("shocked.png", 1,     "Yikes!", 70, 70,  "Didn't see you there", 35, 30, 2),
+        Reaction("eyeRoll.png", 1,     "Oh,", 100, 70,    "a human", 85, 40, 1.2),
+        LongReaction("eyeRoll.png", 1, "Really?", 50, 70, "Are you trying to", 55, 30, "scare me again?", 52, 30, 2),
+        LongReaction("wink.png", 1,    "Again?", 55, 70,  "Have you tried", 60, 30,    "Blockly programming?", 15, 30,   3),
     ]
     
     def __init__(self, pistorms):
@@ -119,10 +134,15 @@ class Sam:
             if self.eyes() < 500 and time.time() - self.lastStartledAt > self.STARTLE_DELAY:
                 self.startled()
                 self.lastStartledAt = time.time()
-            self.checkWaving()
-            self.isSomeoneThere()
+            elif self.checkWaving():
+                self.wave()
+                self.lastStartledAt = time.time() # don't get startled right after waving at someone
+            else:
+                self.isSomeoneThere()
             
             if self.psm.isKeyPressed(): # if the GO button is pressed
+                self.psm.led(1, 0,0,0) # turn off LEDs
+                self.psm.led(2, 0,0,0)
                 self.exit = True
 
     def startled(self):
@@ -141,10 +161,12 @@ class Sam:
         
         reaction = random.choice(self.REACTIONS)
         reaction.display()
+        time.sleep(reaction.dialogDelay)
         
         # slowly lower arms back to resting position
-        self.RIGHT_ARM.runSecs(secs = 1, speed = 20, brakeOnCompletion = True)
-        self.LEFT_ARM.runSecs(secs = 1, speed = 20, brakeOnCompletion = True)
+        self.RIGHT_ARM.runSecs(secs = 3, speed = 20, brakeOnCompletion = True)
+        self.LEFT_ARM.runSecs(secs = 3, speed = 20, brakeOnCompletion = True)
+        time.sleep(3)
         
         # reset LEDs to a restful blue
         self.psm.led(1,0,0,255)
@@ -178,15 +200,16 @@ class Sam:
             time.sleep(0.25)
         
         time.sleep(0.5)
-        self.RIGHT_ARM.runDegs(130, speed = 20, brakeOnCompletion = True)
-        time.sleep(0.5)
+        self.RIGHT_ARM.runSecs(secs=3, speed=20, brakeOnCompletion=True)
+        time.sleep(3)
 
     def checkWaving(self):
         if self.wavesSeen > self.MIN_WAVES:
-            self.wave()
+            #self.wave()
             self.seeWavingNow = False
             self.wavesSeen = 0
             self.lastWave = time.time() + self.NOTICE_WAVE_DELAY
+            return True 
 
         timeDiff = time.time() - self.lastWave
         if timeDiff > 4:
@@ -201,6 +224,8 @@ class Sam:
             self.seeWavingNow = False
             self.wavesSeen = self.wavesSeen + 1 # if commented: only count a wave as a hand entering view
             self.lastWave = time.time()
+        
+        return False
 
 
 '''
