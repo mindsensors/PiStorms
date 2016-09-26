@@ -102,7 +102,8 @@ def playAgain():
     # it returns False.
     
     #psm.screen.fillRect(0,0, 360,240, (0,0,0))
-    return psm.screen.askYesOrNoQuestion(['Do you want to play again?'])
+    psm.screen.askYesOrNoQuestion(['Do you want to play again?'])
+    return 1
 
 def makeMove(board, letter, move):
     board[move] = letter
