@@ -97,7 +97,7 @@ fi
 ff=/etc/wpa_supplicant/wpa_supplicant.conf
 if [ -f $ff ]
 then
-    grep "ssid=\"pistormsclassroom\"" $ff > /dev/null
+    sudo grep "ssid=\"pistormsclassroom\"" $ff > /dev/null
     if [ $? == 0 ]
     then
         echo "pistormsclassroom is already configured"
