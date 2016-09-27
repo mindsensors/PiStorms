@@ -57,7 +57,7 @@ while(not exit):
         
         #play Barking sound
         psm.screen.fillBmp(30, 0, 240, 240, path = currentdir+'/'+"dog.png")
-        os.system('mpg123 -q  -f55000 /home/pi/PiStormsprograms/Puppy_Dog_Barking.mp3 &')
+        os.system('mpg123 -q  -f55000 /home/pi/PiStorms/programs/Puppy_Dog_Barking.mp3 &')
         mytime = int(round(time.time())) 
         
         while (int(round(time.time()))  - mytime ) < 10:
