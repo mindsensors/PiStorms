@@ -42,7 +42,11 @@ import pygame, sys
 cell_size = 18
 cols = 13
 rows = 18
-maxfps = 60
+maxfps = 30
+move_rate = 20 # max number of tiles a piece can slide horizontally per second if the joystick is held in one direction
+spin_rate = 5
+drop_rate = 30
+insta_drop_rate = 1
 
 colors = [
     (0,   0,   0  ),
@@ -112,11 +116,39 @@ def new_board():
     return board
 
 class TetrisApp(object):
+    
+    class Delay(object):
+        def __init__(self, limit, hold = True):
+            self.lastTimeExecuted = time.time()
+            self.currentState = False
+            self.maxExecutionsPerSecond = limit
+            self.canHold = hold
+        
+        def canExec(self):
+            if self.currentState and time.time() - self.lastTimeExecuted > float(1) / self.maxExecutionsPerSecond:
+                self.lastTimeExecuted = time.time()
+                return True
+            else:
+                return False
+        
+        def set(self, state):
+            self.currentState = state
+            
+    
     def __init__(self):
         pygame.init()
         pygame.joystick.Joystick(0).init()
         self.screen = psm.screen
+        self.init_delays()
         self.init_game()
+    
+    def init_delays(self):
+        self.delays = {}
+        self.delays['moveLeft'] = TetrisApp.Delay(move_rate)
+        self.delays['moveRight'] = TetrisApp.Delay(move_rate)
+        self.delays['spin'] = TetrisApp.Delay(spin_rate)
+        self.delays['drop'] = TetrisApp.Delay(drop_rate)
+        self.delays['instaDrop'] = TetrisApp.Delay(insta_drop_rate)
     
     def new_stone(self):
         self.stone = tetris_shapes[rand(len(tetris_shapes))]
@@ -236,25 +268,34 @@ class TetrisApp(object):
             
             for event in pygame.event.get():
                 joystick = pygame.joystick.Joystick(0)
-                if joystick.get_axis(0) < -0.7 or joystick.get_button(0):
-                    self.move(-1)
-                if joystick.get_axis(0) > 0.7 or joystick.get_button(2):
-                    self.move(+1)
-                if joystick.get_axis(1) < -0.7 or joystick.get_button(3): # joystick up or triangle
-                    self.rotate_stone()
-                if joystick.get_axis(1) > 0.7 or joystick.get_button(1):
-                    self.drop(manual = True)
                 
-                if (joystick.get_button(4) or joystick.get_button(5) or # all triggers
+                self.delays['moveLeft'].set(joystick.get_axis(0) < -0.7 or joystick.get_button(0))
+                self.delays['moveRight'].set(joystick.get_axis(0) > 0.7 or joystick.get_button(2))
+                self.delays['spin'].set(joystick.get_axis(1) < -0.7 or joystick.get_button(3)) # joystick up or triangle
+                self.delays['drop'].set(joystick.get_axis(1) > 0.7 or joystick.get_button(1))
+                self.delays['instaDrop'].set(
+                    joystick.get_button(4) or joystick.get_button(5) or # all triggers
                     joystick.get_button(6) or joystick.get_button(7) or
-                    joystick.get_button(10) or joystick.get_button(11)): # joystick pressed in
-                    self.insta_drop()
+                    joystick.get_button(10) or joystick.get_button(11) # joystick pressed in
+                )
+                
                 if joystick.get_button(8): # select
                     raise SystemExit()
                 if joystick.get_button(12): # center "dG" button
                     self.toggle_pause()
                 if joystick.get_button(9): # start
                     self.start_game()
+            
+            if self.delays['moveLeft'].canExec():
+                self.move(-1)
+            if self.delays['moveRight'].canExec():
+                self.move(1)
+            if self.delays['spin'].canExec():
+                self.rotate_stone()
+            if self.delays['drop'].canExec():
+                self.drop(manual = True)
+            if self.delays['instaDrop'].canExec():
+                self.insta_drop()
             
             if psm.isKeyPressed(): # GO button pressed
                 raise SystemExit
