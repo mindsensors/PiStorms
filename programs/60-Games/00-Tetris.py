@@ -29,7 +29,7 @@ import socket,fcntl,struct
 
 currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
 parentdir = os.path.dirname(currentdir)
-sys.path.insert(0,parentdir) 
+sys.path.insert(0,parentdir)
 from PiStorms import PiStorms
 
 psm = PiStorms(rotation = 2)
@@ -43,10 +43,7 @@ cell_size = 18
 cols = 13
 rows = 18
 maxfps = 30
-move_rate = 20 # max number of tiles a piece can slide horizontally per second if the joystick is held in one direction
-spin_rate = 5
-drop_rate = 30
-insta_drop_rate = 1
+msPerTick = float(1000) / maxfps
 
 colors = [
     (0,   0,   0  ),
@@ -117,38 +114,39 @@ def new_board():
 
 class TetrisApp(object):
     
-    class Delay(object):
-        def __init__(self, limit, hold = True):
-            self.lastTimeExecuted = time.time()
+    class InputDelay(object):
+        def __init__(self, maxExecutionsPerSecond = 1, holdEnabled = True):
+            self.timeLastExecuted = time.time()
             self.currentState = False
-            self.maxExecutionsPerSecond = limit
-            self.canHold = hold
+            self.maxRateMs = float(1000) / maxExecutionsPerSecond
+            self.canHold = holdEnabled
         
         def canExec(self):
-            if self.currentState and time.time() - self.lastTimeExecuted > float(1) / self.maxExecutionsPerSecond:
-                self.lastTimeExecuted = time.time()
+            if self.currentState == self.canHold and time.time() - self.timeLastExecuted > self.maxRateMs:
+                self.timeLastExecuted = time.time()
                 return True
             else:
                 return False
         
         def set(self, state):
             self.currentState = state
-            
+        
     
     def __init__(self):
         pygame.init()
         pygame.joystick.Joystick(0).init()
         self.screen = psm.screen
-        self.init_delays()
+        self.init_inputs()
         self.init_game()
-    
-    def init_delays(self):
-        self.delays = {}
-        self.delays['moveLeft'] = TetrisApp.Delay(move_rate)
-        self.delays['moveRight'] = TetrisApp.Delay(move_rate)
-        self.delays['spin'] = TetrisApp.Delay(spin_rate)
-        self.delays['drop'] = TetrisApp.Delay(drop_rate)
-        self.delays['instaDrop'] = TetrisApp.Delay(insta_drop_rate)
+
+    def init_inputs(self): # initialize input timing/delays
+        self.inputs = {}
+        self.inputs['moveLeft'] = TetrisApp.InputDelay(maxExecutionsPerSecond = 20)
+        self.inputs['moveRight'] = TetrisApp.InputDelay(maxExecutionsPerSecond = 20)
+        self.inputs['spin'] = TetrisApp.InputDelay(maxExecutionsPerSecond = 5, holdEnabled = False)
+        self.inputs['drop'] = TetrisApp.InputDelay(maxExecutionsPerSecond = 30)
+        self.inputs['instaDrop'] = TetrisApp.InputDelay(holdEnabled = False)
+        self.inputs['pause'] = TetrisApp.InputDelay(holdEnabled = False)
     
     def new_stone(self):
         self.stone = tetris_shapes[rand(len(tetris_shapes))]
@@ -246,7 +244,7 @@ class TetrisApp(object):
         while True:
             tickStart = time.time()
             
-            # 320 for both so I don't have to change it with the screen orientation
+            # 320 for both width and height to handle both orientations
             self.screen.fillRect(0, 0, 320, 320, fill = (0,0,0), display = False)
             
             if self.gameover:
@@ -269,39 +267,39 @@ class TetrisApp(object):
             for event in pygame.event.get():
                 joystick = pygame.joystick.Joystick(0)
                 
-                self.delays['moveLeft'].set(joystick.get_axis(0) < -0.7 or joystick.get_button(0))
-                self.delays['moveRight'].set(joystick.get_axis(0) > 0.7 or joystick.get_button(2))
-                self.delays['spin'].set(joystick.get_axis(1) < -0.7 or joystick.get_button(3)) # joystick up or triangle
-                self.delays['drop'].set(joystick.get_axis(1) > 0.7 or joystick.get_button(1))
-                self.delays['instaDrop'].set(
+                self.inputs['moveLeft'].set(joystick.get_axis(0) < -0.7 or joystick.get_button(0))
+                self.inputs['moveRight'].set(joystick.get_axis(0) > 0.7 or joystick.get_button(2))
+                self.inputs['spin'].set(joystick.get_axis(1) < -0.7 or joystick.get_button(3)) # joystick up or triangle
+                self.inputs['drop'].set(joystick.get_axis(1) > 0.7 or joystick.get_button(1))
+                self.inputs['instaDrop'].set(
                     joystick.get_button(4) or joystick.get_button(5) or # all triggers
                     joystick.get_button(6) or joystick.get_button(7) or
                     joystick.get_button(10) or joystick.get_button(11) # joystick pressed in
                 )
-                
+                self.inputs['pause'].set(joystick.get_button(12)) # center "dG" button
                 if joystick.get_button(8): # select
                     raise SystemExit()
-                if joystick.get_button(12): # center "dG" button
-                    self.toggle_pause()
                 if joystick.get_button(9): # start
                     self.start_game()
             
-            if self.delays['moveLeft'].canExec():
+            if self.inputs['moveLeft'].canExec():
                 self.move(-1)
-            if self.delays['moveRight'].canExec():
+            if self.inputs['moveRight'].canExec():
                 self.move(1)
-            if self.delays['spin'].canExec():
+            if self.inputs['spin'].canExec():
                 self.rotate_stone()
-            if self.delays['drop'].canExec():
+            if self.inputs['drop'].canExec():
                 self.drop(manual = True)
-            if self.delays['instaDrop'].canExec():
+            if self.inputs['instaDrop'].canExec():
                 self.insta_drop()
-            
+            if self.inputs['pause'].canExec():
+                self.toggle_pause()
             if psm.isKeyPressed(): # GO button pressed
                 raise SystemExit
             
-            while time.time() - tickStart < 1 / maxfps:
-                time.sleep(0.001)
+            elapsed = time.time() - tickStart
+            if elapsed < msPerTick: # if we've finished this frame faster than the amount of time this frame should take
+                time.sleep((msPerTick - elapsed) / 1000) # sleep the rest of that time
 
 
 if __name__ == '__main__':
