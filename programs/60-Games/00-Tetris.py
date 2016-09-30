@@ -149,7 +149,8 @@ class TetrisApp(object):
         self.inputs['pause'] = TetrisApp.InputDelay(holdEnabled = False)
     
     def new_stone(self):
-        self.stone = tetris_shapes[rand(len(tetris_shapes))]
+        self.stone = self.nextStone
+        self.nextStone = tetris_shapes[rand(len(tetris_shapes))]
         self.stone_x = int(cols / 2 - len(self.stone[0])/2)
         self.stone_y = 0
         
@@ -158,6 +159,8 @@ class TetrisApp(object):
     
     def init_game(self):
         self.board = new_board()
+        self.nextStone = [[0]] # avoid AttributeError
+        self.new_stone()
         self.new_stone()
         self.level = 1
         self.score = 0
@@ -240,6 +243,11 @@ class TetrisApp(object):
             self.init_game()
             self.gameover = False
     
+    def quit_game(self):
+        psm.led(1, 0, 0, 0)
+        psm.led(2, 0, 0, 0)
+        raise SystemExit("Exiting...")
+    
     def run(self):
         while True:
             tickStart = time.time()
@@ -259,6 +267,9 @@ class TetrisApp(object):
             else:
                 self.draw_matrix(self.stone, (self.stone_x, self.stone_y))
                 self.draw_matrix(self.board, (0,0), refresh = True)
+                colorIndex = [c for c in self.nextStone[0] if c != 0][0] # get color number of piece (not 0 or empty space)
+                psm.led(1, *(colors[colorIndex]))
+                psm.led(2, *(colors[colorIndex]))
             
             if time.time() >= self.nextStoneAt:
                 self.drop()
@@ -278,7 +289,7 @@ class TetrisApp(object):
                 )
                 self.inputs['pause'].set(joystick.get_button(12)) # center "dG" button
                 if joystick.get_button(8): # select
-                    raise SystemExit()
+                    self.quit_game()
                 if joystick.get_button(9): # start
                     self.start_game()
             
@@ -295,7 +306,7 @@ class TetrisApp(object):
             if self.inputs['pause'].canExec():
                 self.toggle_pause()
             if psm.isKeyPressed(): # GO button pressed
-                raise SystemExit
+                self.quit_game()
             
             elapsed = time.time() - tickStart
             if elapsed < msPerTick: # if we've finished this frame faster than the amount of time this frame should take
