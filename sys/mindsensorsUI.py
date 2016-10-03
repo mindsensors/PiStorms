@@ -896,6 +896,28 @@ class mindsensorsUI():
     def askYesOrNoQuestion(self, question = ["Continue?"]):
         return self.askQuestion(question,["Yes","No"]) == 0
     
+    ## Draw a line on the screen (rotated to screen)
+    #  @param self The object pointer.
+    #  @param x1, y1, x2, y2 The x and y coordinates of each endpoint of the line.
+    #  @param width The width of the line.
+    #  @param fill The color of line.
+    #  @param display Choose to immediately push the drawing to the screen.
+    #  @remark
+    #  To use this function in your program:
+    #  @code
+    #  ...
+    #  screen.drawLine(50, 50, 100, 100, width = 0, fill = (255,255,255), True)
+    #  @endcode    
+    def drawLine(self, x1, y1, x2, y2, width = 0, fill = (255,255,255),display = True):
+        draw = self.disp.draw()
+        actx1 = self.screenXFromImageCoords(x1,y1)
+        acty1 = self.screenYFromImageCoords(x1,y1)
+        actx2 = self.screenXFromImageCoords(x2,y2)
+        acty2 = self.screenYFromImageCoords(x2,y2)
+        draw.line((actx1,acty1,actx2,acty2), fill = fill, width = width)
+        if(display):
+            self.disp.display()
+    
                 
                 
 if __name__ == '__main__':#following code demonstrates screen rotation, popup menus, terminal printing, and custom buttons
