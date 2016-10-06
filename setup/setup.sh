@@ -44,15 +44,15 @@ else
     sudo sed -i -e '$i \dtparam=i2c1=on' $ff
 fi
 
-# baudrate higher than 48000 does not work on PIXEL.
+# baudrate higher than 40000 does not work on PIXEL.
 #
 grep "^dtparam=i2c_baudrate" $ff > /dev/null
 if [ $? == 0 ]
 then
-    echo "i2c_baudrate is already configured, changing it to 48000"
-    sed -i 's/^dtparam=i2c_baudrate.*$/dtparam=i2c_baudrate=48000/g' $ff
+    echo "i2c_baudrate is already configured, changing it to 40000"
+    sed -i 's/^dtparam=i2c_baudrate.*$/dtparam=i2c_baudrate=40000/g' $ff
 else
-    sudo sed -i -e '$i \dtparam=i2c_baudrate=48000' $ff
+    sudo sed -i -e '$i \dtparam=i2c_baudrate=40000' $ff
 fi
 
 grep "^dtparam=spi=on" $ff > /dev/null
