@@ -441,7 +441,7 @@ class mindsensorsUI():
     #  To use this function in your program:
     #  @code
     #  ...
-    #  screen.fillRect(100, 100, 75, 75, fill = (255,0,0), None, True)
+    #  screen.fillRect(100, 100, 75, 75, fill = (255,0,0), outline = None, display = True)
     #  @endcode    
     def fillRect(self, x, y, width, height, fill = (255,255,255), outline = None,display=True):
         draw = self.disp.draw()
@@ -464,7 +464,7 @@ class mindsensorsUI():
     #  To use this function in your program:
     #  @code
     #  ...
-    #  screen.fillCircle(100, 100, 15, fill = (255,255,255), True)
+    #  screen.fillCircle(100, 100, 15, fill = (255,255,255), display = True)
     #  @endcode    
     def fillCircle(self, x, y, radius, fill = (255,255,255),display = True):
         draw = self.disp.draw()
@@ -486,7 +486,7 @@ class mindsensorsUI():
     #  To use this function in your program:
     #  @code
     #  ...
-    #  screen.screen.fillBmp(30, 0, 240, 240, path = currentdir+'/'+"dog.png", True)
+    #  screen.screen.fillBmp(30, 0, 240, 240, path = currentdir+'/'+"dog.png", display = True)
     #  @endcode    
     def fillBmp(self, x, y, width, height, path = "/usr/local/mindsensors/images/Pane1.png",display = True):
 
@@ -624,7 +624,7 @@ class mindsensorsUI():
     #  To use this function in your program:
     #  @code
     #  ...
-    #  screen.drawAutoText(self.terminalBuffer[lineNum], 10, 20, fill = (255,255,255), 25, True)
+    #  screen.drawAutoText(self.terminalBuffer[lineNum], 10, 20, fill = (255,255,255), size = 25, display = True)
     #  @endcode    
     def drawAutoText(self,text,x,y,fill = (255,255,255), size = 20, display = True, align="left"):
         font = ImageFont.truetype("/usr/share/fonts/truetype/freefont/FreeSans.ttf", size)
