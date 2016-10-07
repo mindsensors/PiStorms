@@ -12,6 +12,7 @@
 
 PATH=/sbin:/usr/sbin:/bin:/usr/bin
 #. /lib/init/vars.sh
+lckfile=/tmp/.psm_shutdown.lck
 
 psm_shutdown() {
   if [ -f /usr/local/mindsensors/conf/msdev.cfg ]
@@ -59,10 +60,9 @@ case "$1" in
     do_start
 	exit 3
 	;;
-  stop)
+  stop_orig)
     show_logo
 
-    lckfile=/tmp/.psm_shutdown.lck
     line=`cat $lckfile|tr -d [:space:]`
     if [ x$line = xhalt ]
     then
@@ -71,7 +71,7 @@ case "$1" in
       psm_shutdown
     fi
 	;;
-  stop_new)
+  stop)
     show_logo
     SHUTDOWN=3
     REBOOT=3
@@ -89,8 +89,18 @@ case "$1" in
 		    echo "in reboot mode...."
 		else
 		    echo "in poweroff or halt mode...."
-		      echo "Shutting down SmartUPS"
-              psm_shutdown
+		      echo "Shutting down PiStorms..."
+              line=`cat $lckfile|tr -d [:space:]`
+              if [ x$line = xgo_pressed ]
+              then
+                  echo "go_pressed, skip psm_shutdown"
+                  cp /dev/null $lckfile
+                  rm -f $lckfile
+              else
+                  cp /dev/null $lckfile
+                  rm -f $lckfile
+                  psm_shutdown
+              fi
 		fi
 	else
 		echo "in starting mode... "
