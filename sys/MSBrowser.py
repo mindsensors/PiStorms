@@ -26,6 +26,7 @@
 
 from mindsensorsUI import mindsensorsUI
 from mindsensors_i2c import mindsensors_i2c
+from PiStormsCom import PiStormsCom
 import sys, os, time, json, socket
 from datetime import datetime
 import ConfigParser
@@ -197,6 +198,18 @@ def displaySmallFileList(folder, fileList, displayLeft = 1):
     if ( newMessage == True ):
         scrn.fillBmp(220,7,34,34, "Exclamation-mark-icon.png", False);
     
+    battVoltage = PiStormsCom().battVoltage()
+    batteryFill = (255,255,255) # white: error, could not read
+    if ( battVoltage > 7.7 ):
+        batteryFill = (0,  166,90) # green: voltage >= 7.7V
+    elif (battVoltage > 6.9 ):
+        batteryFill = (243,156,18) # yellow: 7.7V > voltage >= 6.9V
+    else:
+        batteryFill = (221,75, 57) #red: 6.9V > voltage
+    scrn.fillRect(291, 188, 13, 20, fill=batteryFill, display=False)
+    scrn.fillRect(294, 185,  7,  3, fill=batteryFill, display=False)
+    scrn.drawAutoText(("%1.1f V" if battVoltage < 10 else "%2.0f V") % battVoltage, 281, 213, size=16, display=False)
+
     # display the buffered data on screen.
     scrn.disp.display()
 
