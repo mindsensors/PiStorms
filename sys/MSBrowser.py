@@ -27,7 +27,7 @@
 from mindsensorsUI import mindsensorsUI
 from mindsensors_i2c import mindsensors_i2c
 from PiStormsCom import PiStormsCom
-import sys, os, time, json, socket
+import sys, os, time, json, socket, signal
 from datetime import datetime
 import ConfigParser
 
@@ -159,6 +159,21 @@ def runProgram(progName,progDir):
     scrn.clearScreen()
     return os.system("sudo python " +   progDir + "/" + progName + ".py")
     
+def drawBatteryIndicator(signum=None, stack=None, delay=300):
+    battVoltage = PiStormsCom().battVoltage()
+    batteryFill = (255,255,255) # white: error, could not read
+    if ( battVoltage >= 7.7 ):
+        batteryFill = (0,  166,90) # green: voltage >= 7.7V
+    elif (battVoltage >= 6.9 ):
+        batteryFill = (243,156,18) # yellow: 7.7V > voltage >= 6.9V
+    else:
+        batteryFill = (221,75, 57) #red: 6.9V > voltage
+    scrn.fillRect(281, 185, 39, 45, fill=(0,0,0), display=False)
+    scrn.fillRect(291, 188, 13, 20, fill=batteryFill, display=False)
+    scrn.fillRect(294, 185,  7,  3, fill=batteryFill, display=False)
+    scrn.drawAutoText(("%1.1f V" if battVoltage < 10 else "%2.0f V") % battVoltage, 281, 213, size=16, display=False)
+
+    signal.alarm(delay)
     
 def displaySmallFileList(folder, fileList, displayLeft = 1):
     initialYpos = 50
@@ -198,17 +213,7 @@ def displaySmallFileList(folder, fileList, displayLeft = 1):
     if ( newMessage == True ):
         scrn.fillBmp(220,7,34,34, "Exclamation-mark-icon.png", False);
     
-    battVoltage = PiStormsCom().battVoltage()
-    batteryFill = (255,255,255) # white: error, could not read
-    if ( battVoltage > 7.7 ):
-        batteryFill = (0,  166,90) # green: voltage >= 7.7V
-    elif (battVoltage > 6.9 ):
-        batteryFill = (243,156,18) # yellow: 7.7V > voltage >= 6.9V
-    else:
-        batteryFill = (221,75, 57) #red: 6.9V > voltage
-    scrn.fillRect(291, 188, 13, 20, fill=batteryFill, display=False)
-    scrn.fillRect(294, 185,  7,  3, fill=batteryFill, display=False)
-    scrn.drawAutoText(("%1.1f V" if battVoltage < 10 else "%2.0f V") % battVoltage, 281, 213, size=16, display=False)
+    drawBatteryIndicator(delay=5*60) # redraw battery indicator every 5 minutes
 
     # display the buffered data on screen.
     scrn.disp.display()
@@ -311,6 +316,9 @@ def displayFullFileList(folder, fileList, index, isSubFolder):
 #
 try:
     folder = PROGRAM_DIRECTORY
+
+    signal.signal(signal.SIGALRM, drawBatteryIndicator)
+
     while(True):
         result = 0
         #if(psm.battVoltage()<=6.5):
