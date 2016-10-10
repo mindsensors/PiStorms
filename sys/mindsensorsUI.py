@@ -806,9 +806,13 @@ class mindsensorsUI():
                 n+= 1
             n = 0
             offset = 5
+            if(self.currentRotation % 2 == 0): # portrait
+                offset = 12
             while(n<len(self.popupText)):
                 if ( n > 0 ):
                     offset = 10
+                    if(self.currentRotation % 2 == 0): # portrait
+                        offset = 24
                 self.drawAutoText(self.popupText[n], xbuff + 10, ybuff + offset + (20*n), fill = (0,0,0), size = 15, display = False)
             
                 n += 1
