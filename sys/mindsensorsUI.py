@@ -870,7 +870,7 @@ class mindsensorsUI():
     #  To use this function in your program:
     #  @code
     #  ...
-    #  answer = screen.askQuestion(["Continue?"],["Yes","No"])
+    #  answer = screen.askQuestion(["Continue?", "Do you want to continue?"],["Yes","No"])
     #  @endcode    
     def askQuestion(self, question = ["Continue?"], options = ["Yes","No"]):
         self.popupText = question
