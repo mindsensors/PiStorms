@@ -19,8 +19,9 @@
 #Learn more product option visit us @  http://www.mindsensors.com/
 #
 # History:
-# Date         Author          Comments
-# August 2016  Roman Bohuk     Initial Authoring 
+# Date          Author          Comments
+# August 2016   Roman Bohuk     Initial Authoring 
+# October 2016  Seth Tenembaum  Add showMessage 
 */
 
 
@@ -1986,6 +1987,27 @@ Blockly.Python['screen_askyesnoquestion'] = function(block) {
   Blockly.Python.definitions_.psm_PiStorms = "psm = PiStorms()";
   var code = 'psm.screen.askYesOrNoQuestion([' + value_text + '])';
   return [code, Blockly.Python.ORDER_NONE];
+};
+
+Blockly.Blocks['screen_showmessage'] = {
+  init: function() {
+    this.appendValueInput("text")
+        .setCheck("String")
+        .appendField("show message");
+    this.setInputsInline(true);
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(300);
+    this.setTooltip('');
+    this.setHelpUrl('http://www.example.com/');
+  }
+};
+Blockly.Python['screen_showmessage'] = function(block) {
+  var value_text = Blockly.Python.valueToCode(block, 'text', Blockly.Python.ORDER_ATOMIC);
+  Blockly.Python.definitions_.from_PiStorms_import_PiStorms = "from PiStorms import PiStorms";
+  Blockly.Python.definitions_.psm_PiStorms = "psm = PiStorms()";
+  var code = 'psm.screen.showMessage([' + value_text + '])\n';
+  return code;
 };
 
 
