@@ -896,6 +896,52 @@ class mindsensorsUI():
     def askYesOrNoQuestion(self, question = ["Continue?"]):
         return self.askQuestion(question,["Yes","No"]) == 0
     
+    ## Draw a line on the screen (rotated to screen)
+    #  @param self The object pointer.
+    #  @param x1, y1, x2, y2 The x and y coordinates of each endpoint of the line.
+    #  @param width The width of the line.
+    #  @param fill The color of line.
+    #  @param display Choose to immediately push the drawing to the screen.
+    #  @remark
+    #  To use this function in your program:
+    #  @code
+    #  ...
+    #  screen.drawLine(50, 50, 100, 100, width = 0, fill = (255,255,255), display = True)
+    #  @endcode    
+    def drawLine(self, x1, y1, x2, y2, width = 0, fill = (255,255,255),display = True):
+        draw = self.disp.draw()
+        actx1 = self.screenXFromImageCoords(x1,y1)
+        acty1 = self.screenYFromImageCoords(x1,y1)
+        actx2 = self.screenXFromImageCoords(x2,y2)
+        acty2 = self.screenYFromImageCoords(x2,y2)
+        draw.line((actx1,acty1,actx2,acty2), fill = fill, width = width)
+        if(display):
+            self.disp.display()
+    
+    ## Draw a polyline on the screen (rotated to screen)
+    #  @param self The object pointer.
+    #  @param [x1, y1, x2, y2...] The x and y coordinates of each endpoint of the polyline.
+    #  @param width The width of the polyline.
+    #  @param fill The color of polyline.
+    #  @param display Choose to immediately push the drawing to the screen.
+    #  @remark
+    #  To use this function in your program:
+    #  @code
+    #  ...
+    #  screen.drawLine([50, 50, 100, 50, 100, 100], width = 0, fill = (255,255,255), display = True)
+    #  @endcode    
+    def drawPolyLine(self, endpoints, width = 0, fill = (255,255,255),display = True):
+        assert len(endpoints) % 2 == 0, "endpoints must be an array of even length, containing *pairs* of integers"
+        assert len(endpoints) >= 4, "endpoints must contain at least two coordinates to draw a line"
+        draw = self.disp.draw()
+        actendpts = []
+        for (x,y) in [(endpoints[i*2],endpoints[i*2+1]) for i in range(len(endpoints)/2)]: # iterate over each pair of integers
+            actendpts.append(self.screenXFromImageCoords(x,y)) # actual x-coordinate
+            actendpts.append(self.screenYFromImageCoords(x,y)) # actual y-coordinate
+        draw.line(actendpts, fill = fill, width = width)
+        if(display):
+            self.disp.display()
+    
                 
                 
 if __name__ == '__main__':#following code demonstrates screen rotation, popup menus, terminal printing, and custom buttons
