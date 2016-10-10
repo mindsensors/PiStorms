@@ -20,14 +20,16 @@
 # History:
 # Date      Author      Comments
 #  Oct 2015  Nitin     Initial Authoring 
+# Oct 2016   Deepak    support for graceful shutdown.
 
 from mindsensors_i2c import mindsensors_i2c
 import sys,os,time
-#from mindsensorsUI import mindsensorsUI
 
+lckfile = '/tmp/.psm_shutdown.lck'
+
+print "starting..."
 driver = mindsensors_i2c( 0x34 >> 1)
 count = 0
-logoOn = False
 while (True):
     time.sleep(0.4)
     try :
@@ -35,8 +37,13 @@ while (True):
         #print keypress
         if keypress == 253:
             #print "sudo halt -p"
-            if ( logoOn == False):
-                logoOn = True
+            try:
+                os.remove(lckfile)
+            except OSError:
+                pass
+            f = open(lckfile, 'w')
+            f.write("go_pressed")
+            f.close()
             os.system("sudo shutdown -h now")
             quit()
     except:

@@ -38,6 +38,14 @@ psm = PiStorms()
 
 print "running program"
 psm.screen.termPrintln(" ")
+#
+# To exit this program, press & hold GO button and touch the screen 
+#
+
+psm.screen.termPrintAt(1, "To Exit: press & hold GO button")
+psm.screen.termPrintAt(2, "and touch the screen.")
+time.sleep(2)
+
 
 # Get user supplied values
 #cascPath = sys.argv[1]
@@ -119,7 +127,7 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
     rawCapture.truncate(0)
     
 	# if the `q` key was pressed, break from the loop
-    if(psm.isKeyPressed() == True):
+    if((psm.isKeyPressed() == True) and psm.screen.isTouched()):
         break
     #if key == ord("q"):
     #    break
