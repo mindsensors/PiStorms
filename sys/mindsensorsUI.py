@@ -26,6 +26,7 @@
 # Oct. 2015  Michael   Comments and documentation
 # 10/18/15   Deepak    UI improvements
 # 7/12/16    Roman     Touch screen record frame
+# 10/7/16    Seth      Battery indicator, line methods
 
 from mindsensors_i2c import mindsensors_i2c
 import time, math ,os
@@ -899,6 +900,18 @@ class mindsensorsUI():
     #  @endcode    
     def askYesOrNoQuestion(self, question = ["Continue?"]):
         return self.askQuestion(question,["Yes","No"]) == 0
+    
+    ## Display pop-up of a message on the screen with a single option "Ok"
+    #  @param self The object pointer.
+    #  @param message The message that will pop-up on the screen.
+    #  @remark
+    #  To use this function in your program:
+    #  @code
+    #  ...
+    #  answer = screen.showMessage(["The process has completed.", "Status: success"])
+    #  @endcode    
+    def showMessage(self, message):
+        return self.askQuestion(message,["Ok"]) == 0
     
     ## Draw a line on the screen (rotated to screen)
     #  @param self The object pointer.
