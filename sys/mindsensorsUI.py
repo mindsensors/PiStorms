@@ -26,6 +26,7 @@
 # Oct. 2015  Michael   Comments and documentation
 # 10/18/15   Deepak    UI improvements
 # 7/12/16    Roman     Touch screen record frame
+# 10/7/16    Seth      Battery indicator, line methods
 
 from mindsensors_i2c import mindsensors_i2c
 import time, math ,os
@@ -441,7 +442,7 @@ class mindsensorsUI():
     #  To use this function in your program:
     #  @code
     #  ...
-    #  screen.fillRect(100, 100, 75, 75, fill = (255,0,0), None, True)
+    #  screen.fillRect(100, 100, 75, 75, fill = (255,0,0), outline = None, display = True)
     #  @endcode    
     def fillRect(self, x, y, width, height, fill = (255,255,255), outline = None,display=True):
         draw = self.disp.draw()
@@ -464,7 +465,7 @@ class mindsensorsUI():
     #  To use this function in your program:
     #  @code
     #  ...
-    #  screen.fillCircle(100, 100, 15, fill = (255,255,255), True)
+    #  screen.fillCircle(100, 100, 15, fill = (255,255,255), display = True)
     #  @endcode    
     def fillCircle(self, x, y, radius, fill = (255,255,255),display = True):
         draw = self.disp.draw()
@@ -486,7 +487,7 @@ class mindsensorsUI():
     #  To use this function in your program:
     #  @code
     #  ...
-    #  screen.screen.fillBmp(30, 0, 240, 240, path = currentdir+'/'+"dog.png", True)
+    #  screen.screen.fillBmp(30, 0, 240, 240, path = currentdir+'/'+"dog.png", display = True)
     #  @endcode    
     def fillBmp(self, x, y, width, height, path = "/usr/local/mindsensors/images/Pane1.png",display = True):
 
@@ -624,7 +625,7 @@ class mindsensorsUI():
     #  To use this function in your program:
     #  @code
     #  ...
-    #  screen.drawAutoText(self.terminalBuffer[lineNum], 10, 20, fill = (255,255,255), 25, True)
+    #  screen.drawAutoText(self.terminalBuffer[lineNum], 10, 20, fill = (255,255,255), size = 25, display = True)
     #  @endcode    
     def drawAutoText(self,text,x,y,fill = (255,255,255), size = 20, display = True, align="left"):
         font = ImageFont.truetype("/usr/share/fonts/truetype/freefont/FreeSans.ttf", size)
@@ -806,9 +807,13 @@ class mindsensorsUI():
                 n+= 1
             n = 0
             offset = 5
+            if(self.currentRotation % 2 == 0): # portrait
+                offset = 12
             while(n<len(self.popupText)):
                 if ( n > 0 ):
                     offset = 10
+                    if(self.currentRotation % 2 == 0): # portrait
+                        offset = 24
                 self.drawAutoText(self.popupText[n], xbuff + 10, ybuff + offset + (20*n), fill = (0,0,0), size = 15, display = False)
             
                 n += 1
@@ -865,7 +870,7 @@ class mindsensorsUI():
     #  To use this function in your program:
     #  @code
     #  ...
-    #  answer = screen.askQuestion(["Continue?"],["Yes","No"])
+    #  answer = screen.askQuestion(["Continue?", "Do you want to continue?"],["Yes","No"])
     #  @endcode    
     def askQuestion(self, question = ["Continue?"], options = ["Yes","No"]):
         self.popupText = question
@@ -895,6 +900,64 @@ class mindsensorsUI():
     #  @endcode    
     def askYesOrNoQuestion(self, question = ["Continue?"]):
         return self.askQuestion(question,["Yes","No"]) == 0
+    
+    ## Display pop-up of a message on the screen with a single option "Ok"
+    #  @param self The object pointer.
+    #  @param message The message that will pop-up on the screen.
+    #  @remark
+    #  To use this function in your program:
+    #  @code
+    #  ...
+    #  answer = screen.showMessage(["The process has completed.", "Status: success"])
+    #  @endcode    
+    def showMessage(self, message):
+        return self.askQuestion(message,["Ok"]) == 0
+    
+    ## Draw a line on the screen (rotated to screen)
+    #  @param self The object pointer.
+    #  @param x1, y1, x2, y2 The x and y coordinates of each endpoint of the line.
+    #  @param width The width of the line.
+    #  @param fill The color of line.
+    #  @param display Choose to immediately push the drawing to the screen.
+    #  @remark
+    #  To use this function in your program:
+    #  @code
+    #  ...
+    #  screen.drawLine(50, 50, 100, 100, width = 0, fill = (255,255,255), display = True)
+    #  @endcode    
+    def drawLine(self, x1, y1, x2, y2, width = 0, fill = (255,255,255),display = True):
+        draw = self.disp.draw()
+        actx1 = self.screenXFromImageCoords(x1,y1)
+        acty1 = self.screenYFromImageCoords(x1,y1)
+        actx2 = self.screenXFromImageCoords(x2,y2)
+        acty2 = self.screenYFromImageCoords(x2,y2)
+        draw.line((actx1,acty1,actx2,acty2), fill = fill, width = width)
+        if(display):
+            self.disp.display()
+    
+    ## Draw a polyline on the screen (rotated to screen)
+    #  @param self The object pointer.
+    #  @param [x1, y1, x2, y2...] The x and y coordinates of each endpoint of the polyline.
+    #  @param width The width of the polyline.
+    #  @param fill The color of polyline.
+    #  @param display Choose to immediately push the drawing to the screen.
+    #  @remark
+    #  To use this function in your program:
+    #  @code
+    #  ...
+    #  screen.drawLine([50, 50, 100, 50, 100, 100], width = 0, fill = (255,255,255), display = True)
+    #  @endcode    
+    def drawPolyLine(self, endpoints, width = 0, fill = (255,255,255),display = True):
+        assert len(endpoints) % 2 == 0, "endpoints must be an array of even length, containing *pairs* of integers"
+        assert len(endpoints) >= 4, "endpoints must contain at least two coordinates to draw a line"
+        draw = self.disp.draw()
+        actendpts = []
+        for (x,y) in [(endpoints[i*2],endpoints[i*2+1]) for i in range(len(endpoints)/2)]: # iterate over each pair of integers
+            actendpts.append(self.screenXFromImageCoords(x,y)) # actual x-coordinate
+            actendpts.append(self.screenYFromImageCoords(x,y)) # actual y-coordinate
+        draw.line(actendpts, fill = fill, width = width)
+        if(display):
+            self.disp.display()
     
                 
                 

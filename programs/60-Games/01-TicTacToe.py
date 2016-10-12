@@ -71,7 +71,8 @@ def inputPlayerLetter():
             letter = 'X'
         elif psm.screen.checkButton(166,54, 147,180):
             letter = 'O'
-        if(psm.isKeyPressed() == True):
+        # to exit you should press go button as well as touch the screen.
+        if((psm.isKeyPressed() == True) and psm.screen.isTouched()):
             raise SystemExit()
     if letter == 'X':
         psm.led(2,255,0,0)

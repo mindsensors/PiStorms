@@ -22,6 +22,7 @@
 # History:
 # Date         Author          Comments
 # August 2016    Roman Bohuk     Initial Authoring 
+# October 2016   Seth Tenembaum  Add showMessage 
 */
 ?>
 <xml id="toolbox" style="display: none">
@@ -702,6 +703,13 @@
         <value name="text">
           <shadow type="text">
             <field name="TEXT">Continue?</field>
+          </shadow>
+        </value>
+      </block>
+      <block type="screen_showmessage">
+        <value name="text">
+          <shadow type="text">
+            <field name="TEXT">You win!</field>
           </shadow>
         </value>
       </block>
