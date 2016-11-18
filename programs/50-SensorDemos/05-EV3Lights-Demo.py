@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 #
-# Copyright (c) 2015 mindsensors.com
+# Copyright (c) 2016 mindsensors.com
 # 
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 2 as
@@ -19,9 +19,9 @@
 #Learn more product option visit us @  http://www.mindsensors.com/
 # History:
 # Date      Author      Comments
-# 09/11/15  Nitin Patil     Initial Authoring
+# 11/18/16  Deepak Patil  Initial authoring.
 #
-#Demo Code for the PiStorms and Raspberry Pi
+# EV3Lights Demo Program.
 
 
 #initial setup code
@@ -80,6 +80,16 @@ while(not doExit):
         psm.led(1, 0,0,0)
         ev3l.setColor(EV3Lights.BLUE, 0)
         time.sleep(time_gap)
+        for i in range(4):
+            ev3l.setColor(EV3Lights.RED, 200)
+            ev3l.setColor(EV3Lights.GREEN, 200)
+            ev3l.setColor(EV3Lights.BLUE, 200)
+            time.sleep(0.2)
+            ev3l.setColor(EV3Lights.RED, 0)
+            ev3l.setColor(EV3Lights.GREEN, 0)
+            ev3l.setColor(EV3Lights.BLUE, 0)
+            time.sleep(0.2)
+                
     except:
         psm.led(1,0,0,0)
         psm.screen.termPrintAt(6,"connect EV3Lights on BAS1 ")
