@@ -2058,3 +2058,28 @@ class VOLT(mindsensors_i2c):
         except:
             print "Error: Could not set reference voltage"
             return ""
+
+## EV3Lights: this class provides functions to control RGB LEDs using EV3Lights
+class EV3Lights(mindsensors_i2c):
+    
+    ## Default NXTServo I2C Address 
+    EV3Lights_ADDRESS = (0x2c)    
+
+    RED = 0x42
+    GREEN = 0x43
+    BLUE = 0x44
+    
+    ## Initialize the class with the i2c address of your EV3Lights
+    #  @param self The object pointer.
+    #  @param i2c Address of your EV3Lights
+    def __init__(self, ev3lights_address = EV3Lights_ADDRESS):
+        mindsensors_i2c.__init__(self, ev3lights_address >> 1)       
+    
+    ## Sets the Intensity of Color on the strip
+    #  @param self The object pointer
+    #  @param Color Name you wish to control
+    #  @param Light intensity of that color (0 to 255)
+    def setColor(self, Color, intensity):
+        array = [intensity]
+        self.writeArray(Color, array)
+
