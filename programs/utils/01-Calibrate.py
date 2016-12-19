@@ -1,128 +1,110 @@
-#!/usr/bin/env python
-#
-# Copyright (c) 2016 mindsensors.com
-# 
-# This program is free software; you can redistribute it and/or modify
-# it under the terms of the GNU General Public License version 2 as
-# published by the Free Software Foundation.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.    See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program; if not, write to the Free Software
-# Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-#
-#mindsensors.com invests time and resources providing this open source code, 
-#please support mindsensors.com  by purchasing products from mindsensors.com!
-#Learn more product option visit us @  http://www.mindsensors.com/
-#
-# History:
-# Date      Author      Comments
-# 05/25/16   Deepak     Initial development.
-#
+from __future__ import division
+import math
+from time import sleep
+import numpy
 
-import time, sys
+import os,sys,inspect,time
+currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
+parentdir = os.path.dirname(currentdir)
+sys.path.insert(0,parentdir)
 from PiStorms import PiStorms
-
 psm = PiStorms()
 
-width=320
-height=240
+s = psm.screen
 
-opt1 = ""
+p = 0.25
+size = 2
+pause = 1
 
-if ( len(sys.argv) > 1 ):
-    opt1 = str(sys.argv[1])
+def getPoints():
+    x = []
+    y = []
+    for i in range(200):
+        x.append(s.RAW_X())
+        y.append(s.RAW_Y())
+    x = sum(x)/len(x)
+    y = sum(y)/len(y)
+    return (x, y)
 
-psm.resetKeyPressCount()
+# top-left
+s.fillRect(320*p, 240*p, size, size)
+sleep(pause)
+while not psm.isKeyPressed(): pass
+rx1, ry1 = getPoints()
+s.fillRect(0, 0, 320, 320)
+sleep(pause)
+s.fillRect(0, 0, 320, 320, fill=s.PS_BLACK)
 
-if ( opt1 != "force" ):
-    psm.screen.termPrintAt(1, "Touch Screen Calibration Program")
-    psm.screen.termPrintAt(3, "You should only calibrate if you")
-    psm.screen.termPrintAt(4, "upgraded PiStorms Firmware.")
-    psm.screen.termPrintAt(6, "Do you still want to calibrate?")
-    psm.screen.termPrintAt(7, "To Confirm 'Yes':")
+# bottom-left
+s.fillRect(320*p, 240*(1-p), size, size)
+sleep(pause)
+while not psm.isKeyPressed(): pass
+rx2, ry2 = getPoints()
+s.fillRect(0, 0, 320, 320)
+sleep(pause)
+s.fillRect(0, 0, 320, 320, fill=s.PS_BLACK)
 
-    doCalibrate = False
-    count = 11
-    oldKeyPressCount = psm.getKeyPressCount()
-    while ( count > 0 ):
-        psm.screen.termPrintAt(8, "press GO button within " + str(count) +" seconds")
-        count = count - 1
-        newKeyPressCount = psm.getKeyPressCount()
-        if ( newKeyPressCount > oldKeyPressCount ):
-            count = 0
-            doCalibrate = True
-        time.sleep(1)
+# bottom-right
+s.fillRect(320*(1-p), 240*(1-p), size, size)
+sleep(pause)
+while not psm.isKeyPressed(): pass
+rx3, ry3 = getPoints()
+s.fillRect(0, 0, 320, 320)
+sleep(pause)
+s.fillRect(0, 0, 320, 320, fill=s.PS_BLACK)
 
-    if ( doCalibrate == False ):
-        psm.screen.disp.clear()
-        psm.screen.termPrintAt(8, "Not calibrating ...")
-        quit()
+#top-right
+s.fillRect(320*(1-p), 240*p, size, size)
+sleep(pause)
+while not psm.isKeyPressed(): pass
+rx4, ry4 = getPoints()
+s.fillRect(0, 0, 320, 320)
+sleep(pause)
+s.fillRect(0, 0, 320, 320, fill=s.PS_BLACK)
 
-psm.screen.disp.clear()
-psm.screen.termPrintAt(1, "Touch Screen Calibration Program")
-psm.screen.termPrintAt(3, "On next screen, touch and hold")
-psm.screen.termPrintAt(4, "stylus PRECISELY on the")
-psm.screen.termPrintAt(5, "Cross-Hair and Press GO button.")
-psm.screen.termPrintAt(6, "Then follow on screen instructions.")
-psm.screen.termPrintAt(8, "Press GO button to continue")
-doExit = False
-while (doExit == False):
-    if(psm.isKeyPressed() == True): # if the GO button is pressed
-        doExit = True
-time.sleep(2)
+#center
+s.fillRect(320*0.5, 240*0.5, size, size)
+sleep(pause)
+while not psm.isKeyPressed(): pass
+rx5, ry5 = getPoints()
+s.fillRect(0, 0, 320, 320)
+sleep(pause)
+s.fillRect(0, 0, 320, 320, fill=s.PS_BLACK)
 
-draw = psm.screen.disp.draw()
-w = width/4
-h = height/4
+x1 = rx1-(rx5-rx1)*p*4
+y1 = ry1-(ry5-ry1)*p*4
+x2 = rx2-(rx5-rx2)*p*4
+y2 = ry2+(ry2-ry5)*p*4
+x3 = rx3+(rx3-rx5)*p*4
+y3 = ry3+(ry3-ry5)*p*4
+x4 = rx4+(rx4-rx5)*p*4
+y4 = ry4-(ry5-ry4)*p*4
 
-psm.screen.disp.clear()
-draw.line((h-10, w, h+10, w), fill=(0,255,0))
-draw.line((h, w-10, h, w+10), fill=(0,255,0))
-psm.screen.disp.display()
+#print (int(rx1), int(ry1)), (int(rx2), int(ry2)), (int(rx3), int(ry3)), (int(rx4), int(ry4)), (int(rx5), int(ry5))
+print (int(x1), int(y1)), (int(x2), int(y2)), (int(x3), int(y3)), (int(x4), int(y4))
 
-psm.screen.termPrintAt(7, "Touch & Hold Stylus")
-psm.screen.termPrintAt(8, "on the Cross-Hair")
-psm.screen.termPrintAt(9, "And press the GO button")
-doExit = False
-while (doExit == False):
-    if(psm.isKeyPressed() == True): # if the GO button is pressed
-        if ( psm.screen.isTouched() ):
-            time.sleep(1)
-            psm.psc.bankA.writeByte(psm.psc.PS_Command, psm.psc.E)
-            time.sleep(0.1)
-            psm.psc.bankA.writeByte(psm.psc.PS_Command, psm.psc.t)
-            time.sleep(0.1)
-            doExit = True 
-        else:
-            psm.screen.termPrintAt(8, "Screen not touched!!")
-            
-psm.screen.disp.clear()
-psm.screen.termPrintAt(8, "Do it again at new position")
-w = (width/4)*3
-h = (height/4)*3
-draw.line((h-10, w, h+10, w), fill=(0,255,0))
-draw.line((h, w-10, h, w+10), fill=(0,255,0))
-psm.screen.disp.display()
+psm.psc.bankA.writeInteger(psm.psc.PS_TS_CALIBRATION_DATA + 0x00, x1) # write to temporary memory
+psm.psc.bankA.writeInteger(psm.psc.PS_TS_CALIBRATION_DATA + 0x02, y1) # write to temporary memory
+psm.psc.bankA.writeInteger(psm.psc.PS_TS_CALIBRATION_DATA + 0x04, x2) # write to temporary memory
+psm.psc.bankA.writeInteger(psm.psc.PS_TS_CALIBRATION_DATA + 0x06, y2) # write to temporary memory
+psm.psc.bankA.writeInteger(psm.psc.PS_TS_CALIBRATION_DATA + 0x08, x3) # write to temporary memory
+psm.psc.bankA.writeInteger(psm.psc.PS_TS_CALIBRATION_DATA + 0x0A, y3) # write to temporary memory
+psm.psc.bankA.writeInteger(psm.psc.PS_TS_CALIBRATION_DATA + 0x0C, x4) # write to temporary memory
+psm.psc.bankA.writeInteger(psm.psc.PS_TS_CALIBRATION_DATA + 0x0E, y4) # write to temporary memory
+psm.psc.bankA.writeByte(psm.psc.PS_Command, psm.psc.E) # unlock permanent memory
+psm.psc.bankA.writeByte(psm.psc.PS_Command, psm.psc.w) # copy from temporary memory to permanent memory
+while psm.psc.bankA.readByte(psm.psc.PS_TS_CALIBRATION_DATA_READY) != 1: # wait for ready byte
+    time.sleep(0.01)
+if not (psm.psc.bankA.readInteger(psm.psc.PS_TS_CALIBRATION_DATA + 0x00) == int(x1)
+    and psm.psc.bankA.readInteger(psm.psc.PS_TS_CALIBRATION_DATA + 0x02) == int(y1)
+    and psm.psc.bankA.readInteger(psm.psc.PS_TS_CALIBRATION_DATA + 0x04) == int(x2)
+    and psm.psc.bankA.readInteger(psm.psc.PS_TS_CALIBRATION_DATA + 0x06) == int(y2)
+    and psm.psc.bankA.readInteger(psm.psc.PS_TS_CALIBRATION_DATA + 0x08) == int(x3)
+    and psm.psc.bankA.readInteger(psm.psc.PS_TS_CALIBRATION_DATA + 0x0A) == int(y3)
+    and psm.psc.bankA.readInteger(psm.psc.PS_TS_CALIBRATION_DATA + 0x0C) == int(x4)
+    and psm.psc.bankA.readInteger(psm.psc.PS_TS_CALIBRATION_DATA + 0x0E) == int(y4)):
+    print 'Error writing configuration values'
+    s.showMessage(['Error', 'Failed to write configuration values.'])
 
-doExit = False
-while (doExit == False):
-    if(psm.isKeyPressed() == True): # if the GO button is pressed
-        if ( psm.screen.isTouched() ):
-            time.sleep(1)
-            psm.psc.bankA.writeByte(psm.psc.PS_Command, psm.psc.E)
-            time.sleep(0.1)
-            psm.psc.bankA.writeByte(psm.psc.PS_Command, psm.psc.T)
-            time.sleep(0.1)
-            doExit = True 
-        else:
-            psm.screen.termPrintAt(8, "Screen not touched!!")
-            
-psm.screen.disp.clear()
-psm.screen.termPrintAt(8, "Calibration complete")
-time.sleep(1)
-quit()
+for i in range(8):
+    print psm.psc.bankA.readInteger(psm.psc.PS_TS_CALIBRATION_DATA + i*2)
