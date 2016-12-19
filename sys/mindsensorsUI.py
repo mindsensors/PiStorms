@@ -241,24 +241,24 @@ class mindsensorsUI():
     def TS_To_ImageCoords_X(self, x, y):
         cr = self.currentRotation
         if(cr == 0):
-            return y
-        if(cr == 1):
-            return self.PS_SCREENHEIGHT-x
-        if(cr == 2):
-            return self.PS_SCREENWIDTH-y
-        if(cr == 3):
             return x
+        if(cr == 1):
+            return y
+        if(cr == 2):
+            return self.PS_SCREENWIDTH-x
+        if(cr == 3):
+            return self.PS_SCREENHEIGHT-y
 
     def TS_To_ImageCoords_Y(self, x, y):
         cr = self.currentRotation
         if(cr == 0):
-            return self.PS_SCREENHEIGHT-x
-        if(cr == 1):
-            return self.PS_SCREENWIDTH-y
-        if(cr == 2):
-            return x
-        if(cr == 3):
             return y
+        if(cr == 1):
+            return self.PS_SCREENWIDTH-x
+        if(cr == 2):
+            return self.PS_SCREENHEIGHT-y
+        if(cr == 3):
+            return x
             
     ## Displays rotated text (INTERNAL USE ONLY)
     #  @param self The object pointer.
