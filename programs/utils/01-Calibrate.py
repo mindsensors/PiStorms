@@ -93,8 +93,11 @@ psm.psc.bankA.writeInteger(psm.psc.PS_TS_CALIBRATION_DATA + 0x0C, x4) # write to
 psm.psc.bankA.writeInteger(psm.psc.PS_TS_CALIBRATION_DATA + 0x0E, y4) # write to temporary memory
 psm.psc.bankA.writeByte(psm.psc.PS_Command, psm.psc.E) # unlock permanent memory
 psm.psc.bankA.writeByte(psm.psc.PS_Command, psm.psc.w) # copy from temporary memory to permanent memory
+timeout = time.time() + 1 # wait for up to a second
 while psm.psc.bankA.readByte(psm.psc.PS_TS_CALIBRATION_DATA_READY) != 1: # wait for ready byte
     time.sleep(0.01)
+    if time.time() > timeout:
+        break #s.showMessage(['Error', 'Failed to write configuration values.']) # no need to show message here, it will already show below
 if not (psm.psc.bankA.readInteger(psm.psc.PS_TS_CALIBRATION_DATA + 0x00) == int(x1)
     and psm.psc.bankA.readInteger(psm.psc.PS_TS_CALIBRATION_DATA + 0x02) == int(y1)
     and psm.psc.bankA.readInteger(psm.psc.PS_TS_CALIBRATION_DATA + 0x04) == int(x2)

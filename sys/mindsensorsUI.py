@@ -43,7 +43,6 @@ from threading import Thread, Lock
 
 # for new touchscreen functionality
 import json
-from PiStormsCom import PiStormsCom
 
 ## @package mindsensorsUI
 #  This module contains classes and functions necessary for use of LCD touchscreen on mindsensors.com products
@@ -157,11 +156,11 @@ class mindsensorsUI():
         self.myname = name
         #self.drawDisplay(name,display = False)
         
-        # load touchscreen calibration values from cache file
+        # read touchscreen calibration values from cache file
         try:
             self.ts_cal = json.load(open('/tmp/ps_ts_cal', 'r'))
         except IOError:
-            self.showMessage(['Touchscreen Error', 'Failed to load', 'touchscreen calibration values', 'in mindsensorsUI.py'])
+            self.showMessage(['Touchscreen Error', 'Failed to read', 'touchscreen calibration values', 'in mindsensorsUI.py'])
     
     ### @cond
     ## Dumps the screen buffer
@@ -413,13 +412,13 @@ class mindsensorsUI():
                 return float( abs( (y2-y1)*x0 - (x2-x1)*y0 + x2*y1 - y2*x1 ) ) / math.sqrt( (y2-y1)**2 + (x2-x1)**2 )
             
             # http://math.stackexchange.com/a/104595/363240
-            dU0 = int(float( distanceToLine(x, y, x1, y1, x2, y2) )/(y2-y1)*320)
-            dV0 = int(float( distanceToLine(x, y, x1, y1, x4, y4) )/(x4-x1)*240)
-            
-            dU1 = int(float( distanceToLine(x, y, x4, y4, x3, y3) )/(y3-y4)*320)
-            dV1 = int(float( distanceToLine(x, y, x2, y2, x3, y3) )/(x3-x2)*240)
-            
             try:
+                dU0 = int(float( distanceToLine(x, y, x1, y1, x2, y2) )/(y2-y1)*320)
+                dV0 = int(float( distanceToLine(x, y, x1, y1, x4, y4) )/(x4-x1)*240)
+                
+                dU1 = int(float( distanceToLine(x, y, x4, y4, x3, y3) )/(y3-y4)*320)
+                dV1 = int(float( distanceToLine(x, y, x2, y2, x3, y3) )/(x3-x2)*240)
+                
                 x = float( dU0 )/(dU0+dU1) # 0 to 1
                 y = float( dV0 )/(dV0+dV1) # 0 to 1
             
