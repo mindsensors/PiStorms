@@ -29,7 +29,6 @@ import sys,os
 import ctypes
 import random
 import json # for new touchscreen functionality
-from mindsensorsUI import mindsensorsUI # for displaying possible error message when loading touchscreen configuration values
 
 class PSSensor():
 
@@ -710,7 +709,8 @@ class PiStormsCom():
         try:
             self.ts_cal = json.load(open('/tmp/ps_ts_cal', 'r'))
         except IOError:
-            mindsensorsUI().showMessage(['Touchscreen Error', 'Failed to read', 'touchscreen calibration values', 'in PiStormsCom.py'])
+            print 'Touchscreen Error: Failed to read touchscreen calibration values in PiStormsCom.py'
+            pass # PiStormsCom is used in many places where the touchscreen values are not necessary. If there is a problem reading the cache file then an error message would already be shown from mindsensorsUI.py
         
     def Shutdown(self):
         self.bankA.writeByte(self.PS_Command,self.H)

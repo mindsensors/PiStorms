@@ -89,13 +89,11 @@ try:
                'y4': psc.bankA.readInteger(psc.PS_TS_CALIBRATION_DATA + 0x0E) }
     json.dump(ts_cal, open('/tmp/ps_ts_cal', 'w'))
 except TypeError: # failed readInteger
-    mindsensorsUI(host_name, rotation, device=device_number).showMessage(['Touchscreen Error', 'Failed to load', 'touchscreen calibration values', 'in MSBrowser.py'])
-    pass 
+    mindsensorsUI(host_name, rotation, device=device_number).showMessage(['Touchscreen Error', 'Failed to load', 'touchscreen calibration values'])
 except IOError: # failed open in json.dump
-    mindsensorsUI(host_name, rotation, device=device_number).showMessage(['Touchscreen Error', 'Failed to write', 'touchscreen calibration values', 'in MSBrowser.py'])
+    mindsensorsUI(host_name, rotation, device=device_number).showMessage(['Touchscreen Error', 'Failed to write', 'touchscreen calibration values'])
 except:
-    mindsensorsUI(host_name, rotation, device=device_number).showMessage(['Touchscreen Error', 'An unknown error occurred', 'while attempting to load', 'touchscreen calibration values', 'in MSBrowser.py'])
-
+    mindsensorsUI(host_name, rotation, device=device_number).showMessage(['Touchscreen Error', 'An unknown error occurred', 'while attempting to load', 'touchscreen calibration values'])
 try:
     bootmode = mindsensors_i2c(0xEA>>1) 
     bootmode.readbyte()

@@ -107,7 +107,7 @@ if not (psm.psc.bankA.readInteger(psm.psc.PS_TS_CALIBRATION_DATA + 0x00) == int(
     and psm.psc.bankA.readInteger(psm.psc.PS_TS_CALIBRATION_DATA + 0x0C) == int(x4)
     and psm.psc.bankA.readInteger(psm.psc.PS_TS_CALIBRATION_DATA + 0x0E) == int(y4)):
     print 'Error writing configuration values'
-    s.showMessage(['Error', 'Failed to write configuration values.'])
+    s.showMessage(['Error', 'Failed to write configuration values', 'to PiStorms'])
 
 for i in range(8):
     print psm.psc.bankA.readInteger(psm.psc.PS_TS_CALIBRATION_DATA + i*2)

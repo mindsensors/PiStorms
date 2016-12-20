@@ -160,7 +160,7 @@ class mindsensorsUI():
         try:
             self.ts_cal = json.load(open('/tmp/ps_ts_cal', 'r'))
         except IOError:
-            self.showMessage(['Touchscreen Error', 'Failed to read', 'touchscreen calibration values', 'in mindsensorsUI.py'])
+            self.showMessage(['Touchscreen Error', 'Failed to read', 'touchscreen calibration values'])
     
     ### @cond
     ## Dumps the screen buffer
