@@ -20,8 +20,9 @@
 #Learn more product option visit us @  http://www.mindsensors.com/
 #
 # History:
-# Date         Author          Comments
-# July 2016    Roman Bohuk     Initial Authoring 
+# Date              Author          Comments
+# July 2016         Roman Bohuk     Initial Authoring 
+# December 2016     Roman Bohuk     Added functionality to rename files 
 
 from datetime import timedelta, date
 from flask import Flask, make_response, request, current_app  
@@ -375,6 +376,22 @@ def addobject():
                 if request.form["type"] == "bl": f.write('#!/usr/bin/env python\n\n# ATTENTION!\n# Please do not manually edit the contents of this file\n# Only use the web interface for editing\n# Otherwise, the file may no longer be editable using the web interface, or you changes may be lost\n' + copyright + '\n"""\n--BLOCKLY FILE--\n--START BLOCKS--\nPHhtbCB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94aHRtbCI+PC94bWw+\ndcb89b3f89fc910d631112bf6140e47513c301e5bcf76a08a1b4d66ab1ca58d3\n--END BLOCKS--\n"""\n\n')
                 if request.form["type"] == "py": f.write('#!/usr/bin/env python\n\n')
         os.system("sudo chown -R pi:pi %s" % folderpath)
+        return "1"
+    except Exception as e:
+        return "0"
+
+@app.route("/renameobject", methods=['POST', 'OPTIONS'])
+@crossdomain(origin='*')
+def renameobject():
+    try:
+        if not (os.path.isdir(request.form["path"]) and request.form["path"] and request.form["path"].startswith(os.path.abspath(os.path.join(home_folder, "programs"))+'/')):
+            return "0";
+        filename = os.path.basename(request.form["filename"].rstrip(os.sep))
+        folderpath = os.path.join(request.form["path"], filename)
+        filenamenew = os.path.basename(request.form["filenamenew"].rstrip(os.sep))
+        folderpathnew = os.path.join(request.form["path"], filenamenew)
+        os.renames(folderpath,folderpathnew)
+        os.system("sudo chown -R pi:pi %s" % folderpathnew)
         return "1"
     except Exception as e:
         return "0"

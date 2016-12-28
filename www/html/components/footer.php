@@ -74,7 +74,8 @@ function question() {
     var titlev = $("#titlein").val();
     var messagev = $("#messagein").val();
     $.post("https://script.google.com/macros/s/AKfycbz1CWSRnawPwAJ38iqA_De4C2ynKVF5Sd4Pe8uUCvDE94EBmQ1i/exec", {name_s: namev, email_s: emailv, summary_s: titlev, description_s: messagev}, function(data){
-        $("#qbody").html("<h4>Bug report successfully sent!</h4>");
+        $("#qbody").html("<h4>Bug report successfully sent! Refreshing the page ...</h4>");
+        setTimeout(function(){location.reload();}, 1000);
     });
 }
 </script>

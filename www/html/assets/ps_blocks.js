@@ -57,7 +57,7 @@ Blockly.Blocks['motors_setspeed'] = {
     this.setNextStatement(true, null);
     this.setColour(240);
     this.setTooltip('');
-    this.setHelpUrl('http://www.example.com/');
+    this.setHelpUrl('https://www.mindsensors.com/forum');
   }
 };
 Blockly.Python['motors_setspeed'] = function(block) {
@@ -80,7 +80,7 @@ Blockly.Blocks['motors_brake'] = {
     this.setNextStatement(true, null);
     this.setColour(240);
     this.setTooltip('');
-    this.setHelpUrl('http://www.example.com/');
+    this.setHelpUrl('https://www.mindsensors.com/forum');
   }
 };
 Blockly.Python['motors_brake'] = function(block) {
@@ -102,7 +102,7 @@ Blockly.Blocks['motors_float'] = {
     this.setNextStatement(true, null);
     this.setColour(240);
     this.setTooltip('');
-    this.setHelpUrl('http://www.example.com/');
+    this.setHelpUrl('https://www.mindsensors.com/forum');
   }
 };
 Blockly.Python['motors_float'] = function(block) {
@@ -124,7 +124,7 @@ Blockly.Blocks['motors_hold'] = {
     this.setNextStatement(true, null);
     this.setColour(240);
     this.setTooltip('');
-    this.setHelpUrl('http://www.example.com/');
+    this.setHelpUrl('https://www.mindsensors.com/forum');
   }
 };
 Blockly.Python['motors_hold'] = function(block) {
@@ -144,7 +144,7 @@ Blockly.Blocks['motors_getposition'] = {
     this.setOutput(true, "Number");
     this.setColour(240);
     this.setTooltip('');
-    this.setHelpUrl('http://www.example.com/');
+    this.setHelpUrl('https://www.mindsensors.com/forum');
   }
 };
 Blockly.Python['motors_getposition'] = function(block) {
@@ -165,7 +165,7 @@ Blockly.Blocks['motors_resetposition'] = {
     this.setNextStatement(true, null);
     this.setColour(240);
     this.setTooltip('');
-    this.setHelpUrl('http://www.example.com/');
+    this.setHelpUrl('https://www.mindsensors.com/forum');
   }
 };
 Blockly.Python['motors_resetposition'] = function(block) {
@@ -189,7 +189,7 @@ Blockly.Blocks['motors_syncspeed'] = {
     this.setNextStatement(true, null);
     this.setColour(240);
     this.setTooltip('');
-    this.setHelpUrl('http://www.example.com/');
+    this.setHelpUrl('https://www.mindsensors.com/forum');
   }
 };
 Blockly.Python['motors_syncspeed'] = function(block) {
@@ -212,7 +212,7 @@ Blockly.Blocks['motors_syncfloat'] = {
     this.setNextStatement(true, null);
     this.setColour(240);
     this.setTooltip('');
-    this.setHelpUrl('http://www.example.com/');
+    this.setHelpUrl('https://www.mindsensors.com/forum');
   }
 };
 Blockly.Python['motors_syncfloat'] = function(block) {
@@ -234,7 +234,7 @@ Blockly.Blocks['motors_syncbrake'] = {
     this.setNextStatement(true, null);
     this.setColour(240);
     this.setTooltip('');
-    this.setHelpUrl('http://www.example.com/');
+    this.setHelpUrl('https://www.mindsensors.com/forum');
   }
 };
 Blockly.Python['motors_syncbrake'] = function(block) {
@@ -256,7 +256,7 @@ Blockly.Blocks['motors_waituntilnotbusy'] = {
     this.setNextStatement(true, null);
     this.setColour(240);
     this.setTooltip('');
-    this.setHelpUrl('http://www.example.com/');
+    this.setHelpUrl('https://www.mindsensors.com/forum');
   }
 };
 Blockly.Python['motors_waituntilnotbusy'] = function(block) {
@@ -288,7 +288,7 @@ Blockly.Blocks['motors_runsecs'] = {
     this.setNextStatement(true, null);
     this.setColour(240);
     this.setTooltip('');
-    this.setHelpUrl('http://www.example.com/');
+    this.setHelpUrl('https://www.mindsensors.com/forum');
   }
 };
 Blockly.Python['motors_runsecs'] = function(block) {
@@ -323,7 +323,7 @@ Blockly.Blocks['motors_rundegrees'] = {
     this.setNextStatement(true, null);
     this.setColour(240);
     this.setTooltip('');
-    this.setHelpUrl('http://www.example.com/');
+    this.setHelpUrl('https://www.mindsensors.com/forum');
   }
 };
 Blockly.Python['motors_rundegrees'] = function(block) {
@@ -348,7 +348,7 @@ Blockly.Blocks['motors_isbusy'] = {
     this.setOutput(true, "Boolean");
     this.setColour(240);
     this.setTooltip('');
-    this.setHelpUrl('http://www.example.com/');
+    this.setHelpUrl('https://www.mindsensors.com/forum');
   }
 };
 Blockly.Python['motors_isbusy'] = function(block) {
@@ -369,7 +369,7 @@ Blockly.Blocks['motors_isstalled'] = {
     this.setOutput(true, "Boolean");
     this.setColour(240);
     this.setTooltip('');
-    this.setHelpUrl('http://www.example.com/');
+    this.setHelpUrl('https://www.mindsensors.com/forum');
   }
 };
 Blockly.Python['motors_isstalled'] = function(block) {
@@ -390,7 +390,7 @@ Blockly.Blocks['motors_isoverloaded'] = {
     this.setOutput(true, "Boolean");
     this.setColour(240);
     this.setTooltip('');
-    this.setHelpUrl('http://www.example.com/');
+    this.setHelpUrl('https://www.mindsensors.com/forum');
   }
 };
 Blockly.Python['motors_isoverloaded'] = function(block) {
@@ -436,7 +436,7 @@ Blockly.Blocks['motors_setparams'] = {
     this.setNextStatement(true, null);
     this.setColour(240);
     this.setTooltip('');
-    this.setHelpUrl('http://www.example.com/');
+    this.setHelpUrl('https://www.mindsensors.com/forum');
   }
 };
 Blockly.Python['motors_setparams'] = function(block) {
@@ -468,7 +468,7 @@ Blockly.Blocks['system_sleep'] = {
     this.setNextStatement(true, null);
     this.setColour(5);
     this.setTooltip('');
-    this.setHelpUrl('http://www.example.com/');
+    this.setHelpUrl('https://www.mindsensors.com/forum');
   }
 };
 Blockly.Python['system_sleep'] = function(block) {
@@ -486,7 +486,7 @@ Blockly.Blocks['variable_pistorms'] = {
     this.setOutput(true, "PiStorms");
     this.setColour(330);
     this.setTooltip('');
-    this.setHelpUrl('http://www.example.com/');
+    this.setHelpUrl('https://www.mindsensors.com/forum');
   }
 };
 Blockly.Python['variable_pistorms'] = function(block) {
@@ -506,7 +506,7 @@ Blockly.Blocks['system_print'] = {
     this.setNextStatement(true, null);
     this.setColour(5);
     this.setTooltip('');
-    this.setHelpUrl('http://www.example.com/');
+    this.setHelpUrl('https://www.mindsensors.com/forum');
   }
 };
 Blockly.Python['system_print'] = function(block) {
@@ -524,7 +524,7 @@ Blockly.Blocks['system_shutdown'] = {
     this.setNextStatement(true, null);
     this.setColour(5);
     this.setTooltip('');
-    this.setHelpUrl('http://www.example.com/');
+    this.setHelpUrl('https://www.mindsensors.com/forum');
   }
 };
 Blockly.Python['system_shutdown'] = function(block) {
@@ -543,7 +543,7 @@ Blockly.Blocks['system_exit'] = {
     this.setNextStatement(true, null);
     this.setColour(5);
     this.setTooltip('');
-    this.setHelpUrl('http://www.example.com/');
+    this.setHelpUrl('https://www.mindsensors.com/forum');
   }
 };
 Blockly.Python['system_exit'] = function(block) {
@@ -559,7 +559,7 @@ Blockly.Blocks['system_getbattery'] = {
     this.setOutput(true, "Number");
     this.setColour(5);
     this.setTooltip('');
-    this.setHelpUrl('http://www.example.com/');
+    this.setHelpUrl('https://www.mindsensors.com/forum');
   }
 };
 Blockly.Python['system_getbattery'] = function(block) {
@@ -577,7 +577,7 @@ Blockly.Blocks['system_getfirmware'] = {
     this.setOutput(true, "String");
     this.setColour(5);
     this.setTooltip('');
-    this.setHelpUrl('http://www.example.com/');
+    this.setHelpUrl('https://www.mindsensors.com/forum');
   }
 };
 Blockly.Python['system_getfirmware'] = function(block) {
@@ -595,7 +595,7 @@ Blockly.Blocks['system_getvendor'] = {
     this.setOutput(true, "String");
     this.setColour(5);
     this.setTooltip('');
-    this.setHelpUrl('http://www.example.com/');
+    this.setHelpUrl('https://www.mindsensors.com/forum');
   }
 };
 Blockly.Python['system_getvendor'] = function(block) {
@@ -613,7 +613,7 @@ Blockly.Blocks['system_keypressed'] = {
     this.setOutput(true, "Boolean");
     this.setColour(200);
     this.setTooltip('');
-    this.setHelpUrl('http://www.example.com/');
+    this.setHelpUrl('https://www.mindsensors.com/forum');
   }
 };
 Blockly.Python['system_keypressed'] = function(block) {
@@ -631,7 +631,7 @@ Blockly.Blocks['system_getdeviceid'] = {
     this.setOutput(true, "String");
     this.setColour(5);
     this.setTooltip('');
-    this.setHelpUrl('http://www.example.com/');
+    this.setHelpUrl('https://www.mindsensors.com/forum');
   }
 };
 Blockly.Python['system_getdeviceid'] = function(block) {
@@ -649,7 +649,7 @@ Blockly.Blocks['system_getkeypresscount'] = {
     this.setOutput(true, "Number");
     this.setColour(200);
     this.setTooltip('');
-    this.setHelpUrl('http://www.example.com/');
+    this.setHelpUrl('https://www.mindsensors.com/forum');
   }
 };
 Blockly.Python['system_getkeypresscount'] = function(block) {
@@ -668,7 +668,7 @@ Blockly.Blocks['system_resetkeypresscount'] = {
     this.setNextStatement(true, null);
     this.setColour(200);
     this.setTooltip('');
-    this.setHelpUrl('http://www.example.com/');
+    this.setHelpUrl('https://www.mindsensors.com/forum');
   }
 };
 Blockly.Python['system_resetkeypresscount'] = function(block) {
@@ -692,7 +692,7 @@ Blockly.Blocks['led_control'] = {
     this.setNextStatement(true, null);
     this.setColour(140);
     this.setTooltip('');
-    this.setHelpUrl('http://www.example.com/');
+    this.setHelpUrl('https://www.mindsensors.com/forum');
   }
 };
 Blockly.Python['led_control'] = function(block) {
@@ -724,7 +724,7 @@ Blockly.Blocks['sensors_nxttouch'] = {
     this.setOutput(true, "nxtev3touch");
     this.setColour(0);
     this.setTooltip('');
-    this.setHelpUrl('http://www.example.com/');
+    this.setHelpUrl('https://www.mindsensors.com/forum');
   }
 };
 Blockly.Python['sensors_nxttouch'] = function(block) {
@@ -743,7 +743,7 @@ Blockly.Blocks['sensors_ev3touch'] = {
     this.setOutput(true, "nxtev3touch");
     this.setColour(0);
     this.setTooltip('');
-    this.setHelpUrl('http://www.example.com/');
+    this.setHelpUrl('https://www.mindsensors.com/forum');
   }
 };
 Blockly.Python['sensors_ev3touch'] = function(block) {
@@ -764,7 +764,7 @@ Blockly.Blocks['sensors_istouchpressed'] = {
     this.setOutput(true, "Boolean");
     this.setColour(0);
     this.setTooltip('');
-    this.setHelpUrl('http://www.example.com/');
+    this.setHelpUrl('https://www.mindsensors.com/forum');
   }
 };
 Blockly.Python['sensors_istouchpressed'] = function(block) {
@@ -781,7 +781,7 @@ Blockly.Blocks['sensors_gettouchbumpcount'] = {
     this.setOutput(true, "Number");
     this.setColour(0);
     this.setTooltip('');
-    this.setHelpUrl('http://www.example.com/');
+    this.setHelpUrl('https://www.mindsensors.com/forum');
   }
 };
 Blockly.Python['sensors_gettouchbumpcount'] = function(block) {
@@ -799,7 +799,7 @@ Blockly.Blocks['sensors_resettouchbumpcount'] = {
     this.setNextStatement(true, null);
     this.setColour(0);
     this.setTooltip('');
-    this.setHelpUrl('http://www.example.com/');
+    this.setHelpUrl('https://www.mindsensors.com/forum');
   }
 };
 Blockly.Python['sensors_resettouchbumpcount'] = function(block) {
@@ -819,7 +819,7 @@ Blockly.Blocks['sensors_nxtlight'] = {
     this.setOutput(true, "nxtlight");
     this.setColour(20);
     this.setTooltip('');
-    this.setHelpUrl('http://www.example.com/');
+    this.setHelpUrl('https://www.mindsensors.com/forum');
   }
 };
 Blockly.Python['sensors_nxtlight'] = function(block) {
@@ -838,7 +838,7 @@ Blockly.Blocks['sensors_nxtlightgetvalue'] = {
     this.setOutput(true, "Number");
     this.setColour(20);
     this.setTooltip('');
-    this.setHelpUrl('http://www.example.com/');
+    this.setHelpUrl('https://www.mindsensors.com/forum');
   }
 };
 Blockly.Python['sensors_nxtlightgetvalue'] = function(block) {
@@ -859,7 +859,7 @@ Blockly.Blocks['sensors_nxtlightsetmode'] = {
     this.setNextStatement(true, null);
     this.setColour(20);
     this.setTooltip('');
-    this.setHelpUrl('http://www.example.com/');
+    this.setHelpUrl('https://www.mindsensors.com/forum');
   }
 };
 Blockly.Python['sensors_nxtlightsetmode'] = function(block) {
@@ -880,7 +880,7 @@ Blockly.Blocks['sensors_nxtcolor'] = {
     this.setOutput(true, "nxtcolor");
     this.setColour(40);
     this.setTooltip('');
-    this.setHelpUrl('http://www.example.com/');
+    this.setHelpUrl('https://www.mindsensors.com/forum');
   }
 };
 Blockly.Python['sensors_nxtcolor'] = function(block) {
@@ -899,7 +899,7 @@ Blockly.Blocks['sensors_nxtcolorgetcolor'] = {
     this.setOutput(true, "String");
     this.setColour(40);
     this.setTooltip('');
-    this.setHelpUrl('http://www.example.com/');
+    this.setHelpUrl('https://www.mindsensors.com/forum');
   }
 };
 Blockly.Python['sensors_nxtcolorgetcolor'] = function(block) {
@@ -920,7 +920,7 @@ Blockly.Blocks['sensors_nxtcolorsetmode'] = {
     this.setNextStatement(true, null);
     this.setColour(40);
     this.setTooltip('');
-    this.setHelpUrl('http://www.example.com/');
+    this.setHelpUrl('https://www.mindsensors.com/forum');
   }
 };
 Blockly.Python['sensors_nxtcolorsetmode'] = function(block) {
@@ -941,7 +941,7 @@ Blockly.Blocks['sensors_ev3color'] = {
     this.setOutput(true, "ev3color");
     this.setColour(60);
     this.setTooltip('');
-    this.setHelpUrl('http://www.example.com/');
+    this.setHelpUrl('https://www.mindsensors.com/forum');
   }
 };
 Blockly.Python['sensors_ev3color'] = function(block) {
@@ -960,7 +960,7 @@ Blockly.Blocks['sensors_ev3colorgetvalue'] = {
     this.setOutput(true, "Number");
     this.setColour(60);
     this.setTooltip('');
-    this.setHelpUrl('http://www.example.com/');
+    this.setHelpUrl('https://www.mindsensors.com/forum');
   }
 };
 Blockly.Python['sensors_ev3colorgetvalue'] = function(block) {
@@ -981,7 +981,7 @@ Blockly.Blocks['sensors_ev3colorsetmode'] = {
     this.setNextStatement(true, null);
     this.setColour(60);
     this.setTooltip('');
-    this.setHelpUrl('http://www.example.com/');
+    this.setHelpUrl('https://www.mindsensors.com/forum');
   }
 };
 Blockly.Python['sensors_ev3colorsetmode'] = function(block) {
@@ -1001,7 +1001,7 @@ Blockly.Blocks['sensors_ev3gyro'] = {
     this.setOutput(true, "ev3gyro");
     this.setColour(80);
     this.setTooltip('');
-    this.setHelpUrl('http://www.example.com/');
+    this.setHelpUrl('https://www.mindsensors.com/forum');
   }
 };
 Blockly.Python['sensors_ev3gyro'] = function(block) {
@@ -1020,7 +1020,7 @@ Blockly.Blocks['sensors_ev3gyrogetvalue'] = {
     this.setOutput(true, "Number");
     this.setColour(80);
     this.setTooltip('');
-    this.setHelpUrl('http://www.example.com/');
+    this.setHelpUrl('https://www.mindsensors.com/forum');
   }
 };
 Blockly.Python['sensors_ev3gyrogetvalue'] = function(block) {
@@ -1041,7 +1041,7 @@ Blockly.Blocks['sensors_ev3gyrosetmode'] = {
     this.setNextStatement(true, null);
     this.setColour(80);
     this.setTooltip('');
-    this.setHelpUrl('http://www.example.com/');
+    this.setHelpUrl('https://www.mindsensors.com/forum');
   }
 };
 Blockly.Python['sensors_ev3gyrosetmode'] = function(block) {
@@ -1061,7 +1061,7 @@ Blockly.Blocks['sensors_ev3ultrasonic'] = {
     this.setOutput(true, "ev3ultrasonic");
     this.setColour(100);
     this.setTooltip('');
-    this.setHelpUrl('http://www.example.com/');
+    this.setHelpUrl('https://www.mindsensors.com/forum');
   }
 };
 Blockly.Python['sensors_ev3ultrasonic'] = function(block) {
@@ -1080,7 +1080,7 @@ Blockly.Blocks['sensors_ev3ultrasonicgetvalue'] = {
     this.setOutput(true, "Number");
     this.setColour(100);
     this.setTooltip('');
-    this.setHelpUrl('http://www.example.com/');
+    this.setHelpUrl('https://www.mindsensors.com/forum');
   }
 };
 Blockly.Python['sensors_ev3ultrasonicgetvalue'] = function(block) {
@@ -1097,7 +1097,7 @@ Blockly.Blocks['sensors_ev3ultrasonicdetect'] = {
     this.setOutput(true, "Boolean");
     this.setColour(100);
     this.setTooltip('');
-    this.setHelpUrl('http://www.example.com/');
+    this.setHelpUrl('https://www.mindsensors.com/forum');
   }
 };
 Blockly.Python['sensors_ev3ultrasonicdetect'] = function(block) {
@@ -1118,7 +1118,7 @@ Blockly.Blocks['sensors_ev3ultrasonicsetmode'] = {
     this.setNextStatement(true, null);
     this.setColour(100);
     this.setTooltip('');
-    this.setHelpUrl('http://www.example.com/');
+    this.setHelpUrl('https://www.mindsensors.com/forum');
   }
 };
 Blockly.Python['sensors_ev3ultrasonicsetmode'] = function(block) {
@@ -1144,7 +1144,7 @@ Blockly.Blocks['sensors_ev3infrared'] = {
     this.setOutput(true, "ev3infrared");
     this.setColour(120);
     this.setTooltip('');
-    this.setHelpUrl('http://www.example.com/');
+    this.setHelpUrl('https://www.mindsensors.com/forum');
   }
 };
 Blockly.Python['sensors_ev3infrared'] = function(block) {
@@ -1163,7 +1163,7 @@ Blockly.Blocks['sensors_ev3infraredgetproximity'] = {
     this.setOutput(true, "Number");
     this.setColour(120);
     this.setTooltip('');
-    this.setHelpUrl('http://www.example.com/');
+    this.setHelpUrl('https://www.mindsensors.com/forum');
   }
 };
 Blockly.Python['sensors_ev3infraredgetproximity'] = function(block) {
@@ -1183,7 +1183,7 @@ Blockly.Blocks['sensors_ev3infraredchannelheading'] = {
     this.setOutput(true, "Number");
     this.setColour(120);
     this.setTooltip('');
-    this.setHelpUrl('http://www.example.com/');
+    this.setHelpUrl('https://www.mindsensors.com/forum');
   }
 };
 Blockly.Python['sensors_ev3infraredchannelheading'] = function(block) {
@@ -1204,7 +1204,7 @@ Blockly.Blocks['sensors_ev3infraredchannelproximity'] = {
     this.setOutput(true, "Number");
     this.setColour(120);
     this.setTooltip('');
-    this.setHelpUrl('http://www.example.com/');
+    this.setHelpUrl('https://www.mindsensors.com/forum');
   }
 };
 Blockly.Python['sensors_ev3infraredchannelproximity'] = function(block) {
@@ -1226,7 +1226,7 @@ Blockly.Blocks['sensors_ev3infraredgetremote'] = {
     this.setOutput(true, "Array");
     this.setColour(120);
     this.setTooltip('');
-    this.setHelpUrl('http://www.example.com/');
+    this.setHelpUrl('https://www.mindsensors.com/forum');
   }
 };
 Blockly.Python['sensors_ev3infraredgetremote'] = function(block) {
@@ -1248,7 +1248,7 @@ Blockly.Blocks['sensors_ev3infraredsetmode'] = {
     this.setNextStatement(true, null);
     this.setColour(120);
     this.setTooltip('');
-    this.setHelpUrl('http://www.example.com/');
+    this.setHelpUrl('https://www.mindsensors.com/forum');
   }
 };
 Blockly.Python['sensors_ev3infraredsetmode'] = function(block) {
@@ -1272,7 +1272,7 @@ Blockly.Blocks['sensors_absoluteimu'] = {
     this.setOutput(true, "absoluteimu");
     this.setColour(140);
     this.setTooltip('');
-    this.setHelpUrl('http://www.example.com/');
+    this.setHelpUrl('https://www.mindsensors.com/forum');
   }
 };
 Blockly.Python['sensors_absoluteimu'] = function(block) {
@@ -1296,7 +1296,7 @@ Blockly.Blocks['sensors_absoluteimugettilt'] = {
     this.setOutput(true, "Number");
     this.setColour(140);
     this.setTooltip('');
-    this.setHelpUrl('http://www.example.com/');
+    this.setHelpUrl('https://www.mindsensors.com/forum');
   }
 };
 Blockly.Python['sensors_absoluteimugettilt'] = function(block) {
@@ -1317,7 +1317,7 @@ Blockly.Blocks['sensors_absoluteimugetacceleration'] = {
     this.setOutput(true, "Number");
     this.setColour(140);
     this.setTooltip('');
-    this.setHelpUrl('http://www.example.com/');
+    this.setHelpUrl('https://www.mindsensors.com/forum');
   }
 };
 Blockly.Python['sensors_absoluteimugetacceleration'] = function(block) {
@@ -1336,7 +1336,7 @@ Blockly.Blocks['sensors_absoluteimugetheading'] = {
     this.setOutput(true, "Number");
     this.setColour(140);
     this.setTooltip('');
-    this.setHelpUrl('http://www.example.com/');
+    this.setHelpUrl('https://www.mindsensors.com/forum');
   }
 };
 Blockly.Python['sensors_absoluteimugetheading'] = function(block) {
@@ -1356,7 +1356,7 @@ Blockly.Blocks['sensors_absoluteimugetmagnetometer'] = {
     this.setOutput(true, "Number");
     this.setColour(140);
     this.setTooltip('');
-    this.setHelpUrl('http://www.example.com/');
+    this.setHelpUrl('https://www.mindsensors.com/forum');
   }
 };
 Blockly.Python['sensors_absoluteimugetmagnetometer'] = function(block) {
@@ -1377,7 +1377,7 @@ Blockly.Blocks['sensors_absoluteimugetgyro'] = {
     this.setOutput(true, "Number");
     this.setColour(140);
     this.setTooltip('');
-    this.setHelpUrl('http://www.example.com/');
+    this.setHelpUrl('https://www.mindsensors.com/forum');
   }
 };
 Blockly.Python['sensors_absoluteimugetgyro'] = function(block) {
@@ -1399,7 +1399,7 @@ Blockly.Blocks['sensors_absoluteimusetaccel'] = {
     this.setNextStatement(true, null);
     this.setColour(140);
     this.setTooltip('');
-    this.setHelpUrl('http://www.example.com/');
+    this.setHelpUrl('https://www.mindsensors.com/forum');
   }
 };
 Blockly.Python['sensors_absoluteimusetaccel'] = function(block) {
@@ -1418,7 +1418,7 @@ Blockly.Blocks['sensors_absoluteimustartcmpscal'] = {
     this.setNextStatement(true, null);
     this.setColour(140);
     this.setTooltip('');
-    this.setHelpUrl('http://www.example.com/');
+    this.setHelpUrl('https://www.mindsensors.com/forum');
   }
 };
 Blockly.Python['sensors_absoluteimustartcmpscal'] = function(block) {
@@ -1436,7 +1436,7 @@ Blockly.Blocks['sensors_absoluteimustopcmpscal'] = {
     this.setNextStatement(true, null);
     this.setColour(140);
     this.setTooltip('');
-    this.setHelpUrl('http://www.example.com/');
+    this.setHelpUrl('https://www.mindsensors.com/forum');
   }
 };
 Blockly.Python['sensors_absoluteimustopcmpscal'] = function(block) {
@@ -1456,7 +1456,7 @@ Blockly.Blocks['screen'] = {
     this.setNextStatement(true, null);
     this.setColour(140);
     this.setTooltip('');
-    this.setHelpUrl('http://www.example.com/');
+    this.setHelpUrl('https://www.mindsensors.com/forum');
   }
 };
 Blockly.Python['sensors_absoluteimustopcmpscal'] = function(block) {
@@ -1497,7 +1497,7 @@ Blockly.Blocks['screen_drawroundedrect'] = {
     this.setNextStatement(true, null);
     this.setColour(300);
     this.setTooltip('');
-    this.setHelpUrl('http://www.example.com/');
+    this.setHelpUrl('https://www.mindsensors.com/forum');
   }
 };
 Blockly.Python['screen_drawroundedrect'] = function(block) {
@@ -1543,7 +1543,7 @@ Blockly.Blocks['screen_drawrect'] = {
     this.setNextStatement(true, null);
     this.setColour(300);
     this.setTooltip('');
-    this.setHelpUrl('http://www.example.com/');
+    this.setHelpUrl('https://www.mindsensors.com/forum');
   }
 };
 Blockly.Python['screen_drawrect'] = function(block) {
@@ -1584,7 +1584,7 @@ Blockly.Blocks['screen_drawcircle'] = {
     this.setNextStatement(true, null);
     this.setColour(300);
     this.setTooltip('');
-    this.setHelpUrl('http://www.example.com/');
+    this.setHelpUrl('https://www.mindsensors.com/forum');
   }
 };
 Blockly.Python['screen_drawcircle'] = function(block) {
@@ -1627,7 +1627,7 @@ Blockly.Blocks['screen_drawbmp'] = {
     this.setNextStatement(true, null);
     this.setColour(300);
     this.setTooltip('');
-    this.setHelpUrl('http://www.example.com/');
+    this.setHelpUrl('https://www.mindsensors.com/forum');
   }
 };
 Blockly.Python['screen_drawbmp'] = function(block) {
@@ -1653,7 +1653,7 @@ Blockly.Blocks['screen_getwidthheight'] = {
     this.setOutput(true, "Number");
     this.setColour(300);
     this.setTooltip('');
-    this.setHelpUrl('http://www.example.com/');
+    this.setHelpUrl('https://www.mindsensors.com/forum');
   }
 };
 Blockly.Python['screen_getwidthheight'] = function(block) {
@@ -1680,7 +1680,7 @@ Blockly.Blocks['screen_drawtitle'] = {
     this.setNextStatement(true, null);
     this.setColour(300);
     this.setTooltip('');
-    this.setHelpUrl('http://www.example.com/');
+    this.setHelpUrl('https://www.mindsensors.com/forum');
   }
 };
 Blockly.Python['screen_drawtitle'] = function(block) {
@@ -1703,7 +1703,7 @@ Blockly.Blocks['screen_clear'] = {
     this.setNextStatement(true, null);
     this.setColour(300);
     this.setTooltip('');
-    this.setHelpUrl('http://www.example.com/');
+    this.setHelpUrl('https://www.mindsensors.com/forum');
   }
 };
 Blockly.Python['screen_clear'] = function(block) {
@@ -1724,7 +1724,7 @@ Blockly.Blocks['screen_gettouchcoord'] = {
     this.setOutput(true, "Number");
     this.setColour(300);
     this.setTooltip('');
-    this.setHelpUrl('http://www.example.com/');
+    this.setHelpUrl('https://www.mindsensors.com/forum');
   }
 };
 Blockly.Python['screen_gettouchcoord'] = function(block) {
@@ -1744,7 +1744,7 @@ Blockly.Blocks['screen_rotate'] = {
     this.setNextStatement(true, null);
     this.setColour(300);
     this.setTooltip('');
-    this.setHelpUrl('http://www.example.com/');
+    this.setHelpUrl('https://www.mindsensors.com/forum');
   }
 };
 Blockly.Python['screen_rotate'] = function(block) {
@@ -1763,7 +1763,7 @@ Blockly.Blocks['screen_istouched'] = {
     this.setOutput(true, "Boolean");
     this.setColour(300);
     this.setTooltip('');
-    this.setHelpUrl('http://www.example.com/');
+    this.setHelpUrl('https://www.mindsensors.com/forum');
   }
 };
 Blockly.Python['screen_istouched'] = function(block) {
@@ -1805,7 +1805,7 @@ Blockly.Blocks['screen_drawautotxt'] = {
     this.setNextStatement(true, null);
     this.setColour(300);
     this.setTooltip('');
-    this.setHelpUrl('http://www.example.com/');
+    this.setHelpUrl('https://www.mindsensors.com/forum');
   }
 };
 Blockly.Python['screen_drawautotxt'] = function(block) {
@@ -1844,7 +1844,7 @@ Blockly.Blocks['terminal_printatline'] = {
     this.setNextStatement(true, null);
     this.setColour(200);
     this.setTooltip('');
-    this.setHelpUrl('http://www.example.com/');
+    this.setHelpUrl('https://www.mindsensors.com/forum');
   }
 };
 Blockly.Python['terminal_printatline'] = function(block) {
@@ -1866,7 +1866,7 @@ Blockly.Blocks['terminal_print'] = {
     this.setNextStatement(true, null);
     this.setColour(200);
     this.setTooltip('');
-    this.setHelpUrl('http://www.example.com/');
+    this.setHelpUrl('https://www.mindsensors.com/forum');
   }
 };
 Blockly.Python['terminal_print'] = function(block) {
@@ -1889,7 +1889,7 @@ Blockly.Blocks['terminal_println'] = {
     this.setNextStatement(true, null);
     this.setColour(200);
     this.setTooltip('');
-    this.setHelpUrl('http://www.example.com/');
+    this.setHelpUrl('https://www.mindsensors.com/forum');
   }
 };
 Blockly.Python['terminal_println'] = function(block) {
@@ -1910,7 +1910,7 @@ Blockly.Blocks['terminal_replacelastline'] = {
     this.setNextStatement(true, null);
     this.setColour(200);
     this.setTooltip('');
-    this.setHelpUrl('http://www.example.com/');
+    this.setHelpUrl('https://www.mindsensors.com/forum');
   }
 };
 Blockly.Python['terminal_replacelastline'] = function(block) {
@@ -1931,7 +1931,7 @@ Blockly.Blocks['terminal_gotoline'] = {
     this.setNextStatement(true, null);
     this.setColour(200);
     this.setTooltip('');
-    this.setHelpUrl('http://www.example.com/');
+    this.setHelpUrl('https://www.mindsensors.com/forum');
   }
 };
 Blockly.Python['terminal_gotoline'] = function(block) {
@@ -1956,7 +1956,7 @@ Blockly.Blocks['terminal_refreshline'] = {
     this.setNextStatement(true, null);
     this.setColour(200);
     this.setTooltip('');
-    this.setHelpUrl('http://www.example.com/');
+    this.setHelpUrl('https://www.mindsensors.com/forum');
   }
 };
 Blockly.Python['terminal_refreshline'] = function(block) {
@@ -1978,7 +1978,7 @@ Blockly.Blocks['screen_askyesnoquestion'] = {
     this.setOutput(true, "Boolean");
     this.setColour(300);
     this.setTooltip('');
-    this.setHelpUrl('http://www.example.com/');
+    this.setHelpUrl('https://www.mindsensors.com/forum');
   }
 };
 Blockly.Python['screen_askyesnoquestion'] = function(block) {
@@ -1999,7 +1999,7 @@ Blockly.Blocks['screen_showmessage'] = {
     this.setNextStatement(true, null);
     this.setColour(300);
     this.setTooltip('');
-    this.setHelpUrl('http://www.example.com/');
+    this.setHelpUrl('https://www.mindsensors.com/forum');
   }
 };
 Blockly.Python['screen_showmessage'] = function(block) {
@@ -2026,7 +2026,7 @@ Blockly.Blocks['screen_refresh'] = {
     this.setNextStatement(true, null);
     this.setColour(300);
     this.setTooltip('');
-    this.setHelpUrl('http://www.example.com/');
+    this.setHelpUrl('https://www.mindsensors.com/forum');
   }
 };
 Blockly.Python['screen_refresh'] = function(block) {
@@ -2066,7 +2066,7 @@ Blockly.Blocks['screen_drawbutton'] = {
     this.setNextStatement(true, null);
     this.setColour(300);
     this.setTooltip('');
-    this.setHelpUrl('http://www.example.com/');
+    this.setHelpUrl('https://www.mindsensors.com/forum');
   }
 };
 Blockly.Python['screen_drawbutton'] = function(block) {
@@ -2102,7 +2102,7 @@ Blockly.Blocks['screen_checkbutton'] = {
     this.setOutput(true, "Boolean");
     this.setColour(300);
     this.setTooltip('');
-    this.setHelpUrl('http://www.example.com/');
+    this.setHelpUrl('https://www.mindsensors.com/forum');
   }
 };
 
