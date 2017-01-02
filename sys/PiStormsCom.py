@@ -336,7 +336,7 @@ class PSSensor():
             elif(self.SumoEyesisNear(800, 30, (self.bank.readInteger(PiStormsCom.PS_S1EV_Ready)))):
                 return self.SE_Left
         #if  self.SumoEyesisNear(555, 30, (self.EV3Cache[1][0]<<8 ) +self.EV3Cache[0]  ):
-            elif(self.SumoEyesisNear(800, 30, (self.bank.readInteger(PiStormsCom.PS_S1EV_Ready)))):
+            elif(self.SumoEyesisNear(555, 30, (self.bank.readInteger(PiStormsCom.PS_S1EV_Ready)))):
                 return self.SE_Right
             else:
                 return self.SE_None 
@@ -347,7 +347,7 @@ class PSSensor():
             elif(self.SumoEyesisNear(800, 30, (self.bank.readInteger(PiStormsCom.PS_S2EV_Ready)))):
                 return self.SE_Left
         #if  self.SumoEyesisNear(555, 30, (self.EV3Cache[1][0]<<8 ) +self.EV3Cache[0]  ):
-            elif(self.SumoEyesisNear(800, 30, (self.bank.readInteger(PiStormsCom.PS_S2EV_Ready)))):
+            elif(self.SumoEyesisNear(555, 30, (self.bank.readInteger(PiStormsCom.PS_S2EV_Ready)))):
                 return self.SE_Right
             else:
                 return self.SE_None                  
