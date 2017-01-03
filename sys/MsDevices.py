@@ -394,7 +394,7 @@ class LineLeader(mindsensors_i2c):
             print "Error: Could not read Lineleader"
             return ""       
             
-    ## Reads the eight(8) calibrated light sensor values of the LineLeader
+    ## Reads the setpoint register.
     #  @param self The object pointer.
     def getSetPoint(self):
         try:
@@ -403,7 +403,7 @@ class LineLeader(mindsensors_i2c):
             print "Error: Could not read Lineleader"
             return ""
             
-    ## Reads the eight(8) calibrated light sensor values of the LineLeader
+    ## Writes the Setpoint register.
     #  @param self The object pointer.
     def setSetPoint(self):
         try:
