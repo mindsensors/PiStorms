@@ -274,13 +274,259 @@ class AbsoluteIMU(mindsensors_i2c):
             return ""  
 
 
+## LineLeader: this class provides PiStorms specific interface for LineLeader-v2
+# and NXTLineLeader
+class LineLeader(mindsensors_i2c):
+
+    ## Default Lineleader I2C Address 
+    LL_ADDRESS = 0x02
+    ## Command Register
+    LL_COMMAND = 0x41
+    ## Steering Register. Will return a signed byte value
+    LL_STEERING = 0x42
+    ## Average Register. Will return a byte value
+    LL_AVERAGE = 0x43
+    ## Steering Register. Will return a byte value
+    LL_RESULT = 0x44
+    ## Setpoint Register
+    LL_SETPOINT = 0x45
+    ## KP Register
+    LL_Kp = 0x46
+    ## Ki Register
+    LL_KI = 0x47
+    ## Kd Register
+    LL_KD = 0x48
+    ## Kp factor Register
+    LL_KPfactor = 0x61
+    ## Ki factor Register
+    LL_KIfactor = 0x62
+    ## Kd factor Register
+    LL_KDfactor = 0x63
+    
+    LL_CALIBRATED = 0x49
+    LL_UNCALIBRATED = 0x74
+
+    ## Initialize the class with the i2c address of your LineLeader
+    #  @param i2c_address Address of your LineLeader
+    #  @remark
+    def __init__(self, port, address=LL_ADDRESS):
+        port.activateCustomSensorI2C()
+        mindsensors_i2c.__init__(self, address >> 1)        
+
+    ## Writes a value to the command register
+    #  @param self The object pointer.
+    #  @param commands Value to write to the command register.
+    def command(self, command):
+        self.writeByte(COMMAND, int(command)) 
+    
+    ## Calibrates the white value for the LineLeader
+    #  @param self The object pointer.
+    def White_Cal(self):
+        self.command(87)
+        
+        
+    ## Calibrates the black value for the LineLeader
+    #  @param self The object pointer.
+    def Black_Cal(self):
+        self.command(66)
+        
+    ## Wakes up or turns on the LEDs of the LineLeader
+    #  @param self The object pointer.
+    def Wakeup(self):
+        self.command(80)
+        
+    ## Puts to sleep, or turns off the LEDs of the LineLeader
+    #  @param self The object pointer.
+    def Sleep(self):
+        self.command(68)
+    
+    ## Reads the eight(8) calibrated light sensor values of the LineLeader
+    #  @param self The object pointer.
+    def ReadRaw_Calibrated(self):
+        try:
+            return self.readArray(self.LL_CALIBRATED, 8)
+        except:
+            print "Error: Could not read Lineleader"
+            return ""
+    
+    ## Reads the eight(8) uncalibrated light sensor values of the LineLeader
+    #  @param self The object pointer.    
+    def ReadRaw_Uncalibrated(self):
+        try:
+            s1 = self.readInteger(self.LL_UNCALIBRATED)
+            s2 = self.readInteger(self.LL_UNCALIBRATED + 2)
+            s3 = self.readInteger(self.LL_UNCALIBRATED + 4)
+            s4 = self.readInteger(self.LL_UNCALIBRATED + 6)
+            s5 = self.readInteger(self.LL_UNCALIBRATED + 8)
+            s6 = self.readInteger(self.LL_UNCALIBRATED + 10)
+            s7 = self.readInteger(self.LL_UNCALIBRATED + 12)
+            s8 = self.readInteger(self.LL_UNCALIBRATED + 14)
+            array = [s1, s2, s3, s4, s5, s6, s7, s8]
+            return array
+        except:
+            print "Error: Could not read Lineleader"
+            return ""
+     
+    ## Read the steering value from the Lineleader (add or subtract this value to the motor speed)
+    #  @param self The object pointer.
+    def steering(self):
+        try:
+            return self.readByteSigned(self.LL_STEERING)
+        except:
+            print "Error: Could not read Lineleader"
+            return ""  
+    
+    ## Read the average weighted value of the current line from position from the Lineleader
+    #  @param self The object pointer.
+    def average(self):
+        try:
+            return self.readByte(self.LL_AVERAGE)
+        except:
+            print "Error: Could not read Lineleader"
+            return ""  
+
+    ## Reads the result of all 8 light sensors form the LineLeader as 1 byte (1 bit for each sensor) 
+    #  @param self The object pointer.
+    def result(self):
+        try:
+            return self.readByte(self.LL_RESULT)
+        except:
+            print "Error: Could not read Lineleader"
+            return ""       
+            
+    ## Reads the eight(8) calibrated light sensor values of the LineLeader
+    #  @param self The object pointer.
+    def getSetPoint(self):
+        try:
+            return self.readByte(self.LL_SETPOINT)
+        except:
+            print "Error: Could not read Lineleader"
+            return ""
+            
+    ## Reads the eight(8) calibrated light sensor values of the LineLeader
+    #  @param self The object pointer.
+    def setSetPoint(self):
+        try:
+            return self.writeByte(self.LL_SETPOINT)
+        except:
+            print "Error: Could not write to Lineleader"
+            return ""
+            
+    ## Write the Kp value to the Lineleader
+    #  @param self The object pointer.
+    def setKP(self):
+        try:
+            return self.writeByte(self.LL_KP)
+        except:
+            print "Error: Could not write to Lineleader"
+            return ""
+            
+    ## Write the Ki value to the Lineleader
+    #  @param self The object pointer.
+    def setKI(self):
+        try:
+            return self.writeByte(self.LL_KI)
+        except:
+            print "Error: Could not write to Lineleader"
+            return ""
+            
+    ## Write the Kd value to the Lineleader
+    #  @param self The object pointer.
+    def setKD(self):
+        try:
+            return self.writeByte(self.LL_KD)
+        except:
+            print "Error: Could not write to Lineleader"
+            return ""
+            
+    ## Write the Kp factor value to the Lineleader
+    #  @param self The object pointer.
+    def setKPfactor(self):
+        try:
+            return self.writeByte(self.LL_KPfactor)
+        except:
+            print "Error: Could not write to Lineleader"
+            return ""
+            
+    ## Write the Ki factor value to the Lineleader
+    #  @param self The object pointer.
+    def setKIfactor(self):
+        try:
+            return self.writeByte(self.LL_KIfactor)
+        except:
+            print "Error: Could not write to Lineleader"
+            return ""
+            
+    ## Write the Kd factor value to the Lineleader
+    #  @param self The object pointer.
+    def setKDfactor(self):
+        try:
+            return self.writeByte(self.LL_KDfactor)
+        except:
+            print "Error: Could not write to Lineleader"
+            return ""
+    
+    ## Read the Kp value from the Lineleader
+    #  @param self The object pointer.
+    def getKP(self):
+        try:
+            return self.readByte(self.LL_KP)
+        except:
+            print "Error: Could not read Lineleader"
+            return ""
+            
+    ## Read the Ki value from the Lineleader
+    #  @param self The object pointer.
+    def getKI(self):
+        try:
+            return self.readByte(self.LL_KI)
+        except:
+            print "Error: Could not read Lineleader"
+            return ""
+            
+    ## Read the Kd value from the Lineleader
+    #  @param self The object pointer.
+    def getKD(self):
+        try:
+            return self.readByte(self.LL_KD)
+        except:
+            print "Error: Could not read Lineleader"
+            return ""
+            
+    ## Read the Kp factor value to the Lineleader
+    #  @param self The object pointer.
+    def getKPfactor(self):
+        try:
+            return self.readByte(self.LL_KPfactor)
+        except:
+            print "Error: Could not read Lineleader"
+            return ""
+            
+    ## Read the Ki factor value to the Lineleader
+    #  @param self The object pointer.
+    def getKIfactor(self):
+        try:
+            return self.readByte(self.LL_KIfactor)
+        except:
+            print "Error: Could not read Lineleader"
+            return ""
+     
+    ## Read the Kd factor value to the Lineleader
+    #  @param self The object pointer.
+    def getKDfactor(self):
+        try:
+            return self.readByte(self.LL_KDfactor)
+        except:
+            print "Error: Could not read Lineleader"
+            return ""             
+
 
 """
-AbsoluteIMU -> ABSIMU
+AbsoluteIMU -> ABSIMU **
+LineLeader -> LINELEADER **
 AngleSensor  -> ANGLE
 DISTNx -> DIST
 LightSensorArray  -> LSA
-LineLeader -> LINELEADER
 NXTMMX -> MMX
 NXTServo -> NXTSERVO
 PFMate -> PFMATE
