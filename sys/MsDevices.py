@@ -520,13 +520,86 @@ class LineLeader(mindsensors_i2c):
             print "Error: Could not read Lineleader"
             return ""             
 
+## LightSensorArray: this class provides PiStorms specific interface for LightSensorArray
+# and NXTLineLeader
+class LightSensorArray(mindsensors_i2c):
+    ## Default LightSensorArray I2C Address 
+    LSA_ADDRESS = 0x14
+    ## Command Register
+    LSA_COMMAND = 0x41
+    ## Calibrated Register. Will return an 8 byte array
+    LSA_CALIBRATED = 0x42
+    ## Uncalibrated Register. Will return an 8 byte array
+    LSA_UNCALIBRATED = 0x6A
+    
+    ## Initialize the class with the i2c address of your LineLeader
+    #  @param i2c_address Address of your LineLeader
+    #  @remark
+    def __init__(self, port, address=LSA_ADDRESS):
+        port.activateCustomSensorI2C()
+        mindsensors_i2c.__init__(self, address >> 1)        
+
+    ## Writes a value to the command register
+    #  @param self The object pointer.
+    #  @param commands Value to write to the command register.
+    def command(self, cmd):
+        self.writeByte(self.LSA_COMMAND, int(cmd)) 
+
+    ## Calibrates the white value for the LightSensorArray
+    #  @param self The object pointer.
+    def White_Cal(self):
+        self.command(87)
+        
+    ## Calibrates the black value for the LightSensorArray
+    #  @param self The object pointer.
+    def Black_Cal(self):
+        self.command(66)
+        
+    ## Wakes up or turns on the LEDs of the LightSensorArray
+    #  @param self The object pointer.
+    def Wakeup(self):
+        self.command(80)
+        
+    ## Puts to sleep, or turns off the LEDs of the LightSensorArray
+    #  @param self The object pointer.
+    def Sleep(self):
+        self.command(68)
+    
+    ## Reads the eight(8) calibrated light sensor values of the LightSensorArray
+    #  @param self The object pointer.
+    def ReadRaw_Calibrated(self):
+        try:
+            return self.readArray(self.LSA_CALIBRATED, 8)
+        except:
+            print "Error: Could not read LSArray"
+            return ""
+    
+    ## Reads the eight(8) uncalibrated light sensor values of the LightSensorArray
+    #  @param self The object pointer.    
+    def ReadRaw_Uncalibrated(self):
+        try:
+            s1 = self.readInteger(self.LSA_UNCALIBRATED)
+            s2 = self.readInteger(self.LSA_UNCALIBRATED + 2)
+            s3 = self.readInteger(self.LSA_UNCALIBRATED + 4)
+            s4 = self.readInteger(self.LSA_UNCALIBRATED + 6)
+            s5 = self.readInteger(self.LSA_UNCALIBRATED + 8)
+            s6 = self.readInteger(self.LSA_UNCALIBRATED + 10)
+            s7 = self.readInteger(self.LSA_UNCALIBRATED + 12)
+            s8 = self.readInteger(self.LSA_UNCALIBRATED + 14)
+            array = [s1, s2, s3, s4, s5, s6, s7, s8]
+            return array
+        except:
+            print "Error: Could not read LSArray"
+            return "" 
+
+
 
 """
 AbsoluteIMU -> ABSIMU **
 LineLeader -> LINELEADER **
+LightSensorArray  -> LSA **
 AngleSensor  -> ANGLE
 DISTNx -> DIST
-LightSensorArray  -> LSA
 NXTMMX -> MMX
 NXTServo -> NXTSERVO
 PFMate -> PFMATE
