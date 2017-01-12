@@ -19,9 +19,10 @@
 #Learn more product option visit us @  http://www.mindsensors.com/
 #
 # History:
-# Date          Author          Comments
-# August 2016   Roman Bohuk     Initial Authoring 
-# October 2016  Seth Tenembaum  Add showMessage 
+# Date           Author          Comments
+# August 2016    Roman Bohuk     Initial Authoring 
+# October 2016   Seth Tenembaum  Add showMessage
+# January 2017   Roman Bohuk     Add support for SumoEyes, LineLeader, LightSensorArray, and a bug fix 
 */
 
 
@@ -926,7 +927,7 @@ Blockly.Blocks['sensors_nxtcolorsetmode'] = {
 Blockly.Python['sensors_nxtcolorsetmode'] = function(block) {
   var dropdown_mode_selector = block.getFieldValue('mode_selector');
   var value_sensor = Blockly.Python.valueToCode(block, 'sensor', Blockly.Python.ORDER_ATOMIC);
-  code = value_sensor + ".setMode(LegoDevices.PS_SENSOR_MODE_NXT_COLOR_" + dropdown_mode_selector + ")\n";
+  code = value_sensor + ".setMode(LegoDevices." + (dropdown_mode_selector == "COLOR" ? "PS_SENSOR_MODE_NXT_COLOR_COLOR" : "PS_SENSOR_TYPE_COLORFULL") + ")\n";
   return code;
 };
 
@@ -1446,6 +1447,205 @@ Blockly.Python['sensors_absoluteimustopcmpscal'] = function(block) {
 };
 
 
+Blockly.Blocks['sensors_sumoeyes'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField("SumoEyes Sensor at")
+        .appendField(new Blockly.FieldDropdown([["BAS1", "BAS1"], ["BAS2", "BAS2"], ["BBS1", "BBS1"], ["BBS2", "BBS2"]]), "sensor_selector");
+    this.setInputsInline(true);
+    this.setOutput(true, "sumoeyes");
+    this.setColour(160);
+    this.setTooltip('');
+    this.setHelpUrl('https://www.mindsensors.com/forum');
+  }
+};
+Blockly.Python['sensors_sumoeyes'] = function(block) {
+  var dropdown_sensor_selector = block.getFieldValue('sensor_selector');
+  Blockly.Python.definitions_.from_PiStorms_import_PiStorms = "from PiStorms import PiStorms";
+  Blockly.Python.definitions_.psm_PiStorms = "psm = PiStorms()";
+  Blockly.Python.definitions_.import_MsDevices = "import MsDevices";
+  Blockly.Python.definitions_["sumoeyes_" + dropdown_sensor_selector] = 'sumoeyes_' + dropdown_sensor_selector + ' = MsDevices.SumoEyes(psm.' + dropdown_sensor_selector + ')';
+  var code = 'sumoeyes_' + dropdown_sensor_selector;
+  return [code, Blockly.Python.ORDER_NONE];
+};
+Blockly.Blocks['sensors_sumoeyesgetvalue'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField("detect obstacle zone with");
+    this.appendValueInput("sensor")
+        .setCheck("sumoeyes")
+    this.setInputsInline(true);
+    this.setOutput(true, "String");
+    this.setColour(160);
+    this.setTooltip('');
+    this.setHelpUrl('https://www.mindsensors.com/forum');
+  }
+};
+Blockly.Python['sensors_sumoeyesgetvalue'] = function(block) {
+  var value_sensor = Blockly.Python.valueToCode(block, 'sensor', Blockly.Python.ORDER_ATOMIC);
+  code = value_sensor + ".detectObstactleZone(True)";
+  return [code, Blockly.Python.ORDER_NONE];
+};
+Blockly.Blocks['sensors_sumoeyessetmode'] = {
+  init: function() {
+    this.appendValueInput("sensor")
+        .setCheck("sumoeyes")
+        .appendField("set range of");
+    this.appendDummyInput()
+        .appendField("to")
+        .appendField(new Blockly.FieldDropdown([["LONG_RANGE", "LONG_RANGE"], ["SHORT_RANGE", "SHORT_RANGE"]]), "mode_selector");
+    this.setInputsInline(true);
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(160);
+    this.setTooltip('');
+    this.setHelpUrl('https://www.mindsensors.com/forum');
+  }
+};
+Blockly.Python['sensors_sumoeyessetmode'] = function(block) {
+  var dropdown_mode_selector = block.getFieldValue('mode_selector');
+  var value_sensor = Blockly.Python.valueToCode(block, 'sensor', Blockly.Python.ORDER_ATOMIC);
+  code = value_sensor + ".setRange(" + value_sensor + "." + dropdown_mode_selector + ")\n";
+  return code;
+};
+
+Blockly.Blocks['sensors_lineleader'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField("LineLeader-v2 Sensor at")
+        .appendField(new Blockly.FieldDropdown([["BAS1", "BAS1"], ["BAS2", "BAS2"], ["BBS1", "BBS1"], ["BBS2", "BBS2"]]), "sensor_selector");
+    this.setInputsInline(true);
+    this.setOutput(true, "lineleader");
+    this.setColour(180);
+    this.setTooltip('');
+    this.setHelpUrl('https://www.mindsensors.com/forum');
+  }
+};
+Blockly.Python['sensors_lineleader'] = function(block) {
+  var dropdown_sensor_selector = block.getFieldValue('sensor_selector');
+  Blockly.Python.definitions_.from_PiStorms_import_PiStorms = "from PiStorms import PiStorms";
+  Blockly.Python.definitions_.psm_PiStorms = "psm = PiStorms()";
+  Blockly.Python.definitions_.import_MsDevices = "import MsDevices";
+  Blockly.Python.definitions_["lineleader_" + dropdown_sensor_selector] = 'lineleader_' + dropdown_sensor_selector + ' = MsDevices.LineLeader(psm.' + dropdown_sensor_selector + ')';
+  var code = 'lineleader_' + dropdown_sensor_selector;
+  return [code, Blockly.Python.ORDER_NONE];
+};
+Blockly.Blocks['sensors_lineleadergetsteering'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField("read the steering value from");
+    this.appendValueInput("sensor")
+        .setCheck("lineleader")
+    this.setInputsInline(true);
+    this.setOutput(true, "Number");
+    this.setColour(180);
+    this.setTooltip('');
+    this.setHelpUrl('https://www.mindsensors.com/forum');
+  }
+};
+Blockly.Python['sensors_lineleadergetsteering'] = function(block) {
+  var value_sensor = Blockly.Python.valueToCode(block, 'sensor', Blockly.Python.ORDER_ATOMIC);
+  code = value_sensor + ".steering()";
+  return [code, Blockly.Python.ORDER_NONE];
+};
+Blockly.Blocks['sensors_lineleadergetaverage'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField("read the average value of the current line from");
+    this.appendValueInput("sensor")
+        .setCheck("lineleader")
+    this.setInputsInline(true);
+    this.setOutput(true, "Number");
+    this.setColour(180);
+    this.setTooltip('');
+    this.setHelpUrl('https://www.mindsensors.com/forum');
+  }
+};
+Blockly.Python['sensors_lineleadergetaverage'] = function(block) {
+  var value_sensor = Blockly.Python.valueToCode(block, 'sensor', Blockly.Python.ORDER_ATOMIC);
+  code = value_sensor + ".average()";
+  return [code, Blockly.Python.ORDER_NONE];
+};
+Blockly.Blocks['sensors_lineleadergetresult'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField("read the 8 light sensor values as 1 bit from");
+    this.appendValueInput("sensor")
+        .setCheck("lineleader")
+    this.setInputsInline(true);
+    this.setOutput(true, "Number");
+    this.setColour(180);
+    this.setTooltip('');
+    this.setHelpUrl('https://www.mindsensors.com/forum');
+  }
+};
+Blockly.Python['sensors_lineleadergetresult'] = function(block) {
+  var value_sensor = Blockly.Python.valueToCode(block, 'sensor', Blockly.Python.ORDER_ATOMIC);
+  code = value_sensor + ".result()";
+  return [code, Blockly.Python.ORDER_NONE];
+};
+Blockly.Blocks['sensors_lineleadergetrawcalibrated'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField("read the 8 light sensor values as array from");
+    this.appendValueInput("sensor")
+        .setCheck("lineleader")
+    this.setInputsInline(true);
+    this.setOutput(true, "Array");
+    this.setColour(180);
+    this.setTooltip('');
+    this.setHelpUrl('https://www.mindsensors.com/forum');
+  }
+};
+Blockly.Python['sensors_lineleadergetrawcalibrated'] = function(block) {
+  var value_sensor = Blockly.Python.valueToCode(block, 'sensor', Blockly.Python.ORDER_ATOMIC);
+  code = value_sensor + ".ReadRaw_Calibrated()";
+  return [code, Blockly.Python.ORDER_NONE];
+};
+
+Blockly.Blocks['sensors_lsa'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField("LightSensorArray Sensor at")
+        .appendField(new Blockly.FieldDropdown([["BAS1", "BAS1"], ["BAS2", "BAS2"], ["BBS1", "BBS1"], ["BBS2", "BBS2"]]), "sensor_selector");
+    this.setInputsInline(true);
+    this.setOutput(true, "lsa");
+    this.setColour(220);
+    this.setTooltip('');
+    this.setHelpUrl('https://www.mindsensors.com/forum');
+  }
+};
+Blockly.Python['sensors_lsa'] = function(block) {
+  var dropdown_sensor_selector = block.getFieldValue('sensor_selector');
+  Blockly.Python.definitions_.from_PiStorms_import_PiStorms = "from PiStorms import PiStorms";
+  Blockly.Python.definitions_.psm_PiStorms = "psm = PiStorms()";
+  Blockly.Python.definitions_.import_MsDevices = "import MsDevices";
+  Blockly.Python.definitions_["lsa_" + dropdown_sensor_selector] = 'lsa_' + dropdown_sensor_selector + ' = MsDevices.LightSensorArray(psm.' + dropdown_sensor_selector + ')';
+  var code = 'lsa_' + dropdown_sensor_selector;
+  return [code, Blockly.Python.ORDER_NONE];
+};
+Blockly.Blocks['sensors_lsagetrawcalibrated'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField("read the 8 light sensor values as array from");
+    this.appendValueInput("sensor")
+        .setCheck("lsa")
+    this.setInputsInline(true);
+    this.setOutput(true, "Array");
+    this.setColour(220);
+    this.setTooltip('');
+    this.setHelpUrl('https://www.mindsensors.com/forum');
+  }
+};
+Blockly.Python['sensors_lsagetrawcalibrated'] = function(block) {
+  var value_sensor = Blockly.Python.valueToCode(block, 'sensor', Blockly.Python.ORDER_ATOMIC);
+  code = value_sensor + ".ReadRaw_Calibrated()";
+  return [code, Blockly.Python.ORDER_NONE];
+};
+
+
+
+
 Blockly.Blocks['screen'] = {
   init: function() {
     this.appendValueInput("sensor")
@@ -1834,7 +2034,6 @@ Blockly.Python['screen_drawautotxt'] = function(block) {
 Blockly.Blocks['terminal_printatline'] = {
   init: function() {
     this.appendValueInput("text")
-        .setCheck("String")
         .appendField("print");
     this.appendValueInput("line")
         .setCheck("Number")
@@ -1859,7 +2058,6 @@ Blockly.Python['terminal_printatline'] = function(block) {
 Blockly.Blocks['terminal_print'] = {
   init: function() {
     this.appendValueInput("text")
-        .setCheck("String")
         .appendField("print");
     this.setInputsInline(true);
     this.setPreviousStatement(true, null);
@@ -1880,7 +2078,6 @@ Blockly.Python['terminal_print'] = function(block) {
 Blockly.Blocks['terminal_println'] = {
   init: function() {
     this.appendValueInput("text")
-        .setCheck("String")
         .appendField("print");
     this.appendDummyInput()
         .appendField("with newline");
@@ -1903,7 +2100,6 @@ Blockly.Python['terminal_println'] = function(block) {
 Blockly.Blocks['terminal_replacelastline'] = {
   init: function() {
     this.appendValueInput("text")
-        .setCheck("String")
         .appendField("replace last line with");
     this.setInputsInline(true);
     this.setPreviousStatement(true, null);

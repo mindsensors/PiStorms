@@ -1,3 +1,28 @@
+#!/usr/bin/env python
+#
+# Copyright (c) 2015 mindsensors.com
+# 
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License version 2 as
+# published by the Free Software Foundation.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.    See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+
+#mindsensors.com invests time and resources providing this open source code, 
+#please support mindsensors.com  by purchasing products from mindsensors.com!
+#Learn more product option visit us @  http://www.mindsensors.com/
+
+# History:
+# Date          Author     Comments
+# January 2017  Deepak     Support for LineLeader and LightSensorArray
+# January 2017  Roman      Support for SumoEyes
 
 from mindsensors_i2c import mindsensors_i2c
 
@@ -593,7 +618,101 @@ class LightSensorArray(mindsensors_i2c):
             return "" 
 
 
-
+## SumoEyes: this class provides PiStorms specific interface for the 
+#  SumoEyes obstacle detection sensor from mindsensors.com
+class SumoEyes(mindsensors_i2c):
+    # Responses for SumoEyes
+    SE_None = [0, "None"]
+    SE_Values = {
+        465: [1, "Front"],
+        555: [3, "Right"],
+        800: [2, "Left"]
+    }
+    
+    # Sensor
+    PS_S1EV_Ready = 0x70
+    PS_S2EV_Ready = 0xA4
+    
+    # Settings for the setRange method
+    LONG_RANGE = True
+    SHORT_RANGE = False
+    
+    ## Initialize the class with the PiStorms bank
+    #  @param self The object pointer.
+    #  @param port The PiStorms bank.
+    #  @remark
+    #  Example implementation in your program:
+    #  @code
+    #  ...
+    #  psm = PiStorms() 
+    #  se_sensor = MsDevices.SumoEyes(psm.BAS1)
+    #  ...
+    #  @endcode    
+    def __init__(self, port):
+        # Get the instance of the PSSensor class
+        self.sensor = port.pssensor
+        # Initialize the class with the i2c address of the bank
+        mindsensors_i2c.__init__(self, self.sensor.bank.address)
+        # Set range to long range by default
+        self.setRange()
+        # Method used in the original implementation
+        self.sensor.setModeEV3(0)
+    
+    ## Check the zones for an obstacle
+    #  @param self The object pointer.
+    #  @param verbose Outputs the string value of the direction if set to True
+    #  @remark
+    #  Example implementation in your program:
+    #  @code
+    #  ...
+    #  psm = PiStorms() 
+    #  se_sensor = MsDevices.SumoEyes(psm.BAS1)
+    #  print se_sensor.detectObstactleZone()
+    #  ...
+    #  @endcode 
+    def detectObstactleZone(self, verbose = False):
+        reading = self.readSensorValue()
+        for reference in self.SE_Values.keys():
+            if self.isNear(reference, reading):
+                output = self.SE_Values[reference]
+                return output[1] if verbose else ouput[0]
+        return self.SE_None[1] if verbose else self.SE_None[0]
+    
+    ## Reads the value from the SumoEyes sensor
+    #  @param self The object pointer.
+    #  @remark
+    #  Should not be used in other programs
+    def readSensorValue(self):
+        return self.readInteger(self.PS_S1EV_Ready if self.sensor.sensornum == 1 else self.PS_S2EV_Ready)
+    
+    ## Sets the sensor range to LONG_RANGE or SHORT_RANGE setting
+    #  @param self The object LONG_RANGE.
+    #  @param range The range (long is default)
+    #  @remark
+    #  Example implementation in your program:
+    #  @code
+    #  ...
+    #  psm = PiStorms() 
+    #  se_sensor = MsDevices.SumoEyes(psm.BAS1)
+    #  se_sensor.setRange(se_sensor.SHORT_RANGE)
+    #  ...
+    #  @endcode 
+    def setRange(self, range = LONG_RANGE):
+        if range == self.LONG_RANGE:
+            self.sensor.setType(self.sensor.PS_SENSOR_TYPE_LIGHT_INACTIVE)
+        elif range == self.SHORT_RANGE:
+            self.sensor.setType(self.sensor.PS_SENSOR_TYPE_LIGHT_ACTIVE)
+    
+    ## Checks if the sensor reading is within a tolerance to find the zone
+    #  @param self The object pointer.
+    #  @param reference The reference value.
+    #  @param value The sensor measurement.
+    #  @param tolerance The tolerance.
+    #  @remark
+    #  Should not be used in other programs
+    def isNear(self, reference, value, tolerance = 40):
+        return (value > (reference - tolerance)) and (value < (reference + tolerance))
+            
 """
 AbsoluteIMU -> ABSIMU **
 LineLeader -> LINELEADER **
@@ -612,5 +731,4 @@ EV3SensorMux -> EV3SensAdapt (3 channels -> change i2c address based on channel)
 IRThermometer -> needs implementation in mindsensors.py
 EV3SensorAdapter -> EV3SensAdapt 
 SumoEyes (is an analog device - needs different implementation).
-
 """
