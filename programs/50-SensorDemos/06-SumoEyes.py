@@ -26,6 +26,7 @@
 
 from PiStorms import PiStorms
 import MsDevices
+import os, inspect
 import time
 
 print "running program"
@@ -33,39 +34,44 @@ print "running program"
 psm = PiStorms()
 # Attaching a SumoEyes sensor to Port BAS1
 se_sensor = MsDevices.SumoEyes(psm.BAS1)
+currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
 
 # Ask the user to connect the sensor to BAS1
 question = ["SumoEyes Demo", "Connect SumoEyes sensor to BAS1,",
-"and press OK to continue"]
+"and press OK to continue, then"," ",
+"Press GO to stop the program", "Tap the screen to switch mode"]
 psm.screen.askQuestion(question,["OK"])
 
 
-psm.screen.termPrintln("SumoEyes readout (from BAS1):")
-psm.screen.termPrintln("Press GO to stop the program")
-psm.screen.termPrintln(" ")
-psm.screen.termPrintln("Tap the screen to switch mode")
-psm.screen.termPrintln(" ")
+x = 10
+y = 10
+w = 250
+h = 181
+psm.screen.fillBmp(x,y,w,h, path=currentdir+'/'+'SumoEyes-view-None.png', display = True)
 
 # Current mode
 mode = se_sensor.LONG_RANGE
-psm.screen.termPrintAt(5,"Mode: LONG_RANGE")
+psm.screen.termPrintAt(8,"Mode: LONG_RANGE")
+psm.screen.termPrintAt(9,"Press GO to stop")
 
 # Main loop
 exit = False
 while not exit:
-    psm.screen.termPrintAt(6, "SumoEyes: " + se_sensor.detectObstactleZone(True))
+    #psm.screen.termPrintAt(6, "SumoEyes: " + se_sensor.detectObstactleZone(True))
+    z = se_sensor.detectObstactleZone(True)
+    psm.screen.fillBmp(x,y,w,h, path=currentdir+'/'+'SumoEyes-view-'+z+'.png', display = True)
     # Code to change the mode
     if psm.screen.checkButton(0, 0, 320, 320):
         if mode == se_sensor.LONG_RANGE:
             mode = se_sensor.SHORT_RANGE
-            psm.screen.termPrintAt(5, "Mode: SHORT_RANGE")
+            psm.screen.termPrintAt(8, "Mode: SHORT_RANGE")
         else:
             mode = se_sensor.LONG_RANGE
-            psm.screen.termPrintAt(5, "Mode: LONG_RANGE")
+            psm.screen.termPrintAt(8, "Mode: LONG_RANGE")
         se_sensor.setRange(mode)
     
     # Code to exit the program
     if psm.isKeyPressed():
-        psm.screen.termPrintAt(8, "Exiting program")
+        psm.screen.termPrintAt(9, "Exiting program")
         exit = True
         
