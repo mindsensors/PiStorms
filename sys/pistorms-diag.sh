@@ -36,7 +36,8 @@ fi
 echo ""
 echo "i2cdetect output"
 echo "----------------"
-i2cdetect -y 1
+i2cdetect -y 1 0x03 0x74
+i2cdetect -y 1 0x76 0x77
 
 echo ""
 echo "Voltage check..."
