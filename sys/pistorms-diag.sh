@@ -34,9 +34,12 @@ else
 fi
 
 echo ""
-echo "i2cdetect output"
-echo "----------------"
+echo "i2cdetect -y 1 0x03 0x74 output"
+echo "-------------------------------"
 i2cdetect -y 1 0x03 0x74
+echo ""
+echo "i2cdetect -y 1 0x76 0x77 output"
+echo "-------------------------------"
 i2cdetect -y 1 0x76 0x77
 
 echo ""
