@@ -136,7 +136,6 @@ sudo rm -f /etc/init.d/PiStormsDriver.sh
 sudo rm -f /etc/init.d/PiStormsBrowser.sh
 
 # copy startup scripts.
-sudo cp -p ../sys/fwcheck.py /usr/local/bin/
 sudo cp -p ../sys/MSDriver.py /usr/local/bin/
 sudo cp -p ../sys/MSBrowser.py /usr/local/bin/
 sudo cp -p ../sys/psm_shutdown /usr/local/bin/
@@ -166,13 +165,6 @@ sudo cp -p ../sys/mindsensors.py /usr/local/lib/python2.7/dist-packages/
 sudo cp -p ../sys/MsDevices.py /usr/local/lib/python2.7/dist-packages/
 sudo cp -p ../sys/LegoDevices.py /usr/local/lib/python2.7/dist-packages/
 sudo cp -p ../sys/swarmclient.py /usr/local/lib/python2.7/dist-packages/
-
-echo "copying firmware update files ... "
-sudo mkdir -p /usr/local/bin/fwupgrader
-sudo cp -p ../sys/B_PiStormsV2.10.hex /usr/local/bin/fwupgrader/
-sudo cp -p ../sys/fwupgrader /usr/local/bin/fwupgrader/
-sudo cp -p ../sys/fwupgrader.cfg /usr/local/bin/fwupgrader/
-sudo chmod +x /usr/local/bin/fwupgrader/fwupgrader
 
 echo "copying web interface files ..."
 sudo mkdir -p /var/www
