@@ -794,11 +794,11 @@ class PiStormsCom():
             # We don't take a calibration point in the left gutter, so we have to assume 200 is the greatest reasonable width of this area. If the current touched x point is right of the border, then it is on the touchscreen so return 0 (because none of the software buttons are being pressed). If the value is between the border and 200 points left of that, continue on as the touch point is in the software button area, If the value is further than 200 points left of the border, it is likely an erroneous error caused by the touchscreen not being touched.
             if x4 > x1: # lower values left
                 xborder = max(x1, x2) # where the touchscreen ends and the software buttons begin
-                if not xborder > x > xborder-200:
+                if not xborder+100 > x > xborder-200:
                     return 0
             else: # greater values left
                 xborder = min(x1, x2)
-                if not xborder < x < xborder+200:
+                if not xborder-100 < x < xborder+200:
                     return 0
             
             y = self.bankA.readInteger(0xE9) # current y
