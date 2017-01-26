@@ -27,8 +27,10 @@
 # 10/18/15   Deepak    UI improvements
 # 7/12/16    Roman     Touch screen record frame
 # 10/7/16    Seth      Battery indicator, line methods
+# 1/25/17    Seth      Additional dialog options
 
 from mindsensors_i2c import mindsensors_i2c
+from PiStormsCom import PiStormsCom
 import time, math ,os
 import Image
 import ImageDraw
@@ -40,6 +42,9 @@ import Adafruit_GPIO as GPIO
 import Adafruit_GPIO.SPI as SPI
 import sys,os
 from threading import Thread, Lock
+
+# for new touchscreen functionality
+import json
 
 ## @package mindsensorsUI
 #  This module contains classes and functions necessary for use of LCD touchscreen on mindsensors.com products
@@ -58,6 +63,10 @@ class mindsensorsUI():
     PS_TSX = 0xE3
     ## Touchscreen Y-axis Register. Will return an unsigned integer reading (0-440) 
     PS_TSY = 0xE5
+    ## Touchscreen Y-axis Raw Register.
+    PS_RAWX = 0xE7
+    ## Touchscreen Y-axis Raw Register.
+    PS_RAWY = 0xE9
     
     ## Constant to specify black color
     PS_BLACK = (0,0,0)
@@ -148,6 +157,14 @@ class mindsensorsUI():
         self.refresh()
         self.myname = name
         #self.drawDisplay(name,display = False)
+        
+        self.ts_cal = None # signified firmware version older than V2.10, use old touchscreen methods
+        if self.i2c.readString(0x00, 8) >= 'V2.10':
+            # read touchscreen calibration values from cache file
+            try:
+                self.ts_cal = json.load(open('/tmp/ps_ts_cal', 'r'))
+            except IOError:
+                print 'Touchscreen Error: Failed to read touchscreen calibration values in mindsensorsUI.py'
     
     ### @cond
     ## Dumps the screen buffer
@@ -224,19 +241,27 @@ class mindsensorsUI():
         if(cr == 3):
             return self.PS_SCREENHEIGHT-x
 
-    def TS_To_ImageCoords_Y(self, x, y):
-        cr = self.currentRotation
-        if(cr == 0):
-            return y
-        if(cr == 3):
-            return x
-
     def TS_To_ImageCoords_X(self, x, y):
         cr = self.currentRotation
         if(cr == 0):
             return x
+        if(cr == 1):
+            return y
+        if(cr == 2):
+            return self.PS_SCREENWIDTH-x
         if(cr == 3):
             return self.PS_SCREENHEIGHT-y
+
+    def TS_To_ImageCoords_Y(self, x, y):
+        cr = self.currentRotation
+        if(cr == 0):
+            return y
+        if(cr == 1):
+            return self.PS_SCREENWIDTH-x
+        if(cr == 2):
+            return self.PS_SCREENHEIGHT-y
+        if(cr == 3):
+            return x
             
     ## Displays rotated text (INTERNAL USE ONLY)
     #  @param self The object pointer.
@@ -352,8 +377,7 @@ class mindsensorsUI():
                 ayub = aylb
                 aylb = tempy
             
-            tsx = self.TS_X()
-            tsy = self.TS_Y()
+            tsx, tsy = self.getTouchscreenValues()
             #print str(tsy) + " " + str(aylb) + " " + str(ayub)
             if(tsx<axub and tsx>axlb and tsy>aylb and tsy<ayub):
                 return n
@@ -362,6 +386,64 @@ class mindsensorsUI():
             n += 1
         return -1
     ### @endcond
+    
+    def getTouchscreenValues(self):
+    
+        if self.ts_cal == None:
+            return (self.TS_X(), self.TS_Y())
+        
+        def getReading():
+            
+            try:
+                x1 = self.ts_cal['x1']
+                y1 = self.ts_cal['y1']
+                x2 = self.ts_cal['x2']
+                y2 = self.ts_cal['y2']
+                x3 = self.ts_cal['x3']
+                y3 = self.ts_cal['y3']
+                x4 = self.ts_cal['x4']
+                y4 = self.ts_cal['y4']
+            except AttributeError: # self.ts_cal doesn't exist, failed to load touchscreen calibration values in __init__
+                return (0, 0)
+            
+            x = self.RAW_X()
+            y = self.RAW_Y()
+            
+            if x < min(x1,x2,x3,x4) \
+            or x > max(x1,x2,x3,x4) \
+            or y < min(y1,y2,y3,y4) \
+            or y > max(y1,y2,y3,y4):
+                return (0, 0)
+            
+            def distanceToLine(x0, y0, x1, y1, x2, y2): # point and two points forming the line
+                return float( abs( (y2-y1)*x0 - (x2-x1)*y0 + x2*y1 - y2*x1 ) ) / math.sqrt( (y2-y1)**2 + (x2-x1)**2 )
+            
+            # http://math.stackexchange.com/a/104595/363240
+            try:
+                dU0 = int(float( distanceToLine(x, y, x1, y1, x2, y2) )/(y2-y1)*320)
+                dV0 = int(float( distanceToLine(x, y, x1, y1, x4, y4) )/(x4-x1)*240)
+                
+                dU1 = int(float( distanceToLine(x, y, x4, y4, x3, y3) )/(y3-y4)*320)
+                dV1 = int(float( distanceToLine(x, y, x2, y2, x3, y3) )/(x3-x2)*240)
+                
+                x = float( dU0 )/(dU0+dU1) # 0 to 1
+                y = float( dV0 )/(dV0+dV1) # 0 to 1
+            
+                #return int(320*x), int(240*y)
+                return int(240*y), 320-int(320*x) # for compatibility
+            
+            except ZeroDivisionError:
+                return (0, 0)
+        
+        tolerance = 5
+        
+        x1, y1 = getReading()
+        x2, y2 = getReading()
+        
+        if abs(x2-x1) < tolerance and abs(y2-y1) < tolerance:
+            return (x2, y2)
+        else:
+            return (0, 0)
     
     ## Reads the x-coordinate of the touchscreen press
     #  @param self The object pointer.
@@ -372,11 +454,14 @@ class mindsensorsUI():
     #  x = screen.TS_X()
     #  @endcode 
     def TS_X(self):
-        try:
-            return self.i2c.readInteger(self.PS_TSY)
-        except:
-            print "Could not read Touch Screen X"
-            return -1
+        if self.ts_cal != None:
+            return self.getTouchscreenValues()[0]
+        else:
+            try:
+                return  self.i2c.readInteger(self.PS_TSY)
+            except:
+                print "Could not read Touch Screen X"
+                return -1
     
     ## Reads the y-coordinate of the touchscreen press
     #  @param self The object pointer.
@@ -386,10 +471,27 @@ class mindsensorsUI():
     #  y = screen.TS_Y()
     #  @endcode 
     def TS_Y(self):
+        if self.ts_cal != None:
+            return self.getTouchscreenValues()[1]
+        else:
+            try:
+                return  self.i2c.readInteger(self.PS_TSX)
+            except:
+                print "Could not read Touch Screen Y"
+                return -1
+    
+    def RAW_X(self):
         try:
-            return self.i2c.readInteger(self.PS_TSX)
+            return self.i2c.readInteger(self.PS_RAWX)
         except:
-            print "Could not read Touch Screen Y"
+            print "Could not read Raw Touch Screen X"
+            return -1
+    
+    def RAW_Y(self):
+        try:
+            return self.i2c.readInteger(self.PS_RAWY)
+        except:
+            print "Could not read Raw Touch Screen Y"
             return -1
     
     ## Detects touchscreen presses and prevents false positives 
@@ -400,6 +502,9 @@ class mindsensorsUI():
     #  touch = screen.isTouched()
     #  @endcode 
     def isTouched(self):
+        if self.ts_cal != None:
+            return self.getTouchscreenValues() != (0, 0)
+        
         time.sleep(0.001)
         firstTry = self.touchIgnoreX == self.TS_X() and self.touchIgnoreY == self.TS_Y()
         secondTry = self.touchIgnoreX == self.TS_X() and self.touchIgnoreY == self.TS_Y()
@@ -848,16 +953,20 @@ class mindsensorsUI():
                 ayub = aylb
                 aylb = tempy
                 
-            tsx = self.TS_X()
-            tsy = self.TS_Y()
-            
-            tsx2 = self.TS_X()
-            tsy2 = self.TS_Y()
-            
-            if(tsx != tsx2):
+            if self.ts_cal != None:
+                tsx, tsy = self.getTouchscreenValues()
+            else:            
                 tsx = self.TS_X()
-            if(tsy != tsy2):
                 tsy = self.TS_Y()
+                
+                tsx2 = self.TS_X()
+                tsy2 = self.TS_Y()
+                
+                if(tsx != tsx2):
+                    tsx = self.TS_X()
+                if(tsy != tsy2):
+                    tsy = self.TS_Y()
+            
             if(tsx<axub and tsx>axlb and tsy>aylb and tsy<ayub):
                 return True
         return False
@@ -872,7 +981,7 @@ class mindsensorsUI():
     #  ...
     #  answer = screen.askQuestion(["Continue?", "Do you want to continue?"],["Yes","No"])
     #  @endcode    
-    def askQuestion(self, question = ["Continue?"], options = ["Yes","No"]):
+    def askQuestion(self, question = ["Continue?"], options = ["Yes","No"], touch = True, goBtn = False):
         self.popupText = question
         self.buttonText = options
         oldMode = self.currentMode
@@ -880,14 +989,21 @@ class mindsensorsUI():
         if(len(options)>5):
             print "warning!, buttons may be too small to read"
         while(True):
-            if(self.isTouched()):
-                tempthis = self.calculateButton(20,20,50) #check four times in a row, and only return if all four readings were the same
-                tempthis2 = self.calculateButton(20,20,50)
-                tempthis3 = self.calculateButton(20,20,50)
-                tempthis4 = self.calculateButton(20,20,50)
-                if(tempthis != -1 and tempthis == tempthis2 and tempthis2 == tempthis3 and tempthis3 == tempthis4):
+            try:
+                if(goBtn and self.i2c.readByte(PiStormsCom.PS_KeyPress)):
                     self.setMode(oldMode)
-                    return tempthis
+                    return 0
+                if(touch and self.isTouched()):
+                    tempthis = self.calculateButton(20,20,50) #check four times in a row, and only return if all four readings were the same
+                    tempthis2 = self.calculateButton(20,20,50)
+                    tempthis3 = self.calculateButton(20,20,50)
+                    tempthis4 = self.calculateButton(20,20,50)
+                    if(tempthis != -1 and tempthis == tempthis2 and tempthis2 == tempthis3 and tempthis3 == tempthis4):
+                        self.setMode(oldMode)
+                        return tempthis
+            except KeyError: # no touchscreen calibration values
+                self.setMode(oldMode)
+                return 0
     
     ## Display Pop-up of 'Yes' or 'No' question on the screen
     #  @param self The object pointer.
@@ -898,10 +1014,10 @@ class mindsensorsUI():
     #  ...
     #  answer = screen.askYesOrNoQuestion(["Continue?"])
     #  @endcode    
-    def askYesOrNoQuestion(self, question = ["Continue?"]):
-        return self.askQuestion(question,["Yes","No"]) == 0
+    def askYesOrNoQuestion(self, question = ["Continue?"], touch = True, goBtn = False):
+        return self.askQuestion(question, ["Yes","No"], touch = touch, goBtn = goBtn) == 0
     
-    ## Display pop-up of a message on the screen with a single option "Ok"
+    ## Display pop-up of a message on the screen with a single option "OK"
     #  @param self The object pointer.
     #  @param message The message that will pop-up on the screen.
     #  @remark
@@ -910,8 +1026,34 @@ class mindsensorsUI():
     #  ...
     #  answer = screen.showMessage(["The process has completed.", "Status: success"])
     #  @endcode    
-    def showMessage(self, message):
-        return self.askQuestion(message,["Ok"]) == 0
+    def showMessage(self, message, touch = True, goBtn = True):
+        return self.askQuestion(message, ["OK"], touch = touch, goBtn = goBtn) == 0
+    
+    ## Display pop-up of a message on the screen with no exit options.
+    #  @param self The object pointer.
+    #  @param message The message that will pop-up on the screen.
+    #  @remark
+    #  To use this function in your program:
+    #  @code
+    #  ...
+    #  answer = screen.forceMessage(["Processing, please wait..."])
+    #  @endcode    
+    def forceMessage(self, message):
+        self.popupText = message
+        self.buttonText = []
+        oldMode = self.currentMode
+        self.setMode(self.PS_MODE_POPUP)
+        '''
+        while(True):
+            try:
+                if(self.i2c.readByte(PiStormsCom.PS_KeyPress)):
+                    break
+            except KeyError: # no touchscreen calibration values
+                break
+        
+        self.setMode(oldMode)
+        return 0
+        '''
     
     ## Draw a line on the screen (rotated to screen)
     #  @param self The object pointer.

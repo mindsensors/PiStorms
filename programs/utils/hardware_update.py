@@ -59,8 +59,6 @@ def available():
     except Exception as e: pass
     return False
 
-opt = str(sys.argv[1])
-
 isConnected = available()
 if (isConnected == False):
     m = ["Hardware Updater", "You are not connected to Internet.",

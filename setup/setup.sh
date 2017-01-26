@@ -22,6 +22,7 @@
 # History:
 # Date      Author      Comments
 # Apr 2016  Deepak      install from github created environment
+# Jan 2017  Seth        Add files to upgrade firmware if below V2.10
 
 #setup i2c and spi 
 cp /boot/config.txt /tmp/config.txt
@@ -121,7 +122,7 @@ fi
 
 echo "installing required python packages ... "
 sudo pip install -qq RPi.GPIO
-sudo pip install -qq mindsensors_i2c
+sudo pip install -qq mindsensors_i2c --upgrade
 sudo pip install -qq wireless
 sudo pip install -qq wifi
 sudo pip install -qq ws4py
@@ -282,7 +283,7 @@ echo "If prompted, enter a password to access vnc"
 tightvncserver
 
 echo "For VNC to start upon bootup,"
-echo "use rapi-config to set your pi to"
+echo "use raspi-config to set your pi to"
 echo "automatically log into the desktop environment."
 
 echo "-----------------------------"

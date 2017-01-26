@@ -28,6 +28,7 @@ import time, math
 import sys,os
 import ctypes
 import random
+import json # for new touchscreen functionality
 
 class PSSensor():
 
@@ -643,6 +644,9 @@ class PiStormsCom():
     PS_S1C_G_raw = 0x76
     PS_S1C_B_raw = 0x77
     PS_S1C_N_raw = 0x78
+    # Touchscreen Calibration
+    PS_TS_CALIBRATION_DATA_READY = 0x70
+    PS_TS_CALIBRATION_DATA = 0x71
     # Sensor 2
     PS_S2_Mode = 0xA3
     # EV3
@@ -693,6 +697,8 @@ class PiStormsCom():
     E = 0x45
     t = 0x74
     T = 0x54
+    w = 0x77
+    l = 0x6C
     
     
     bankA = mindsensors_i2c(PS_A_ADDRESS >> 1)
@@ -716,6 +722,14 @@ class PiStormsCom():
         else:
             self.bankA.writeByte(self.PS_Command,self.R)
             self.bankB.writeByte(self.PS_Command,self.R)
+        
+        self.ts_cal = None # signified firmware version older than V2.10, use old touchscreen methods
+        if self.GetFirmwareVersion() >= 'V2.10':
+            # read touchscreen calibration values from cache file
+            try:
+                self.ts_cal = json.load(open('/tmp/ps_ts_cal', 'r'))
+            except IOError:
+                print 'Touchscreen Error: Failed to read touchscreen calibration values in PiStormsCom.py'
         
     def Shutdown(self):
         self.bankA.writeByte(self.PS_Command,self.H)
@@ -780,7 +794,52 @@ class PiStormsCom():
 
     def getKeyPressValue(self):
         try:
-            return (self.bankA.readByte(self.PS_KeyPress))
+            if self.ts_cal == None:
+                return (self.bankA.readByte(self.PS_KeyPress))
+            
+            # if self.ts_cal doesn't exist because it failed to load touchscreen calibration values in __init__, the surrounding try/except block here will handle returning 0 as the default/error value
+            x1 = self.ts_cal['x1']
+            y1 = self.ts_cal['y1']
+            x2 = self.ts_cal['x2']
+            y2 = self.ts_cal['y2']
+            x3 = self.ts_cal['x3']
+            y3 = self.ts_cal['y3']
+            x4 = self.ts_cal['x4']
+            y4 = self.ts_cal['y4']
+            
+            x = self.bankA.readInteger(0xE7) # current x
+            # x1 and x2 are the left-most calibration points. We want to take whichever value is furthest right, to give the maximum touch area for the software buttons that make sense. x4 is the right-top calibration point. If x4 > x1 then 0 is towards the left so the the greater value of x1 and x2 will be the rightmost. If not, then high numbers are towards the left so we the lesser value of x1 and x2 will be rightmost.
+            # We don't take a calibration point in the left gutter, so we have to assume 200 is the greatest reasonable width of this area. If the current touched x point is right of the border, then it is on the touchscreen so return 0 (because none of the software buttons are being pressed). If the value is between the border and 200 points left of that, continue on as the touch point is in the software button area, If the value is further than 200 points left of the border, it is likely an erroneous error caused by the touchscreen not being touched.
+            if x4 > x1: # lower values left
+                xborder = max(x1, x2) # where the touchscreen ends and the software buttons begin
+                if not xborder+100 > x > xborder-200:
+                    return 0
+            else: # greater values left
+                xborder = min(x1, x2)
+                if not xborder-100 < x < xborder+200:
+                    return 0
+            
+            y = self.bankA.readInteger(0xE9) # current y
+            # the lower and greater of the two left-most y calibration values
+            # TODO: does this assume the screen is not flipped vertically? Be sure to test this
+            ymin = min(y1, y2)
+            ymax = max(y1, y2)
+            yQuarter = (ymax-ymin)/4 # a quarter of the distance between the two y extremes
+            
+            if y < ymin + 0 * yQuarter:
+                return 0 # too low
+            if y < ymin + 1 * yQuarter:
+                return 8
+            if y < ymin + 2 * yQuarter:
+                return 16
+            if y < ymin + 3 * yQuarter:
+                return 24
+            if y < ymin + 4 * yQuarter:
+                return 40
+            if y >= ymin + 4 * yQuarter:
+                return 0 # too high
+            
+            return 0 # some other weird error occured, execution should not reach this point
         except:
             return 0
 

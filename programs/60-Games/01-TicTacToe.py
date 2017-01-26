@@ -14,18 +14,6 @@ psm.led(1,0,0,0)
 psm.led(2,0,0,0)
 
 
-'''
-exit = False
-while not exit:
-    if psm.screen.checkButton(0,0,320,240):
-        psm.led(2,255,0,0)
-    else:
-        psm.led(2,0,0,0)
-    
-    if(psm.isKeyPressed() == True): # if the GO button is pressed
-            exit = True
-'''
-
 def drawLines():
     #210x210, 55px side border, 15px vertical border,  70px squares
     psm.screen.fillRect(124,15, 2,210)
@@ -101,10 +89,7 @@ def whoGoesFirst():
 def playAgain():
     # This function returns True if the player wants to play again, otherwise
     # it returns False.
-    
-    #psm.screen.fillRect(0,0, 360,240, (0,0,0))
-    psm.screen.askYesOrNoQuestion(['Do you want to play again?'])
-    return 1
+    return psm.screen.askYesOrNoQuestion(['Do you want to play again?'])
 
 def makeMove(board, letter, move):
     board[move] = letter
@@ -138,15 +123,12 @@ def isSpaceFree(board, move):
 
 def getPlayerMove(board):
     # Let the player type in his or her move.
-    #psm.screen.termPrintAt(9, 'What is your next move?')
- 
     move = 0
-    while not (move >= 1 and move <= 10):# or not isSpaceFree(board, int(move)):
+    while not (move >= 1 and move <= 10) or not isSpaceFree(board, int(move)):
         for y in range(3):
             for x in range(3):
                  if psm.screen.checkButton(55+x*70, y*70, 70,70):
-                    #psm.led(2,128*x,128*y,255)
-                    move = x+1+(2-y)*3 #  like a number pad, not x+1+y*3
+                    move = x+1+(2-y)*3 # like a number pad, not x+1+y*3
     return move
 
 def chooseRandomMoveFromList(board, movesList):

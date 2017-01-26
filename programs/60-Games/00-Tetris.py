@@ -134,8 +134,12 @@ class TetrisApp(object):
     
     def __init__(self):
         pygame.init()
-        pygame.joystick.Joystick(0).init()
         self.screen = psm.screen
+        try:
+            pygame.joystick.Joystick(0).init()
+        except pygame.error:
+            self.screen.showMessage(["Joystick Error", "Error: joystick not found.", "Please connect a joystick", "and run this program again."])
+            self.quit_game()
         self.init_inputs()
         self.init_game()
 
@@ -246,7 +250,7 @@ class TetrisApp(object):
     def quit_game(self):
         psm.led(1, 0, 0, 0)
         psm.led(2, 0, 0, 0)
-        raise SystemExit("Exiting...")
+        sys.exit(0)
     
     def run(self):
         while True:
