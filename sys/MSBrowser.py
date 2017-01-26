@@ -70,44 +70,56 @@ else:
     print "Unknown device in configuration file, exiting..."
     sys.exit(1)
 
-# load touchscreen calibration values from PiStorms and write to cache file
-ts_cal = None
-ts_cal_error = None
-try:
-    psc = PiStormsCom()
-    psc.BAS1.setType(psc.BAS1.PS_SENSOR_TYPE_NONE)
-    psc.bankA.writeByte(psc.PS_Command, psc.l) # copy from permanent memory to temporary memory
-    timeout = time.time() + 1 # wait for up to a second
-    while psc.bankA.readByte(psc.PS_TS_CALIBRATION_DATA_READY) != 1: # wait for ready byte
-        time.sleep(0.01)
-        if time.time() > timeout:
-            raise TypeError() # same as failure from readInteger
-    ts_cal = { 'x1': psc.bankA.readInteger(psc.PS_TS_CALIBRATION_DATA + 0x00),
-               'y1': psc.bankA.readInteger(psc.PS_TS_CALIBRATION_DATA + 0x02),
-               'x2': psc.bankA.readInteger(psc.PS_TS_CALIBRATION_DATA + 0x04),
-               'y2': psc.bankA.readInteger(psc.PS_TS_CALIBRATION_DATA + 0x06),
-               'x3': psc.bankA.readInteger(psc.PS_TS_CALIBRATION_DATA + 0x08),
-               'y3': psc.bankA.readInteger(psc.PS_TS_CALIBRATION_DATA + 0x0A),
-               'x4': psc.bankA.readInteger(psc.PS_TS_CALIBRATION_DATA + 0x0C),
-               'y4': psc.bankA.readInteger(psc.PS_TS_CALIBRATION_DATA + 0x0E) }
-except TypeError: # failed readInteger
-    ts_cal_error = ['Touchscreen Error', 'Failed to load', 'touchscreen calibration values']
-except IOError: # failed open in json.dump
-    ts_cal_error = ['Touchscreen Error', 'Failed to write', 'touchscreen calibration values']
-except:
-    ts_cal_error = ['Touchscreen Error', 'An unknown error occurred', 'while attempting to load', 'touchscreen calibration values']
-json.dump(ts_cal or {u'x1': 0, u'y1': 0, u'x2': 0, u'x3': 0, u'y3': 0, u'y2': 0, u'y4': 0, u'x4': 0}, open('/tmp/ps_ts_cal', 'w'))
+if PiStormsCom().GetFirmwareVersion() < 'V2.10':
+    try:
+        bootmode = mindsensors_i2c(0xEA>>1) 
+        bootmode.readbyte()
+        #psm = PiStorms("PiStorms",rotation)
+        scrn = mindsensorsUI(host_name, rotation, device=device_number)
+        scrn.termPrintAt(4,"PiStorms in fw upgrade mode")
+    except:
+        scrn = mindsensorsUI(host_name, rotation, device=device_number)
+else:
+    # load touchscreen calibration values from PiStorms and write to cache file
+    ts_cal = None
+    ts_cal_error = None
+    try:
+        psc = PiStormsCom()
+        oldBAS1type = psc.BAS1.getType()
+        psc.BAS1.setType(psc.BAS1.PS_SENSOR_TYPE_NONE)
+        psc.bankA.writeByte(psc.PS_Command, psc.l) # copy from permanent memory to temporary memory
+        timeout = time.time() + 1 # wait for up to a second
+        while psc.bankA.readByte(psc.PS_TS_CALIBRATION_DATA_READY) != 1: # wait for ready byte
+            time.sleep(0.01)
+            if time.time() > timeout:
+                raise TypeError() # same as failure from readInteger
+        ts_cal = { 'x1': psc.bankA.readInteger(psc.PS_TS_CALIBRATION_DATA + 0x00),
+                   'y1': psc.bankA.readInteger(psc.PS_TS_CALIBRATION_DATA + 0x02),
+                   'x2': psc.bankA.readInteger(psc.PS_TS_CALIBRATION_DATA + 0x04),
+                   'y2': psc.bankA.readInteger(psc.PS_TS_CALIBRATION_DATA + 0x06),
+                   'x3': psc.bankA.readInteger(psc.PS_TS_CALIBRATION_DATA + 0x08),
+                   'y3': psc.bankA.readInteger(psc.PS_TS_CALIBRATION_DATA + 0x0A),
+                   'x4': psc.bankA.readInteger(psc.PS_TS_CALIBRATION_DATA + 0x0C),
+                   'y4': psc.bankA.readInteger(psc.PS_TS_CALIBRATION_DATA + 0x0E) }
+        psc.BAS1.setType(oldBAS1type)
+    except TypeError: # failed readInteger
+        ts_cal_error = ['Touchscreen Error', 'Failed to load', 'touchscreen calibration values']
+    except IOError: # failed open in json.dump
+        ts_cal_error = ['Touchscreen Error', 'Failed to write', 'touchscreen calibration values']
+    except:
+        ts_cal_error = ['Touchscreen Error', 'An unknown error occurred', 'while attempting to load', 'touchscreen calibration values']
+    json.dump(ts_cal or {u'x1': 0, u'y1': 0, u'x2': 0, u'x3': 0, u'y3': 0, u'y2': 0, u'y4': 0, u'x4': 0}, open('/tmp/ps_ts_cal', 'w'))
 
-scrn = mindsensorsUI(host_name, rotation, device=device_number)
+    scrn = mindsensorsUI(host_name, rotation, device=device_number)
 
-if ts_cal == {u'x1': 0, u'y1': 0, u'x2': 0, u'x3': 0, u'y3': 0, u'y2': 0, u'y4': 0, u'x4': 0}:
-    scrn.askQuestion(["Screen not calibrated.", "No touchscreen calibration values",
-      "were found. Press GO to calibrate."], ["Press GO to continue..."], touch = False, goBtn = True)
-    os.system("sudo python " + os.path.join(PROGRAM_DIRECTORY, "utils", "01-Calibrate") + ".py force")
-    scrn = mindsensorsUI(host_name, rotation, device=device_number) # recreate with new calibration values
+    if ts_cal == {u'x1': 0, u'y1': 0, u'x2': 0, u'x3': 0, u'y3': 0, u'y2': 0, u'y4': 0, u'x4': 0}:
+        scrn.askQuestion(["Screen not calibrated.", "No touchscreen calibration values",
+          "were found. Press GO to calibrate."], ["Press GO to continue..."], touch = False, goBtn = True)
+        os.system("sudo python " + os.path.join(PROGRAM_DIRECTORY, "utils", "01-Calibrate") + ".py force")
+        scrn = mindsensorsUI(host_name, rotation, device=device_number) # recreate with new calibration values
 
-if ts_cal_error is not None:
-    scrn.askQuestion(ts_cal_error, ["Press GO to continue..."], touch = False, goBtn = True)
+    if ts_cal_error is not None:
+        scrn.askQuestion(ts_cal_error, ["Press GO to continue..."], touch = False, goBtn = True)
 
 def listPrograms(directory):
     files =  os.listdir(directory)

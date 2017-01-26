@@ -158,12 +158,13 @@ class mindsensorsUI():
         self.myname = name
         #self.drawDisplay(name,display = False)
         
-        # read touchscreen calibration values from cache file
-        try:
-            self.ts_cal = json.load(open('/tmp/ps_ts_cal', 'r'))
-        except IOError:
-            self.ts_cal = {u'x1': 0, u'y1': 0, u'x2': 0, u'x3': 0, u'y3': 0, u'y2': 0, u'y4': 0, u'x4': 0}
-            print 'Touchscreen Error: Failed to read touchscreen calibration values.'
+        self.ts_cal = None # signified firmware version older than V2.10, use old touchscreen methods
+        if self.i2c.readString(0x00, 8) >= 'V2.10':
+            # read touchscreen calibration values from cache file
+            try:
+                self.ts_cal = json.load(open('/tmp/ps_ts_cal', 'r'))
+            except IOError:
+                print 'Touchscreen Error: Failed to read touchscreen calibration values in mindsensorsUI.py'
     
     ### @cond
     ## Dumps the screen buffer
@@ -387,6 +388,9 @@ class mindsensorsUI():
     ### @endcond
     
     def getTouchscreenValues(self):
+    
+        if self.ts_cal == None:
+            return (self.TS_X(), self.TS_Y())
         
         def getReading():
             
@@ -450,7 +454,14 @@ class mindsensorsUI():
     #  x = screen.TS_X()
     #  @endcode 
     def TS_X(self):
-        return self.getTouchscreenValues()[0]
+        if self.ts_cal != None:
+            return self.getTouchscreenValues()[0]
+        else:
+            try:
+                return  self.i2c.readInteger(self.PS_TSY)
+            except:
+                print "Could not read Touch Screen X"
+                return -1
     
     ## Reads the y-coordinate of the touchscreen press
     #  @param self The object pointer.
@@ -460,20 +471,27 @@ class mindsensorsUI():
     #  y = screen.TS_Y()
     #  @endcode 
     def TS_Y(self):
-        return self.getTouchscreenValues()[1]
+        if self.ts_cal != None:
+            return self.getTouchscreenValues()[1]
+        else:
+            try:
+                return  self.i2c.readInteger(self.PS_TSX)
+            except:
+                print "Could not read Touch Screen Y"
+                return -1
     
     def RAW_X(self):
         try:
             return self.i2c.readInteger(self.PS_RAWX)
         except:
-            print "Could not read Touch Screen Y"
+            print "Could not read Raw Touch Screen X"
             return -1
     
     def RAW_Y(self):
         try:
             return self.i2c.readInteger(self.PS_RAWY)
         except:
-            print "Could not read Touch Screen X"
+            print "Could not read Raw Touch Screen Y"
             return -1
     
     ## Detects touchscreen presses and prevents false positives 
@@ -484,7 +502,24 @@ class mindsensorsUI():
     #  touch = screen.isTouched()
     #  @endcode 
     def isTouched(self):
-        return self.getTouchscreenValues() != (0, 0)
+        if self.ts_cal != None:
+            return self.getTouchscreenValues() != (0, 0)
+        
+        time.sleep(0.001)
+        firstTry = self.touchIgnoreX == self.TS_X() and self.touchIgnoreY == self.TS_Y()
+        secondTry = self.touchIgnoreX == self.TS_X() and self.touchIgnoreY == self.TS_Y()
+        thirdTry = self.touchIgnoreX == self.TS_X() and self.touchIgnoreY == self.TS_Y()
+        # return (not firstTry) and (not secondTry) and (not thirdTry)
+        # Modified
+        x = self.TS_X() # before everything else for speed
+        y = self.TS_Y()
+        
+        touch = (not firstTry) and (not secondTry) and (not thirdTry)
+        if touch:
+            self.disp.x = x
+            self.disp.y = y
+            self.disp.store = True
+        return touch
     
     ## Clears the LCD screen to defualt black
     #  @param self The object pointer.
@@ -918,7 +953,19 @@ class mindsensorsUI():
                 ayub = aylb
                 aylb = tempy
                 
-            tsx, tsy = self.getTouchscreenValues()
+            if self.ts_cal != None:
+                tsx, tsy = self.getTouchscreenValues()
+            else:            
+                tsx = self.TS_X()
+                tsy = self.TS_Y()
+                
+                tsx2 = self.TS_X()
+                tsy2 = self.TS_Y()
+                
+                if(tsx != tsx2):
+                    tsx = self.TS_X()
+                if(tsy != tsy2):
+                    tsy = self.TS_Y()
             
             if(tsx<axub and tsx>axlb and tsy>aylb and tsy<ayub):
                 return True

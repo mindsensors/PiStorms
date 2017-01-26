@@ -705,12 +705,13 @@ class PiStormsCom():
             self.bankA.writeByte(self.PS_Command,self.R)
             self.bankB.writeByte(self.PS_Command,self.R)
         
-        # read touchscreen calibration values from cache file
-        try:
-            self.ts_cal = json.load(open('/tmp/ps_ts_cal', 'r'))
-        except IOError:
-            print 'Touchscreen Error: Failed to read touchscreen calibration values in PiStormsCom.py'
-            pass # PiStormsCom is used in many places where the touchscreen values are not necessary. If there is a problem reading the cache file then an error message would already be shown from mindsensorsUI.py
+        self.ts_cal = None # signified firmware version older than V2.10, use old touchscreen methods
+        if self.GetFirmwareVersion() >= 'V2.10':
+            # read touchscreen calibration values from cache file
+            try:
+                self.ts_cal = json.load(open('/tmp/ps_ts_cal', 'r'))
+            except IOError:
+                print 'Touchscreen Error: Failed to read touchscreen calibration values in PiStormsCom.py'
         
     def Shutdown(self):
         self.bankA.writeByte(self.PS_Command,self.H)
@@ -775,6 +776,9 @@ class PiStormsCom():
 
     def getKeyPressValue(self):
         try:
+            if self.ts_cal == None:
+                return (self.bankA.readByte(self.PS_KeyPress))
+            
             # if self.ts_cal doesn't exist because it failed to load touchscreen calibration values in __init__, the surrounding try/except block here will handle returning 0 as the default/error value
             x1 = self.ts_cal['x1']
             y1 = self.ts_cal['y1']

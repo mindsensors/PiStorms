@@ -34,6 +34,10 @@ import json # to write calibration values to cache file
 from mindsensorsUI import mindsensorsUI
 from PiStormsCom import PiStormsCom
 
+if PiStormsCom().GetFirmwareVersion() < 'V2.10':
+    os.system("sudo python " + os.path.join(os.path.dirname(os.path.realpath(__file__)), "01-Calibrate_old.py"))
+    sys.exit(0)
+
 #########
 # Setup #
 #########
@@ -153,6 +157,9 @@ y4 = ry4-(ry5-ry4)*p*4
 # Write calibration values to PiStorms #
 ########################################
 
+oldBAS1type = psc.BAS1.getType()
+psc.BAS1.setType(psc.BAS1.PS_SENSOR_TYPE_NONE)
+
 # write to temporary memory
 for offset, value in enumerate([x1,y1,x2,y2,x3,y3,x4,y4]):
     comm.writeInteger(psc.PS_TS_CALIBRATION_DATA + 0x02*offset, value)
@@ -168,6 +175,10 @@ while comm.readByte(psc.PS_TS_CALIBRATION_DATA_READY) != 1 and time.time() < tim
 def calibrationEqual(offset, value):
     return comm.readInteger(psc.PS_TS_CALIBRATION_DATA + 0x02*offset) == int(value)
 
+psc.BAS1.setType(oldBAS1type)
+
+#for i in range(8): print comm.readInteger(psc.PS_TS_CALIBRATION_DATA + i*2)
+
 if all([ calibrationEqual(offset, value) for offset, value in enumerate([x1,y1,x2,y2,x3,y3,x4,y4]) ]):
     print 'Successfully wrote calibration values to PiStorms'
     # write the calibration values to the cache file and recreate the mindsensorsUI object to load them
@@ -181,5 +192,3 @@ if all([ calibrationEqual(offset, value) for offset, value in enumerate([x1,y1,x
 else:
     print 'Error writing calibration values to PiStorms'
     s.showMessage(['Error', 'Failed to write calibration values', 'to PiStorms'])
-
-#for i in range(8): print comm.readInteger(psc.PS_TS_CALIBRATION_DATA + i*2)
