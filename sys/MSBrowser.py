@@ -23,6 +23,7 @@
 # Date      Author      Comments
 #  July 2015  Henry     Initial Authoring from PiStorms import PiStorms
 # 10/18/15   Deepak     UI improvements and messenger integration
+# 1/25/17    Seth       Reorder touschreen calibration value loading
 
 from mindsensorsUI import mindsensorsUI
 from mindsensors_i2c import mindsensors_i2c
@@ -70,6 +71,8 @@ else:
     sys.exit(1)
 
 # load touchscreen calibration values from PiStorms and write to cache file
+ts_cal = None
+ts_cal_error = None
 try:
     psc = PiStormsCom()
     psc.BAS1.setType(psc.BAS1.PS_SENSOR_TYPE_NONE)
@@ -87,24 +90,25 @@ try:
                'y3': psc.bankA.readInteger(psc.PS_TS_CALIBRATION_DATA + 0x0A),
                'x4': psc.bankA.readInteger(psc.PS_TS_CALIBRATION_DATA + 0x0C),
                'y4': psc.bankA.readInteger(psc.PS_TS_CALIBRATION_DATA + 0x0E) }
-    json.dump(ts_cal, open('/tmp/ps_ts_cal', 'w'))
 except TypeError: # failed readInteger
-    mindsensorsUI(host_name, rotation, device=device_number).showMessage(['Touchscreen Error', 'Failed to load', 'touchscreen calibration values'])
+    ts_cal_error = ['Touchscreen Error', 'Failed to load', 'touchscreen calibration values']
 except IOError: # failed open in json.dump
-    mindsensorsUI(host_name, rotation, device=device_number).showMessage(['Touchscreen Error', 'Failed to write', 'touchscreen calibration values'])
+    ts_cal_error = ['Touchscreen Error', 'Failed to write', 'touchscreen calibration values']
 except:
-    mindsensorsUI(host_name, rotation, device=device_number).showMessage(['Touchscreen Error', 'An unknown error occurred', 'while attempting to load', 'touchscreen calibration values'])
-try:
-    bootmode = mindsensors_i2c(0xEA>>1) 
-    bootmode.readbyte()
-    #psm = PiStorms("PiStorms",rotation)
-    scrn = mindsensorsUI(host_name, rotation, device=device_number)
-    scrn.termPrintAt(4,"PiStorms in fw upgrade mode")
-    
-except:
-    scrn = mindsensorsUI(host_name, rotation, device=device_number)
+    ts_cal_error = ['Touchscreen Error', 'An unknown error occurred', 'while attempting to load', 'touchscreen calibration values']
+json.dump(ts_cal or {u'x1': 0, u'y1': 0, u'x2': 0, u'x3': 0, u'y3': 0, u'y2': 0, u'y4': 0, u'x4': 0}, open('/tmp/ps_ts_cal', 'w'))
 
-#sudo 
+scrn = mindsensorsUI(host_name, rotation, device=device_number)
+
+if ts_cal == {u'x1': 0, u'y1': 0, u'x2': 0, u'x3': 0, u'y3': 0, u'y2': 0, u'y4': 0, u'x4': 0}:
+    scrn.askQuestion(["Screen not calibrated.", "No touchscreen calibration values",
+      "were found. Press GO to calibrate."], ["Press GO to continue..."], touch = False, goBtn = True)
+    os.system("sudo python " + os.path.join(PROGRAM_DIRECTORY, "utils", "01-Calibrate") + ".py force")
+    scrn = mindsensorsUI(host_name, rotation, device=device_number) # recreate with new calibration values
+
+if ts_cal_error is not None:
+    scrn.askQuestion(ts_cal_error, ["Press GO to continue..."], touch = False, goBtn = True)
+
 def listPrograms(directory):
     files =  os.listdir(directory)
     x = 0

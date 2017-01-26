@@ -52,7 +52,7 @@ class ILI9341(Adafruit_ILI9341.ILI9341):
         dat.save(path, extension)
 
     def getBuffer(self):
-        """Gets the copy of a bugger"""
+        """Gets the copy of a buffer"""
         return self.buffer.copy().rotate(270)
 
     def getSectionBounds(self, left, upper, right, lower):

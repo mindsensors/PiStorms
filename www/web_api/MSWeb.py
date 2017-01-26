@@ -258,6 +258,7 @@ def startbrowser():
 def calibrate():
     stopbrowser()
     os.system("python " + os.path.join(home_folder, "programs", "utils", "01-Calibrate.py"))
+    startbrowser()
     return "1"
     
 @app.route("/getapacheerrors", methods=['GET', 'OPTIONS'])

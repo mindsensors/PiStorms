@@ -22,6 +22,7 @@
 # History:
 # Date      Author      Comments
 # Apr 2016  Deepak      install from github created environment
+# Jan 2017  Seth        Add files to upgrade firmware if below V2.10
 
 #setup i2c and spi 
 cp /boot/config.txt /tmp/config.txt
@@ -121,7 +122,7 @@ fi
 
 echo "installing required python packages ... "
 sudo pip install -qq RPi.GPIO
-sudo pip install -qq mindsensors_i2c
+sudo pip install -qq mindsensors_i2c --upgrade
 sudo pip install -qq wireless
 sudo pip install -qq wifi
 sudo pip install -qq ws4py
@@ -135,6 +136,7 @@ sudo rm -f /etc/init.d/PiStormsDriver.sh
 sudo rm -f /etc/init.d/PiStormsBrowser.sh
 
 # copy startup scripts.
+sudo cp -p ../sys/fwcheck.py /usr/local/bin/
 sudo cp -p ../sys/MSDriver.py /usr/local/bin/
 sudo cp -p ../sys/MSBrowser.py /usr/local/bin/
 sudo cp -p ../sys/psm_shutdown /usr/local/bin/
@@ -164,6 +166,13 @@ sudo cp -p ../sys/mindsensors.py /usr/local/lib/python2.7/dist-packages/
 sudo cp -p ../sys/MsDevices.py /usr/local/lib/python2.7/dist-packages/
 sudo cp -p ../sys/LegoDevices.py /usr/local/lib/python2.7/dist-packages/
 sudo cp -p ../sys/swarmclient.py /usr/local/lib/python2.7/dist-packages/
+
+echo "copying firmware update files ... "
+sudo mkdir -p /usr/local/bin/fwupgrader
+sudo cp -p ../sys/B_PiStormsV2.10.hex /usr/local/bin/fwupgrader/
+sudo cp -p ../sys/fwupgrader /usr/local/bin/fwupgrader/
+sudo cp -p ../sys/fwupgrader.cfg /usr/local/bin/fwupgrader/
+sudo chmod +x /usr/local/bin/fwupgrader/fwupgrader
 
 echo "copying web interface files ..."
 sudo mkdir -p /var/www
@@ -282,7 +291,7 @@ echo "If prompted, enter a password to access vnc"
 tightvncserver
 
 echo "For VNC to start upon bootup,"
-echo "use rapi-config to set your pi to"
+echo "use raspi-config to set your pi to"
 echo "automatically log into the desktop environment."
 
 echo "-----------------------------"

@@ -22,7 +22,7 @@
 # History:
 # Date      Author      Comments
 # 05/25/16   Deepak     Initial development.
-# 12/21/16   Seth Tenembaum   Rewrite for new touchscreen calibration strategy
+# 12/21/16   Seth       Rewrite for new touchscreen calibration strategy
 #
 
 from __future__ import division # for decimal division
@@ -30,6 +30,7 @@ import os # to check if cache file exists, possibly launch a painting program, a
 import ConfigParser # to get PiStorms home folder if launching paint
 import time # to periodically decrement calibration confirmation countdown
 import sys # to exit if GO button is not pressed to confirm beginning calibration
+import json # to write calibration values to cache file
 from mindsensorsUI import mindsensorsUI
 from PiStormsCom import PiStormsCom
 
@@ -59,26 +60,27 @@ INSET_PERCENT = 0.25
 #############################
 # Introduce program to user #
 #############################
-s.termGotoLine(0)
-s.termPrintln("Touch Screen Calibration Program")
-s.termPrintln("")
-s.termPrintln("You should only calibrate if you")
-s.termPrintln("notice your touchscreen being")
-s.termPrintln("inaccurate.")
-s.termPrintln("")
-s.termPrintln("If you still want to calibrate,")
-s.termPrintln("press the GO button")
+if not (len(sys.argv) > 1 and str(sys.argv[1]) == "force"):
+    s.termGotoLine(0)
+    s.termPrintln("Touch Screen Calibration Program")
+    s.termPrintln("")
+    s.termPrintln("You should only calibrate if you")
+    s.termPrintln("notice your touchscreen being")
+    s.termPrintln("inaccurate.")
+    s.termPrintln("")
+    s.termPrintln("If you still want to calibrate,")
+    s.termPrintln("press the GO button")
 
-countdown = 10
-startKeyPressCount = psc.getKeyPressCount()
-while countdown > 0 and psc.getKeyPressCount() == startKeyPressCount:
-    s.termReplaceLastLine("within %d second%s" % (countdown, 's' if countdown > 1 else ''))
-    time.sleep(1)
-    countdown = countdown - 1
+    countdown = 10
+    startKeyPressCount = psc.getKeyPressCount()
+    while countdown > 0 and psc.getKeyPressCount() == startKeyPressCount:
+        s.termReplaceLastLine("within %d second%s" % (countdown, 's' if countdown > 1 else ''))
+        time.sleep(1)
+        countdown = countdown - 1
 
-if psc.getKeyPressCount() == startKeyPressCount:
-    os.system("sudo /etc/init.d/MSBrowser.sh start &")
-    sys.exit(0)
+    if psc.getKeyPressCount() == startKeyPressCount:
+        os.system("sudo /etc/init.d/MSBrowser.sh start &")
+        sys.exit(0)
 
 s.clearScreen()
 s.dumpTerminal()
@@ -155,8 +157,8 @@ y4 = ry4-(ry5-ry4)*p*4
 for offset, value in enumerate([x1,y1,x2,y2,x3,y3,x4,y4]):
     comm.writeInteger(psc.PS_TS_CALIBRATION_DATA + 0x02*offset, value)
 
-comm.writeByte(psc.PS_commmand, psc.E) # unlock permanent memory
-comm.writeByte(psc.PS_commmand, psc.w) # copy from temporary memory to permanent memory
+comm.writeByte(psc.PS_Command, psc.E) # unlock permanent memory
+comm.writeByte(psc.PS_Command, psc.w) # copy from temporary memory to permanent memory
 
 timeout = time.time() + 1 # wait for up to a second
 while comm.readByte(psc.PS_TS_CALIBRATION_DATA_READY) != 1 and time.time() < timeout: time.sleep(0.01) # wait for ready byte
@@ -168,9 +170,10 @@ def calibrationEqual(offset, value):
 
 if all([ calibrationEqual(offset, value) for offset, value in enumerate([x1,y1,x2,y2,x3,y3,x4,y4]) ]):
     print 'Successfully wrote calibration values to PiStorms'
-    # manually update calibration values in mindsensorsUI. A new PiStorms object would be needed to have mindsensorsUI actually read the values, but MSBrowser would have to be launched first to write them to the cache file
-    s.ts_cal = dict( (v,eval(v)) for v in ['x1','y1','x2','y2','x3','y3','x4','y4'] )
-    res = s.askQuestion(['Success', 'Wrote calibration values', 'to PiStorms'], ['Paint', 'Great!'])
+    # write the calibration values to the cache file and recreate the mindsensorsUI object to load them
+    json.dump(dict( (v,eval(v)) for v in ['x1','y1','x2','y2','x3','y3','x4','y4'] ), open('/tmp/ps_ts_cal', 'w'))
+    s = mindsensorsUI("PiStorms", 3)
+    res = s.askQuestion(['Success', 'Wrote calibration values', 'to PiStorms'], ['Paint', 'Exit'])
     if res == 0:
         config = ConfigParser.RawConfigParser() # modeled after parts of MSBrowser
         config.read('/usr/local/mindsensors/conf/msdev.cfg')

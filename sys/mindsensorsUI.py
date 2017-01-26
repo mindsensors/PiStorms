@@ -27,8 +27,10 @@
 # 10/18/15   Deepak    UI improvements
 # 7/12/16    Roman     Touch screen record frame
 # 10/7/16    Seth      Battery indicator, line methods
+# 1/25/17    Seth      Additional dialog options
 
 from mindsensors_i2c import mindsensors_i2c
+from PiStormsCom import PiStormsCom
 import time, math ,os
 import Image
 import ImageDraw
@@ -160,7 +162,8 @@ class mindsensorsUI():
         try:
             self.ts_cal = json.load(open('/tmp/ps_ts_cal', 'r'))
         except IOError:
-            self.showMessage(['Touchscreen Error', 'Failed to read', 'touchscreen calibration values'])
+            self.ts_cal = {u'x1': 0, u'y1': 0, u'x2': 0, u'x3': 0, u'y3': 0, u'y2': 0, u'y4': 0, u'x4': 0}
+            print 'Touchscreen Error: Failed to read touchscreen calibration values.'
     
     ### @cond
     ## Dumps the screen buffer
@@ -422,7 +425,8 @@ class mindsensorsUI():
                 x = float( dU0 )/(dU0+dU1) # 0 to 1
                 y = float( dV0 )/(dV0+dV1) # 0 to 1
             
-                return int(320*x), int(240*y)
+                #return int(320*x), int(240*y)
+                return int(240*y), 320-int(320*x) # for compatibility
             
             except ZeroDivisionError:
                 return (0, 0)
@@ -930,7 +934,7 @@ class mindsensorsUI():
     #  ...
     #  answer = screen.askQuestion(["Continue?", "Do you want to continue?"],["Yes","No"])
     #  @endcode    
-    def askQuestion(self, question = ["Continue?"], options = ["Yes","No"]):
+    def askQuestion(self, question = ["Continue?"], options = ["Yes","No"], touch = True, goBtn = False):
         self.popupText = question
         self.buttonText = options
         oldMode = self.currentMode
@@ -938,14 +942,21 @@ class mindsensorsUI():
         if(len(options)>5):
             print "warning!, buttons may be too small to read"
         while(True):
-            if(self.isTouched()):
-                tempthis = self.calculateButton(20,20,50) #check four times in a row, and only return if all four readings were the same
-                tempthis2 = self.calculateButton(20,20,50)
-                tempthis3 = self.calculateButton(20,20,50)
-                tempthis4 = self.calculateButton(20,20,50)
-                if(tempthis != -1 and tempthis == tempthis2 and tempthis2 == tempthis3 and tempthis3 == tempthis4):
+            try:
+                if(goBtn and self.i2c.readByte(PiStormsCom.PS_KeyPress)):
                     self.setMode(oldMode)
-                    return tempthis
+                    return 0
+                if(touch and self.isTouched()):
+                    tempthis = self.calculateButton(20,20,50) #check four times in a row, and only return if all four readings were the same
+                    tempthis2 = self.calculateButton(20,20,50)
+                    tempthis3 = self.calculateButton(20,20,50)
+                    tempthis4 = self.calculateButton(20,20,50)
+                    if(tempthis != -1 and tempthis == tempthis2 and tempthis2 == tempthis3 and tempthis3 == tempthis4):
+                        self.setMode(oldMode)
+                        return tempthis
+            except KeyError: # no touchscreen calibration values
+                self.setMode(oldMode)
+                return 0
     
     ## Display Pop-up of 'Yes' or 'No' question on the screen
     #  @param self The object pointer.
@@ -956,10 +967,10 @@ class mindsensorsUI():
     #  ...
     #  answer = screen.askYesOrNoQuestion(["Continue?"])
     #  @endcode    
-    def askYesOrNoQuestion(self, question = ["Continue?"]):
-        return self.askQuestion(question,["Yes","No"]) == 0
+    def askYesOrNoQuestion(self, question = ["Continue?"], touch = True, goBtn = False):
+        return self.askQuestion(question, ["Yes","No"], touch = touch, goBtn = goBtn) == 0
     
-    ## Display pop-up of a message on the screen with a single option "Ok"
+    ## Display pop-up of a message on the screen with a single option "OK"
     #  @param self The object pointer.
     #  @param message The message that will pop-up on the screen.
     #  @remark
@@ -968,8 +979,34 @@ class mindsensorsUI():
     #  ...
     #  answer = screen.showMessage(["The process has completed.", "Status: success"])
     #  @endcode    
-    def showMessage(self, message):
-        return self.askQuestion(message,["Ok"]) == 0
+    def showMessage(self, message, touch = True, goBtn = True):
+        return self.askQuestion(message, ["OK"], touch = touch, goBtn = goBtn) == 0
+    
+    ## Display pop-up of a message on the screen with no exit options.
+    #  @param self The object pointer.
+    #  @param message The message that will pop-up on the screen.
+    #  @remark
+    #  To use this function in your program:
+    #  @code
+    #  ...
+    #  answer = screen.forceMessage(["Processing, please wait..."])
+    #  @endcode    
+    def forceMessage(self, message):
+        self.popupText = message
+        self.buttonText = []
+        oldMode = self.currentMode
+        self.setMode(self.PS_MODE_POPUP)
+        '''
+        while(True):
+            try:
+                if(self.i2c.readByte(PiStormsCom.PS_KeyPress)):
+                    break
+            except KeyError: # no touchscreen calibration values
+                break
+        
+        self.setMode(oldMode)
+        return 0
+        '''
     
     ## Draw a line on the screen (rotated to screen)
     #  @param self The object pointer.
