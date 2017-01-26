@@ -20,9 +20,10 @@
 #Learn more product option visit us @  http://www.mindsensors.com/
 #
 # History:
-# Date      Author      Comments
-#  July 2015  Henry     Initial Authoring from PiStorms import PiStorms
+# Date       Author      Comments
+# 07/15      Henry      Initial Authoring from PiStorms import PiStorms
 # 10/18/15   Deepak     UI improvements and messenger integration
+# 12/27/16   Roman      Fix to allow to run programs with a space
 # 1/25/17    Seth       Reorder touschreen calibration value loading
 
 from mindsensorsUI import mindsensorsUI
@@ -198,7 +199,7 @@ def message_update_status( json_data, new_status ):
 
 def runProgram(progName,progDir):
     scrn.clearScreen()
-    return os.system("sudo python " +   progDir + "/" + progName + ".py")
+    return os.system("sudo python '" +   progDir + "/" + progName + ".py'")
     
 def drawBatteryIndicator(signum=None, stack=None, delay=300):
     battVoltage = PiStormsCom().battVoltage()

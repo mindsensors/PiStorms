@@ -45,6 +45,12 @@ PS_SENSOR_MODE_NXT_LIGHT_REFLECTED = 0
 PS_SENSOR_MODE_NXT_LIGHT_AMBIENT = 0
 PS_SENSOR_MODE_NXT_COLOR_COLOR = 0
 
+PS_SENSOR_TYPE_COLORFULL = 13
+PS_SENSOR_TYPE_COLORRED = 14
+PS_SENSOR_TYPE_COLORGREEN = 15
+PS_SENSOR_TYPE_COLORBLUE = 16
+PS_SENSOR_TYPE_COLORNONE = 17
+
 class PSMotor():
     
     #bank = 0
@@ -692,20 +698,24 @@ class NXTLightSensor(LegoSensor):
             return self.bank.readInteger(PiStormsCom.PS_S2AN_Read)
 
 class NXTColorSensor(LegoSensor):
-    def __init__(self, port, mode = PS_SENSOR_MODE_EV3_COLOR_REFLECTED): #mode can be PS_SENSOR_MODE_NXT_COLOR_COLOR
+    def __init__(self, port, mode = PS_SENSOR_TYPE_COLORFULL): #mode can be PS_SENSOR_MODE_NXT_COLOR_COLOR
         super(self.__class__,self).__init__(port)
         self.setType(13)
         self.mode = mode
         self.setMode(mode)
     ## read raw value from the sensor
     def rawValue(self):
-        self.retrieveUARTData()
-        return self.EV3Cache[0:1] + self.EV3Cache[1]
+        if(self.sensornum == 1):
+            return self.bank.readByte(PiStormsCom.PS_S1AN_Read)
+        if(self.sensornum == 2):
+            return self.bank.readByte(PiStormsCom.PS_S2AN_Read)
     ## read color value from the sensor
     def getColor(self): #test
-        self.retrieveUARTData()
-        raw = self.EV3Cache[0:1] + self.EV3Cache[1]
-        return raw[0]
+        if(self.sensornum == 1):
+            return self.bank.readByte(PiStormsCom.PS_S1AN_Read)
+        if(self.sensornum == 2):
+            return self.bank.readByte(PiStormsCom.PS_S2AN_Read)
+
     #def colorSensorNXT(self):#test
     #    if(self.sensornum == 1):
     #        return self.bank.readByte(PiStormsCom.PS_S1AN_Read)

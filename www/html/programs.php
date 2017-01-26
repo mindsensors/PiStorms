@@ -20,8 +20,9 @@
 #Learn more product option visit us @  http://www.mindsensors.com/
 #
 # History:
-# Date         Author          Comments
-# July 2016    Roman Bohuk     Initial Authoring 
+# Date              Author          Comments
+# July 2016         Roman Bohuk     Initial Authoring
+# December 2016     Roman Bohuk     A few bugfixes (ability to rename files, bug reporting function) 
 */
 
 include "api/config.php";
@@ -181,14 +182,38 @@ if (!isset($_SESSION['logged_in']) || !$_SESSION['logged_in']) {
         The name must start with a 2-digit number to be displayed. Example: <code>01-Sample</code><br>Do not put a file extension
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <button type="button" onclick="createobject()" class="btn btn-success">Create new <span id="objecttype"></span></button>
+        <button type="button" class="btn btn-default btn-flat" data-dismiss="modal">Close</button>
+        <button type="button" onclick="createobject()" class="btn btn-success btn-flat">Create new <span id="objecttype"></span></button>
       </div>
     </div>
   </div>
 </div>
 
-
+<div class="modal fade" tabindex="-1" id="renameModal" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">Rename File</h4>
+      </div>
+      <div class="modal-body">
+        Rename <code id="file2"></code> to
+        <br><br>
+        <div id="modalinputgroup2" class="form-group">
+            <input class="form-control" minlen="2" type="text" id="filenameinput2" placeholder="Enter new name here">
+            <input type="hidden" id="id2">
+            <span id="modalinputhelp2" class="help-block"></span>
+        </div>
+        <input class="form-control" type="hidden" id="filetypeinput2" value="">
+        The name must start with a 2-digit number to be displayed. Example: <code>01-Sample</code><br>Do not put a file extension
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default btn-flat" data-dismiss="modal">Close</button>
+        <button type="button" onclick="renameobject()" class="btn btn-success btn-flat">Rename</button>
+      </div>
+    </div>
+  </div>
+</div>
 
 
 <script src="assets/jquery.min.js"></script>
@@ -229,17 +254,17 @@ var tbl = '<table class="table table-striped">\
                 <tr>\
                   <th class="text-center">Type</th>\
                   <th class="text-center">Name</th>\
-                  <th style="width:80px" class="text-center">Actions</th>\
+                  <th style="width:120px" class="text-center">Actions</th>\
                 </tr>';
 var filerow = '<tr>\
                   <td class="text-center"><img src="assets/&&ft&&.png" alt="object" style="height:40px"></img></td>\
                   <td class="text-center"><b>&&fn&&</b></td>\
-                  <td class="text-right"><button onclick="edit(\'&&fn&&\',\'&&fl&&\',\'&&id&&\')" style="width:32px;" class="btn btn-flat btn-success btn-sm"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button><button style="width:32px;" onclick="deleteFile(&&id&&);" class="btn btn-flat btn-danger btn-sm"><i class="fa fa-trash" aria-hidden="true"></i></button></td>\
+                  <td class="text-center"><button onclick="edit(\'&&fn&&\',\'&&fl&&\',\'&&id&&\')" style="width:32px;" class="btn btn-flat btn-success btn-sm"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button><button onclick="rename(\'&&fn&&\',\'&&fl&&\',\'&&id&&\')" style="width:32px;" class="btn btn-flat btn-warning btn-sm"><i class="fa fa-font" aria-hidden="true"></i></button><button style="width:32px;" onclick="deleteFile(&&id&&);" class="btn btn-flat btn-danger btn-sm"><i class="fa fa-trash" aria-hidden="true"></i></button></td>\
                 </tr>';
 var folderrow = '<tr>\
                   <td class="text-center"><img src="assets/&&ft&&.png" alt="object" style="height:40px"></img></td>\
                   <td class="text-center"><b>&&fn&&</b></td>\
-                  <td class="text-right"><button style="width:32px;" onclick="traverse(\'&&fn&&\');" class="btn btn-flat btn-info btn-sm"><i class="fa fa-level-down" aria-hidden="true"></i></button><button style="width:32px;" onclick="deleteDirectory(&&id&&);" class="btn btn-flat btn-danger btn-sm"><i class="fa fa-trash" aria-hidden="true"></i></button></td>\
+                  <td class="text-center"><button style="width:32px;" onclick="traverse(\'&&fn&&\');" class="btn btn-flat btn-info btn-sm"><i class="fa fa-level-down" aria-hidden="true"></i></button><button onclick="rename(\'&&fn&&\',\'&&fl&&\',\'&&id&&\')" style="width:32px;" class="btn btn-flat btn-warning btn-sm"><i class="fa fa-font" aria-hidden="true"></i></button><button style="width:32px;" onclick="deleteDirectory(&&id&&);" class="btn btn-flat btn-danger btn-sm"><i class="fa fa-trash" aria-hidden="true"></i></button></td>\
                 </tr>';
 var backrow = '<tr style="cursor:pointer" onclick="traverseup();">\
                   <td class="text-center"><img src="assets/updir.png" alt="object" style="height:34px;margin:3px;"></img></td>\
@@ -597,10 +622,10 @@ function createobject() {
         grievances.push("The filename does not start with a 2-digit number!");
     }
     var legal = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-    var ext = "()-_+ ";
+    var ext = "-_";
     for (var i = 0; i < namein.length; i++) {
         if ((legal + ext).indexOf(namein.charAt(i)) < 0) {
-            grievances.push("The filename cannot contain special characters except <code>() -_</code>!");
+            grievances.push("The filename cannot contain spaces and special characters other than <code>-_</code>!");
             break;
         }
     }
@@ -628,6 +653,71 @@ function createobject() {
         $('#modalinputhelp').html(grievances.join('<br>'));
     }
 }
+
+
+
+function rename(filename, location, id) {
+    $("#filenameinput").val("")
+    $("#file2").html(filename);
+    $("#id2").val(id);
+    $('#renameModal').modal('show');
+}
+
+function renameobject() {
+    var namein = $("#filenameinput2").val();
+    var nameinold = $("#file2").html();
+    var end = nameinold.toLowerCase().endsWith(".py") ? ".py" : "";
+    var grievances = [];
+    if ((nameinold == namein || nameinold == namein+'.py') && namein != "") {
+        grievances.push("The name is the same as the original!");
+    } else {
+        for (var i = 0; i < progs.length; i++) {
+            if (progs[i][0].toLowerCase() == namein.toLowerCase() || progs[i][0].toLowerCase() == namein.toLowerCase()+".py") {
+                grievances.push("An object with such name already exists!");
+                break;
+            }
+        }
+    }
+    if (namein.length <= 3) {
+        grievances.push("Filename is too short!");
+    }
+    if (!isInteger(namein.substring(0,2).replace("0","1"))) {
+        grievances.push("The filename does not start with a 2-digit number!");
+    }
+    var legal = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    var ext = "-_";
+    for (var i = 0; i < namein.length; i++) {
+        if ((legal + ext).indexOf(namein.charAt(i)) < 0) {
+            grievances.push("The filename cannot contain spaces and special characters other than <code>-_</code>!");
+            break;
+        }
+    }
+    if (legal.indexOf(namein.charAt(namein.length - 1)) < 0) {
+        grievances.push("The filename cannot end with a special character!");
+    }
+    
+    if (grievances.length <= 0) {
+        console.log({path: currentdir, filename:nameinold, filenamenew:namein + end});
+        $.post(api+"renameobject", {path: currentdir, filename:nameinold, filenamenew:namein + end}, function(result){
+            if (result == "1") {
+                notify("Success","Object renamed successfully","success");
+                fetchlist();
+                grievances = [];
+                $('#filenameModal2').modal('hide');
+                $('#filenameinput2').val("");
+                $('#modalinputhelp2').html('');
+                $('#modalinputgroup2').removeClass('has-error');
+                $('#renameModal').modal('hide');
+            } else {
+                notify("Success","An error has occured","danger");
+            }
+        });
+    } else {
+        $('#modalinputgroup2').addClass('has-error');
+        $('#modalinputhelp2').html(grievances.join('<br>'));
+    }
+}
+
 
 $("#filenameinput").keyup(function (e) {
     if (e.keyCode == 13) {

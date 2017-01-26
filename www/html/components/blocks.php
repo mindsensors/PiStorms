@@ -20,9 +20,11 @@
 #Learn more product option visit us @  http://www.mindsensors.com/
 #
 # History:
-# Date         Author          Comments
+# Date           Author          Comments
 # August 2016    Roman Bohuk     Initial Authoring 
 # October 2016   Seth Tenembaum  Add showMessage 
+# January 2017   Roman Bohuk     Add support for SumoEyes, LineLeader, LightSensorArray
+
 */
 ?>
 <xml id="toolbox" style="display: none">
@@ -520,6 +522,26 @@
       <block type="sensors_absoluteimustartcmpscal"></block>
       <sep gap="5"></sep>
       <block type="sensors_absoluteimustopcmpscal"></block>
+      <block type="sensors_sumoeyes"></block>
+      <sep gap="5"></sep>
+      <block type="sensors_sumoeyesgetvalue"></block>
+      <sep gap="5"></sep>
+      <block type="sensors_sumoeyessetmode"></block>
+      <sep gap="20"></sep>
+      <block type="sensors_lineleader"></block>
+      <sep gap="5"></sep>
+      <block type="sensors_lineleadergetsteering"></block>
+      <sep gap="5"></sep>
+      <block type="sensors_lineleadergetaverage"></block>
+      <sep gap="5"></sep>
+      <block type="sensors_lineleadergetresult"></block>
+      <sep gap="5"></sep>
+      <block type="sensors_lineleadergetrawcalibrated"></block>
+      <sep gap="20"></sep>
+      <block type="sensors_lsa"></block>
+      <sep gap="5"></sep>
+      <block type="sensors_lsagetrawcalibrated"></block>
+      <sep gap="20"></sep>
     </category>
 
     <category name="Screen" colour="300">

@@ -337,7 +337,7 @@ class PSSensor():
             elif(self.SumoEyesisNear(800, 30, (self.bank.readInteger(PiStormsCom.PS_S1EV_Ready)))):
                 return self.SE_Left
         #if  self.SumoEyesisNear(555, 30, (self.EV3Cache[1][0]<<8 ) +self.EV3Cache[0]  ):
-            elif(self.SumoEyesisNear(800, 30, (self.bank.readInteger(PiStormsCom.PS_S1EV_Ready)))):
+            elif(self.SumoEyesisNear(555, 30, (self.bank.readInteger(PiStormsCom.PS_S1EV_Ready)))):
                 return self.SE_Right
             else:
                 return self.SE_None 
@@ -348,7 +348,7 @@ class PSSensor():
             elif(self.SumoEyesisNear(800, 30, (self.bank.readInteger(PiStormsCom.PS_S2EV_Ready)))):
                 return self.SE_Left
         #if  self.SumoEyesisNear(555, 30, (self.EV3Cache[1][0]<<8 ) +self.EV3Cache[0]  ):
-            elif(self.SumoEyesisNear(800, 30, (self.bank.readInteger(PiStormsCom.PS_S2EV_Ready)))):
+            elif(self.SumoEyesisNear(555, 30, (self.bank.readInteger(PiStormsCom.PS_S2EV_Ready)))):
                 return self.SE_Right
             else:
                 return self.SE_None                  
@@ -547,6 +547,24 @@ class PSMotor():
             array = [b1, b2, b3, b4, speed, 0, 0, ctrl]
             self.bank.writeArray(PiStormsCom.PS_SetPoint_M2, array) 
 
+    ## Reads the values of the PID control registers
+    #  @param self The object pointer.
+    def ReadPerformanceParameters(self):
+        try:
+            b0 = self.bank.readInteger(PiStormsCom.PS_P_Kp)
+            b1 = self.bank.readInteger(PiStormsCom.PS_P_Ki)
+            b2 = self.bank.readInteger(PiStormsCom.PS_P_Kd)
+            b3 = self.bank.readInteger(PiStormsCom.PS_S_Kp)
+            b4 = self.bank.readInteger(PiStormsCom.PS_S_Ki)
+            b5 = self.bank.readInteger(PiStormsCom.PS_S_Kd)
+            b6 = self.bank.readByte(PiStormsCom.PS_PassCount)
+            b7 = self.bank.readByte(PiStormsCom.PS_PassTolerance)
+            array = [b0, b1, b2, b3, b4, b5, b6, b7]
+            return array
+        except:
+            print "Error: Could not read PID values"
+            return []
+            
     def SetPerformanceParameters(self, Kp_tacho, Ki_tacho, Kd_tacho, Kp_speed, Ki_speed, Kd_speed, passcount, tolerance):#untested
         Kp_t1 = Kp_tacho%0x100
         Kp_t2 = Kp_tacho/0x100    

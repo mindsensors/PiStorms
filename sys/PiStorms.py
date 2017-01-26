@@ -783,6 +783,11 @@ class PiStormsMotor():
     #  @endcode   
     def SetPerformanceParameters(self, Kp_tacho, Ki_tacho, Kd_tacho, Kp_speed, Ki_speed, Kd_speed, passcount, tolerance):
         self.psmotor.SetPerformanceParameters(Kp_tacho, Ki_tacho, Kd_tacho, Kp_speed, Ki_speed, Kd_speed, passcount, tolerance)
+
+    def ReadPerformanceParameters(self):
+        return self.psmotor.ReadPerformanceParameters()
+    
+
     
 
 ## PiStorms: This class provides functions for PiStorms.

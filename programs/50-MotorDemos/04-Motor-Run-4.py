@@ -33,8 +33,8 @@ m = ["Motors-Synchronised", "Connect 4 motors.",
 psm.screen.askQuestion(m,["OK"])
 
 # Start the motor at speed 75 for unlimited duration.
-psm.BAM1.setSpeedSync(45)
-psm.BBM1.setSpeedSync(45)
+psm.BAM1.setSpeedSync(75)
+psm.BBM1.setSpeedSync(75)
 
 m = ["Motor-Demo", "All Motors should be running now",
   "click STOP to stop"]

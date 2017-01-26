@@ -1,3 +1,28 @@
+#!/usr/bin/env python
+#
+# Copyright (c) 2015 mindsensors.com
+# 
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License version 2 as
+# published by the Free Software Foundation.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.    See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+
+#mindsensors.com invests time and resources providing this open source code, 
+#please support mindsensors.com  by purchasing products from mindsensors.com!
+#Learn more product option visit us @  http://www.mindsensors.com/
+
+# History:
+# Date          Author     Comments
+# January 2017  Deepak     Support for LineLeader and LightSensorArray
+# January 2017  Roman      Support for SumoEyes
 
 from mindsensors_i2c import mindsensors_i2c
 
@@ -274,13 +299,426 @@ class AbsoluteIMU(mindsensors_i2c):
             return ""  
 
 
+## LineLeader: this class provides PiStorms specific interface for LineLeader-v2
+# and NXTLineLeader
+class LineLeader(mindsensors_i2c):
 
+    ## Default Lineleader I2C Address 
+    LL_ADDRESS = 0x02
+    ## Command Register
+    LL_COMMAND = 0x41
+    ## Steering Register. Will return a signed byte value
+    LL_STEERING = 0x42
+    ## Average Register. Will return a byte value
+    LL_AVERAGE = 0x43
+    ## Steering Register. Will return a byte value
+    LL_RESULT = 0x44
+    ## Setpoint Register
+    LL_SETPOINT = 0x45
+    ## KP Register
+    LL_Kp = 0x46
+    ## Ki Register
+    LL_KI = 0x47
+    ## Kd Register
+    LL_KD = 0x48
+    ## Kp factor Register
+    LL_KPfactor = 0x61
+    ## Ki factor Register
+    LL_KIfactor = 0x62
+    ## Kd factor Register
+    LL_KDfactor = 0x63
+    
+    LL_CALIBRATED = 0x49
+    LL_UNCALIBRATED = 0x74
+
+    ## Initialize the class with the i2c address of your LineLeader
+    #  @param i2c_address Address of your LineLeader
+    #  @remark
+    def __init__(self, port, address=LL_ADDRESS):
+        port.activateCustomSensorI2C()
+        mindsensors_i2c.__init__(self, address >> 1)        
+
+    ## Writes a value to the command register
+    #  @param self The object pointer.
+    #  @param commands Value to write to the command register.
+    def command(self, command):
+        self.writeByte(COMMAND, int(command)) 
+    
+    ## Calibrates the white value for the LineLeader
+    #  @param self The object pointer.
+    def White_Cal(self):
+        self.command(87)
+        
+        
+    ## Calibrates the black value for the LineLeader
+    #  @param self The object pointer.
+    def Black_Cal(self):
+        self.command(66)
+        
+    ## Wakes up or turns on the LEDs of the LineLeader
+    #  @param self The object pointer.
+    def Wakeup(self):
+        self.command(80)
+        
+    ## Puts to sleep, or turns off the LEDs of the LineLeader
+    #  @param self The object pointer.
+    def Sleep(self):
+        self.command(68)
+    
+    ## Reads the eight(8) calibrated light sensor values of the LineLeader
+    #  @param self The object pointer.
+    def ReadRaw_Calibrated(self):
+        try:
+            return self.readArray(self.LL_CALIBRATED, 8)
+        except:
+            print "Error: Could not read Lineleader"
+            return ""
+    
+    ## Reads the eight(8) uncalibrated light sensor values of the LineLeader
+    #  @param self The object pointer.    
+    def ReadRaw_Uncalibrated(self):
+        try:
+            s1 = self.readInteger(self.LL_UNCALIBRATED)
+            s2 = self.readInteger(self.LL_UNCALIBRATED + 2)
+            s3 = self.readInteger(self.LL_UNCALIBRATED + 4)
+            s4 = self.readInteger(self.LL_UNCALIBRATED + 6)
+            s5 = self.readInteger(self.LL_UNCALIBRATED + 8)
+            s6 = self.readInteger(self.LL_UNCALIBRATED + 10)
+            s7 = self.readInteger(self.LL_UNCALIBRATED + 12)
+            s8 = self.readInteger(self.LL_UNCALIBRATED + 14)
+            array = [s1, s2, s3, s4, s5, s6, s7, s8]
+            return array
+        except:
+            print "Error: Could not read Lineleader"
+            return ""
+     
+    ## Read the steering value from the Lineleader (add or subtract this value to the motor speed)
+    #  @param self The object pointer.
+    def steering(self):
+        try:
+            return self.readByteSigned(self.LL_STEERING)
+        except:
+            print "Error: Could not read Lineleader"
+            return ""  
+    
+    ## Read the average weighted value of the current line from position from the Lineleader
+    #  @param self The object pointer.
+    def average(self):
+        try:
+            return self.readByte(self.LL_AVERAGE)
+        except:
+            print "Error: Could not read Lineleader"
+            return ""  
+
+    ## Reads the result of all 8 light sensors form the LineLeader as 1 byte (1 bit for each sensor) 
+    #  @param self The object pointer.
+    def result(self):
+        try:
+            return self.readByte(self.LL_RESULT)
+        except:
+            print "Error: Could not read Lineleader"
+            return ""       
+            
+    ## Reads the setpoint register.
+    #  @param self The object pointer.
+    def getSetPoint(self):
+        try:
+            return self.readByte(self.LL_SETPOINT)
+        except:
+            print "Error: Could not read Lineleader"
+            return ""
+            
+    ## Writes the Setpoint register.
+    #  @param self The object pointer.
+    def setSetPoint(self):
+        try:
+            return self.writeByte(self.LL_SETPOINT)
+        except:
+            print "Error: Could not write to Lineleader"
+            return ""
+            
+    ## Write the Kp value to the Lineleader
+    #  @param self The object pointer.
+    def setKP(self):
+        try:
+            return self.writeByte(self.LL_KP)
+        except:
+            print "Error: Could not write to Lineleader"
+            return ""
+            
+    ## Write the Ki value to the Lineleader
+    #  @param self The object pointer.
+    def setKI(self):
+        try:
+            return self.writeByte(self.LL_KI)
+        except:
+            print "Error: Could not write to Lineleader"
+            return ""
+            
+    ## Write the Kd value to the Lineleader
+    #  @param self The object pointer.
+    def setKD(self):
+        try:
+            return self.writeByte(self.LL_KD)
+        except:
+            print "Error: Could not write to Lineleader"
+            return ""
+            
+    ## Write the Kp factor value to the Lineleader
+    #  @param self The object pointer.
+    def setKPfactor(self):
+        try:
+            return self.writeByte(self.LL_KPfactor)
+        except:
+            print "Error: Could not write to Lineleader"
+            return ""
+            
+    ## Write the Ki factor value to the Lineleader
+    #  @param self The object pointer.
+    def setKIfactor(self):
+        try:
+            return self.writeByte(self.LL_KIfactor)
+        except:
+            print "Error: Could not write to Lineleader"
+            return ""
+            
+    ## Write the Kd factor value to the Lineleader
+    #  @param self The object pointer.
+    def setKDfactor(self):
+        try:
+            return self.writeByte(self.LL_KDfactor)
+        except:
+            print "Error: Could not write to Lineleader"
+            return ""
+    
+    ## Read the Kp value from the Lineleader
+    #  @param self The object pointer.
+    def getKP(self):
+        try:
+            return self.readByte(self.LL_KP)
+        except:
+            print "Error: Could not read Lineleader"
+            return ""
+            
+    ## Read the Ki value from the Lineleader
+    #  @param self The object pointer.
+    def getKI(self):
+        try:
+            return self.readByte(self.LL_KI)
+        except:
+            print "Error: Could not read Lineleader"
+            return ""
+            
+    ## Read the Kd value from the Lineleader
+    #  @param self The object pointer.
+    def getKD(self):
+        try:
+            return self.readByte(self.LL_KD)
+        except:
+            print "Error: Could not read Lineleader"
+            return ""
+            
+    ## Read the Kp factor value to the Lineleader
+    #  @param self The object pointer.
+    def getKPfactor(self):
+        try:
+            return self.readByte(self.LL_KPfactor)
+        except:
+            print "Error: Could not read Lineleader"
+            return ""
+            
+    ## Read the Ki factor value to the Lineleader
+    #  @param self The object pointer.
+    def getKIfactor(self):
+        try:
+            return self.readByte(self.LL_KIfactor)
+        except:
+            print "Error: Could not read Lineleader"
+            return ""
+     
+    ## Read the Kd factor value to the Lineleader
+    #  @param self The object pointer.
+    def getKDfactor(self):
+        try:
+            return self.readByte(self.LL_KDfactor)
+        except:
+            print "Error: Could not read Lineleader"
+            return ""             
+
+## LightSensorArray: this class provides PiStorms specific interface for LightSensorArray
+# and NXTLineLeader
+class LightSensorArray(mindsensors_i2c):
+    ## Default LightSensorArray I2C Address 
+    LSA_ADDRESS = 0x14
+    ## Command Register
+    LSA_COMMAND = 0x41
+    ## Calibrated Register. Will return an 8 byte array
+    LSA_CALIBRATED = 0x42
+    ## Uncalibrated Register. Will return an 8 byte array
+    LSA_UNCALIBRATED = 0x6A
+    
+    ## Initialize the class with the i2c address of your LineLeader
+    #  @param i2c_address Address of your LineLeader
+    #  @remark
+    def __init__(self, port, address=LSA_ADDRESS):
+        port.activateCustomSensorI2C()
+        mindsensors_i2c.__init__(self, address >> 1)        
+
+    ## Writes a value to the command register
+    #  @param self The object pointer.
+    #  @param commands Value to write to the command register.
+    def command(self, cmd):
+        self.writeByte(self.LSA_COMMAND, int(cmd)) 
+
+    ## Calibrates the white value for the LightSensorArray
+    #  @param self The object pointer.
+    def White_Cal(self):
+        self.command(87)
+        
+    ## Calibrates the black value for the LightSensorArray
+    #  @param self The object pointer.
+    def Black_Cal(self):
+        self.command(66)
+        
+    ## Wakes up or turns on the LEDs of the LightSensorArray
+    #  @param self The object pointer.
+    def Wakeup(self):
+        self.command(80)
+        
+    ## Puts to sleep, or turns off the LEDs of the LightSensorArray
+    #  @param self The object pointer.
+    def Sleep(self):
+        self.command(68)
+    
+    ## Reads the eight(8) calibrated light sensor values of the LightSensorArray
+    #  @param self The object pointer.
+    def ReadRaw_Calibrated(self):
+        try:
+            return self.readArray(self.LSA_CALIBRATED, 8)
+        except:
+            print "Error: Could not read LSArray"
+            return ""
+    
+    ## Reads the eight(8) uncalibrated light sensor values of the LightSensorArray
+    #  @param self The object pointer.    
+    def ReadRaw_Uncalibrated(self):
+        try:
+            s1 = self.readInteger(self.LSA_UNCALIBRATED)
+            s2 = self.readInteger(self.LSA_UNCALIBRATED + 2)
+            s3 = self.readInteger(self.LSA_UNCALIBRATED + 4)
+            s4 = self.readInteger(self.LSA_UNCALIBRATED + 6)
+            s5 = self.readInteger(self.LSA_UNCALIBRATED + 8)
+            s6 = self.readInteger(self.LSA_UNCALIBRATED + 10)
+            s7 = self.readInteger(self.LSA_UNCALIBRATED + 12)
+            s8 = self.readInteger(self.LSA_UNCALIBRATED + 14)
+            array = [s1, s2, s3, s4, s5, s6, s7, s8]
+            return array
+        except:
+            print "Error: Could not read LSArray"
+            return "" 
+
+
+## SumoEyes: this class provides PiStorms specific interface for the 
+#  SumoEyes obstacle detection sensor from mindsensors.com
+class SumoEyes(mindsensors_i2c):
+    # Responses for SumoEyes
+    SE_None = [0, "None"]
+    SE_Values = {
+        465: [1, "Front"],
+        555: [3, "Right"],
+        800: [2, "Left"]
+    }
+    
+    # Sensor
+    PS_S1EV_Ready = 0x70
+    PS_S2EV_Ready = 0xA4
+    
+    # Settings for the setRange method
+    LONG_RANGE = True
+    SHORT_RANGE = False
+    
+    ## Initialize the class with the PiStorms bank
+    #  @param self The object pointer.
+    #  @param port The PiStorms bank.
+    #  @remark
+    #  Example implementation in your program:
+    #  @code
+    #  ...
+    #  psm = PiStorms() 
+    #  se_sensor = MsDevices.SumoEyes(psm.BAS1)
+    #  ...
+    #  @endcode    
+    def __init__(self, port):
+        # Get the instance of the PSSensor class
+        self.sensor = port.pssensor
+        # Initialize the class with the i2c address of the bank
+        mindsensors_i2c.__init__(self, self.sensor.bank.address)
+        # Set range to long range by default
+        self.setRange()
+        # Method used in the original implementation
+        self.sensor.setModeEV3(0)
+    
+    ## Check the zones for an obstacle
+    #  @param self The object pointer.
+    #  @param verbose Outputs the string value of the direction if set to True
+    #  @remark
+    #  Example implementation in your program:
+    #  @code
+    #  ...
+    #  psm = PiStorms() 
+    #  se_sensor = MsDevices.SumoEyes(psm.BAS1)
+    #  print se_sensor.detectObstactleZone()
+    #  ...
+    #  @endcode 
+    def detectObstactleZone(self, verbose = False):
+        reading = self.readSensorValue()
+        for reference in self.SE_Values.keys():
+            if self.isNear(reference, reading):
+                output = self.SE_Values[reference]
+                return output[1] if verbose else ouput[0]
+        return self.SE_None[1] if verbose else self.SE_None[0]
+    
+    ## Reads the value from the SumoEyes sensor
+    #  @param self The object pointer.
+    #  @remark
+    #  Should not be used in other programs
+    def readSensorValue(self):
+        return self.readInteger(self.PS_S1EV_Ready if self.sensor.sensornum == 1 else self.PS_S2EV_Ready)
+    
+    ## Sets the sensor range to LONG_RANGE or SHORT_RANGE setting
+    #  @param self The object LONG_RANGE.
+    #  @param range The range (long is default)
+    #  @remark
+    #  Example implementation in your program:
+    #  @code
+    #  ...
+    #  psm = PiStorms() 
+    #  se_sensor = MsDevices.SumoEyes(psm.BAS1)
+    #  se_sensor.setRange(se_sensor.SHORT_RANGE)
+    #  ...
+    #  @endcode 
+    def setRange(self, range = LONG_RANGE):
+        if range == self.LONG_RANGE:
+            self.sensor.setType(self.sensor.PS_SENSOR_TYPE_LIGHT_INACTIVE)
+        elif range == self.SHORT_RANGE:
+            self.sensor.setType(self.sensor.PS_SENSOR_TYPE_LIGHT_ACTIVE)
+    
+    ## Checks if the sensor reading is within a tolerance to find the zone
+    #  @param self The object pointer.
+    #  @param reference The reference value.
+    #  @param value The sensor measurement.
+    #  @param tolerance The tolerance.
+    #  @remark
+    #  Should not be used in other programs
+    def isNear(self, reference, value, tolerance = 40):
+        return (value > (reference - tolerance)) and (value < (reference + tolerance))
+            
 """
-AbsoluteIMU -> ABSIMU
+AbsoluteIMU -> ABSIMU **
+LineLeader -> LINELEADER **
+LightSensorArray  -> LSA **
 AngleSensor  -> ANGLE
 DISTNx -> DIST
-LightSensorArray  -> LSA
-LineLeader -> LINELEADER
 NXTMMX -> MMX
 NXTServo -> NXTSERVO
 PFMate -> PFMATE
@@ -293,5 +731,4 @@ EV3SensorMux -> EV3SensAdapt (3 channels -> change i2c address based on channel)
 IRThermometer -> needs implementation in mindsensors.py
 EV3SensorAdapter -> EV3SensAdapt 
 SumoEyes (is an analog device - needs different implementation).
-
 """
