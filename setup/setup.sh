@@ -71,7 +71,7 @@ sudo cp /tmp/config.txt /boot/config.txt
 echo "Updating installations files. This may take several minutes..."
 sudo apt-get update -qq -y
 echo "Installing packages..."
-sudo apt-get install -qq tightvncserver mpg123 build-essential python-dev python-smbus python-pip python-imaging python-numpy git nmap -y
+sudo apt-get install -qq mpg123 build-essential python-dev python-smbus python-pip python-imaging python-numpy git nmap -y
 sudo apt-get install -qq python-opencv -y
 sudo apt-get install -qq apache2 php5 libapache2-mod-php5 -y
 sudo pip install -qq flask
@@ -226,7 +226,6 @@ sudo chmod +x /etc/init.d/MSBrowser.sh
 sudo chmod +x /etc/init.d/MSWeb.sh
 sudo chmod +x /etc/init.d/SwarmServer.sh
 mkdir -p /home/pi/.config/autostart
-cp -p tightvnc.desktop /home/pi/.config/autostart
 
 #
 # insert into startup scripts for subsequent use
@@ -279,12 +278,9 @@ sudo python setup.py -q install
 cd  .. 
 sudo rm -rf Adafruit_Python_ILI9341
 
-echo "If prompted, enter a password to access vnc"
-tightvncserver
-
-echo "For VNC to start upon bootup,"
-echo "use raspi-config to set your pi to"
-echo "automatically log into the desktop environment."
+echo "Enabling VNC..."
+sudo /usr/sbin/update-rc.d vncserver-x11-serviced defaults
+sudo /usr/sbin/update-rc.d vncserver-x11-serviced enable
 
 echo "-----------------------------"
 echo "Install completed.   "
