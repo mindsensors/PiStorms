@@ -201,7 +201,8 @@ def runProgram(progName,progDir):
     scrn.clearScreen()
     return os.system("sudo python '" +   progDir + "/" + progName + ".py'")
     
-def drawBatteryIndicator(signum=None, stack=None, delay=300):
+# signum and stack come from when this method is called from signal, accept but ignore these arguments
+def drawBatteryIndicator(signum=None, stack=None):
     battVoltage = PiStormsCom().battVoltage()
     batteryFill = (255,255,255) # white: error, could not read
     if ( battVoltage >= 7.7 ):
@@ -213,9 +214,9 @@ def drawBatteryIndicator(signum=None, stack=None, delay=300):
     scrn.fillRect(281, 185, 39, 45, fill=(0,0,0), display=False)
     scrn.fillRect(291, 188, 13, 20, fill=batteryFill, display=False)
     scrn.fillRect(294, 185,  7,  3, fill=batteryFill, display=False)
-    scrn.drawAutoText(("%1.1f V" if battVoltage < 10 else "%2.0f V") % battVoltage, 281, 213, size=16, display=False)
+    scrn.drawAutoText(("%1.1f V" if battVoltage < 10 else "%2.0f V") % battVoltage, 281, 213, size=16, display=True)
 
-    signal.alarm(delay)
+    signal.alarm(1) # redraw battery indicator every second like the web interface
     
 def displaySmallFileList(folder, fileList, displayLeft = 1):
     initialYpos = 50
@@ -255,7 +256,7 @@ def displaySmallFileList(folder, fileList, displayLeft = 1):
     if ( newMessage == True ):
         scrn.fillBmp(220,7,34,34, "Exclamation-mark-icon.png", False);
     
-    drawBatteryIndicator(delay=5*60) # redraw battery indicator every 5 minutes
+    drawBatteryIndicator()
 
     # display the buffered data on screen.
     scrn.disp.display()
