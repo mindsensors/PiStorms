@@ -203,6 +203,9 @@ def runProgram(progName,progDir):
     
 # signum and stack come from when this method is called from signal, accept but ignore these arguments
 def drawBatteryIndicator(signum=None, stack=None):
+    if scrn.currentMode == scrn.PS_MODE_POPUP:
+        return
+    
     battVoltage = PiStormsCom().battVoltage()
     batteryFill = (255,255,255) # white: error, could not read
     if ( battVoltage >= 7.7 ):
@@ -216,7 +219,7 @@ def drawBatteryIndicator(signum=None, stack=None):
     scrn.fillRect(294, 185,  7,  3, fill=batteryFill, display=False)
     scrn.drawAutoText(("%1.1f V" if battVoltage < 10 else "%2.0f V") % battVoltage, 281, 213, size=16, display=True)
 
-    signal.alarm(1) # redraw battery indicator every second like the web interface
+    signal.alarm(30) # redraw battery indicator every second like the web interface
     
 def displaySmallFileList(folder, fileList, displayLeft = 1):
     initialYpos = 50
