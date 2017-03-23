@@ -769,6 +769,14 @@ class PiStormsCom():
             return device    
         except:
             return "ReadErr"
+
+    ##  Read the features from device
+    def GetDeviceFeatures(self):
+        try:
+            features = self.bankA.readString(0x18, 8)
+            return features    
+        except:
+            return "ReadErr"
         
     def led(self,lednum,red,green,blue):
     
