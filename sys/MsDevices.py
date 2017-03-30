@@ -546,7 +546,7 @@ class LineLeader(mindsensors_i2c):
             return ""             
 
 ## LightSensorArray: this class provides PiStorms specific interface for LightSensorArray
-# and NXTLineLeader
+#
 class LightSensorArray(mindsensors_i2c):
     ## Default LightSensorArray I2C Address 
     LSA_ADDRESS = 0x14
@@ -557,8 +557,8 @@ class LightSensorArray(mindsensors_i2c):
     ## Uncalibrated Register. Will return an 8 byte array
     LSA_UNCALIBRATED = 0x6A
     
-    ## Initialize the class with the i2c address of your LineLeader
-    #  @param i2c_address Address of your LineLeader
+    ## Initialize the class with the i2c address of your device
+    #  @param i2c_address Address of your device
     #  @remark
     def __init__(self, port, address=LSA_ADDRESS):
         port.activateCustomSensorI2C()
@@ -712,11 +712,46 @@ class SumoEyes(mindsensors_i2c):
     #  Should not be used in other programs
     def isNear(self, reference, value, tolerance = 40):
         return (value > (reference - tolerance)) and (value < (reference + tolerance))
+
+## IRThermometer : this class provides PiStorms specific interface for the 
+#  IR Thermometer sensor: 
+#  http://www.mindsensors.com/products/170-ir-temperature-sensor-for-ev3-or-nxt
+#
+class IRThermometer(mindsensors_i2c):
+    ## Default I2C Address 
+    IRT_ADDRESS = 0x2A
+    ## Command Register
+    IRT_COMMAND = 0x41
+    # temperature registers
+    IRT_AMBIENT_CELSIUS = 0x42
+    IRT_TARGET_CELSIUS = 0x44
+    IRT_AMBIENT_FAHR = 0x46
+    IRT_TARGET_FAHR = 0x48
+    
+    ## Initialize the class with the i2c address of your device
+    #  @param i2c_address Address of your device
+    #  @remark
+    def __init__(self, port, address=IRT_ADDRESS):
+        port.activateCustomSensorI2C()
+        mindsensors_i2c.__init__(self, address >> 1)        
+
+    def readAmbientCelsius(self):
+        return (float(self.readInteger(self.IRT_AMBIENT_CELSIUS))/100)
+
+    def readTargetCelsius(self):
+        return (float(self.readInteger(self.IRT_TARGET_CELSIUS))/100)
+
+    def readAmbientFahr(self):
+        return (float(self.readInteger(self.IRT_AMBIENT_FAHR))/100)
+
+    def readTargetFahr(self):
+        return (float(self.readInteger(self.IRT_TARGET_FAHR))/100)
             
 """
 AbsoluteIMU -> ABSIMU **
 LineLeader -> LINELEADER **
 LightSensorArray  -> LSA **
+IRThermometer -> (done - IRThermometer)
 AngleSensor  -> ANGLE
 DISTNx -> DIST
 NXTMMX -> MMX
@@ -728,7 +763,6 @@ PressureSensor -> PPS58
 NXTCam -> NXTCAM
 PSPNx -> needs implementation
 EV3SensorMux -> EV3SensAdapt (3 channels -> change i2c address based on channel).
-IRThermometer -> needs implementation in mindsensors.py
 EV3SensorAdapter -> EV3SensAdapt 
 SumoEyes (is an analog device - needs different implementation).
 """
