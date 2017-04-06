@@ -1,13 +1,13 @@
 
 #from PiStorms import PiStorms
-#import rcg
-from rcg import *
+#import PiStorms_GRX
+from PiStorms_GRX import *
 import time
 import numpy
 from GroveDevices import *
 
 print "running program"
-psm = RCG()
+psm = PiStorms_GRX()
 print "Device : "+ str(psm.GetDeviceId() )
 print "Vendor : "+ str(psm.GetVendorName() )
 print "Firmware : "+ str(psm.GetFirmwareVersion() )
@@ -115,4 +115,3 @@ while (True):
         print "value changed"
         old_x = x
         servo1.setPos(int(x))
-

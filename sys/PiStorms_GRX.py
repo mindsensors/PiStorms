@@ -32,12 +32,12 @@ import numpy
 import random
 import json # for new touchscreen functionality
 
-## RCGCom: this class provides communication functions for PiStorms-RCG.
+## GRXCom: this class provides communication functions for PiStorms-GRX.
 # do not use this class directly in user programs, instead use functions provided by LegoDevices or MsDevices class.
-class RCGCom(object):
+class GRXCom(object):
 
-    RCG_A_ADDRESS = 0x34
-    RCG_B_ADDRESS = 0x36
+    GRX_A_ADDRESS = 0x34
+    GRX_B_ADDRESS = 0x36
     
     A1 = 0
     A2 = 1
@@ -61,21 +61,21 @@ class RCGCom(object):
     LOW = 0
 
     # Registers
-    RCG_BattV = 0x6E
-    RCG_Servo_Base = 0x42
-    RCG_LED_Base  =  0xb6
-    RCG_SA1_Base = 0x48
-    RCG_SA2_Base = 0x5E
-    RCG_SA3_Base = 0x74
-    RCG_SD1_Base = 0x8A
-    RCG_SD2_Base = 0xA0
-    RCG_KEY1_Count = 0xba
+    GRX_BattV = 0x6E
+    GRX_Servo_Base = 0x42
+    GRX_LED_Base  =  0xb6
+    GRX_SA1_Base = 0x48
+    GRX_SA2_Base = 0x5E
+    GRX_SA3_Base = 0x74
+    GRX_SD1_Base = 0x8A
+    GRX_SD2_Base = 0xA0
+    GRX_KEY1_Count = 0xba
 
     # ???
-    RCG_KEY_Press = 0xb9
+    GRX_KEY_Press = 0xb9
 
     # Registers
-    RCG_Command = 0x41
+    GRX_Command = 0x41
     
     #Supported I2C commands
     R = 0x52
@@ -94,17 +94,17 @@ class RCGCom(object):
     l = 0x6C
     
     
-    bankA = mindsensors_i2c(RCG_A_ADDRESS >> 1)
-    bankB = mindsensors_i2c(RCG_B_ADDRESS >> 1)
+    bankA = mindsensors_i2c(GRX_A_ADDRESS >> 1)
+    bankB = mindsensors_i2c(GRX_B_ADDRESS >> 1)
     
     def __init__(self):
         try:
-            self.bankA.readByte(self.RCG_BattV)
+            self.bankA.readByte(self.GRX_BattV)
         except:
-            print "could not connect to pistorms-rcg"
+            print "could not connect to pistorms-grx"
         else:
-            self.bankA.writeByte(self.RCG_Command,self.R)
-            self.bankB.writeByte(self.RCG_Command,self.R)
+            self.bankA.writeByte(self.GRX_Command,self.R)
+            self.bankB.writeByte(self.GRX_Command,self.R)
         
         self.ts_cal = None # signified firmware version older than V2.10, use old touchscreen methods
         if self.GetFirmwareVersion() >= 'V2.10':
@@ -115,17 +115,17 @@ class RCGCom(object):
                 print 'Touchscreen Error: Failed to read touchscreen calibration values in PiStormsCom.py'
         
     def Shutdown(self):
-        self.bankA.writeByte(self.RCG_Command,self.H)
+        self.bankA.writeByte(self.GRX_Command,self.H)
         
     def command(self, cmd, bank):
         if(bank == 1):
-            self.bankA.writeByte(self.RCG_Command,cmd)
+            self.bankA.writeByte(self.GRX_Command,cmd)
         elif(bank == 2):
-            self.bankB.writeByte(self.RCG_Command,cmd)
+            self.bankB.writeByte(self.GRX_Command,cmd)
             
     def battVoltage(self):
         try:
-            return self.bankA.readByte(self.RCG_BattV)*.040
+            return self.bankA.readByte(self.GRX_BattV)*.040
         except:
             return 0
     ##  Read the firmware version of the i2c device
@@ -165,10 +165,10 @@ class RCGCom(object):
         try:
             if(lednum == 1):
                 array = [red, green, blue]
-                self.bankA.writeArray(self.RCG_LED_Base, array)
+                self.bankA.writeArray(self.GRX_LED_Base, array)
             if(lednum == 2):
                 array = [red, green, blue]
-                self.bankB.writeArray(self.RCG_LED_Base, array)
+                self.bankB.writeArray(self.GRX_LED_Base, array)
 
         except AttributeError:
             pass
@@ -177,7 +177,7 @@ class RCGCom(object):
     def isKeyPressed(self):
         x = 0
         try:
-            x = self.bankA.readByte(self.RCG_KEY_Press)
+            x = self.bankA.readByte(self.GRX_KEY_Press)
             return int(0x01&x)
         except:
             return 0
@@ -185,7 +185,7 @@ class RCGCom(object):
     def getKeyPressValue(self):
         try:
             if self.ts_cal == None:
-                return (self.bankA.readByte(self.RCG_KEY_Press))
+                return (self.bankA.readByte(self.GRX_KEY_Press))
             
             # if self.ts_cal doesn't exist because it failed to load touchscreen calibration values in __init__, the surrounding try/except block here will handle returning 0 as the default/error value
             x1 = self.ts_cal['x1']
@@ -235,13 +235,13 @@ class RCGCom(object):
 
     def getKeyPressCount(self):
         try:
-            return(self.bankA.readByte(self.RCG_KEY1_Count))
+            return(self.bankA.readByte(self.GRX_KEY1_Count))
         except:
             return 0
 
     def resetKeyPressCount(self):
         try:
-            self.bankA.writeByte(self.RCG_KEY1_Count,0)
+            self.bankA.writeByte(self.GRX_KEY1_Count,0)
         except:
             pass
 
@@ -249,7 +249,7 @@ class RCGCom(object):
         self.bankA.readByte(0x00)
 
 if __name__ == '__main__':
-    psc = RCGCom()
+    psc = GRXCom()
     print "Version = "+ str(psc.GetFirmwareVersion())
     print "Vendor = "+ str(psc.GetVendorName())
     print "Device = "+ str(psc.GetDeviceId())
@@ -280,7 +280,7 @@ class RCServo():
     def setPos(self, newPos):
         data0 = int(numpy.ubyte(newPos))
         data1 = int(numpy.ubyte(newPos>>8))
-        addr = RCGCom.RCG_Servo_Base + (self.motornum * 2)
+        addr = GRXCom.GRX_Servo_Base + (self.motornum * 2)
         # NOTE: writeArray does not work correctly.
         # hence, this function uses two writeByte calls.
         #a = [data0, data1]
@@ -294,12 +294,12 @@ class RCServo():
         self.setPos(1500)
         pass
 
-class RCG:
+class GRX:
 
-    def __init__(self, name = "PiStorms_RCG", rotation = 3 ):
+    def __init__(self, name = "PiStorms_GRX", rotation = 3 ):
         
         self.screen = mindsensorsUI(name, rotation)
-        self.psc = RCGCom()
+        self.psc = GRXCom()
 
         self.BAM1 = RCServo(self.psc.bankA, 1)
         self.BAM2 = RCServo(self.psc.bankA, 2)
@@ -356,4 +356,3 @@ class RCG:
     
     def ping(self):
         self.psc.ping()
-

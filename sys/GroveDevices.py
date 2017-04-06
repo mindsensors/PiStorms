@@ -24,14 +24,14 @@
 # Mar 2017  Deepak      Initial Authoring
 
 from mindsensors_i2c import mindsensors_i2c
-from rcg import *
+from PiStorms_GRX import *
 
-class GroveSensor(RCGCom):
+class GroveSensor(GRXCom):
 
-    RCG_SENSOR_TYPE_NONE = 0
-    RCG_SENSOR_TYPE_ANALOG = 1
-    RCG_SENSOR_TYPE_DIGITAL = 2
-    RCG_SENSOR_TYPE_I2C = 3
+    GRX_SENSOR_TYPE_NONE = 0
+    GRX_SENSOR_TYPE_ANALOG = 1
+    GRX_SENSOR_TYPE_DIGITAL = 2
+    GRX_SENSOR_TYPE_I2C = 3
 
     def __init__(self, port):
         self.port = port
@@ -72,7 +72,7 @@ class GroveSensor(RCGCom):
         else:
             self.bank = None
             self.sensornum = 0
-            self.type = self.RCG_SENSOR_TYPE_NONE
+            self.type = self.GRX_SENSOR_TYPE_NONE
             raise ValueError ('No such port: %s' %(port))
 
     def verifyPort(self):
@@ -84,28 +84,28 @@ class GroveSensor(RCGCom):
         # allows digital sensors or tachometer inputs
         # does not allow analog sensors
         #
-        if ( self.type == self.RCG_SENSOR_TYPE_ANALOG ):
+        if ( self.type == self.GRX_SENSOR_TYPE_ANALOG ):
             if ( self.port == "BAD1" or self.port == "BAD2" or
                  self.port == "BBD1" or self.port == "BBD2" ):
                     raise ValueError ('Analog sensor not supported on: %s' %(self.port ))
 
     def setType(self, type, mode=0):
-        addr = self.RCG_SA1_Base +(self.sensornum*22)
+        addr = self.GRX_SA1_Base +(self.sensornum*22)
         self.type = type
-        if ( type == self.RCG_SENSOR_TYPE_DIGITAL):
+        if ( type == self.GRX_SENSOR_TYPE_DIGITAL):
             _type = self._DI
-        elif ( type == self.RCG_SENSOR_TYPE_ANALOG):
+        elif ( type == self.GRX_SENSOR_TYPE_ANALOG):
             _type = self._ANIN
 
         self.bank.writeByte(addr, _type)
         self.bank.writeByte(addr+1, mode)
         
     def digitalInput(self):
-        reg = self.RCG_SA1_Base +(self.sensornum*22)+4
+        reg = self.GRX_SA1_Base +(self.sensornum*22)+4
         return (self.bank.readByte(reg))
 
     def analogInput(self):
-        reg = self.RCG_SA1_Base +(self.sensornum*22)
+        reg = self.GRX_SA1_Base +(self.sensornum*22)
         x = self.bank.readByte(reg)
         if (x == 1):
             y = self.bank.readByte(reg+4)
@@ -117,7 +117,7 @@ class GroveSensor(RCGCom):
 class Grove_Digital_Sensor(GroveSensor):
     def __init__(self, port):
         super(Grove_Digital_Sensor,self).__init__(port)
-        self.setType(self.RCG_SENSOR_TYPE_DIGITAL)
+        self.setType(self.GRX_SENSOR_TYPE_DIGITAL)
         self.verifyPort()
 
     def readValue(self):
@@ -135,7 +135,7 @@ class Grove_PIR_Sensor(Grove_Digital_Sensor):
 class Grove_Analog_Sensor(GroveSensor):
     def __init__(self, port):
         super(Grove_Analog_Sensor,self).__init__(port)
-        self.setType(self.RCG_SENSOR_TYPE_ANALOG)
+        self.setType(self.GRX_SENSOR_TYPE_ANALOG)
         self.verifyPort()
 
     def readValue(self):
@@ -422,4 +422,3 @@ class Grove_Sunlight_Sensor(mindsensors_i2c):
     ## readUV: returns UV index at present conditions.
     def readUV(self):
         return self.readInteger(self.SI114X_AUX_DATA0_UVINDEX0)
-

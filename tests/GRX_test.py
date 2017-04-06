@@ -1,13 +1,13 @@
 
 #from PiStorms import PiStorms
-#import rcg
-from rcg import *
+#import PiStorms_GRX
+from PiStorms_GRX import *
 import time
 import numpy
 from GroveDevices import *
 
 print "running program"
-psm = RCG()
+psm = PiStorms_GRX()
 print "Device : "+ str(psm.GetDeviceId() )
 print "Vendor : "+ str(psm.GetVendorName() )
 print "Firmware : "+ str(psm.GetFirmwareVersion() )
@@ -125,7 +125,7 @@ def testDigitalButtonDirectControl():
 def button_test_dc():
     # set type
     port = 0
-    addr = RCGCom.RCG_SA1_Base+(port*22)
+    addr = GRXCom.GRX_SA1_Base+(port*22)
     psm.psc.bankA.writeByte(addr, _DI)
     psm.psc.bankA.writeByte(addr+1, 0)
     
