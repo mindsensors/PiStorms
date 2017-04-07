@@ -155,14 +155,18 @@ class Grove_Luminance_Sensor(Grove_Analog_Sensor):
         vout = [ 0.0011498,  0.0033908,  0.011498,  0.041803,  0.15199,  0.53367,  1.3689,  1.9068,  2.3  ]
         lux  = [ 1.0108,     3.1201,     9.8051,    27.43,     69.545,   232.67,   645.11,  73.52,   1000 ]
 
+        # take care the value is within range
         if (val <= vout[0]):  return lux[0]
         if (val >= vout[-1]): return lux[-1]
 
-        pos = 1
+        # search right interval
+        pos = 1 # _in[0] allready tested
         while (val > vout[pos]): pos = pos + 1
 
+        # this will handle all exact "points" in the _in array
         if (val == vout[pos]): return lux[pos]
 
+        # interpolate in the right segment for the rest
         return (val - vout[pos-1]) * (lux[pos] - lux[pos-1]) / (vout[pos] - vout[pos-1]) + lux[pos-1]
 
 ## Grove_Light_Sensor: This class supports Grove Light Sensor v1.1
