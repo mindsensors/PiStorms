@@ -210,6 +210,12 @@ class Grove_Moisture_Sensor(Grove_Analog_Sensor):
     def moistureLevel(self):
         return self.readValue()
 
+## Grove_Sound_Sensor: This class supports Grove Sound Sensor v1.6
+#  Documentation: http://wiki.seeed.cc/Grove-Sound_Sensor/
+class Grove_Sound_Sensor(Grove_Analog_Sensor):
+    def soundIntensity(self):
+        return self.readValue()
+
 ## Grove_Sunlight_Sensor: This class supports Grove Sunlight Sensor v1.4
 #  Documentation: http://wiki.seeed.cc/Grove-Sunlight_Sensor/
 class Grove_Sunlight_Sensor(mindsensors_i2c):
