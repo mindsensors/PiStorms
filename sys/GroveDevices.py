@@ -26,6 +26,7 @@
 
 from mindsensors_i2c import mindsensors_i2c
 from PiStorms_GRX import *
+import math
 
 class GroveSensor(GRXCom):
 
@@ -129,9 +130,9 @@ class Grove_Analog_Sensor(GroveSensor):
         super(Grove_Analog_Sensor,self).__init__(port)
         self.setType(self.GRX_SENSOR_TYPE_ANALOG)
         self.verifyPort()
-        
-        def readValue(self):
-            return self.analogInput()
+
+    def readValue(self):
+        return self.analogInput()
 
 ## Grove_Button: This class supports Grove Button v1.1
 #  Documentation: http://wiki.seeed.cc/Grove-Button/
@@ -159,8 +160,14 @@ class Grove_Light_Sensor(Grove_Analog_Sensor):
 ## Grove_Temperature_Sensor: This class supports Grove Temperature Sensor v1.2
 #  Documentation: http://wiki.seeed.cc/Grove-Temperature_Sensor_V1.2/
 class Grove_Temperature_Sensor(Grove_Analog_Sensor):
-# FIXME: this sensor doesn't seem to be returning correct data.
-        pass
+    # LM358 8AK YTM1430
+    # TODO: readings do not seem to be correct
+    def temperature(self):
+        B = 4275 # B value of the thermistor
+        a = self.readValue()
+        R = (4096.0 / a) - 1.0 # or 4095.0?
+        temperature = 1.0 / (math.log(R)/B + 1/298.15) - 273.15; # convert to temperature via datasheet
+        return temperature
 
 ## Grove_UV_Sensor: This class supports Grove UV Sensor v1.1
 #  Documentation: http://wiki.seeed.cc/Grove-UV_Sensor/
