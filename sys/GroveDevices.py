@@ -26,7 +26,7 @@
 
 from mindsensors_i2c import mindsensors_i2c
 from PiStorms_GRX import *
-import math
+import math, time
 
 class GroveSensor(GRXCom):
 
@@ -149,7 +149,8 @@ class Grove_PIR_Motion_Sensor(Grove_Digital_Sensor):
 ## Grove_Luminance_Sensor: This class supports Grove Luminance Sensor v1.0
 #  Documentation: http://wiki.seeed.cc/Grove-Luminance_Sensor/
 class Grove_Luminance_Sensor(Grove_Analog_Sensor):
-        # TODO: untested
+    # TODO: untested
+    def getLuminance():
         val = self.readValue() * (3.0 / 4096.0)
 
         vout = [ 0.0011498,  0.0033908,  0.011498,  0.041803,  0.15199,  0.53367,  1.3689,  1.9068,  2.3  ]
@@ -190,7 +191,15 @@ class Grove_Temperature_Sensor(Grove_Analog_Sensor):
 ## Grove_UV_Sensor: This class supports Grove UV Sensor v1.1
 #  Documentation: http://wiki.seeed.cc/Grove-UV_Sensor/
 class Grove_UV_Sensor(Grove_Analog_Sensor):
-        pass
+    # TODO: untested
+    def getUVindex():
+        sum = 0
+        for i in range(1024): # accumulate readings for 1024 times
+            sum = sum + self.readValue()
+            time.sleep(0.02)
+
+        meanVal = sum / 1024 # get mean value
+        UVindex = (meanVal*1000/4.3 - 83) / 21
 
 ## Grove_Moisture_Sensor: This class supports Grove Moisture Sensor v1.4
 #  Documentation: http://wiki.seeed.cc/Grove-Moisture_Sensor/
