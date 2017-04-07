@@ -150,7 +150,7 @@ class Grove_PIR_Motion_Sensor(Grove_Digital_Sensor):
 #  Documentation: http://wiki.seeed.cc/Grove-Luminance_Sensor/
 class Grove_Luminance_Sensor(Grove_Analog_Sensor):
     # TODO: untested
-    def getLuminance():
+    def luminance():
         val = self.readValue() * (3.0 / 4096.0)
 
         vout = [ 0.0011498,  0.0033908,  0.011498,  0.041803,  0.15199,  0.53367,  1.3689,  1.9068,  2.3  ]
@@ -204,7 +204,8 @@ class Grove_UV_Sensor(Grove_Analog_Sensor):
 ## Grove_Moisture_Sensor: This class supports Grove Moisture Sensor v1.4
 #  Documentation: http://wiki.seeed.cc/Grove-Moisture_Sensor/
 class Grove_Moisture_Sensor(Grove_Analog_Sensor):
-        pass
+    def moistureLevel():
+        return self.readValue()
 
 ## Grove_Sunlight_Sensor: This class supports Grove Sunlight Sensor v1.4
 #  Documentation: http://wiki.seeed.cc/Grove-Sunlight_Sensor/
