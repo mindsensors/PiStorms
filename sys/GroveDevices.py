@@ -193,13 +193,13 @@ class Grove_Temperature_Sensor(Grove_Analog_Sensor):
 class Grove_UV_Sensor(Grove_Analog_Sensor):
     # TODO: untested
     def getUVindex():
-        sum = 0
+        val = 0
         for i in range(1024): # accumulate readings for 1024 times
-            sum = sum + self.readValue()
+            val = val + self.readValue()
             time.sleep(0.02)
+        val = val / 1024 # mean value
 
-        meanVal = sum / 1024 # get mean value
-        UVindex = (meanVal*1000/4.3 - 83) / 21
+        return (val*1000/4.3 - 83) / 21
 
 ## Grove_Moisture_Sensor: This class supports Grove Moisture Sensor v1.4
 #  Documentation: http://wiki.seeed.cc/Grove-Moisture_Sensor/
