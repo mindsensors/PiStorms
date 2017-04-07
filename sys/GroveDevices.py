@@ -35,7 +35,10 @@ class GroveSensor(GRXCom):
     GRX_SENSOR_TYPE_DIGITAL = 2
     GRX_SENSOR_TYPE_I2C = 3
 
-    def __init__(self, port):
+    def __init__(self, port=None):
+        if port == None:
+            raise TypeError('You must specify a port as an argument')
+
         self.port = port
         if ( port == "BAA1" ):
             self.bank = self.bankA
@@ -117,7 +120,7 @@ class GroveSensor(GRXCom):
             return 0
 
 class Grove_Digital_Sensor(GroveSensor):
-    def __init__(self, port):
+    def __init__(self, port=None):
         super(Grove_Digital_Sensor,self).__init__(port)
         self.setType(self.GRX_SENSOR_TYPE_DIGITAL)
         self.verifyPort()
@@ -126,7 +129,7 @@ class Grove_Digital_Sensor(GroveSensor):
         return self.digitalInput()
 
 class Grove_Analog_Sensor(GroveSensor):
-    def __init__(self, port):
+    def __init__(self, port=None):
         super(Grove_Analog_Sensor,self).__init__(port)
         self.setType(self.GRX_SENSOR_TYPE_ANALOG)
         self.verifyPort()
@@ -150,7 +153,7 @@ class Grove_PIR_Motion_Sensor(Grove_Digital_Sensor):
 #  Documentation: http://wiki.seeed.cc/Grove-Luminance_Sensor/
 class Grove_Luminance_Sensor(Grove_Analog_Sensor):
     # TODO: untested
-    def luminance():
+    def luminance(self):
         val = self.readValue() * (3.0 / 4096.0)
 
         vout = [ 0.0011498,  0.0033908,  0.011498,  0.041803,  0.15199,  0.53367,  1.3689,  1.9068,  2.3  ]
@@ -185,26 +188,26 @@ class Grove_Temperature_Sensor(Grove_Analog_Sensor):
         B = 4275 # B value of the thermistor
         a = self.readValue()
         R = (4096.0 / a) - 1.0 # or 4095.0?
-        temperature = 1.0 / (math.log(R)/B + 1/298.15) - 273.15; # convert to temperature via datasheet
+        temperature = 1.0 / (math.log(R)/B + 1/298.15) - 273.15 # convert to temperature via datasheet
         return temperature
 
 ## Grove_UV_Sensor: This class supports Grove UV Sensor v1.1
 #  Documentation: http://wiki.seeed.cc/Grove-UV_Sensor/
 class Grove_UV_Sensor(Grove_Analog_Sensor):
     # TODO: untested
-    def getUVindex():
+    def getUVindex(self):
         val = 0
-        for i in range(1024): # accumulate readings for 1024 times
+        for i in range(32): # take many readings
             val = val + self.readValue()
             time.sleep(0.02)
-        val = val / 1024 # mean value
+        val = val / 32 # mean value
 
         return (val*1000/4.3 - 83) / 21
 
 ## Grove_Moisture_Sensor: This class supports Grove Moisture Sensor v1.4
 #  Documentation: http://wiki.seeed.cc/Grove-Moisture_Sensor/
 class Grove_Moisture_Sensor(Grove_Analog_Sensor):
-    def moistureLevel():
+    def moistureLevel(self):
         return self.readValue()
 
 ## Grove_Sunlight_Sensor: This class supports Grove Sunlight Sensor v1.4
@@ -268,7 +271,7 @@ class Grove_Sunlight_Sensor(mindsensors_i2c):
 
 
     ## Initialize the class with the i2c address of your LineLeader
-    #  @param i2c_address Address of your LineLeader (?)
+    #  @param i2c_address Address of your LineLeader TODO:(?)
     #  @remark
     def __init__(self, address=0x60):
         mindsensors_i2c.__init__(self, address)        
@@ -291,7 +294,7 @@ class Grove_Sunlight_Sensor(mindsensors_i2c):
         # PS ADC setting
         self.writeParamData(self.SI114X_PS_ADC_GAIN,    self.SI114X_ADC_GAIN_DIV1)
         self.writeParamData(self.SI114X_PS_ADC_COUNTER, self.SI114X_ADC_COUNTER_511ADCCLK)
-        self.writeParamData(self.SI114X_PS_ADC_MISC,    self.SI114X_ADC_MISC_HIGHRANGE | self.SI114X_ADC_MISC_ADC_RAWADC); 
+        self.writeParamData(self.SI114X_PS_ADC_MISC,    self.SI114X_ADC_MISC_HIGHRANGE | self.SI114X_ADC_MISC_ADC_RAWADC)
 
         # VIS ADC setting
         self.writeParamData(self.SI114X_ALS_VIS_ADC_GAIN,    self.SI114X_ADC_GAIN_DIV1)
