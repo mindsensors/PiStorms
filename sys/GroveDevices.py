@@ -149,7 +149,21 @@ class Grove_PIR_Motion_Sensor(Grove_Digital_Sensor):
 ## Grove_Luminance_Sensor: This class supports Grove Luminance Sensor v1.0
 #  Documentation: http://wiki.seeed.cc/Grove-Luminance_Sensor/
 class Grove_Luminance_Sensor(Grove_Analog_Sensor):
-        pass
+        # TODO: untested
+        measuredVout = self.readValue() * (3.0 / 4096.0)
+
+        voutArray = [ 0.0011498,  0.0033908,  0.011498,  0.041803,  0.15199,  0.53367,  1.3689,  1.9068,  2.3  ]
+        luxArray  = [ 1.0108,     3.1201,     9.8051,    27.43,     69.545,   232.67,   645.11,  73.52,   1000 ]
+
+        if (measuredVout <= voutArray[0]):  return luxArray[0]
+        if (measuredVout >= voutArray[-1]): return luxArray[-1]
+
+        pos = 1
+        while (measuredVout > voutArray[pos]): pos = pos + 1
+
+        if (measuredVout == voutArray[pos]): return luxArray[pos]
+
+        return (measuredVout - voutArray[pos-1]) * (luxArray[pos] - luxArray[pos-1]) / (voutArray[pos] - voutArray[pos-1]) + luxArray[pos-1]
 
 ## Grove_Light_Sensor: This class supports Grove Light Sensor v1.1
 #  Documentation: http://wiki.seeed.cc/Grove-Light_Sensor/
