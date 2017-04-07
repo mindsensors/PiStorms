@@ -70,7 +70,7 @@ def testServoDirectControl():
     while (True):
         print "running servo (and blinking led)"
         colors = [100, 100, 40]
-        psm.psc.bankA.writeArray(0xb6, colors)
+        psm.psc.bankA.writeArray(0xB6, colors)
         time.sleep(0.1)
         a = split_int(500)
         print a
@@ -81,7 +81,7 @@ def testServoDirectControl():
         time.sleep(2)
 
         colors = [70, 10, 90]
-        psm.psc.bankA.writeArray(0xb6, colors)
+        psm.psc.bankA.writeArray(0xB6, colors)
         time.sleep(0.1)
 
         a = split_int(2500)

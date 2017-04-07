@@ -20,8 +20,9 @@
 #Learn more product option visit us @  http://www.mindsensors.com/
 
 # History:
-# Date      Author      Comments
-# Mar 2017  Deepak      Initial Authoring
+# Date      Author          Comments
+# Mar 2017  Deepak          Initial Authoring
+# Apr 2017  Seth Tenembaum  Implement additional Grove sensors
 
 from mindsensors_i2c import mindsensors_i2c
 from PiStorms_GRX import *
@@ -123,65 +124,56 @@ class Grove_Digital_Sensor(GroveSensor):
     def readValue(self):
         return self.digitalInput()
 
-
-class Grove_Button(Grove_Digital_Sensor):
-    def isPressed(self):
-        return self.readValue()
-
-class Grove_PIR_Sensor(Grove_Digital_Sensor):
-    def peoplePresent(self):
-        return self.readValue()
-
 class Grove_Analog_Sensor(GroveSensor):
     def __init__(self, port):
         super(Grove_Analog_Sensor,self).__init__(port)
         self.setType(self.GRX_SENSOR_TYPE_ANALOG)
         self.verifyPort()
+        
+        def readValue(self):
+            return self.analogInput()
 
-    def readValue(self):
-        return self.analogInput()
+## Grove_Button: This class supports Grove Button v1.1
+#  Documentation: http://wiki.seeed.cc/Grove-Button/
+class Grove_Button(Grove_Digital_Sensor):
+    def isPressed(self):
+        return self.readValue()
+
+## Grove_PIR_Motion_Sensor: This class supports Grove PIR Motion Sensor v1.2
+#  Documentation: http://wiki.seeed.cc/Grove-PIR_Motion_Sensor/
+class Grove_PIR_Motion_Sensor(Grove_Digital_Sensor):
+    def motionDetected(self):
+        return self.readValue()
 
 ## Grove_Luminance_Sensor: This class supports Grove Luminance Sensor v1.0
-# sensor documents as follows:
-# https://seeeddoc.github.io/Grove-Luminance_Sensor/
-#
+#  Documentation: http://wiki.seeed.cc/Grove-Luminance_Sensor/
 class Grove_Luminance_Sensor(Grove_Analog_Sensor):
         pass
 
 ## Grove_Light_Sensor: This class supports Grove Light Sensor v1.1
-# sensor documents as follows:
-# https://seeeddoc.github.io/Grove-Light_Sensor/
+#  Documentation: http://wiki.seeed.cc/Grove-Light_Sensor/
 class Grove_Light_Sensor(Grove_Analog_Sensor):
-        pass
+    def lightLevel(self):
+        return self.readValue()
 
 ## Grove_Temperature_Sensor: This class supports Grove Temperature Sensor v1.2
-# sensor documents as follows:
-# https://seeeddoc.github.io/Grove-Temperature_Sensor_V1.2/
-#
+#  Documentation: http://wiki.seeed.cc/Grove-Temperature_Sensor_V1.2/
 class Grove_Temperature_Sensor(Grove_Analog_Sensor):
-# FIXME:
 # FIXME: this sensor doesn't seem to be returning correct data.
         pass
 
 ## Grove_UV_Sensor: This class supports Grove UV Sensor v1.1
-# sensor documents as follows:
-# https://seeeddoc.github.io/Grove-UV_Sensor/
-#
+#  Documentation: http://wiki.seeed.cc/Grove-UV_Sensor/
 class Grove_UV_Sensor(Grove_Analog_Sensor):
         pass
 
 ## Grove_Moisture_Sensor: This class supports Grove Moisture Sensor v1.4
-# sensor documents as follows:
-# https://seeeddoc.github.io/Grove-Moisture_Sensor/
-#
+#  Documentation: http://wiki.seeed.cc/Grove-Moisture_Sensor/
 class Grove_Moisture_Sensor(Grove_Analog_Sensor):
         pass
 
-
 ## Grove_Sunlight_Sensor: This class supports Grove Sunlight Sensor v1.4
-# sensor documents as follows:
-# https://seeeddoc.github.io/Grove-Sunlight_Sensor/
-#
+#  Documentation: http://wiki.seeed.cc/Grove-Sunlight_Sensor/
 class Grove_Sunlight_Sensor(mindsensors_i2c):
     #
     # commands

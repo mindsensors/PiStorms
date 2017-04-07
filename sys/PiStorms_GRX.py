@@ -44,16 +44,16 @@ class GRXCom(object):
     A3 = 2
     D1 = 3
     D2 = 4
-    NONE  = 0
-    S1  = 1
+    NONE = 0
+    S1 = 1
     S2 = 2
     S3 = 3
 
     _NONE = 0
     _ANIN = 1
-    _DO  = 2
-    _DI  = 3
-    _I2C = 4
+    _DO   = 2
+    _DI   = 3
+    _I2C  = 4
     _TAC2X = 5
     _SERIAL = 6
 
@@ -63,16 +63,16 @@ class GRXCom(object):
     # Registers
     GRX_BattV = 0x6E
     GRX_Servo_Base = 0x42
-    GRX_LED_Base  =  0xb6
+    GRX_LED_Base  =  0xB6
     GRX_SA1_Base = 0x48
     GRX_SA2_Base = 0x5E
     GRX_SA3_Base = 0x74
     GRX_SD1_Base = 0x8A
     GRX_SD2_Base = 0xA0
-    GRX_KEY1_Count = 0xba
+    GRX_KEY1_Count = 0xBA
 
     # ???
-    GRX_KEY_Press = 0xb9
+    GRX_KEY_Press = 0xB9
 
     # Registers
     GRX_Command = 0x41
@@ -294,7 +294,7 @@ class RCServo():
         self.setPos(1500)
         pass
 
-class GRX:
+class PiStorms_GRX:
 
     def __init__(self, name = "PiStorms_GRX", rotation = 3 ):
         

@@ -34,13 +34,13 @@ Device_VERSION    =  0x00
 Device_VENDOR    =  0x08
 Device_FEATURES    =  0x18
 Servo_Base = 0x42
-Led_Base  =  0xb6
+Led_Base  =  0xB6
 SA1_base = 0x48
 SA2_base = 0x5E
 SA3_base = 0x74
 SD1_base = 0x8A
 SD2_base = 0xA0
-KEY1_count = 0xba
+KEY1_count = 0xBA
 
 Control_reg  = 0x41
 
