@@ -28,13 +28,23 @@ from mindsensors_i2c import mindsensors_i2c
 from PiStorms_GRX import *
 import math, time
 
+## GroveSensor: This class provides functions for Grove sensors.
+#  This class has derived classes for each sensor.
+#   @remark
+#  There is no need to use this class directly in your program.
 class GroveSensor(GRXCom):
 
     GRX_SENSOR_TYPE_NONE = 0
     GRX_SENSOR_TYPE_ANALOG = 1
     GRX_SENSOR_TYPE_DIGITAL = 2
-    GRX_SENSOR_TYPE_I2C = 3
+    GRX_SENSOR_TYPE_I2C = 3 # !unused
 
+    ## Initialize a Grove sensor object.
+    #  @param port Must be a valid port, one of [BAA1, BAA2, BAA3, BBA1, BBA2, BBA3, BAD1, BAD2, BBD1, BBD2].
+    #              The first two characters are "BA" or "BB", for "Bank A" or "Bank B". The third character is 'A' for "analog" 
+    #              or 'D' for "digital". The fourth character is the port number of that type. See verifyPort(self) for usage details.
+    #  @note I2C sensors will inherit directly from mindsensors_i2c and therefore do not have a port identifier for use in this constructor.
+    #        There is a single I2C port.
     def __init__(self, port=None):
         if port == None:
             raise TypeError('You must specify a port as an argument')
@@ -78,38 +88,66 @@ class GroveSensor(GRXCom):
             self.bank = None
             self.sensornum = 0
             self.type = self.GRX_SENSOR_TYPE_NONE
-            raise ValueError ('No such port: %s' %(port))
+            raise ValueError('No such port: %s' %(port))
 
-    def verifyPort(self):
-        #
-        # ports A1,A2,A3:
-        # allows analog as well as digital sensors, does not allow tachometers.
-        #
-        # port D1,D2:
-        # allows digital sensors or tachometer inputs
-        # does not allow analog sensors
-        #
-        if ( self.type == self.GRX_SENSOR_TYPE_ANALOG ):
-            if ( self.port == "BAD1" or self.port == "BAD2" or
-                 self.port == "BBD1" or self.port == "BBD2" ):
-                    raise ValueError ('Analog sensor not supported on: %s' %(self.port ))
-
+    ## Set the sensor type.
+    #  This function is called by the constructor of each sensor's class. User programs don't need to call this function.
     def setType(self, type, mode=0):
         addr = self.GRX_SA1_Base +(self.sensornum*22)
         self.type = type
         if ( type == self.GRX_SENSOR_TYPE_DIGITAL):
-            _type = self._DI
+            _type = self._DI # defined in GRXCom
         elif ( type == self.GRX_SENSOR_TYPE_ANALOG):
             _type = self._ANIN
 
         self.bank.writeByte(addr, _type)
         self.bank.writeByte(addr+1, mode)
-        
-    def digitalInput(self):
+
+    ## Verify self.type is valid for self.port
+    #  Ports [BAA1, BAA2, BAA3, BBA1, BBA2, BBA3] allow analog as well as digital sensors, but do not allow tachometers.
+    #  Ports [BAD1, BAD2, BBD1, BBD2] allow digital sensors or tachometer inputs. They do not support analog sensors.
+    def verifyPort(self):
+        if ( self.type == self.GRX_SENSOR_TYPE_ANALOG ):
+            if ( self.port == "BAD1" or self.port == "BAD2" or
+                 self.port == "BBD1" or self.port == "BBD2" ):
+                    raise ValueError( 'Analog sensors are not supported on: %s' % self.port )
+
+
+## Grove_Digital_Sensor: This class provides functions for digital Grove sensors.
+#  This class has derived classes for each sensor.
+#   @remark
+#  There is no need to use this class directly in your program.
+class Grove_Digital_Sensor(GroveSensor):
+    ## Initialize a digital Grove sensor.
+    #  Valid ports are [BAA1, BAA2, BAA3, BBA1, BBA2, BBA3, BAD1, BAD2, BBD1, BBD2].
+    #  @see GroveSensor.__init__(self, port)
+    #  @see GroveSensor.verifyPort(self)
+    def __init__(self, port=None):
+        super(Grove_Digital_Sensor,self).__init__(port)
+        self.setType(self.GRX_SENSOR_TYPE_DIGITAL)
+        self.verifyPort()
+
+    ## Take a reading from this sensor
+    def readValue(self):
         reg = self.GRX_SA1_Base +(self.sensornum*22)+4
         return (self.bank.readByte(reg))
 
-    def analogInput(self):
+## Grove_Analog_Sensor: This class provides functions for analog Grove sensors.
+#  This class has derived classes for each sensor.
+#   @remark
+#  There is no need to use this class directly in your program.
+class Grove_Analog_Sensor(GroveSensor):
+    ## Initialize an analog Grove sensor.
+    #  Valid ports are [BAA1, BAA2, BAA3, BBA1, BBA2, BBA3].
+    #  @see GroveSensor.__init__(self, port)
+    #  @see GroveSensor.verifyPort(self)
+    def __init__(self, port=None):
+        super(Grove_Analog_Sensor,self).__init__(port)
+        self.setType(self.GRX_SENSOR_TYPE_ANALOG)
+        self.verifyPort()
+
+    ## Take a reading from this sensor
+    def readValue(self):
         reg = self.GRX_SA1_Base +(self.sensornum*22)
         x = self.bank.readByte(reg)
         if (x == 1):
@@ -119,40 +157,59 @@ class GroveSensor(GRXCom):
         else:
             return 0
 
-class Grove_Digital_Sensor(GroveSensor):
-    def __init__(self, port=None):
-        super(Grove_Digital_Sensor,self).__init__(port)
-        self.setType(self.GRX_SENSOR_TYPE_DIGITAL)
-        self.verifyPort()
-
-    def readValue(self):
-        return self.digitalInput()
-
-class Grove_Analog_Sensor(GroveSensor):
-    def __init__(self, port=None):
-        super(Grove_Analog_Sensor,self).__init__(port)
-        self.setType(self.GRX_SENSOR_TYPE_ANALOG)
-        self.verifyPort()
-
-    def readValue(self):
-        return self.analogInput()
-
-## Grove_Button: This class supports Grove Button v1.1
+## This class supports the Grove Button v1.1
+#
+#  The Grove Button is a momentary push button. The button will release when you let go.
+#
 #  Documentation: http://wiki.seeed.cc/Grove-Button/
+#
+#  @code
+#  import GroveDevices
+#  # initialize a button connected to Bank A digital 1
+#  button = GroveDevices.Grove_Button("BAD1")
+#  if (button.isPressed()):
+#    # do something
+#  @endcode
 class Grove_Button(Grove_Digital_Sensor):
+    ## @ return True if the button is pressed, False if the button is released
     def isPressed(self):
-        return self.readValue()
+        return self.readValue() == 1
 
-## Grove_PIR_Motion_Sensor: This class supports Grove PIR Motion Sensor v1.2
+## This class supports the Grove PIR Motion Sensor v1.2
+#
+#  The Grove PIR Motion Sensor allows you to sense motion withing its range.
+#  You can change whether or not it is retriggerable with an on-board jumper.
+#
 #  Documentation: http://wiki.seeed.cc/Grove-PIR_Motion_Sensor/
+#
+#  @code
+#  import GroveDevices
+#  # initialize a PIR motion sensor connected to Bank A digital 1
+#  button = GroveDevices.Grove_PIR_Motion_Sensor("BAD1")
+#  if (button.motionDetected()):
+#    # do something
+#  @endcode
 class Grove_PIR_Motion_Sensor(Grove_Digital_Sensor):
+    ## @ return True if the button is pressed, False if the button is released
     def motionDetected(self):
-        return self.readValue()
+        return self.readValue() == 1
 
-## Grove_Luminance_Sensor: This class supports Grove Luminance Sensor v1.0
+## This class supports the Grove Luminance Sensor v1.0
+#
+#  The Grove Luminance Sensor detects the ambient light level.
+#
 #  Documentation: http://wiki.seeed.cc/Grove-Luminance_Sensor/
+#
+#  @code
+#  import GroveDevices
+#  # initialize a luminance sensor connected to Bank A analog 1
+#  lum = GroveDevices.Grove_Luminance_Sensor("BAA1")
+#  if (lum.luminance() < 20.0):
+#    # do something when the lights are off
+#  @endcode
 class Grove_Luminance_Sensor(Grove_Analog_Sensor):
-    # TODO: untested
+    # TODO: untested, can't find sensor
+    ## @return A decimal for the detected lux
     def luminance(self):
         val = self.readValue() * (3.0 / 4096.0)
 
@@ -173,17 +230,42 @@ class Grove_Luminance_Sensor(Grove_Analog_Sensor):
         # interpolate in the right segment for the rest
         return (val - vout[pos-1]) * (lux[pos] - lux[pos-1]) / (vout[pos] - vout[pos-1]) + lux[pos-1]
 
-## Grove_Light_Sensor: This class supports Grove Light Sensor v1.1
+## This class supports the Grove Light Sensor v1.1
+#
+#  This is a simple sensor that uses a photoresistor to detect light.
+#
 #  Documentation: http://wiki.seeed.cc/Grove-Light_Sensor/
+#
+#  @code
+#  import GroveDevices
+#  # initialize a light sensor connected to Bank A analog 1
+#  light = GroveDevices.Grove_Light_Sensor("BAA1")
+#  if (light.lightLevel() < 1000):
+#    # do something when it gets dark
+#  @endcode
 class Grove_Light_Sensor(Grove_Analog_Sensor):
+    ## @return A number corresponding with the current detected light level.
+    #          Average indoor lighting might be in the 2000s.
     def lightLevel(self):
         return self.readValue()
 
-## Grove_Temperature_Sensor: This class supports Grove Temperature Sensor v1.2
+## This class supports the Grove Temperature Sensor v1.2
+#
+#  This sensor uses a thermistor (portmanteau of "thermal" and "resistor") to detect temperature.
+#
 #  Documentation: http://wiki.seeed.cc/Grove-Temperature_Sensor_V1.2/
+#
+#  @code
+#  import GroveDevices
+#  # initialize a temperature sensor connected to Bank A analog 1
+#  temp = GroveDevices.Grove_Temperature_Sensor("BAA1")
+#  if (temp.temperature() > 22.0):
+#    # do something when it's a bit hot
+#  @endcode
 class Grove_Temperature_Sensor(Grove_Analog_Sensor):
     # LM358 8AK YTM1430
     # TODO: readings do not seem to be correct
+    ## @return A decimal corresponding to the detected temperature in Celsius
     def temperature(self):
         B = 4275 # B value of the thermistor
         a = self.readValue()
