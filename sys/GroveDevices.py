@@ -216,6 +216,13 @@ class Grove_Sound_Sensor(Grove_Analog_Sensor):
     def soundIntensity(self):
         return self.readValue()
 
+## Grove_Air_Quality_Sensor: This class supports Grove Air Quality Sensor v1.3
+#  Documentation: http://wiki.seeed.cc/Grove-Air_Quality_Sensor_v1.3/
+#  TODO: add more description to all these methods, and their/our methods
+class Grove_Air_Quality_Sensor(Grove_Analog_Sensor):
+    def airQuality(self):
+        return self.readValue()
+
 ## Grove_Sunlight_Sensor: This class supports Grove Sunlight Sensor v1.4
 #  Documentation: http://wiki.seeed.cc/Grove-Sunlight_Sensor/
 class Grove_Sunlight_Sensor(mindsensors_i2c):
@@ -276,11 +283,11 @@ class Grove_Sunlight_Sensor(mindsensors_i2c):
     SI114X_IRQEN_ALS = 0x01
 
 
-    ## Initialize the class with the i2c address of your LineLeader
-    #  @param i2c_address Address of your LineLeader TODO:(?)
+    ## Initialize the class with the i2c address of your sunlight sensor
+    #  @param i2c_address Address of your sunlight sensor
     #  @remark
     def __init__(self, address=0x60):
-        mindsensors_i2c.__init__(self, address)        
+        mindsensors_i2c.__init__(self, address)
         self.reset()
         self.deInit()
 
