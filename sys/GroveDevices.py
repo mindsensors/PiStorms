@@ -43,7 +43,7 @@ class GroveSensor(GRXCom):
     #  @param port Must be a valid port, one of [BAA1, BAA2, BAA3, BBA1, BBA2, BBA3, BAD1, BAD2, BBD1, BBD2].
     #              The first two characters are "BA" or "BB", for "Bank A" or "Bank B". The third character is 'A' for "analog" 
     #              or 'D' for "digital". The fourth character is the port number of that type. See verifyPort(self) for usage details.
-    #  @note I2C sensors will inherit directly from mindsensors_i2c and therefore do not have a port identifier for use in this constructor.
+    #  @note I2C sensors will inherit directly from mindsensors_i2c and therefore does not have a port identifier for use in this constructor.
     #        There is a single I2C port.
     def __init__(self, port=None, type=None):
         if port == None:
@@ -116,6 +116,9 @@ class GroveSensor(GRXCom):
                  self.port == "BBD1" or self.port == "BBD2" ):
                     raise ValueError( 'Analog sensors are not supported on: %s' % self.port )
 
+    ## Take a reading from this sensor
+    def readValue(self):
+        raise NotImplementedError("A derived Grove sensor class must implement this abstract method.")
 
 ## Grove_Digital_Sensor: This class provides functions for digital Grove sensors.
 #  This class has derived classes for each sensor.
@@ -129,7 +132,7 @@ class Grove_Digital_Sensor(GroveSensor):
     def __init__(self, port=None):
         super(Grove_Digital_Sensor,self).__init__(port, self.GRX_SENSOR_TYPE_DIGITAL)
 
-    ## Take a reading from this sensor
+    ## Take a reading from this digital sensor
     def readValue(self):
         reg = self.GRX_SA1_Base +(self.sensornum*22)+4
         return (self.bank.readByte(reg))
@@ -146,7 +149,7 @@ class Grove_Analog_Sensor(GroveSensor):
     def __init__(self, port=None):
         super(Grove_Analog_Sensor,self).__init__(port, self.GRX_SENSOR_TYPE_ANALOG)
 
-    ## Take a reading from this sensor
+    ## Take a reading from this analog sensor
     def readValue(self):
         reg = self.GRX_SA1_Base +(self.sensornum*22)
         x = self.bank.readByte(reg)
