@@ -45,7 +45,7 @@ class GroveSensor(GRXCom):
     #              or 'D' for "digital". The fourth character is the port number of that type. See verifyPort(self) for usage details.
     #  @note I2C sensors will inherit directly from mindsensors_i2c and therefore do not have a port identifier for use in this constructor.
     #        There is a single I2C port.
-    def __init__(self, port=None):
+    def __init__(self, port=None, type=None):
         if port == None:
             raise TypeError('You must specify a port as an argument')
 
@@ -90,6 +90,10 @@ class GroveSensor(GRXCom):
             self.type = self.GRX_SENSOR_TYPE_NONE
             raise ValueError('No such port: %s' %(port))
 
+        if type != None:
+            self.setType(type)
+            self.verifyPort()
+
     ## Set the sensor type.
     #  This function is called by the constructor of each sensor's class. User programs don't need to call this function.
     def setType(self, type, mode=0):
@@ -123,9 +127,7 @@ class Grove_Digital_Sensor(GroveSensor):
     #  @see GroveSensor.__init__(self, port)
     #  @see GroveSensor.verifyPort(self)
     def __init__(self, port=None):
-        super(Grove_Digital_Sensor,self).__init__(port)
-        self.setType(self.GRX_SENSOR_TYPE_DIGITAL)
-        self.verifyPort()
+        super(Grove_Digital_Sensor,self).__init__(port, self.GRX_SENSOR_TYPE_DIGITAL)
 
     ## Take a reading from this sensor
     def readValue(self):
@@ -142,9 +144,7 @@ class Grove_Analog_Sensor(GroveSensor):
     #  @see GroveSensor.__init__(self, port)
     #  @see GroveSensor.verifyPort(self)
     def __init__(self, port=None):
-        super(Grove_Analog_Sensor,self).__init__(port)
-        self.setType(self.GRX_SENSOR_TYPE_ANALOG)
-        self.verifyPort()
+        super(Grove_Analog_Sensor,self).__init__(port, self.GRX_SENSOR_TYPE_ANALOG)
 
     ## Take a reading from this sensor
     def readValue(self):
