@@ -273,16 +273,27 @@ class Grove_Temperature_Sensor(Grove_Analog_Sensor):
         temperature = 1.0 / (math.log(R)/B + 1/298.15) - 273.15 # convert to temperature via datasheet
         return temperature
 
-## Grove_UV_Sensor: This class supports Grove UV Sensor v1.1
+## This class supports the Grove UV Sensor v1.1
+#
+#  The Grove UV Sensor measure ultraviolet light intensity.
+#
 #  Documentation: http://wiki.seeed.cc/Grove-UV_Sensor/
+#
+#  @code
+#  import GroveDevices
+#  # initialize a UV sensor connected to Bank A analog 1
+#  uv = GroveDevices.Grove_UV_Sensor("BAA1")
+#  if (uv.getUVindex() > 5.0):
+#    print("It might be a good idea to put on some sunscreen!")
+#  @endcode
 class Grove_UV_Sensor(Grove_Analog_Sensor):
-    # TODO: untested
+    # TODO: results (-3.95 inside, 1292.06 outside) are completely off of the UV index scale (0 through 11)
     def getUVindex(self):
         val = 0
-        for i in range(32): # take many readings
+        for i in range(1024): # take many readings
             val = val + self.readValue()
-            time.sleep(0.02)
-        val = val / 32 # mean value
+            time.sleep(0.002)
+        val = val / 1024.0 # mean value
 
         return (val*1000/4.3 - 83) / 21
 
