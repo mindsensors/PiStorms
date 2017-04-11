@@ -322,9 +322,21 @@ class Grove_Moisture_Sensor(Grove_Analog_Sensor):
     def moistureLevel(self):
         return self.readValue()
 
-## Grove_Sound_Sensor: This class supports Grove Sound Sensor v1.6
+## This class supports the Grove Sound Sensor v1.6
+#
+#  This sensor can detect moisture in soil. Simply insert the leads in the soil.
+#
 #  Documentation: http://wiki.seeed.cc/Grove-Sound_Sensor/
+#
+#  @code
+#  import GroveDevices
+#  # initialize a sound sensor connected to Bank A analog 1
+#  s = GroveDevices.Grove_Sound_Sensor("BAA1")
+#  if (s.soundIntensity() < 3200):
+#    print "I heard a clap!"
+#  @endcode
 class Grove_Sound_Sensor(Grove_Analog_Sensor):
+    ## @return A number corresponding with the current detected sound intensity.
     def soundIntensity(self):
         return self.readValue()
 
