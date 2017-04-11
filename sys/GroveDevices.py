@@ -245,7 +245,7 @@ class Grove_Luminance_Sensor(Grove_Analog_Sensor):
 #  @endcode
 class Grove_Light_Sensor(Grove_Analog_Sensor):
     ## @return A number corresponding with the current detected light level.
-    #          Average indoor lighting might be in the 2000s.
+    #          Average indoor lighting might be in the 2000's.
     def lightLevel(self):
         return self.readValue()
 
@@ -301,9 +301,21 @@ class Grove_UV_Sensor(Grove_Analog_Sensor):
     def UVindex(self):
         return self.intensity()/200.0
 
-## Grove_Moisture_Sensor: This class supports Grove Moisture Sensor v1.4
+## This class supports the Grove Moisture Sensor v1.4
+#
+#  This sensor can detect moisture in soil. Simply insert the leads in the soil.
+#
 #  Documentation: http://wiki.seeed.cc/Grove-Moisture_Sensor/
+#
+#  @code
+#  import GroveDevices
+#  # initialize a moisture sensor connected to Bank A analog 1
+#  m = GroveDevices.Grove_Moisture_Sensor("BAA1")
+#  if (m.moistureLevel() < 450):
+#    print "Your plant needs water!"
+#  @endcode
 class Grove_Moisture_Sensor(Grove_Analog_Sensor):
+    ## @return A number corresponding to the detected moisture level
     def moistureLevel(self):
         return self.readValue()
 
