@@ -26,7 +26,7 @@
 
 from mindsensors_i2c import mindsensors_i2c
 from PiStorms_GRX import *
-import math, time
+import math
 
 ## GroveSensor: This class provides functions for Grove sensors.
 #  This class has derived classes for each sensor.
@@ -283,19 +283,23 @@ class Grove_Temperature_Sensor(Grove_Analog_Sensor):
 #  import GroveDevices
 #  # initialize a UV sensor connected to Bank A analog 1
 #  uv = GroveDevices.Grove_UV_Sensor("BAA1")
-#  if (uv.getUVindex() > 5.0):
+#  if (uv.UVindex() > 3.0):
 #    print("It might be a good idea to put on some sunscreen!")
 #  @endcode
 class Grove_UV_Sensor(Grove_Analog_Sensor):
-    # TODO: results (-3.95 inside, 1292.06 outside) are completely off of the UV index scale (0 through 11)
-    def getUVindex(self):
+    ## @return Measured illumination intensity in mW/m^2
+    def intensity(self):
         val = 0
         for i in range(1024): # take many readings
             val = val + self.readValue()
-            time.sleep(0.002)
         val = val / 1024.0 # mean value
+        Vsig = val/4096.0 * 5
+        return 307 * Vsig
 
-        return (val*1000/4.3 - 83) / 21
+    ## @note This is an approximation!
+    #  @return The estimated measured EPA standard UV index
+    def UVindex(self):
+        return self.intensity()/200.0
 
 ## Grove_Moisture_Sensor: This class supports Grove Moisture Sensor v1.4
 #  Documentation: http://wiki.seeed.cc/Grove-Moisture_Sensor/
