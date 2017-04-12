@@ -263,6 +263,11 @@ class RCServo():
         self.sendDataArray = lambda dataArray: bank.writeArray( GRXCom.GRX_Servo_Base + (num-1)*2, dataArray )
         self.setNeutralPoint(neutralPoint)
         self.setNeutral()
+        # useful properties for user access, not necessary for this class's functions
+        #self.pos = self.neutralPoint
+        self.speed = 0
+        self.bankAddr = bank.address
+        self.num = num
 
     def setPos(self, newPos):
         try:
@@ -271,6 +276,7 @@ class RCServo():
             raise ValueError("Servo position must be an integer in the range 500-2500")
         if not ( 500 <= newPos <= 2500  or newPos==0):
             raise ValueError("Servo position must be in the range 500 through 2500")
+        self.pos = newPos
         self.sendDataArray([newPos%256, newPos/256])
 
     def setSpeed(self, speed):
@@ -280,6 +286,7 @@ class RCServo():
             raise ValueError("Servo speed must be a rational number between -100 and 100")
         if not -100.0 <= speed <= 100.0:
             raise ValueError("Servo speed must be between -100 and 100")
+        self.speed = speed
         buffer = 150 # don't try to set speed too close to the extremes
         # here min is used to find the smaller range: neutral to min or neutral to max (max to neutral)
         self.setPos(self.neutralPoint + speed/100.0 * min(self.neutralPoint-(500+buffer), (2500-buffer)-self.neutralPoint))
