@@ -257,36 +257,26 @@ class RCServo():
         if not 1 <= num <= 3:
             raise ValueError("Servo number must be 1, 2 or 3")
         self.bank = bank
-        self.num = num-1
+        self.addr = GRXCom.GRX_Servo_Base + (num-1)*2
         self.setNeutralPoint(neutralPoint)
         self.setNeutral()
 
-    #def setPos(self, newPos=self.neutralPoint): # self not defined
-    #    if not 0 <= newPos < 2**16:
-    #        raise ValueError("Servo position must be in the range 0 through 65535, range(0, 2**16)")
-    #    ...
-    
-    # alias: pos, setPulse
     def setPos(self, newPos):
         newPos = int(newPos)
-        if not 500 <= newPos <= 2500 and newPos!=0:
+        if not ( 500 <= newPos <= 2500  or newPos==0):
             raise ValueError("Servo position must be in the range 500 through 2500")
-        addr = GRXCom.GRX_Servo_Base + self.num*2
-        self.bank.writeArray(addr, [newPos%256, newPos/256])
+        self.bank.writeArray(self.addr, [newPos%256, newPos/256])
 
-    #def setSpeed(self, speed=0):
     def setSpeed(self, speed):
-        if not -100 <= speed <= 100:
+        try:
+            speed = float(speed)
+        except ValueError:
+            raise ValueError("Servo speed must be a rational number between -100 and 100")
+        if not -100.0 <= speed <= 100.0:
             raise ValueError("Servo speed must be between -100 and 100")
-        min_ = 500+50  #  550
-        max_ = 2500-50 # 2450
-        mid_ = self.neutralPoint  # 1225
-        minrange = mid_ - min_  # 1225-550 == 675
-        maxrange = max_ - mid_  # 2450-1225 == 1225
-        smallestRange = min(minrange,maxrange) # 675
-        setVal = mid_ + speed/100.0 * smallestRange
-        print setVal
-        self.setPos(setVal)
+        buffer = 50 # don't try to set speed right at the extremes
+        # here min is used to find the smaller range: neutral to min or neutral to max (max to neutral)
+        self.setPos(self.neutralPoint + speed/100.0 * min(self.neutralPoint-(500+buffer), (2500-buffer)-self.neutralPoint))
 
     def setNeutralPoint(self, neutralPoint):
         neutralPoint = int(neutralPoint)
@@ -294,7 +284,6 @@ class RCServo():
             raise ValueError("Servo neutral point must be in the range 500 through 2500")
         self.neutralPoint = neutralPoint
 
-    # alias: neutral
     def setNeutral(self):
         self.setPos(self.neutralPoint)
 
