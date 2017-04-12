@@ -28,7 +28,6 @@ from mindsensorsUI import mindsensorsUI
 import time, math
 import sys,os
 import ctypes
-import numpy
 import random
 import json # for new touchscreen functionality
 
@@ -248,51 +247,60 @@ class GRXCom(object):
     def ping(self):
         self.bankA.readByte(0x00)
 
-if __name__ == '__main__':
-    psc = GRXCom()
-    print "Version = "+ str(psc.GetFirmwareVersion())
-    print "Vendor = "+ str(psc.GetVendorName())
-    print "Device = "+ str(psc.GetDeviceId())
-    try:
-        while(True):
-            print   psc.battVoltage()
-            time.sleep(1)
-            
-    except KeyboardInterrupt:
-        #psc.BAM1.float()
-        #psc.BAM2.float()
-        #psc.BBM1.float()
-        #psc.BBM2.float()
-        pass
 
-
+## outermost is 1, intermost is 3
+#  signal pin towards pi, away from screen
 class RCServo():
 
-    motornum = 0
-    def __init__(self, bank, num):
+    def __init__(self, bank, num, neutralPoint=1500):
         # each bank supports three servos.
+        if not 1 <= num <= 3:
+            raise ValueError("Servo number must be 1, 2 or 3")
         self.bank = bank
-        if (num < 1): num = 1
-        if (num > 3): num = 3
-        self.motornum = int(num - 1)
+        self.num = num-1
+        self.setNeutralPoint(neutralPoint)
         self.setNeutral()
 
+    #def setPos(self, newPos=self.neutralPoint): # self not defined
+    #    if not 0 <= newPos < 2**16:
+    #        raise ValueError("Servo position must be in the range 0 through 65535, range(0, 2**16)")
+    #    ...
+    
+    # alias: pos, setPulse
     def setPos(self, newPos):
-        data0 = int(numpy.ubyte(newPos))
-        data1 = int(numpy.ubyte(newPos>>8))
-        addr = GRXCom.GRX_Servo_Base + (self.motornum * 2)
-        # NOTE: writeArray does not work correctly.
-        # hence, this function uses two writeByte calls.
-        #a = [data0, data1]
-        #self.bank.writeArray(addr, a)
+        newPos = int(newPos)
+        if not 500 <= newPos <= 2500 and newPos!=0:
+            raise ValueError("Servo position must be in the range 500 through 2500")
+        addr = GRXCom.GRX_Servo_Base + self.num*2
+        self.bank.writeArray(addr, [newPos%256, newPos/256])
 
-        self.bank.writeByte(addr, data0)
-        self.bank.writeByte(addr+1, data1)
+    #def setSpeed(self, speed=0):
+    def setSpeed(self, speed):
+        if not -100 <= speed <= 100:
+            raise ValueError("Servo speed must be between -100 and 100")
+        min_ = 500+50  #  550
+        max_ = 2500-50 # 2450
+        mid_ = self.neutralPoint  # 1225
+        minrange = mid_ - min_  # 1225-550 == 675
+        maxrange = max_ - mid_  # 2450-1225 == 1225
+        smallestRange = min(minrange,maxrange) # 675
+        setVal = mid_ + speed/100.0 * smallestRange
+        print setVal
+        self.setPos(setVal)
 
+    def setNeutralPoint(self, neutralPoint):
+        neutralPoint = int(neutralPoint)
+        if not 500 <= neutralPoint <= 2500:
+            raise ValueError("Servo neutral point must be in the range 500 through 2500")
+        self.neutralPoint = neutralPoint
+
+    # alias: neutral
     def setNeutral(self):
-        # TODO: write code to neutral servo.
-        self.setPos(1500)
-        pass
+        self.setPos(self.neutralPoint)
+
+    def stop(self):
+        self.setPos(0)
+
 
 class PiStorms_GRX:
 

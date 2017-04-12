@@ -6,12 +6,8 @@ import time
 import numpy
 from GroveDevices import *
 
-print "running program"
+
 psm = PiStorms_GRX()
-print "Device : "+ str(psm.GetDeviceId() )
-print "Vendor : "+ str(psm.GetVendorName() )
-print "Firmware : "+ str(psm.GetFirmwareVersion() )
-print "Features : "+ str(psm.psc.GetDeviceFeatures())
 
 _NONE = 0
 _ANIN = 1
@@ -22,7 +18,6 @@ _TAC2X = 5
 _SERIAL = 6
 
 
-
 # test function to print battery voltage
 def printBattVoltage():
     while (True):
@@ -31,9 +26,10 @@ def printBattVoltage():
         time.sleep (1)
 
 
-# test function to run servo motor
-def runServo1(num):
+#def runServo1(num):
     #servo1 = RCServo(psm.psc.bankB, num)
+# test function to run servo motor
+def runServo1():
     servo1 = psm.BBM3
     x = 1500
     while (True):
@@ -105,13 +101,19 @@ def set_type():
         psm.psc.bankA.writeByte(addr+1, 0)
     
 
+if __name__ == "__main__":
+    print "running program"
+    print "Device : "+ str(psm.GetDeviceId() )
+    print "Vendor : "+ str(psm.GetVendorName() )
+    print "Firmware : "+ str(psm.GetFirmwareVersion() )
+    print "Features : "+ str(psm.psc.GetDeviceFeatures())
 
-x = 1500
-old_x = x
-servo1 = psm.BBM1
-while (True):
-    x = raw_input("enter ms value:")
-    if ( x != old_x):
-        print "value changed"
-        old_x = x
-        servo1.setPos(int(x))
+    x = 1500
+    old_x = x
+    servo1 = psm.BBM1
+    while (True):
+        x = raw_input("enter ms value:")
+        if ( x != old_x):
+            print "value changed"
+            old_x = x
+            servo1.setPos(int(x))
