@@ -215,6 +215,26 @@ class Grove_PIR_Motion_Sensor(Grove_Digital_Sensor):
     def motionDetected(self):
         return self.readValue() == 1
 
+## This class supports the Grove Flame Sensor v1.1
+#
+#  This sensor can detect fire in front of it and is essential in a fire-fighting robot game.
+#  It can also detect "other light sources of the wavelength in the range of 760nm - 1100 nm."
+#
+#  Documentation: http://wiki.seeed.cc/Grove-Flame_Sensor/
+#
+#  @code
+#  import GroveDevices
+#  # initialize a flame sensor connected to Bank A digital 1
+#  f = GroveDevices.Grove_Flame_Sensor("BAD1")
+#  if (f.fireDetected()):
+#    print("Fire! Fire!!")
+#  @endcode
+class Grove_Flame_Sensor(Grove_Digital_Sensor):
+    ## @ return True if infrared light is found in a line straight in front of
+    #           the sensor (looks like a black LED), False otherwise
+    def fireDetected(self):
+        return self.readValue() == 1
+
 ## This class supports the Grove Luminance Sensor v1.0
 #
 #  The Grove Luminance Sensor detects the ambient light level.
