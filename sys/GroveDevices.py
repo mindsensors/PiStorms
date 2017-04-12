@@ -30,8 +30,7 @@ import math
 
 ## GroveSensor: This class provides functions for Grove sensors.
 #  This class has derived classes for each sensor.
-#   @remark
-#  There is no need to use this class directly in your program.
+#  @remark There is no need to use this class directly in your program.
 class GroveSensor(GRXCom):
 
     GRX_SENSOR_TYPE_NONE = 0
@@ -122,8 +121,7 @@ class GroveSensor(GRXCom):
 
 ## Grove_Digital_Sensor: This class provides functions for digital Grove sensors.
 #  This class has derived classes for each sensor.
-#   @remark
-#  There is no need to use this class directly in your program.
+#  @remark There is no need to use this class directly in your program.
 class Grove_Digital_Sensor(GroveSensor):
     ## Initialize a digital Grove sensor.
     #  Valid ports are [BAA1, BAA2, BAA3, BBA1, BBA2, BBA3, BAD1, BAD2, BBD1, BBD2].
@@ -139,8 +137,7 @@ class Grove_Digital_Sensor(GroveSensor):
 
 ## Grove_Analog_Sensor: This class provides functions for analog Grove sensors.
 #  This class has derived classes for each sensor.
-#   @remark
-#  There is no need to use this class directly in your program.
+#  @remark There is no need to use this class directly in your program.
 class Grove_Analog_Sensor(GroveSensor):
     ## Initialize an analog Grove sensor.
     #  Valid ports are [BAA1, BAA2, BAA3, BBA1, BBA2, BBA3].
@@ -171,7 +168,7 @@ class Grove_Analog_Sensor(GroveSensor):
 #  # initialize a button connected to Bank A digital 1
 #  button = GroveDevices.Grove_Button("BAD1")
 #  if (button.isPressed()):
-#    # do something
+#    print("Pointless button pressed (warning: pointless).")
 #  @endcode
 class Grove_Button(Grove_Digital_Sensor):
     ## @ return True if the button is pressed, False if the button is released
@@ -190,7 +187,7 @@ class Grove_Button(Grove_Digital_Sensor):
 #  # initialize a PIR motion sensor connected to Bank A digital 1
 #  button = GroveDevices.Grove_PIR_Motion_Sensor("BAD1")
 #  if (button.motionDetected()):
-#    # do something
+#    print("I see you, hi there!")
 #  @endcode
 class Grove_PIR_Motion_Sensor(Grove_Digital_Sensor):
     ## @ return True if the button is pressed, False if the button is released
@@ -208,7 +205,7 @@ class Grove_PIR_Motion_Sensor(Grove_Digital_Sensor):
 #  # initialize a luminance sensor connected to Bank A analog 1
 #  lum = GroveDevices.Grove_Luminance_Sensor("BAA1")
 #  if (lum.luminance() < 20.0):
-#    # do something when the lights are off
+#    print("Someone turn on the lights, I can't see anything!")
 #  @endcode
 class Grove_Luminance_Sensor(Grove_Analog_Sensor):
     # TODO: untested, can't find sensor
@@ -244,7 +241,7 @@ class Grove_Luminance_Sensor(Grove_Analog_Sensor):
 #  # initialize a light sensor connected to Bank A analog 1
 #  light = GroveDevices.Grove_Light_Sensor("BAA1")
 #  if (light.lightLevel() < 1000):
-#    # do something when it gets dark
+#    print("It's pretty dark in here.")
 #  @endcode
 class Grove_Light_Sensor(Grove_Analog_Sensor):
     ## @return A number corresponding with the current detected light level.
@@ -263,7 +260,7 @@ class Grove_Light_Sensor(Grove_Analog_Sensor):
 #  # initialize a temperature sensor connected to Bank A analog 1
 #  temp = GroveDevices.Grove_Temperature_Sensor("BAA1")
 #  if (temp.temperature() > 22.0):
-#    # do something when it's a bit hot
+#    print("You might want a fan, it's getting a bit hot.")
 #  @endcode
 class Grove_Temperature_Sensor(Grove_Analog_Sensor):
     # LM358 8AK YTM1430
@@ -315,7 +312,7 @@ class Grove_UV_Sensor(Grove_Analog_Sensor):
 #  # initialize a moisture sensor connected to Bank A analog 1
 #  m = GroveDevices.Grove_Moisture_Sensor("BAA1")
 #  if (m.moistureLevel() < 450):
-#    print "Your plant needs water!"
+#    print("Your plant needs water!")
 #  @endcode
 class Grove_Moisture_Sensor(Grove_Analog_Sensor):
     ## @return A number corresponding to the detected moisture level
@@ -333,7 +330,7 @@ class Grove_Moisture_Sensor(Grove_Analog_Sensor):
 #  # initialize a sound sensor connected to Bank A analog 1
 #  s = GroveDevices.Grove_Sound_Sensor("BAA1")
 #  if (s.soundIntensity() < 3200):
-#    print "I heard a clap!"
+#    print("I heard a clap!")
 #  @endcode
 class Grove_Sound_Sensor(Grove_Analog_Sensor):
     ## @return A number corresponding with the current detected sound intensity.
