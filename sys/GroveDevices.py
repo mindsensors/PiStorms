@@ -340,12 +340,33 @@ class Grove_Sound_Sensor(Grove_Analog_Sensor):
     def soundIntensity(self):
         return self.readValue()
 
-## Grove_Air_Quality_Sensor: This class supports Grove Air Quality Sensor v1.3
+## This class supports the Grove Air Quality Sensor v1.3
+#
+#  This sensor detects harmful gases like "carbon monoxide, alcohol, acetone, thinner, formaldehyde."
+#  It is best to leave the sensor on for a bit and let the value stabalize for an accurate reading.
+#
 #  Documentation: http://wiki.seeed.cc/Grove-Air_Quality_Sensor_v1.3/
-#  TODO: add more description to all these methods, and their/our methods
+#
+#  @code
+#  import GroveDevices
+#  # initialize an air quality sensor connected to Bank A analog 1
+#  air = GroveDevices.Grove_Air_Quality_Sensor("BAA1")
+#  if (air.qualitativeMeasurement() != "Fresh air"):
+#    print("There are harmful gases nearby, you might want to open a window.")
+#  @endcode
 class Grove_Air_Quality_Sensor(Grove_Analog_Sensor):
+    ## @return A number corresponding with the air quality. Higher numbers mean more pollutants are present.
     def airQuality(self):
         return self.readValue()
+
+    def qualitativeMeasurement(self):
+        sensor_value = self.airQuality()
+        if sensor_value > 700:
+            return "High pollution"
+        elif sensor_value > 300:
+            return "Low pollution"
+        else:
+            return "Fresh air"
 
 ## Grove_Sunlight_Sensor: This class supports Grove Sunlight Sensor v1.4
 #  Documentation: http://wiki.seeed.cc/Grove-Sunlight_Sensor/
