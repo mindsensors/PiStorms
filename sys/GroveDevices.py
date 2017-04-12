@@ -263,8 +263,6 @@ class Grove_Light_Sensor(Grove_Analog_Sensor):
 #    print("You might want a fan, it's getting a bit hot.")
 #  @endcode
 class Grove_Temperature_Sensor(Grove_Analog_Sensor):
-    # LM358 8AK YTM1430
-    # TODO: readings do not seem to be correct
     ## @return A decimal corresponding to the detected temperature in Celsius
     def temperature(self):
         B = 4275 # B value of the thermistor
@@ -272,6 +270,11 @@ class Grove_Temperature_Sensor(Grove_Analog_Sensor):
         R = (4096.0 / a) - 1.0 # or 4095.0?
         temperature = 1.0 / (math.log(R)/B + 1/298.15) - 273.15 # convert to temperature via datasheet
         return temperature
+
+    ## A convenience function to convert Celsius to Fahrenheit
+    @classmethod
+    def CtoF(self, degreesCelsius):
+        return degreesCelsius * 1.8 + 32
 
 ## This class supports the Grove UV Sensor v1.1
 #
