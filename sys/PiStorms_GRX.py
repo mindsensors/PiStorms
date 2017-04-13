@@ -250,21 +250,31 @@ class GRXCom(object):
 
 ## outermost is 1, intermost is 3
 #  signal pin towards pi, away from screen
-class RCServo():
+class RCServo(GRXCom):
 
-    def __init__(self, bank, num, neutralPoint=1500):
+    def __init__(self, port=None, neutralPoint=1500):
+        if port == None:
+            raise TypeError('You must specify a port as an argument')
+
+        if port[0:2] == "BA":
+            bank = self.bankA
+        elif port[0:2] == "BB":
+            bank = self.bankB
+        else:
+            raise ValueError("Invalid bank letter")
+
         # each bank supports three servos.
         try:
-            num = int(num)
+            num = int(port[-1])
         except ValueError:
             raise ValueError("Servo number must be an integer: 1, 2, or 3")
         if not 1 <= num <= 3:
             raise ValueError("Servo number must be 1, 2, or 3")
-        self.sendDataArray = lambda dataArray: bank.writeArray( GRXCom.GRX_Servo_Base + (num-1)*2, dataArray )
+
+        self.sendDataArray = lambda dataArray: bank.writeArray( self.GRX_Servo_Base + (num-1)*2, dataArray )
         self.setNeutralPoint(neutralPoint)
         self.setNeutral()
         # useful properties for user access, not necessary for this class's functions
-        #self.pos = self.neutralPoint
         self.speed = 0
         self.bankAddr = bank.address
         self.num = num
@@ -311,17 +321,8 @@ class RCServo():
 class PiStorms_GRX:
 
     def __init__(self, name = "PiStorms_GRX", rotation = 3 ):
-        
         self.screen = mindsensorsUI(name, rotation)
         self.psc = GRXCom()
-
-        self.BAM1 = RCServo(self.psc.bankA, 1)
-        self.BAM2 = RCServo(self.psc.bankA, 2)
-        self.BAM3 = RCServo(self.psc.bankA, 3)
-
-        self.BBM1 = RCServo(self.psc.bankB, 1)
-        self.BBM2 = RCServo(self.psc.bankB, 2)
-        self.BBM3 = RCServo(self.psc.bankB, 3)
 
     def command (self, cmd, bank):
         self.psc.command(cmd, bank)
