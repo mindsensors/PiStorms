@@ -256,9 +256,9 @@ class RCServo(GRXCom):
         if port == None:
             raise TypeError('You must specify a port as an argument')
 
-        if port[0:2] == "BA":
+        if port[:2] == "BA":
             bank = self.bankA
-        elif port[0:2] == "BB":
+        elif port[:2] == "BB":
             bank = self.bankB
         else:
             raise ValueError("Invalid bank letter")
