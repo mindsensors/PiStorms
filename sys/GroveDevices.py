@@ -320,7 +320,7 @@ class Grove_Temperature_Sensor(Grove_Analog_Sensor):
 
 ## This class supports the Grove UV Sensor v1.1
 #
-#  The Grove UV Sensor measure ultraviolet light intensity.
+#  The Grove UV Sensor measures ultraviolet light intensity.
 #
 #  Documentation: http://wiki.seeed.cc/Grove-UV_Sensor/
 #
@@ -366,7 +366,7 @@ class Grove_Moisture_Sensor(Grove_Analog_Sensor):
 
 ## This class supports the Grove Sound Sensor v1.6
 #
-#  This sensor can detect moisture in soil. Simply insert the leads in the soil.
+#  This sensor uses a basic microphone to detect sound intensity.
 #
 #  Documentation: http://wiki.seeed.cc/Grove-Sound_Sensor/
 #
@@ -380,6 +380,25 @@ class Grove_Moisture_Sensor(Grove_Analog_Sensor):
 class Grove_Sound_Sensor(Grove_Analog_Sensor):
     ## @return A number corresponding with the current detected sound intensity.
     def soundIntensity(self):
+        return self.readValue()
+
+## This class supports the Grove Loudness Sensor v0.9b
+#
+#  This sensor detects the sound of its environment. It has a potentiometer to
+#  adjust its output. It filters the sound signal to increased accuracy.
+#
+#  Documentation: http://wiki.seeed.cc/Grove-Sound_Sensor/
+#
+#  @code
+#  import GroveDevices
+#  # initialize a loudness sensor connected to Bank A analog 1
+#  s = GroveDevices.Grove_Loudness_Sensor("BAA1")
+#  if (s.detectSound() < 500):
+#    print("Hey, stop blowing on the mic!")
+#  @endcode
+class Grove_Loudness_Sensor(Grove_Analog_Sensor):
+    ## @return A number corresponding with the sound of the environment.
+    def detectSound(self):
         return self.readValue()
 
 ## This class supports the Grove Air Quality Sensor v1.3
