@@ -248,60 +248,107 @@ class GRXCom(object):
         self.bankA.readByte(0x00)
 
 
-## outermost is 1, intermost is 3
-#  signal pin towards pi, away from screen
+## This class provides functions for controlling a servo connected to
+#  the PiStorms-GRX. It has six servo pins at the top of the device. There are
+#  three on Bank A and three on Bank B. The pins on the outside, closer to
+#  the edge of the device, are numbered 1. The next pins inward are pin 2,
+#  and the pins closest to the center are pin 3. The ports are represented
+#  in the form "BAM1" for Bank A Motor 1. Looking at the top of the device
+#  with the screen facing you, the ports are, from left to right:
+#  BBM1, BBM2, BBM3, BAM3, BAM2, BAM1.
+#  The signal pin should be facing away from you (closer to the Raspberry Pi)
+#  and the ground pin should be closer to you, towards the front of the device
+#  with the screen. Of course this leaves the voltage pin in the center.
+#  This class supports both regular servos and continuous rotation servos.
+# TODO: Add encoder support
 class RCServo(GRXCom):
 
+    ## Initialize an RC servo object.
+    #  @param port Must be a valid port, one of [BAM1, BAM2, BAM3, BBM1, BBM2, BBM3].
+    #              The first two characters are "BA" or "BB", for "Bank A" or "Bank B".
+    #              The third character is 'M' for "Motor". The fourth character
+    #              is the pin number. See the RCServo class documentation for details.
+    #  @ param neutralPoint You may specify the neutral point of this servo.
+    #                       The default is 1500, but as a result of the manufacturing
+    #                       process for these servos each has a slightly different
+    #                       neutral point. For example, if your continuous rotation
+    #                       servo continues to spin when you call setNeutral, it likely
+    #                       has the wrong neutral point set. You can update this
+    #                       at any time with setNeutralPoint(self, neutralPoint).
     def __init__(self, port=None, neutralPoint=1500):
         if port == None:
             raise TypeError('You must specify a port as an argument')
 
-        if port[:2] == "BA":
-            bank = self.bankA
-        elif port[:2] == "BB":
-            bank = self.bankB
-        else:
-            raise ValueError("Invalid bank letter")
-
-        # each bank supports three servos.
         try:
-            num = int(port[-1])
+            if not len(port) == 4:
+                raise TypeError()
+            if port[:2] == "BA":
+                bank = self.bankA
+            elif port[:2] == "BB":
+                bank = self.bankB
+            else:
+                raise ValueError("Invalid bank letter")
+        except TypeError:
+            raise TypeError("Port argument is invalid. Please see this class's documentation.")
+
+        try:
+            pinNum = int(port[-1])
         except ValueError:
             raise ValueError("Servo number must be an integer: 1, 2, or 3")
-        if not 1 <= num <= 3:
+        if not 1 <= pinNum <= 3:
             raise ValueError("Servo number must be 1, 2, or 3")
 
-        self.sendDataArray = lambda dataArray: bank.writeArray( self.GRX_Servo_Base + (num-1)*2, dataArray )
+        self.sendDataArray = lambda dataArray: bank.writeArray(self.GRX_Servo_Base+(pinNum-1)*2, dataArray)
         self.setNeutralPoint(neutralPoint)
         self.setNeutral()
         # useful properties for user access, not necessary for this class's functions
+        #self.pos has already been set to neutralPoint
         self.speed = 0
         self.bankAddr = bank.address
-        self.num = num
+        self.pinNum = pinNum
 
+    ## Sets the pulse being send to this servo.
+    #  @param pulse A number of microseconds for the pulse length.
+    #  @remark There is no need to use this method directly in your program.
+    def setPulse(self, pulse):
+        try:
+            pulse = int(pulse)
+        except ValueError:
+            raise ValueError("Servo pulse must be an integer in the range 500-2500")
+        if not (500 <= pulse <= 2500  or pulse==0):
+            raise ValueError("Servo pulse must be in the range 500 through 2500")
+        self.sendDataArray([pulse%256, pulse/256])
+
+    ## Use this method to set the position of regular servos.
+    #  @param newPos A position between 0.0 and 180.0, with 90.0 being
+    #                the nominal center value.
     def setPos(self, newPos):
         try:
-            newPos = int(newPos)
+            newPos = float(newPos)
         except ValueError:
-            raise ValueError("Servo position must be an integer in the range 500-2500")
-        if not ( 500 <= newPos <= 2500  or newPos==0):
-            raise ValueError("Servo position must be in the range 500 through 2500")
+            raise ValueError("Servo position must be a decimal in the range 0.0 - 180.0")
+        if not 0.0 <= newPos <= 180.0:
+            raise ValueError("Servo position must be in the range 0.0 through 180.0")
+        self.setPulse((newPos/90.0 - 1) * self.range + self.neutralPoint)
         self.pos = newPos
-        self.sendDataArray([newPos%256, newPos/256])
 
+    ## Use this method to set the speed of continuous rotation servos.
+    #  @param speed A decimal between -100 and 100 for what speed this servos
+    #               should run at.
     def setSpeed(self, speed):
         try:
             speed = float(speed)
         except ValueError:
-            raise ValueError("Servo speed must be a rational number between -100 and 100")
+            raise ValueError("Servo speed must be a decimal between -100 and 100")
         if not -100.0 <= speed <= 100.0:
             raise ValueError("Servo speed must be between -100 and 100")
+        self.setPulse(speed/100.0 * self.range + self.neutralPoint)
         self.speed = speed
-        buffer = 150 # don't try to set speed too close to the extremes
-        # here min is used to find the smaller range: neutral to min or neutral to max (max to neutral)
-        self.setPos(self.neutralPoint + speed/100.0 * min(self.neutralPoint-(500+buffer), (2500-buffer)-self.neutralPoint))
 
-    ## note this does not call self.setNeutral()
+    ## Update the neutral point of this servo.
+    #  @param neutralPoint The new neutral point of this servo. As with setPos(self, newPos),
+    #                      this number must be between 500 and 2500.
+    ## @note This does <b>not</b> call self.setNeutral(self) after the neutral point is set.
     def setNeutralPoint(self, neutralPoint):
         try:
             neutralPoint = int(neutralPoint)
@@ -309,13 +356,20 @@ class RCServo(GRXCom):
             raise ValueError("Servo neutral point must be an integer in the range 500-2500")
         if not 500 <= neutralPoint <= 2500:
             raise ValueError("Servo neutral point must be in the range 500 through 2500")
+
         self.neutralPoint = neutralPoint
+        margin = 150 # don't try to set speed too close to the extremes
+        # here min is used to find the smaller range: neutral to min or neutral to max (max to neutral)
+        self.range = min(self.neutralPoint-(500+margin), (2500-margin)-self.neutralPoint)
 
+    ## Return this servo to the neutral position. For a regular servo it will go
+    #  to the center, and a continuous rotation servo will stop rotating.
     def setNeutral(self):
-        self.setPos(self.neutralPoint)
+        self.setPulse(self.neutralPoint)
 
+    ## Stop sending a signal altogether to this servo.
     def stop(self):
-        self.setPos(0)
+        self.setPulse(0)
 
 
 class PiStorms_GRX:
