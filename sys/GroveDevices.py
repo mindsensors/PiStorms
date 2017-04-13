@@ -249,8 +249,7 @@ class Grove_Flame_Sensor(Grove_Digital_Sensor):
 #    print("Someone turn on the lights, I can't see anything!")
 #  @endcode
 class Grove_Luminance_Sensor(Grove_Analog_Sensor):
-    # TODO: untested, can't find sensor
-    ## @return A decimal for the detected lux
+    ## @return A decimal for the detected light intensity in lux
     def luminance(self):
         val = self.readValue() * (3.0 / 4096.0)
 
@@ -263,7 +262,7 @@ class Grove_Luminance_Sensor(Grove_Analog_Sensor):
 
         # search right interval
         pos = 1 # _in[0] allready tested
-        while (val > vout[pos]): pos = pos + 1
+        while (val > vout[pos]): pos += 1
 
         # this will handle all exact "points" in the _in array
         if (val == vout[pos]): return lux[pos]
