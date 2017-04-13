@@ -11,13 +11,13 @@ plt.xlabel('time (s)')
 plt.ylabel('voltage (mV)')
 plt.title('About as simple as it gets, folks')
 plt.grid(True)
-plt.savefig("test.png", dpi=40)
-#plt.show()
+
+import tempfile
+image = tempfile.NamedTemporaryFile()
+plt.savefig(image.name+".png", dpi=40)
 
 from PIL import Image
-img = Image.open("test.png")
-img.save("test.bmp")
+Image.open(image.name+".png").save(image.name+".bmp")
 from PiStorms import PiStorms
 psm = PiStorms()
-import os
-psm.screen.fillBmp( 0,0, 320,240, os.path.join(os.getcwd(),"test.bmp") )
+psm.screen.fillBmp(0,0, 320,240, image.name+".bmp")
