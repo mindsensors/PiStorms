@@ -11,20 +11,18 @@ plt.xlabel('time')
 plt.ylabel('angle')
 plt.title('Gyro Pendulum')
 plt.grid(True)
-plt.ylim((-500, 500))
-
-data = np.zeros(10)
-plt.plot(data)
-line = plt.gca().lines[0] # gca means "get current axis"
 
 psm = PiStorms()
 gyro = EV3GyroSensor("BAS1")
 gyro.setMode(PS_SENSOR_MODE_EV3_GYRO_RATE)
-image = tempfile.NamedTemporaryFile()
+psm.screen.drawAutoText("Recording data!",   45, 40,  size=32)
+psm.screen.drawAutoText("Press GO to stop.", 65, 120, size=24)
 
+data = np.empty(0)
 while not psm.isKeyPressed():
-    data = np.roll(data, -1)
-    data[-1] = gyro.readValue()
-    line.set_ydata(data)
-    plt.savefig(image.name, format="png")
-    psm.screen.fillBmp(0,0, 320,240, image.name)
+    data = np.append(data, gyro.readValue())
+plt.plot(data)
+
+image = tempfile.NamedTemporaryFile()
+plt.savefig(image.name, format="png")
+psm.screen.fillBmp(0,0, 320,240, image.name)
