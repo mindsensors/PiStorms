@@ -10,16 +10,16 @@ plt.xlabel('index')
 plt.ylabel('random data')
 plt.title('Live updating example')
 plt.grid(True)
-plt.ylim((0,1))
+plt.ylim((0, 1)) # set y-axis range
 y = np.zeros(10)
-plt.plot(range(0,len(y)), y)
+plt.plot(y)
 line = plt.gca().lines[0] # gca means "get current axis"
 
 psm = PiStorms()
 image = tempfile.NamedTemporaryFile()
-while True:
+while not psm.isKeyPressed():
     y = np.roll(y, -1)
-    y[y.size-1] = np.random.random()
+    y[-1] = np.random.random()
     line.set_ydata(y)
-    plt.savefig(image.name+".png")
-    psm.screen.fillBmp(0,0, 320,240, image.name+".png")
+    plt.savefig(image.name, format="png")
+    psm.screen.fillBmp(0,0, 320,240, image.name)

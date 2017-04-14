@@ -1,3 +1,5 @@
+# heavily based on https://matplotlib.org/examples/pylab_examples/simple_plot.html
+
 import matplotlib
 matplotlib.use("AGG")
 import matplotlib.pyplot as plt
@@ -18,9 +20,9 @@ plt.plot(t, s)
 # save to temporary file
 import tempfile
 image = tempfile.NamedTemporaryFile()
-plt.savefig(image.name+".png")
+plt.savefig(image.name, format="png")
 
 # draw on screen
 from PiStorms import PiStorms
 psm = PiStorms()
-psm.screen.fillBmp(0,0, 320,240, image.name+".png")
+psm.screen.fillBmp(0,0, 320,240, image.name)
