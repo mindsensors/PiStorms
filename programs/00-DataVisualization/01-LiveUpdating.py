@@ -6,12 +6,12 @@ import tempfile
 from PiStorms import PiStorms
 
 plt.figure(figsize=(4,3), dpi=80)
-y = []
+y = np.zeros(10)
 psm = PiStorms()
 image = tempfile.NamedTemporaryFile()
 while True:
-    y.append(np.random.random())
-    y = y[-10:]
+    y = np.roll(y, -1)
+    y[y.size-1] = np.random.random()
     plt.cla() # clear axis
     plt.xlabel('time (s)')
     plt.ylabel('voltage (mV)')
