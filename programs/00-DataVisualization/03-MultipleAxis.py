@@ -11,12 +11,8 @@ plt.xlabel('time')
 plt.ylabel('tilt')
 plt.title('3-Axis AbsoluteIMU Tilt')
 plt.grid(True)
-x = np.zeros(10)
-y = np.zeros(10)
-z = np.zeros(10)
-plt.plot(range(0,len(x)), x)
-plt.plot(range(0,len(y)), y)
-plt.plot(range(0,len(z)), z)
+tilt = np.zeros([3,10])
+plt.plot(tilt.T)
 ax = plt.gca() # get current axis
 
 psm = PiStorms()
@@ -24,15 +20,11 @@ imu = ABSIMU()
 psm.BAS1.activateCustomSensorI2C()
 image = tempfile.NamedTemporaryFile()
 while True:
-    x = np.roll(x, -1)
-    y = np.roll(y, -1)
-    z = np.roll(z, -1)
-    x[x.size-1] = imu.get_tiltx()
-    y[y.size-1] = imu.get_tilty()
-    z[z.size-1] = imu.get_tiltz()
-    ax.lines[0].set_ydata(x)
-    ax.lines[1].set_ydata(y)
-    ax.lines[2].set_ydata(z)
+    tilt = np.roll(tilt, -1)
+    tiltnow = imu.get_tiltall()[0]
+    for i in range(0,3):
+        tilt[i][tilt[i].size-1] = tiltnow[i]
+        ax.lines[i].set_ydata(tilt[i])
     ax.relim() # recompute axis limits
     ax.autoscale_view()
     plt.savefig(image.name+".png")
