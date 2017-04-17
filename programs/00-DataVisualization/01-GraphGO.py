@@ -10,22 +10,19 @@ from PiStorms import PiStorms
 
 plt.figure(figsize=(4,3), dpi=80)
 plt.xlabel('time')
-plt.ylabel('GO button')
+plt.ylabel('GO button state')
 plt.title('GO Button')
 plt.grid(True)
 plt.ylim((-0.05, 1.05)) # set y-axis range, off by a bit so the line isn't right on the edge of the graph
 
-# make a data array of 50 values, they are all 0 at the beginning
-# in this example we are only displaying the latest 50 readings
-data = np.zeros(50)
-plt.plot(data)
-line = plt.gca().lines[0] # gca means "get current axis"
-
+axis = plt.gca() # get current axis
+data = np.empty(0)
 psm = PiStorms()
 image = tempfile.NamedTemporaryFile() # we will be overwriting this same file 
+
 while not psm.screen.isTouched():
-    data = np.roll(data, -1) # shift the data left one
-    data[-1] = psm.isKeyPressed() # change the last value to 0 or 1 depending on the GO button
-    line.set_ydata(data) # overwrite the data for the line so it updates
+    data = np.append(data, psm.isKeyPressed()) # add a data point with the current GO button state
+    if axis.lines: axis.lines.pop() # if there's already a line on the graph (old), remove it
+    lines = plt.plot(data[-20:], color="blue") # plot the last 20 data points on the graph (new line)
     plt.savefig(image.name, format="png")
     psm.screen.fillBmp(0,0, 320,240, image.name)
