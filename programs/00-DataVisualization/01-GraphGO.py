@@ -6,20 +6,21 @@ import tempfile
 from PiStorms import PiStorms
 
 plt.figure(figsize=(4,3), dpi=80)
-plt.xlabel('index')
-plt.ylabel('random data')
-plt.title('Live updating example')
+plt.xlabel('time')
+plt.ylabel('GO button')
+plt.title('GO Button')
 plt.grid(True)
-plt.ylim((0, 1)) # set y-axis range
-y = np.zeros(10)
-plt.plot(y)
+plt.ylim((-0.05, 1.05))
+
+data = np.zeros(50)
+plt.plot(data)
 line = plt.gca().lines[0] # gca means "get current axis"
 
 psm = PiStorms()
 image = tempfile.NamedTemporaryFile()
-while not psm.isKeyPressed():
-    y = np.roll(y, -1)
-    y[-1] = np.random.random()
-    line.set_ydata(y)
+while not psm.screen.isTouched():
+    data = np.roll(data, -1)
+    data[-1] = psm.isKeyPressed()
+    line.set_ydata(data)
     plt.savefig(image.name, format="png")
     psm.screen.fillBmp(0,0, 320,240, image.name)
