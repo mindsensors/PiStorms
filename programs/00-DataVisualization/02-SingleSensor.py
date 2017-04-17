@@ -19,7 +19,7 @@ line = plt.gca().lines[0] # gca means "get current axis"
 
 psm = PiStorms()
 ir = EV3InfraredSensor("BAS1")
-ir.setMode(PS_SENSOR_MODE_EV3_IR_PROXIMITY)
+ir.setMode(PS_SENSOR_MODE_EV3_IR_PROXIMITY) # see example in 50-SensorDemos
 image = tempfile.NamedTemporaryFile()
 
 while not psm.isKeyPressed():
