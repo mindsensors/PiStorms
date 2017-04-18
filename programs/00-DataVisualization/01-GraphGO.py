@@ -1,3 +1,5 @@
+# This program demonstrates how to create a live-updating graph, but only displaying
+# the latest n values on screen. It also explicitly sets the y-axis range.
 # Don't hold the button too long, or you'll turn off the PiStorms!
 # Tap the touchscreen to exit.
 

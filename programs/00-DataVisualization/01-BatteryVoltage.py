@@ -1,3 +1,5 @@
+# This program introduces the process of continually updating a graph.
+
 import matplotlib
 matplotlib.use("AGG")
 import matplotlib.pyplot as plt

@@ -1,4 +1,6 @@
-# heavily based on https://matplotlib.org/examples/pylab_examples/simple_plot.html
+# This program demonstrates how to create and display a basic, static graph
+# on the PiStorms screen.
+# It is heavily based on https://matplotlib.org/examples/pylab_examples/simple_plot.html
 
 import matplotlib
 matplotlib.use("AGG")

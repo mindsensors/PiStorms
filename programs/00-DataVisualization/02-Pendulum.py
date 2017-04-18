@@ -1,3 +1,8 @@
+# This program demonstrates using a sensor, the AbsoluteIMU in this case.
+# It also demonstrates how to capture data quickly on a separate thread,
+# and update the graph on screen as the data comes in. Furthermore it will
+# save the data to a file once the program stops.
+
 import matplotlib
 matplotlib.use("AGG")
 import matplotlib.pyplot as plt
