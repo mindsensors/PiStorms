@@ -26,7 +26,7 @@ data = np.empty(0, dtype="int_") # data starts completely empty (signed integer 
 
 # We could take the same approach as the previous examples, but unfortunately
 # the process of generating the graph image, saving it, and drawing it to the screen
-# takes roughly 2.5 seconds (for 76,800 pixels in a roughly 15kb file). Taking
+# takes roughly 1 second (for 76,800 pixels in a roughly 15kb file). Taking
 # readings this slowly would not be very useful, so instead we'll constantly read
 # the sensor's value, and just update the graph as fast as we can.
 # We use threads to accomplish this. The method below, captureData(), will be
@@ -39,17 +39,19 @@ stop = False
 def captureData():
     global data, stop # share the data and stop variables from the global namespace
     while not psm.isKeyPressed():
-        accel = imu.get_accely()+imu.get_accelx() # acceleration in the y direction
+        accel = imu.get_accely() + imu.get_accelx() # acceleration in the x+y direction
         if not accel > 30000: # as long as it's not a crazy value...
             data = np.append(data, accel) # add it to the data array
         time.sleep(0.01) # take a short break to let the Pi do the other things it needs to
     stop = True
-    np.savetxt("pendulum.csv", data, delimiter=",", fmt="%i")
 
 threading.Thread(target=captureData).start() # create a new thread that will run this method and start it
 
+image = tempfile.NamedTemporaryFile()
 while not stop:
     plt.plot(data, color="blue")
-    image = tempfile.NamedTemporaryFile()
     plt.savefig(image.name, format="png")
     psm.screen.fillBmp(0,0, 320,240, image.name)
+
+plt.savefig("/home/pi/Documents/pendulum.png")
+np.savetxt("/home/pi/Documents/pendulum.csv", data, delimiter=",", fmt="%i")
