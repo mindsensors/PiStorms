@@ -42,6 +42,8 @@ if PiStormsCom().GetFirmwareVersion() < 'V2.10':
 # Setup #
 #########
 
+os.system("/etc/init.d/MSBrowser.sh stop") # stop browser to avoid race conditions
+
 # avoid 'Failed to read touchscreen calibration values' popup from mindsensorsUI if the touchscreen calibration values cache file doesn't exist
 if not os.path.isfile('/tmp/ps_ts_cal'):
     open('/tmp/ps_ts_cal', 'w').write('{}')
@@ -192,3 +194,6 @@ if all([ calibrationEqual(offset, value) for offset, value in enumerate([x1,y1,x
 else:
     print 'Error writing calibration values to PiStorms'
     s.showMessage(['Error', 'Failed to write calibration values', 'to PiStorms'])
+
+# the browser needs to be restarted so it will read the new touchscreen values
+os.system("/etc/init.d/MSBrowser.sh start &")
