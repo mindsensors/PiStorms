@@ -42,7 +42,8 @@ if PiStormsCom().GetFirmwareVersion() < 'V2.10':
 # Setup #
 #########
 
-os.system("/etc/init.d/MSBrowser.sh stop") # stop browser to avoid race conditions
+# the browser needs to be stopped and restarted to read the new touchscreen values when calibration finishes
+os.system("/etc/init.d/MSBrowser.sh stop")
 
 # avoid 'Failed to read touchscreen calibration values' popup from mindsensorsUI if the touchscreen calibration values cache file doesn't exist
 if not os.path.isfile('/tmp/ps_ts_cal'):
@@ -85,8 +86,7 @@ if not (len(sys.argv) > 1 and str(sys.argv[1]) == "force"):
         countdown = countdown - 1
 
     if psc.getKeyPressCount() == startKeyPressCount:
-        os.system("sudo /etc/init.d/MSBrowser.sh start &")
-        sys.exit(0)
+        sys.exit(0) # note: MSBrowser will automatically restart
 
 s.clearScreen()
 s.dumpTerminal()
@@ -195,5 +195,4 @@ else:
     print 'Error writing calibration values to PiStorms'
     s.showMessage(['Error', 'Failed to write calibration values', 'to PiStorms'])
 
-# the browser needs to be restarted so it will read the new touchscreen values
-os.system("/etc/init.d/MSBrowser.sh start &")
+# note: MSBrowser will automatically restart
