@@ -42,5 +42,8 @@ while not stop:
     plt.savefig(image.name, format="png")
     psm.screen.fillBmp(0,0, 320,240, image.name)
 
-#plt.savefig("/home/pi/Documents/impact.png")
-#np.savetxt("/home/pi/Documents/impact.csv", data, delimiter=",", fmt="%i")
+plt.savefig("/home/pi/Documents/impact.png")
+np.savetxt("/home/pi/Documents/impact.csv", [datax,datay,dataz], delimiter=",", fmt="%i")
+
+while psm.isKeyPressed(): time.sleep(0.01) # leave image on screen until you release...
+while not psm.isKeyPressed(): time.sleep(0.01) # ...and press the button again
