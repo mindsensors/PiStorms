@@ -76,6 +76,7 @@ threading.Thread(target=captureData).start() # create a new thread that will run
 image = tempfile.NamedTemporaryFile()
 while not stop:
     plt.plot(data, color="blue")
+    plt.tight_layout()
     plt.savefig(image.name, format="png")
     psm.screen.fillBmp(0,0, 320,240, image.name)
 

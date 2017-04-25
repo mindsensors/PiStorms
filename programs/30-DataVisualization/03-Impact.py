@@ -65,6 +65,7 @@ while not stop:
     plt.plot(datax, color="red")
     plt.plot(datay, color="green")
     plt.plot(dataz, color="blue")
+    plt.tight_layout()
     plt.savefig(image.name, format="png")
     psm.screen.fillBmp(0,0, 320,240, image.name)
 

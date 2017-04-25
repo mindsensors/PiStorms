@@ -46,6 +46,7 @@ plt.grid(True)
 data = np.zeros([3,10])
 plt.plot(data.T) # transpose
 axis = plt.gca() # get current axis
+axis.set_xticklabels([]) # hide x-axis tick labels
 
 psm = PiStorms()
 imu = ABSIMU()

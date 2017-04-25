@@ -44,6 +44,7 @@ plt.grid(True)
 t = np.arange(0.0, 2.0, 0.01) # a range from 0.0 to 2.0 with 0.01 intervals: [0.0, 0.01, 0.02 ... 1.98, 1.99, 2.0]
 s = 1 + np.sin(2*np.pi*t) # simple sine wave
 plt.plot(t, s)
+plt.tight_layout() # make sure the entire plot fits on screen
 
 # save to temporary file
 import tempfile
