@@ -34,7 +34,7 @@ show_logo() {
     echo "config file is missing"
     homefolder=/home/pi/PiStorms
   fi
-  python $homefolder/programs/utils/img-to-screen.py 0 0 320 240 /usr/local/mindsensors/images/ms-logo-w320-h240.png
+  python $homefolder/programs/utils/show-logo.py
 
 }
 
