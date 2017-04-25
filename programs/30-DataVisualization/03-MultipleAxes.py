@@ -25,7 +25,7 @@
 #
 
 # This program demonstrates using a sensor and displaying multiple lines
-# (overlapping data series). Here we plot the three axis of tilt from the
+# (overlapping data series). Here we plot the three axes of tilt from the
 # AbsoluteIMU sensor.
 
 import matplotlib
