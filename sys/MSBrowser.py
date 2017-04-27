@@ -362,6 +362,7 @@ def displayFullFileList(folder, fileList, index, isSubFolder):
 #
 try:
     folder = PROGRAM_DIRECTORY
+    file_id = 0
 
     signal.signal(signal.SIGALRM, drawBatteryIndicator)
 
@@ -377,7 +378,7 @@ try:
             showLeftIcon = False
         else:
             showLeftIcon = True
-        x = displayFullFileList(folder, files, 0, showLeftIcon)
+        x = displayFullFileList(folder, files, file_id/4, showLeftIcon)
         file_id = x[0]
         folder = x[1]
         fileName = x[2]
