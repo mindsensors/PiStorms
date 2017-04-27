@@ -64,7 +64,7 @@ class PSSensor():
         self.bank = bank
         self.sensornum = num
         self.type = self.PS_SENSOR_TYPE_NONE
-        self.EV3Cache = [0,[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],0,0,[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]]
+        self.EV3Cache = [ 0, [0]*16, 0, 0, [0]*32 ] # ready, ID[16], mode, length, data[32]
     def setType(self,type):
         if(type != self.type):
             self.type = type

@@ -78,7 +78,7 @@ class LegoSensor(PiStormsCom):
         else:
             print "no such port???"
         self.type = self.PS_SENSOR_TYPE_NONE
-        self.EV3Cache = [0,[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],0,0,[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]]
+        self.EV3Cache = [ 0, [0]*16, 0, 0, [0]*32 ] # ready, ID[16], mode, length, data[32]
 
     ##
     #  Set the sensor type
