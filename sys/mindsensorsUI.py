@@ -990,7 +990,8 @@ class mindsensorsUI():
             print "warning!, buttons may be too small to read"
         while(True):
             try:
-                if(goBtn and self.i2c.readByte(PiStormsCom.PS_KeyPress)):
+                if(goBtn and self.i2c.readByte(PiStormsCom.PS_KeyPress)&0x01):
+                    while self.i2c.readByte(PiStormsCom.PS_KeyPress)&0x01: time.sleep(0.1) # wait for user to release GO
                     self.setMode(oldMode)
                     return 0
                 if(touch and self.isTouched()):
@@ -999,6 +1000,12 @@ class mindsensorsUI():
                     tempthis3 = self.calculateButton(20,20,50)
                     tempthis4 = self.calculateButton(20,20,50)
                     if(tempthis != -1 and tempthis == tempthis2 and tempthis2 == tempthis3 and tempthis3 == tempthis4):
+                        # wait for user to let go of button
+                        while not (tempthis == -1 and tempthis == tempthis2 and tempthis2 == tempthis3 and tempthis3 == tempthis4):
+                            tempthis = self.calculateButton(20,20,50) #check four times in a row, and only return if all four readings were the same
+                            tempthis2 = self.calculateButton(20,20,50)
+                            tempthis3 = self.calculateButton(20,20,50)
+                            tempthis4 = self.calculateButton(20,20,50)
                         self.setMode(oldMode)
                         return tempthis
             except KeyError: # no touchscreen calibration values
@@ -1046,7 +1053,8 @@ class mindsensorsUI():
         '''
         while(True):
             try:
-                if(self.i2c.readByte(PiStormsCom.PS_KeyPress)):
+                if(goBtn and self.i2c.readByte(PiStormsCom.PS_KeyPress)&0x01):
+                    while self.i2c.readByte(PiStormsCom.PS_KeyPress)&0x01: pass # wait for user to release GO
                     break
             except KeyError: # no touchscreen calibration values
                 break
