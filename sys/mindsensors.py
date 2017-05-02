@@ -1773,14 +1773,12 @@ class NXTSERVO(mindsensors_i2c):
             
     ## Sets the position of a user defined servo
     #  @param self The object pointer
-    #  @param servoNumber The number of the servo you wish to move.
-    #  @param position The position to set the servo.
+    #  @param servoNumber The number of the servo you wish to move (1-8).
+    #  @param position The position to set the servo (0-255).
     def setPosition(self, servoNumber, position):
-        reg = 64 + (servoNumber*2) 
-        p1 = position%256
-        p2 = position/256
-        array = [p1, p2]
-        self.writeArray(reg, array)
+        reg = 0x5A + servoNumber-1
+        pos = position % 256
+        self.writeByte(reg, pos)
 
     ## Sets the default neutral position of a user defined servo
     #  @param self The object pointer
