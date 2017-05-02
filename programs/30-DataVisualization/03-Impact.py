@@ -72,5 +72,5 @@ while not stop:
 plt.savefig("/home/pi/Documents/impact.png")
 np.savetxt("/home/pi/Documents/impact.csv", [datax,datay,dataz], delimiter=",", fmt="%i")
 
-while psm.isKeyPressed(): time.sleep(0.01) # leave image on screen until you release...
-while not psm.isKeyPressed(): time.sleep(0.01) # ...and press the button again
+psm.resetKeyPressCount()
+while psm.getKeyPressCount() < 1: time.sleep(0.1) # leave image on screen until you press GO
