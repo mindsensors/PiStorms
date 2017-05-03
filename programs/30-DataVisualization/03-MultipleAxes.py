@@ -56,7 +56,7 @@ image = tempfile.NamedTemporaryFile()
 while not psm.isKeyPressed():
     data = np.roll(data, -1)
     tilt = imu.get_tiltall()[0] # read the x, y, and z tilt data
-    for i in range(0,3): # update the data array and graph line for each axis
+    for i in range(3): # update the data array and graph line for each axis
         data[i][-1] = tilt[i]
         axis.lines[i].set_ydata(data[i])
     axis.relim() # recompute axis limits/bounds
