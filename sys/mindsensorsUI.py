@@ -1000,6 +1000,7 @@ class mindsensorsUI():
                     tempthis3 = self.calculateButton(20,20,50)
                     tempthis4 = self.calculateButton(20,20,50)
                     if(tempthis != -1 and tempthis == tempthis2 and tempthis2 == tempthis3 and tempthis3 == tempthis4):
+                        retval = tempthis
                         # wait for user to let go of button
                         while not (tempthis == -1 and tempthis == tempthis2 and tempthis2 == tempthis3 and tempthis3 == tempthis4):
                             tempthis = self.calculateButton(20,20,50) #check four times in a row, and only return if all four readings were the same
@@ -1007,7 +1008,7 @@ class mindsensorsUI():
                             tempthis3 = self.calculateButton(20,20,50)
                             tempthis4 = self.calculateButton(20,20,50)
                         self.setMode(oldMode)
-                        return tempthis
+                        return retval
             except KeyError: # no touchscreen calibration values
                 self.setMode(oldMode)
                 return 0
