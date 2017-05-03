@@ -40,7 +40,7 @@ from PIL import Image
 from PiStorms import PiStorms
 from mindsensors import ABSIMU
 
-DATA_SIZE = 40 # only the latest n data points will be shown on screen (this is not a cap on how much data will be recorded in total)
+DATA_SIZE = 80 # only the latest n data points will be shown on screen (this is not a cap on how much data will be recorded in total)
 
 plt.figure(figsize=(4,3), dpi=80)
 plt.xlabel('time')
@@ -53,40 +53,35 @@ plt.plot(data.T) # transpose
 axis = plt.gca() # get current axis
 axis.set_xticklabels([]) # hide x-axis tick labels
 axis.set_color_cycle(['red', 'green', 'blue'])
+smooth_x = np.linspace(0, DATA_SIZE-1, 247) # the x-axis for the smoothed lines    
 
 psm = PiStorms()
 imu = ABSIMU()
-psm.BAS1.activateCustomSensorI2C()
+psm.BAS1.activateCustomSensorI2C() # attach AbsoluteIMU to BAS1, or change this line
 
-canvas = plt.get_current_fig_manager().canvas
-disp = psm.screen.disp
+canvas = plt.get_current_fig_manager().canvas # used to quickly redraw the screen
+disp = psm.screen.disp # just shorthand
 
-lock = threading.Lock()
 stop = False
 def captureData():
-    global data, stop, axis
-    while len(axis.lines) < 3: time.sleep(0.1) # wait for the three lines to exist
+    global data, stop
     while not psm.isKeyPressed():
         tilt = imu.get_tiltall()[0] # read the x, y, and z tilt data
-        data = np.column_stack([data, tilt])
-        lock.acquire()
-        for i in range(3): # update the graph line for each axis
-            axis.lines[i].set_ydata(data[i])
-        lock.release()
+        data = np.column_stack([data, tilt]) # add the new numbers at the end of the array
         time.sleep(0.01)
     stop = True
 threading.Thread(target=captureData).start()
 
-while not stop and not psm.isKeyPressed():
-    lock.acquire()
-    for i in range(3): axis.lines.pop()
-    slicedata = data[:,-1*DATA_SIZE:]
-    smooth_x = np.linspace(0, len(slicedata[0])-1, 320)
+while not stop:
+    plt.cla() # clear axis, get rid of old lines
+    slicedata = data[:,-1*DATA_SIZE:] # use only the last n data points, where n is DATA_SIZE
+    # plot a spline (smooth line) for each axis
     for i in range(3): plt.plot(smooth_x, spline(np.arange(len(slicedata[i])), slicedata[i], smooth_x))
     canvas.draw()
-    lock.release()
+    # directly write the matplotlib canvas to the PiStorms screen (faster than using an intermediary)
     disp.buffer = Image.frombytes('RGB', canvas.get_width_height(), canvas.tostring_rgb()).rotate(-90*psm.screen.currentRotation)
-    disp.display()
+    disp.display() # update the screen
 
-#plt.savefig("/home/pi/Documents/smoothfastfast.png")
-np.savetxt("/home/pi/Documents/smoothfastfast.csv", data.T[DATA_SIZE:], fmt="%i")
+# save the final picture and data to files in ~/Documents
+plt.savefig("/home/pi/Documents/smoothfastfast.png")
+np.savetxt("/home/pi/Documents/smoothfastfast.csv", data.T[DATA_SIZE:], delimiter=",", fmt="%i")
