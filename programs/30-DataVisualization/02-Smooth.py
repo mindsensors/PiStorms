@@ -50,8 +50,9 @@ data = np.append(data, psm.battVoltage())
 
 while not psm.isKeyPressed():
     data = np.append(data, psm.battVoltage()) # add a data point with the current battery voltage
+    smooth_x = np.linspace(0, len(data)-1, len(data)*5) # an array 5 times the length of data for the smoothed data
     if axis.lines: axis.lines.pop() # if there's already a line on the graph (old), remove it
-    lines = plt.plot(np.linspace(0, len(data)-1, len(data)*5), spline(np.arange(len(data)), data, np.linspace(0, len(data)-1, len(data)*5)), color="blue")
+    lines = plt.plot(smooth_x, spline(np.arange(len(data)), data, smooth_x), color="blue")
     plt.tight_layout() # make sure the entire plot fits on screen
     plt.savefig(image.name, format="png") # save it
     psm.screen.fillBmp(0,0, 320,240, image.name) # show it on screen
