@@ -290,7 +290,6 @@ def displaySmallFileList(folder, fileList, displayLeft = 1):
             counter += 1
             
 def displayFullFileList(folder, fileList, index, isSubFolder):
-
     newPath = folder
     if(index*4>len(fileList)):
         return displayFullFileList(folder, fileList, 0, isSubFolder)
@@ -321,7 +320,7 @@ def displayFullFileList(folder, fileList, index, isSubFolder):
             if (index == 0):
                 # if the index is zero, then go back to parent folder.
                 if ( not os.path.samefile(folder, PROGRAM_DIRECTORY) ):
-                    # go back oly if we are already not at the home folder
+                    # go back only if we are already not at the home folder
                     newPath = os.path.dirname(folder)
                     f2 = listPrograms(newPath)
                     # On home directory, don't show left icon
@@ -340,7 +339,12 @@ def displayFullFileList(folder, fileList, index, isSubFolder):
 
     if(result == 5):
         # User clicked right arrow
-        return displayFullFileList(folder, fileList,index + 1, isSubFolder)
+        if ((index+1)*4==len(fileList)):
+            # number of files is divisible by 4, don't show a blank page
+            return displayFullFileList(folder, fileList, 0, isSubFolder)
+        else:
+            # there are more files, go to the next page
+            return displayFullFileList(folder, fileList,index + 1, isSubFolder)
     
     try:
         newResult = result + (index*4)
