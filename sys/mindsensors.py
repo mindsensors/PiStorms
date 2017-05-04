@@ -1831,6 +1831,37 @@ class NXTSERVO(mindsensors_i2c):
         self.command(73)
         time.sleep(0.1)
         self.command(servoNumber + 48)
+    
+    # warning: macro methods are untested
+    
+    ## Stop the onboard macro on the NXTServo
+    #  @param self The object pointer.
+    def haltMacro(self):
+        self.command('H')
+    
+    ## Resume the onboard macro on the NXTServo
+    #  @param self The object pointer.
+    def resumeMacro(self):
+        self.command('R')
+    
+    ## Go to a given EEPROM position
+    #  This command re-initializes the macro environment
+    #  @param self The object pointer.
+    #  @param position The EEPROM position to go to
+    def gotoEEPROM(self, position):
+        self.command('G')
+        self.command(position)
+    
+    ## Edit the onboard macro
+    #  @param self The object pointer.
+    def editMacro(self):
+        self.command('E')
+        self.command('m')
+    
+    ## Temporarily pause the running macro
+    #  @param self The object pointer.
+    def pauseMacro(self):
+        self.command('P')
 
 ## PFMATE: this class provides motor control functions
 class PFMATE(mindsensors_i2c):
