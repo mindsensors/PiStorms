@@ -1741,45 +1741,46 @@ class NXTCAM(mindsensors_i2c):
 ## NXTSERVO: this class provides servo motor control functions
 class NXTSERVO(mindsensors_i2c):
     
-    ## Default NXTServo I2C Address 
-    NXTSERVO_ADDRESS = (0xB0)    
+    ## Default NXTServo I2C Address
+    NXTSERVO_ADDRESS = 0xB0
     ## Constant Voltage Multiplier
-    NXTSERVO_VBATT_SCALER = 41    
+    NXTSERVO_VBATT_SCALER = 37
     ## Command Register
-    NXTSERVO_COMMAND = 0x41   
-    ## Input Power Voltage Register. Will Return a signed integer value    
+    NXTSERVO_COMMAND = 0x41
+    ## Input Power Voltage Register
     NXTSERVO_VBATT = 0x62
     
     ## Initialize the class with the i2c address of your NXTServo
     #  @param self The object pointer.
     #  @param PiDrive_address Address of your NXTServo.
     def __init__(self, nxtservo_address = NXTSERVO_ADDRESS):
-        mindsensors_i2c.__init__(self, nxtservo_address >> 1)       
+        mindsensors_i2c.__init__(self, nxtservo_address >> 1)  
+        #self.command(ord('S'))
     
     ## Writes a specified command on the command register of the NXTServo
     #  @param self The object pointer.
-    #  @param cmd The command you wish the NXTServo to execute.    
+    #  @param cmd The command you wish the NXTServo to execute.
     def command(self, cmd):
-       self.writeByte(self.NXTSERVO_COMMAND, int(cmd))       
-
+        self.writeByte(self.NXTSERVO_COMMAND, int(cmd))
+    
     ## Reads NXTServo battery voltage in millivolts
-    #  @param self The object pointer.  
+    #  @param self The object pointer.
     def battVoltage(self):
         try:
             return self.readByte(self.NXTSERVO_VBATT) * self.NXTSERVO_VBATT_SCALER
         except:
             print "Error: Could not read battery voltage"
             return ""
-            
+    
     ## Sets the position of a user defined servo
-    #  @param self The object pointer
+    #  @param self The object pointer.
     #  @param servoNumber The number of the servo you wish to move (1-8).
     #  @param position The position to set the servo (0-255).
     def setPosition(self, servoNumber, position):
         reg = 0x5A + servoNumber-1
         pos = position % 256
         self.writeByte(reg, pos)
-
+    
     ## Sets the default neutral position of a user defined servo
     #  @param self The object pointer
     #  @param servoNumber The number of the servo you wish to set to the default position.
@@ -1787,7 +1788,7 @@ class NXTSERVO(mindsensors_i2c):
         self.command(73)
         time.sleep(.1)
         servo = servoNumber + 48
-        self.command(servo) 
+        self.command(servo)
 
 ## PFMATE: this class provides motor control functions
 class PFMATE(mindsensors_i2c):
