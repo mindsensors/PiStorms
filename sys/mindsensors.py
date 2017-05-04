@@ -1776,14 +1776,53 @@ class NXTSERVO(mindsensors_i2c):
             print "Error: Could not read battery voltage"
             return ""
     
-    ## Sets the position of a user defined servo
+    ## Sets the speed of a servo
+    #  Has no effect on continuous rotation servos.
     #  @param self The object pointer.
-    #  @param servoNumber The number of the servo you wish to move (1-8).
-    #  @param position The position to set the servo (0-255).
+    #  @param servoNumber The number of the servo to set its speed (1-8).
+    #  @param speed The speed to set the servo (1-255).
+    def setSpeed(self, servoNumber, speed):
+        reg = 0x52 + servoNumber-1
+        spd = speed % 256 # note: speed 0 is the same as speed 255
+        self.writeByte(reg, spd)
+    
+    ## Sets the position of a servo
+    #  @param self The object pointer.
+    #  @param servoNumber The number of the servo to set its position (1-8).
+    #  @param position The position to set the servo (1-255).
     def setPosition(self, servoNumber, position):
         reg = 0x5A + servoNumber-1
         pos = position % 256
         self.writeByte(reg, pos)
+    
+    ## Runs the specified servo to a specific position at a specified speed
+    #  @param self The object pointer.
+    #  @param servoNumber The number of the servo to move (1-8).
+    #  @param position The position to set the servo (1-255).
+    #  @param speed The speed to set the servo (1-255) (not used for continuous rotation servos).
+    def runServo(self, servoNumber, position, speed = None):
+        #self.setPosition(servoNumber, position)
+        if speed: self.setSpeed(servoNumber, speed)
+        self.setPosition(servoNumber, position)
+    
+    ## Store the current settings of the specified servo to initial/default settings (remembered when powered on)
+    #  @param self The object pointer.
+    #  @param servoNumber The number of the servo to save its settings (1-8).
+    def storeInitial(self, servoNumber):
+        self.command('I')
+        self.command(servoNumber)
+    
+    ## Reset all servos to their default settings
+    #  @param self The object pointer.
+    def reset(self):
+        self.command('S')
+    
+    ## Stop a specific servo
+    #  This will also completely stop a continuous rotation servo, regardless of its neutral point.
+    #  @param self The object pointer.
+    #  @param servoNumber The number of the servo to stop (1-8).
+    def stopServo(self, servoNumber):
+        self.setPosition(servoNumber, 0)
     
     ## Sets the default neutral position of a user defined servo
     #  @param self The object pointer.
