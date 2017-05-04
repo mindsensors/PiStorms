@@ -25,6 +25,7 @@
 # 10/21/15  Michael     ABSIMU heading fix and MMX encoder reset
 
 from mindsensors_i2c import mindsensors_i2c
+import time
 
 ## @package mindsensors
 #  This module contains classes and functions necessary for use of mindsensors.com I2C devices with Raspberry Pi
@@ -1785,13 +1786,12 @@ class NXTSERVO(mindsensors_i2c):
         self.writeByte(reg, pos)
     
     ## Sets the default neutral position of a user defined servo
-    #  @param self The object pointer
+    #  @param self The object pointer.
     #  @param servoNumber The number of the servo you wish to set to the default position.
     def setNeutral(self, servoNumber):
         self.command(73)
-        time.sleep(.1)
-        servo = servoNumber + 48
-        self.command(servo)
+        time.sleep(0.1)
+        self.command(servoNumber + 48)
 
 ## PFMATE: this class provides motor control functions
 class PFMATE(mindsensors_i2c):
