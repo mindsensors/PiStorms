@@ -1755,13 +1755,16 @@ class NXTSERVO(mindsensors_i2c):
     #  @param PiDrive_address Address of your NXTServo.
     def __init__(self, nxtservo_address = NXTSERVO_ADDRESS):
         mindsensors_i2c.__init__(self, nxtservo_address >> 1)  
-        #self.command(ord('S'))
+        self.command('S')
     
     ## Writes a specified command on the command register of the NXTServo
     #  @param self The object pointer.
     #  @param cmd The command you wish the NXTServo to execute.
     def command(self, cmd):
-        self.writeByte(self.NXTSERVO_COMMAND, int(cmd))
+        try:
+            self.writeByte(self.NXTSERVO_COMMAND, int(cmd))
+        except ValueError:
+            self.writeByte(self.NXTSERVO_COMMAND, ord(cmd))
     
     ## Reads NXTServo battery voltage in millivolts
     #  @param self The object pointer.
