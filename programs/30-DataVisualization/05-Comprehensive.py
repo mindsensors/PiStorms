@@ -66,18 +66,20 @@ stop = False
 def captureData():
     global data, stop
     while not psm.isKeyPressed():
-        time.sleep(0.01)
         tilt = imu.get_tiltall()[0] # read the x, y, and z tilt data
         if tilt == ('','',''): continue # try again if sensor is disconnected
         data = np.column_stack([data, tilt]) # add the new numbers at the end of the array
+        time.sleep(0.01)
     stop = True
 threading.Thread(target=captureData).start()
 
 while not stop:
     plt.cla() # clear axis, get rid of old lines
     slicedata = data[:,-1*DATA_SIZE:] # use only the last n data points, where n is DATA_SIZE
-    # plot a spline (smooth line) for each axis
-    for i in range(3): plt.plot(smooth_x, spline(np.arange(len(slicedata[i])), slicedata[i], smooth_x))
+    try:
+        for i in range(3): # plot a spline (smooth line) for each axis
+            plt.plot(smooth_x, spline(np.arange(len(slicedata[i])), slicedata[i], smooth_x))
+    except: continue # if there's an error, just try again (don't crash)
     canvas.draw()
     # directly write the matplotlib canvas to the PiStorms screen (faster than using an intermediary)
     disp.buffer = Image.frombytes('RGB', canvas.get_width_height(), canvas.tostring_rgb()).rotate(-90*psm.screen.currentRotation)

@@ -65,7 +65,6 @@ stop = False
 def captureData():
     global data, stop # share the data and stop variables from the global namespace
     while not psm.isKeyPressed():
-        time.sleep(0.01) # take a short break to let the Pi do the other things it needs to
         try:
             accel = imu.get_accely() + imu.get_accelx() # acceleration in the x+y direction
             if accel == '': raise ValueError("AbsoluteIMU not connected to BAS1")
@@ -73,6 +72,7 @@ def captureData():
             data = np.append(data, accel) # add the new (valid) data to the data array
         except (TypeError, ValueError) as e:
             print "Error: " + e.args[0]
+        time.sleep(0.01) # take a short break to let the Pi do the other things it needs to (like draw the screen)
     stop = True
 
 threading.Thread(target=captureData).start() # create a new thread that will run this method and start it
