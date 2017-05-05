@@ -65,10 +65,16 @@ stop = False
 def captureData():
     global data, stop # share the data and stop variables from the global namespace
     while not psm.isKeyPressed():
-        accel = imu.get_accely() + imu.get_accelx() # acceleration in the x+y direction
-        if not accel > 30000: # as long as it's not a crazy value...
-            data = np.append(data, accel) # add it to the data array
-        time.sleep(0.01) # take a short break to let the Pi do the other things it needs to
+        try:
+            accel = imu.get_accely() + imu.get_accelx() # acceleration in the x+y direction
+            if accel == '': raise TypeError("AbsoluteIMU not connected to BAS1")
+            if accel > 3000: raise ValueError("AbsoluteIMU returned a crazy value")
+            data = np.append(data, accel) # add the new (valid) data to the data array
+        except TypeError:
+            psm.screen.showMessage(["AbsoluteIMU not found!", "Please connect an AbsoluteIMU sensor", "to BAS1."])
+        except ValueError as e:
+            print "Error: " + e.args[0]
+        time.sleep(0.01) # take a short break to let the Pi do the other things it needs to (like draw the screen)
     stop = True
 
 threading.Thread(target=captureData).start() # create a new thread that will run this method and start it
@@ -78,7 +84,8 @@ while not stop:
     plt.plot(data, color="blue")
     plt.tight_layout()
     plt.savefig(image.name, format="png")
-    psm.screen.fillBmp(0,0, 320,240, image.name)
+    if psm.screen.getMode() != psm.screen.PS_MODE_POPUP: # as long as there's not a popup about the sensor missing...
+        psm.screen.fillBmp(0,0, 320,240, image.name) # draw the image
 
 plt.savefig("/home/pi/Documents/pendulum.png")
 np.savetxt("/home/pi/Documents/pendulum.csv", data, delimiter=",", fmt="%i")

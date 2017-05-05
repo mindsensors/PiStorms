@@ -71,7 +71,7 @@ sudo cp /tmp/config.txt /boot/config.txt
 echo "Updating installations files. This may take several minutes..."
 sudo apt-get update -qq -y
 echo "Installing packages..."
-sudo apt-get install -qq mpg123 build-essential python-dev python-smbus python-pip python-imaging python-numpy git nmap -y
+sudo apt-get install -qq mpg123 build-essential python-dev python-smbus python-pip python-imaging python-numpy python-matplotlib python-scipy git nmap -y
 sudo apt-get install -qq python-opencv -y
 sudo apt-get install -qq apache2 php5 libapache2-mod-php5 -y
 sudo pip install -qq flask
@@ -286,4 +286,3 @@ echo "-----------------------------"
 echo "Install completed.   "
 echo "Please reboot your Raspberry Pi for changes to take effect."
 echo "-----------------------------"
-

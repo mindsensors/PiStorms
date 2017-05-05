@@ -21,49 +21,39 @@
 #
 # History:
 # Date      Author          Comments
-# 04/18/17  Seth Tenembaum  Initial development.
+# 05/02/17  Seth Tenembaum  Initial development.
 #
 
-# This program demonstrates using a sensor and displaying multiple lines
-# (overlapping data series). Here we plot the three axes of tilt from the
-# AbsoluteIMU sensor.
+# This program demonstrates displaying a smooth curve.
 
 import matplotlib
 matplotlib.use("AGG")
 import matplotlib.pyplot as plt
 import numpy as np
+from scipy.interpolate import spline
 import tempfile
 from PiStorms import PiStorms
-from mindsensors import ABSIMU
-import time
 
 plt.figure(figsize=(4,3), dpi=80)
 plt.xlabel('time')
-plt.ylabel('tilt')
-plt.title('3-Axis AbsoluteIMU Tilt')
+plt.ylabel('Voltage (V)')
+plt.title('Battery Voltage')
 plt.grid(True)
 
-# this time data will be a 3 by 10 array, storing the latest ten values for each axis
-data = np.zeros([3,10])
-plt.plot(data.T) # transpose
 axis = plt.gca() # get current axis
-axis.set_xticklabels([]) # hide x-axis tick labels
-
+data = np.empty(0) # start with a completely empty data array
 psm = PiStorms()
-imu = ABSIMU()
-psm.BAS1.activateCustomSensorI2C()
-image = tempfile.NamedTemporaryFile()
+image = tempfile.NamedTemporaryFile() # we will be overwriting this same file 
+
+data = np.append(data, psm.battVoltage())
+data = np.append(data, psm.battVoltage())
 
 while not psm.isKeyPressed():
-    tilt = imu.get_tiltall()[0] # read the x, y, and z tilt data
-    if tilt == ('','',''):
-        psm.screen.showMessage(["AbsoluteIMU not found!", "Please connect an AbsoluteIMU sensor", "to BAS1."])
-        continue # try again after you tap "OK" or press GO
-    data = np.roll(data, -1)
-    for i in range(3): # update the data array and graph line for each axis
-        data[i][-1] = tilt[i]
-        axis.lines[i].set_ydata(data[i])
-    axis.relim() # recompute axis limits/bounds
-    axis.autoscale_view()
-    plt.savefig(image.name, format="png")
-    psm.screen.fillBmp(0,0, 320,240, image.name)
+    data = np.append(data, psm.battVoltage()) # add a data point with the current battery voltage
+    smooth_x = np.linspace(0, len(data)-1, len(data)*5) # an array 5 times the length of data for the smoothed data
+    if axis.lines: axis.lines.pop() # if there's already a line on the graph (old), remove it
+    lines = plt.plot(smooth_x, spline(np.arange(len(data)), data, smooth_x), color="blue")
+    plt.tight_layout() # make sure the entire plot fits on screen
+    plt.savefig(image.name, format="png") # save it
+    psm.screen.fillBmp(0,0, 320,240, image.name) # show it on screen
+
