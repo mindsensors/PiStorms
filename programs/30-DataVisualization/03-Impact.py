@@ -52,6 +52,8 @@ def captureData():
     global datax, datay, dataz, stop
     while not psm.isKeyPressed():
         accel = imu.get_accelall()[0]
+        if accel == ('','',''):
+            psm.screen.showMessage(["AbsoluteIMU not found!", "Please connect an AbsoluteIMU sensor", "to BAS1."])
         if accel[0] < 30000: datax = np.append(datax, accel[0])
         if accel[1] < 30000: datay = np.append(datay, accel[1])
         if accel[2] < 30000: dataz = np.append(dataz, accel[2])
@@ -67,7 +69,8 @@ while not stop:
     plt.plot(dataz, color="blue")
     plt.tight_layout()
     plt.savefig(image.name, format="png")
-    psm.screen.fillBmp(0,0, 320,240, image.name)
+    if psm.screen.getMode() != psm.screen.PS_MODE_POPUP: # as long as there's not a popup about the sensor missing...
+        psm.screen.fillBmp(0,0, 320,240, image.name) # draw the image
 
 plt.savefig("/home/pi/Documents/impact.png")
 np.savetxt("/home/pi/Documents/impact.csv", np.column_stack([datax,datay,dataz]), delimiter=",", fmt="%i")

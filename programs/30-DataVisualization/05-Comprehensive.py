@@ -67,9 +67,11 @@ def captureData():
     global data, stop
     while not psm.isKeyPressed():
         tilt = imu.get_tiltall()[0] # read the x, y, and z tilt data
-        if tilt == ('','',''): continue # try again if sensor is disconnected
-        data = np.column_stack([data, tilt]) # add the new numbers at the end of the array
-        time.sleep(0.01)
+        if tilt == ('','',''):
+            psm.screen.showMessage(["AbsoluteIMU not found!", "Please connect an AbsoluteIMU sensor", "to BAS1."])
+        else:
+            data = np.column_stack([data, tilt]) # add the new numbers at the end of the array
+        time.sleep(0.01) # let the screen update
     stop = True
 threading.Thread(target=captureData).start()
 
@@ -81,9 +83,10 @@ while not stop:
             plt.plot(smooth_x, spline(np.arange(len(slicedata[i])), slicedata[i], smooth_x))
     except: continue # if there's an error, just try again (don't crash)
     canvas.draw()
-    # directly write the matplotlib canvas to the PiStorms screen (faster than using an intermediary)
-    disp.buffer = Image.frombytes('RGB', canvas.get_width_height(), canvas.tostring_rgb()).rotate(-90*psm.screen.currentRotation)
-    disp.display() # update the screen
+    if psm.screen.getMode() != psm.screen.PS_MODE_POPUP: # as long as there's not a popup about the sensor missing...
+        # directly write the matplotlib canvas to the PiStorms screen (faster than using an intermediary)
+        disp.buffer = Image.frombytes('RGB', canvas.get_width_height(), canvas.tostring_rgb()).rotate(-90*psm.screen.currentRotation)
+        disp.display() # update the screen
 
 # save the final picture and data to files in ~/Documents
 plt.savefig("/home/pi/Documents/smoothfastfast.png")
