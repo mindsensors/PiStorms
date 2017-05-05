@@ -67,11 +67,12 @@ def captureData():
     while not psm.isKeyPressed():
         time.sleep(0.01) # take a short break to let the Pi do the other things it needs to
         try:
-            accel = imu.get_accely() + imu.get_accelx() + 0 # acceleration in the x+y direction
-        except TypeError:
-            continue # sensor not connected, try again (+ 0 is for if both fail... ''+'' doesn't raise TypeError)
-        if not accel > 30000: # as long as it's not a crazy value...
-            data = np.append(data, accel) # add it to the data array
+            accel = imu.get_accely() + imu.get_accelx() # acceleration in the x+y direction
+            if accel == '': raise ValueError("AbsoluteIMU not connected to BAS1")
+            if accel > 3000: raise ValueError("AbsoluteIMU returned a crazy value")
+            data = np.append(data, accel) # add the new (valid) data to the data array
+        except (TypeError, ValueError) as e:
+            print "Error: " + e.args[0]
     stop = True
 
 threading.Thread(target=captureData).start() # create a new thread that will run this method and start it
