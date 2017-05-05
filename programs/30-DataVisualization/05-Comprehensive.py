@@ -66,9 +66,10 @@ stop = False
 def captureData():
     global data, stop
     while not psm.isKeyPressed():
-        tilt = imu.get_tiltall()[0] # read the x, y, and z tilt data
-        data = np.column_stack([data, tilt]) # add the new numbers at the end of the array
         time.sleep(0.01)
+        tilt = imu.get_tiltall()[0] # read the x, y, and z tilt data
+        if tilt == ('','',''): continue # try again if sensor is disconnected
+        data = np.column_stack([data, tilt]) # add the new numbers at the end of the array
     stop = True
 threading.Thread(target=captureData).start()
 

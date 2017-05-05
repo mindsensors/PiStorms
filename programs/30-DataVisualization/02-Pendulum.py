@@ -65,10 +65,13 @@ stop = False
 def captureData():
     global data, stop # share the data and stop variables from the global namespace
     while not psm.isKeyPressed():
-        accel = imu.get_accely() + imu.get_accelx() # acceleration in the x+y direction
+        time.sleep(0.01) # take a short break to let the Pi do the other things it needs to
+        try:
+            accel = imu.get_accely() + imu.get_accelx() + 0 # acceleration in the x+y direction
+        except TypeError:
+            continue # sensor not connected, try again (+ 0 is for if both fail... ''+'' doesn't raise TypeError)
         if not accel > 30000: # as long as it's not a crazy value...
             data = np.append(data, accel) # add it to the data array
-        time.sleep(0.01) # take a short break to let the Pi do the other things it needs to
     stop = True
 
 threading.Thread(target=captureData).start() # create a new thread that will run this method and start it

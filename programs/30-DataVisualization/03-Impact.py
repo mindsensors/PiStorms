@@ -51,11 +51,12 @@ stop = False
 def captureData():
     global datax, datay, dataz, stop
     while not psm.isKeyPressed():
+        time.sleep(0.01) # take a short break to let the Pi do the other things it needs to
         accel = imu.get_accelall()[0]
+        if accel == ('','',''): continue # try again if sensor is disconnected
         if accel[0] < 30000: datax = np.append(datax, accel[0])
         if accel[1] < 30000: datay = np.append(datay, accel[1])
         if accel[2] < 30000: dataz = np.append(dataz, accel[2])
-        time.sleep(0.01) # take a short break to let the Pi do the other things it needs to
     stop = True
 
 threading.Thread(target=captureData).start() # create a new thread that will run this method and start it

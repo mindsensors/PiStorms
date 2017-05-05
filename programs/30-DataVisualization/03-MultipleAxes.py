@@ -35,6 +35,7 @@ import numpy as np
 import tempfile
 from PiStorms import PiStorms
 from mindsensors import ABSIMU
+import time
 
 plt.figure(figsize=(4,3), dpi=80)
 plt.xlabel('time')
@@ -54,8 +55,11 @@ psm.BAS1.activateCustomSensorI2C()
 image = tempfile.NamedTemporaryFile()
 
 while not psm.isKeyPressed():
-    data = np.roll(data, -1)
     tilt = imu.get_tiltall()[0] # read the x, y, and z tilt data
+    if tilt == ('','',''): # if the sensor is disconnected...
+        time.sleep(0.01)
+        continue # ...try again
+    data = np.roll(data, -1)
     for i in range(3): # update the data array and graph line for each axis
         data[i][-1] = tilt[i]
         axis.lines[i].set_ydata(data[i])
