@@ -68,7 +68,8 @@ def captureData():
     while not psm.isKeyPressed():
         tilt = imu.get_tiltall()[0] # read the x, y, and z tilt data
         if tilt == ('','',''):
-            psm.screen.showMessage(["AbsoluteIMU not found!", "Please connect an AbsoluteIMU sensor", "to BAS1."])
+            answer = psm.screen.askQuestion(["AbsoluteIMU not found!", "Please connect an AbsoluteIMU sensor", "to BAS1."], ["OK", "Cancel"], goBtn=True)
+            if answer != 0: break
         else:
             data = np.column_stack([data, tilt]) # add the new numbers at the end of the array
         time.sleep(0.01) # let the screen update

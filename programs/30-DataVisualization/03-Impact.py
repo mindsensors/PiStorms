@@ -53,7 +53,8 @@ def captureData():
     while not psm.isKeyPressed():
         accel = imu.get_accelall()[0]
         if accel == ('','',''):
-            psm.screen.showMessage(["AbsoluteIMU not found!", "Please connect an AbsoluteIMU sensor", "to BAS1."])
+            answer = psm.screen.askQuestion(["AbsoluteIMU not found!", "Please connect an AbsoluteIMU sensor", "to BAS1."], ["OK", "Cancel"], goBtn=True)
+            if answer != 0: break
         if accel[0] < 30000: datax = np.append(datax, accel[0])
         if accel[1] < 30000: datay = np.append(datay, accel[1])
         if accel[2] < 30000: dataz = np.append(dataz, accel[2])
