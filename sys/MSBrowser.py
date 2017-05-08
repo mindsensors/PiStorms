@@ -382,7 +382,10 @@ try:
             showLeftIcon = False
         else:
             showLeftIcon = True
-        x = displayFullFileList(folder, files, file_id/4, showLeftIcon)
+        try:
+            x = displayFullFileList(folder, files, file_id/4, showLeftIcon)
+        except:
+            x = displayFullFileList(folder, files, 0, showLeftIcon)
         file_id = x[0]
         folder = x[1]
         fileName = x[2]
