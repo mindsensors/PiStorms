@@ -55,9 +55,11 @@ def captureData():
         if accel == ('','',''):
             answer = psm.screen.askQuestion(["AbsoluteIMU not found!", "Please connect an AbsoluteIMU sensor", "to BAS1."], ["OK", "Cancel"], goBtn=True)
             if answer != 0: break
-        if accel[0] < 30000: datax = np.append(datax, accel[0])
-        if accel[1] < 30000: datay = np.append(datay, accel[1])
-        if accel[2] < 30000: dataz = np.append(dataz, accel[2])
+        # append the data, but only if x, y, and z are all reasonable measurements (not something crazy like over 30,000)
+        if all(accel[i] < 30000 for i in range(3)):
+            datax = np.append(datax, accel[0])
+            datay = np.append(datay, accel[1])
+            dataz = np.append(dataz, accel[2])
         time.sleep(0.01) # take a short break to let the Pi do the other things it needs to (like draw the screen)
     stop = True
 
