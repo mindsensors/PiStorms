@@ -993,7 +993,7 @@ class mindsensorsUI():
                 if(goBtn and self.i2c.readByte(PiStormsCom.PS_KeyPress)&0x01):
                     while self.i2c.readByte(PiStormsCom.PS_KeyPress)&0x01: time.sleep(0.1) # wait for user to release GO
                     self.setMode(oldMode)
-                    return 0
+                    return -1
                 if(touch and self.isTouched()):
                     tempthis = self.calculateButton(20,20,50) #check four times in a row, and only return if all four readings were the same
                     tempthis2 = self.calculateButton(20,20,50)
