@@ -990,10 +990,13 @@ class mindsensorsUI():
         self.setMode(self.PS_MODE_POPUP)
         if(len(options)>5):
             print "warning!, buttons may be too small to read"
+        if(len(options)<1):
+            print "warning!, no options will leave this pop-up stuck"
+        if goBtn:
+            keyPressCount = self.i2c.readByte(PiStormsCom.PS_Key1Count)
         while(True):
             try:
-                if(goBtn and self.i2c.readByte(PiStormsCom.PS_KeyPress)&0x01):
-                    while self.i2c.readByte(PiStormsCom.PS_KeyPress)&0x01: time.sleep(0.1) # wait for user to release GO
+                if(goBtn and keyPressCount < self.i2c.readByte(PiStormsCom.PS_Key1Count)):
                     self.setMode(oldMode)
                     return -1
                 if(touch and self.isTouched()):
