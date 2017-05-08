@@ -26,13 +26,20 @@
 
 # This program demonstrates displaying a smooth curve.
 
+from PiStorms import PiStorms
+psm = PiStorms()
+psm.screen.termPrintln("Please wait a moment")
+psm.screen.termPrintln("as matplotlib loads...")
+psm.screen.termPrintln("")
+psm.screen.termPrintln("Press and hold GO briefly")
+psm.screen.termPrintln("to stop the program running.")
+
 import matplotlib
 matplotlib.use("AGG")
 import matplotlib.pyplot as plt
 import numpy as np
 from scipy.interpolate import spline
 import tempfile
-from PiStorms import PiStorms
 
 plt.figure(figsize=(4,3), dpi=80)
 plt.xlabel('time')
@@ -42,7 +49,6 @@ plt.grid(True)
 
 axis = plt.gca() # get current axis
 data = np.empty(0) # start with a completely empty data array
-psm = PiStorms()
 image = tempfile.NamedTemporaryFile() # we will be overwriting this same file 
 
 data = np.append(data, psm.battVoltage())

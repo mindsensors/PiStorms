@@ -24,12 +24,16 @@
 # 04/18/17  Seth Tenembaum  Initial development.
 #
 
+from PiStorms import PiStorms
+psm = PiStorms()
+psm.screen.termPrintln("Please wait a moment")
+psm.screen.termPrintln("as matplotlib loads...")
+
 import matplotlib
 matplotlib.use("AGG")
 import matplotlib.pyplot as plt
 import numpy as np
 import tempfile
-from PiStorms import PiStorms
 from mindsensors import ABSIMU
 import threading, time
 
@@ -39,7 +43,6 @@ plt.ylabel('acceleration')
 plt.title('AbsoluteIMU Car Impact')
 plt.grid(True)
 
-psm = PiStorms()
 imu = ABSIMU()
 psm.BAS1.activateCustomSensorI2C()
 
@@ -78,5 +81,6 @@ while not stop:
 plt.savefig("/home/pi/Documents/impact.png")
 np.savetxt("/home/pi/Documents/impact.csv", np.column_stack([datax,datay,dataz]), delimiter=",", fmt="%i")
 
+psm.screen.drawAutoText("Press GO to exit.", 2, 219, psm.screen.PS_BLACK)
 psm.resetKeyPressCount()
 while psm.getKeyPressCount() < 1: time.sleep(0.1) # leave image on screen until you press GO

@@ -28,12 +28,19 @@
 # (overlapping data series). Here we plot the three axes of tilt from the
 # AbsoluteIMU sensor.
 
+from PiStorms import PiStorms
+psm = PiStorms()
+psm.screen.termPrintln("Please wait a moment")
+psm.screen.termPrintln("as matplotlib loads...")
+psm.screen.termPrintln("")
+psm.screen.termPrintln("Press and hold GO briefly")
+psm.screen.termPrintln("to stop the program running.")
+
 import matplotlib
 matplotlib.use("AGG")
 import matplotlib.pyplot as plt
 import numpy as np
 import tempfile
-from PiStorms import PiStorms
 from mindsensors import ABSIMU
 import time
 
@@ -49,7 +56,6 @@ plt.plot(data.T) # transpose
 axis = plt.gca() # get current axis
 axis.set_xticklabels([]) # hide x-axis tick labels
 
-psm = PiStorms()
 imu = ABSIMU()
 psm.BAS1.activateCustomSensorI2C()
 image = tempfile.NamedTemporaryFile()

@@ -30,6 +30,11 @@
 # Save final graph and data
 # Multiple simultaneous axes
 
+from PiStorms import PiStorms
+psm = PiStorms()
+psm.screen.termPrintln("Please wait a moment")
+psm.screen.termPrintln("as matplotlib loads...")
+
 import matplotlib
 matplotlib.use("AGG")
 import matplotlib.pyplot as plt
@@ -37,7 +42,6 @@ import numpy as np
 from scipy.interpolate import spline
 import threading, time
 from PIL import Image
-from PiStorms import PiStorms
 from mindsensors import ABSIMU
 
 DATA_SIZE = 80 # only the latest n data points will be shown on screen (this is not a cap on how much data will be recorded in total)
@@ -55,7 +59,6 @@ axis.set_xticklabels([]) # hide x-axis tick labels
 axis.set_color_cycle(['red', 'green', 'blue'])
 smooth_x = np.linspace(0, DATA_SIZE-1, 247) # the x-axis for the smoothed lines    
 
-psm = PiStorms()
 imu = ABSIMU()
 psm.BAS1.activateCustomSensorI2C() # attach AbsoluteIMU to BAS1, or change this line
 
