@@ -57,7 +57,8 @@ image = tempfile.NamedTemporaryFile()
 while not psm.isKeyPressed():
     tilt = imu.get_tiltall()[0] # read the x, y, and z tilt data
     if tilt == ('','',''):
-        psm.screen.showMessage(["AbsoluteIMU not found!", "Please connect an AbsoluteIMU sensor", "to BAS1."])
+        answer = psm.screen.askQuestion(["AbsoluteIMU not found!", "Please connect an AbsoluteIMU sensor", "to BAS1."], ["OK", "Cancel"], goBtn=True)
+        if answer != 0: break
         continue # try again after you tap "OK" or press GO
     data = np.roll(data, -1)
     for i in range(3): # update the data array and graph line for each axis

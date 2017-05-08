@@ -71,7 +71,8 @@ def captureData():
             if accel > 3000: raise ValueError("AbsoluteIMU returned a crazy value")
             data = np.append(data, accel) # add the new (valid) data to the data array
         except TypeError:
-            psm.screen.showMessage(["AbsoluteIMU not found!", "Please connect an AbsoluteIMU sensor", "to BAS1."])
+            answer = psm.screen.askQuestion(["AbsoluteIMU not found!", "Please connect an AbsoluteIMU sensor", "to BAS1."], ["OK", "Cancel"], goBtn=True)
+            if answer != 0: break
         except ValueError as e:
             print "Error: " + e.args[0]
         time.sleep(0.01) # take a short break to let the Pi do the other things it needs to (like draw the screen)
