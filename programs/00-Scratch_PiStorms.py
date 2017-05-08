@@ -203,7 +203,13 @@ while doExit == False:
         error = 1
         while (error == 1) and (doExit == False) :
             rmap.rmap_print("Disconnected")
-            time.sleep(5)
+            timeout = time.time() + 5
+            while time.time() < timeout:
+                time.sleep(0.1)
+                if(psm.isKeyPressed() == True): # if the GO button is pressed
+                    psm.screen.clearScreen()
+                    psm.screen.termPrintAt(8, "Exiting to menu")
+                    sys.exit(0)
             # Reconnects to Scratch 
             try:
                 s = scratch.Scratch(host=rmapcfg.host, port=rmapcfg.port)
