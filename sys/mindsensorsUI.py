@@ -103,7 +103,7 @@ class mindsensorsUI():
     PS_MODE_DEAD = 2
     
     ## Dictionary of default emnpty terminal buffer
-    terminalBuffer = ["","","","","","","","","","","","","","","","","","","",""]
+    terminalBuffer = [""]*20
     ## Variable of default terminal cursor position
     terminalCursor = 0
     ## Variable of default mode
