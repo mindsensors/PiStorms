@@ -199,11 +199,18 @@ while doExit == False:
         break
     # Connection disruption exception
     except (scratch.ScratchError,NameError) as e:
+        psm.screen.termPrintAt(0, "Searching for Scratch instance")
+        psm.screen.termPrintAt(1, "Press GO to cancel")
         errorCounter = 0
         error = 1
         while (error == 1) and (doExit == False) :
             rmap.rmap_print("Disconnected")
-            time.sleep(5)
+            timeout = time.time() + 5
+            while time.time() < timeout:
+                time.sleep(0.1)
+                if(psm.isKeyPressed() == True): # if the GO button is pressed
+                    psm.screen.termPrintAt(7, "Exiting to menu")
+                    sys.exit(0)
             # Reconnects to Scratch 
             try:
                 s = scratch.Scratch(host=rmapcfg.host, port=rmapcfg.port)
@@ -213,11 +220,11 @@ while doExit == False:
             except scratch.ScratchError:
                 errorCounter += 1
                 rmap.rmap_print("Scratch is either not opened or remote sensor connections aren't enabled")
-                psm.screen.termPrintAt(5, "Is Scratch running?")
-                psm.screen.termPrintAt(6, "And ensure to enable:")
-                psm.screen.termPrintAt(7, "'Remote Sensor connections'")
+                psm.screen.termPrintAt(3, "Is Scratch running?")
+                psm.screen.termPrintAt(4, "And ensure to enable:")
+                psm.screen.termPrintAt(5, "'Remote Sensor connections'")
                 if ( errorCounter > 10 ):
                     psm.screen.clearScreen()
-                    psm.screen.termPrintAt(6, "Scrach connection failed")
+                    psm.screen.termPrintAt(7, "Scrach connection failed")
                     time.sleep(10)
                     sys.exit(0)
