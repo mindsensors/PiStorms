@@ -28,6 +28,11 @@
 # on the PiStorms screen.
 # It is heavily based on https://matplotlib.org/examples/pylab_examples/simple_plot.html
 
+from PiStorms import PiStorms
+psm = PiStorms()
+psm.screen.termPrintln("Please wait a moment")
+psm.screen.termPrintln("as matplotlib loads...")
+
 import matplotlib
 matplotlib.use("AGG")
 import matplotlib.pyplot as plt
@@ -52,8 +57,6 @@ image = tempfile.NamedTemporaryFile()
 plt.savefig(image.name, format="png")
 
 # draw on screen
-from PiStorms import PiStorms
-psm = PiStorms()
 psm.screen.fillBmp(0,0, 320,240, image.name)
 
 # wait until GO is pressed to exit

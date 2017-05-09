@@ -35,17 +35,15 @@ nxt_servo = NXTSERVO()
 
 m = ["NXTServo Example",
      "Connect NXTServo to BAS1.",
+     "Connect a servo to SV1.",
+     "Connect power to the NXTServo.",
      "Tap OK or press GO to continue."]
 psm.screen.showMessage(m)
 
 # Set servo SV1 to position 100
 nxt_servo.setPosition(1, 100)
-
-m[1] = "Servo should be at position 100."
-psm.screen.showMessage(m)
+psm.screen.showMessage(["NXTServo Example", "Servo 1 should be at position 100."])
 
 nxt_servo.setPosition(1, 200)
-
-m[1] = "Servo should be at position 200."
-psm.screen.showMessage(m)
+psm.screen.showMessage(["NXTServo Example", "Servo 1 should be at position 200."])
 

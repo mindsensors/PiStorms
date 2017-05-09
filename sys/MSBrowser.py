@@ -382,10 +382,9 @@ try:
             showLeftIcon = False
         else:
             showLeftIcon = True
-        x = displayFullFileList(folder, files, file_id/4, showLeftIcon)
-        file_id = x[0]
-        folder = x[1]
-        fileName = x[2]
+        
+        file_id, folder, fileName = displayFullFileList(folder, files, file_id/4, showLeftIcon)
+        
         if ( isinstance( file_id, int ) ):
             # if the value returned was integer
             #result = runProgram(files[file_id], folder)
@@ -437,6 +436,7 @@ try:
             # Force the result to be zero, so that even if there was error
             # browser does not show error dialog
             result = 0
+            file_id = 0
 
         elif ( file_id == "message"):
             f = open(json_file, 'r')
@@ -450,6 +450,7 @@ try:
             message_update_status( data, "Read" )
             scrn.askQuestion(m,["OK"])
             result = 0 
+            file_id = 0
 
         # FIXME: find a method (without psm) to float the motors.
         # possibly with direct i2c access.

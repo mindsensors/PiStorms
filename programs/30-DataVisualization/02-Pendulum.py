@@ -29,12 +29,16 @@
 # and update the graph on screen as the data comes in. Furthermore it will
 # save the data to a file once the program stops.
 
+from PiStorms import PiStorms
+psm = PiStorms()
+psm.screen.termPrintln("Please wait a moment")
+psm.screen.termPrintln("as matplotlib loads...")
+
 import matplotlib
 matplotlib.use("AGG")
 import matplotlib.pyplot as plt
 import numpy as np
 import tempfile
-from PiStorms import PiStorms
 from mindsensors import ABSIMU
 import threading, time
 
@@ -44,7 +48,6 @@ plt.ylabel('acceleration')
 plt.title('AbsoluteIMU Pendulum')
 plt.grid(True)
 
-psm = PiStorms()
 imu = ABSIMU()
 psm.BAS1.activateCustomSensorI2C() # see example in 50-SensorDemos
 

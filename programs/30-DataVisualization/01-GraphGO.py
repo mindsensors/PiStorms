@@ -29,12 +29,19 @@
 # Don't hold the button too long, or you'll turn off the PiStorms!
 # Tap the touchscreen to exit.
 
+from PiStorms import PiStorms
+psm = PiStorms()
+psm.screen.termPrintln("Please wait a moment")
+psm.screen.termPrintln("as matplotlib loads...")
+psm.screen.termPrintln("")
+psm.screen.termPrintln("Tap and hold to exit")
+psm.screen.termPrintln("when program runs.")
+
 import matplotlib
 matplotlib.use("AGG")
 import matplotlib.pyplot as plt
 import numpy as np
 import tempfile
-from PiStorms import PiStorms
 
 plt.figure(figsize=(4,3), dpi=80)
 plt.xlabel('time')
@@ -45,7 +52,6 @@ plt.ylim((-0.05, 1.05)) # set y-axis range, off by a bit so the line isn't right
 
 axis = plt.gca() # get current axis
 data = np.empty(0)
-psm = PiStorms()
 image = tempfile.NamedTemporaryFile() # we will be overwriting this same file 
 
 while not psm.screen.isTouched():

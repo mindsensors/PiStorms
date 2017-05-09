@@ -28,12 +28,19 @@
 # To achieve this we directly set the buffer and call the display function
 # instead of saving it to disk first.
 
+from PiStorms import PiStorms
+psm = PiStorms()
+psm.screen.termPrintln("Please wait a moment")
+psm.screen.termPrintln("as matplotlib loads...")
+psm.screen.termPrintln("")
+psm.screen.termPrintln("Press and hold GO briefly")
+psm.screen.termPrintln("to stop the program running.")
+
 import matplotlib
 matplotlib.use("AGG")
 import matplotlib.pyplot as plt
 import numpy as np
 from PIL import Image
-from PiStorms import PiStorms
 
 plt.figure(figsize=(4,3), dpi=80)
 plt.xlabel('time')
@@ -42,7 +49,6 @@ plt.title('Battery Voltage')
 plt.grid(True)
 
 data = np.empty(0) # start with a completely empty data array
-psm = PiStorms()
 canvas = plt.get_current_fig_manager().canvas
 disp = psm.screen.disp
 
