@@ -178,6 +178,7 @@ class mindsensorsUI():
     
     ## Sets the mode(Experienced users)
     #  @param self The object pointer. 
+    #  @param mode The new mode: PS_MODE_TERMINAL, PS_MODE_POPUP, or PS_MODE_DEAD
     def setMode(self, mode = 0):
         if(mode<0 or mode>2):
             self.currentMode = self.PS_MODE_DEAD
@@ -190,6 +191,8 @@ class mindsensorsUI():
     def getMode(self):
         return self.currentMode
         
+    ## Sets the expected X,Y when the screen is not touched to their current values(Experienced users)
+    #  @param self The object pointer.
     def calibrateTouched(self):
         self.touchIgnoreX = self.TS_X()
         self.touchIgnoreY = self.TS_Y()
@@ -241,6 +244,10 @@ class mindsensorsUI():
         if(cr == 3):
             return self.PS_SCREENHEIGHT-x
 
+    ## Calculates display x-coordinate from touchscreen values, adjusted for rotation(INTERNAL USE ONLY)
+    #  @param self The object pointer.
+    #  @param x The x-coordinate.
+    #  @param y The y-coordinate.  
     def TS_To_ImageCoords_X(self, x, y):
         cr = self.currentRotation
         if(cr == 0):
@@ -252,6 +259,10 @@ class mindsensorsUI():
         if(cr == 3):
             return self.PS_SCREENHEIGHT-y
 
+    ## Calculates display y-coordinate from touchscreen values, adjusted for rotation(INTERNAL USE ONLY)
+    #  @param self The object pointer.
+    #  @param x The x-coordinate.
+    #  @param y The y-coordinate.  
     def TS_To_ImageCoords_Y(self, x, y):
         cr = self.currentRotation
         if(cr == 0):
@@ -387,6 +398,14 @@ class mindsensorsUI():
         return -1
     ### @endcond
     
+    ## Returns a tuple of the x and y touchscreen coordinates, or (0,0) if the screen is not touched
+    #  @param self The object pointer.
+    #  @remark
+    #  To use this function in your program:
+    #  @code
+    #  ...
+    #  x, y = screen.getTouchscreenValues()
+    #  @endcode 
     def getTouchscreenValues(self):
     
         if self.ts_cal == None:
@@ -480,6 +499,8 @@ class mindsensorsUI():
                 print "Could not read Touch Screen Y"
                 return -1
     
+    ## Reads the raw touchscreen x-value(INTERNAL USE ONLY)
+    #  @param self The object pointer.
     def RAW_X(self):
         try:
             return self.i2c.readInteger(self.PS_RAWX)
@@ -487,6 +508,8 @@ class mindsensorsUI():
             print "Could not read Raw Touch Screen X"
             return -1
     
+    ## Reads the raw touchscreen y-value(INTERNAL USE ONLY)
+    #  @param self The object pointer.
     def RAW_Y(self):
         try:
             return self.i2c.readInteger(self.PS_RAWY)
@@ -527,7 +550,7 @@ class mindsensorsUI():
     #  To use this function in your program:
     #  @code
     #  ...
-    #  screen.clearScreen(True)
+    #  screen.clearScreen()
     #  @endcode 
     def clearScreen(self,display = True):
         self.disp.clear()
@@ -547,7 +570,7 @@ class mindsensorsUI():
     #  To use this function in your program:
     #  @code
     #  ...
-    #  screen.fillRect(100, 100, 75, 75, fill = (255,0,0), outline = None, display = True)
+    #  screen.fillRect(100, 100, 75, 75, fill = (255,0,0), outline = (0,0,0))
     #  @endcode    
     def fillRect(self, x, y, width, height, fill = (255,255,255), outline = None,display=True):
         draw = self.disp.draw()
@@ -570,7 +593,7 @@ class mindsensorsUI():
     #  To use this function in your program:
     #  @code
     #  ...
-    #  screen.fillCircle(100, 100, 15, fill = (255,255,255), display = True)
+    #  screen.fillCircle(100, 100, 15, fill = (255,0,0))
     #  @endcode    
     def fillCircle(self, x, y, radius, fill = (255,255,255),display = True):
         draw = self.disp.draw()
@@ -592,7 +615,7 @@ class mindsensorsUI():
     #  To use this function in your program:
     #  @code
     #  ...
-    #  screen.screen.fillBmp(30, 0, 240, 240, path = currentdir+'/'+"dog.png", display = True)
+    #  screen.screen.fillBmp(30, 0, 240, 240, path = os.path.join(currentdir, "dog.png"))
     #  @endcode    
     def fillBmp(self, x, y, width, height, path = "/usr/local/mindsensors/images/Pane1.png",display = True):
 
@@ -654,7 +677,7 @@ class mindsensorsUI():
     #  To use this function in your program:
     #  @code
     #  ...
-    #  screen.screen.fillBmp(30, 0, 240, 240, image, True)
+    #  screen.screen.fillBmp(40, 0, 240, 240, image)
     #  @endcode    
     def fillImgArray(self, x, y, width, height, image, display = True):
         start_time = time.time()
@@ -730,7 +753,7 @@ class mindsensorsUI():
     #  To use this function in your program:
     #  @code
     #  ...
-    #  screen.drawAutoText(self.terminalBuffer[lineNum], 10, 20, fill = (255,255,255), size = 25, display = True)
+    #  screen.drawAutoText("Wow!", 10, 20, fill = (255,255,255), size = 25)
     #  @endcode    
     def drawAutoText(self,text,x,y,fill = (255,255,255), size = 20, display = True, align="left"):
         font = ImageFont.truetype("/usr/share/fonts/truetype/freefont/FreeSans.ttf", size)
@@ -777,7 +800,7 @@ class mindsensorsUI():
     #  To use this function in your program:
     #  @code
     #  ...
-    #  screen.termPrintAt(5, "Print At Line 5")
+    #  screen.termPrintAt(5, "Printing at line 5")
     #  @endcode    
     def termPrintAt(self,lineno,text):
         self.terminalCursor = lineno
@@ -839,13 +862,25 @@ class mindsensorsUI():
     #  To use this function in your program:
     #  @code
     #  ...
-    #  screen.refreshLine(1,True)
+    #  screen.refreshLine(1)
     #  @endcode    
     def refreshLine(self,lineNum, display = True):
         if(self.currentMode == self.PS_MODE_TERMINAL):
             self.drawAutoText(self.terminalBuffer[lineNum],10,lineNum*20 + 40, (255,255,255), display = display)
     
-    ## drawButton
+    ## Draw a labeled button on the screen (INTERNAL USE ONLY)
+    #  @param self The object pointer.
+    #  @param x The upper left x coordinate of the rectangle.
+    #  @param y The upper left y coordinate of the rectangle.
+    #  @param width The width of the button.
+    #  @param height The height of the button.
+    #  @param prefix The button images filename prefix.
+    #  @param text The button label.
+    #  @param display Choose to immediately push the drawing to the screen.
+    #  @param align The alignment for the button's text label.
+    #  @param image An optional image to be included on the button, should be 32x32.
+    #  @param imageX The x-coordinate of the optional image icon.
+    #  @param imageY The y-coordinate of the optional image icon.
     def drawButton(self, x, y, width, height, prefix="btns_",text="OK", display=True, align="left", image=None, imageX=None, imageY=None):
         self.fillBmp(x, y, 14, height, prefix+"left.png", display=display)
         self.fillBmp(x+14, y, width-28, height, prefix+"center.png", display=display)
@@ -973,13 +1008,16 @@ class mindsensorsUI():
     
     ## Display pop-up of a question on the screen
     #  @param self The object pointer.
-    #  @param question The question that will pop-up on the screen.
+    #  @param question The question that will pop-up on the screen. The first string will be the titlebar.
     #  @param options The possible answers to the question.
+    #  @param touch Whether to check if on screen buttons are pressed.
+    #  @param goBtn Whether to check for the GO button to close the question.
+    #  @note If goBtn is True, pressing GO will close the dialog and return -1
     #  @remark
     #  To use this function in your program:
     #  @code
     #  ...
-    #  answer = screen.askQuestion(["Continue?", "Do you want to continue?"],["Yes","No"])
+    #  answer = screen.askQuestion(["Continue?", "Do you want to continue?"],["OK","Cancel"])
     #  @endcode    
     def askQuestion(self, question = ["Continue?"], options = ["Yes","No"], touch = True, goBtn = False):
         self.popupText = question
@@ -1013,38 +1051,45 @@ class mindsensorsUI():
                 self.setMode(oldMode)
                 return 0
     
-    ## Display Pop-up of 'Yes' or 'No' question on the screen
+    ## Display Pop-up of 'Yes' or 'No' question on the screen, returning True or False
     #  @param self The object pointer.
     #  @param question The question that will pop-up on the screen.
+    #  @param touch Whether to check if on screen buttons are pressed.
+    #  @param goBtn Whether to check for the GO button to close the question.
+    #  @note If goBtn is True, pressing GO will close the dialog and return False
     #  @remark
     #  To use this function in your program:
     #  @code
     #  ...
-    #  answer = screen.askYesOrNoQuestion(["Continue?"])
+    #  answer = screen.askYesOrNoQuestion(["Continue?", "Do you want to continue?"])
     #  @endcode    
-    def askYesOrNoQuestion(self, question = ["Continue?"], touch = True, goBtn = False):
+    def askYesOrNoQuestion(self, question = ["Continue?", "Do you want to continue?"], touch = True, goBtn = False):
         return self.askQuestion(question, ["Yes","No"], touch = touch, goBtn = goBtn) == 0
     
     ## Display pop-up of a message on the screen with a single option "OK"
     #  @param self The object pointer.
     #  @param message The message that will pop-up on the screen.
+    #  @param touch Whether to check if on screen buttons are pressed.
+    #  @param goBtn Whether to check for the GO button to close the question.
+    #  @note If goBtn is True, pressing GO will close the dialog and return False
     #  @remark
     #  To use this function in your program:
     #  @code
     #  ...
-    #  answer = screen.showMessage(["The process has completed.", "Status: success"])
+    #  answer = screen.showMessage(["Complete", "The process has completed.", "Status: success"])
     #  @endcode    
     def showMessage(self, message, touch = True, goBtn = True):
         return self.askQuestion(message, ["OK"], touch = touch, goBtn = goBtn) == 0
     
     ## Display pop-up of a message on the screen with no exit options.
+    #  This function will return right away. You may need to call `screen.setMode(screen.PS_MODE_TERMINAL)` to stop the popup later.
     #  @param self The object pointer.
     #  @param message The message that will pop-up on the screen.
     #  @remark
     #  To use this function in your program:
     #  @code
     #  ...
-    #  answer = screen.forceMessage(["Processing, please wait..."])
+    #  answer = screen.forceMessage(["Processing", "Processing, please wait..."])
     #  @endcode    
     def forceMessage(self, message):
         self.popupText = message
@@ -1074,7 +1119,7 @@ class mindsensorsUI():
     #  To use this function in your program:
     #  @code
     #  ...
-    #  screen.drawLine(50, 50, 100, 100, width = 0, fill = (255,255,255), display = True)
+    #  screen.drawLine(50, 50, 100, 100, width = 0, fill = (255,0,0))
     #  @endcode    
     def drawLine(self, x1, y1, x2, y2, width = 0, fill = (255,255,255),display = True):
         draw = self.disp.draw()
@@ -1088,7 +1133,7 @@ class mindsensorsUI():
     
     ## Draw a polyline on the screen (rotated to screen)
     #  @param self The object pointer.
-    #  @param [x1, y1, x2, y2...] The x and y coordinates of each endpoint of the polyline.
+    #  @param endpoints [x1, y1, x2, y2...] The x and y coordinates of each endpoint of the polyline.
     #  @param width The width of the polyline.
     #  @param fill The color of polyline.
     #  @param display Choose to immediately push the drawing to the screen.
@@ -1096,7 +1141,7 @@ class mindsensorsUI():
     #  To use this function in your program:
     #  @code
     #  ...
-    #  screen.drawLine([50, 50, 100, 50, 100, 100], width = 0, fill = (255,255,255), display = True)
+    #  screen.drawLine([50, 50, 100, 50, 100, 100], width = 0, fill = (255,0,0))
     #  @endcode    
     def drawPolyLine(self, endpoints, width = 0, fill = (255,255,255),display = True):
         assert len(endpoints) % 2 == 0, "endpoints must be an array of even length, containing *pairs* of integers"
