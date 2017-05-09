@@ -728,6 +728,7 @@ class mindsensorsUI():
     #  screen.drawAutoText("Wow!", 10, 20, fill = (255,255,255), size = 25)
     #  @endcode
     def drawAutoText(self, text, x, y, fill = (255,255,255), size = 20, display = True, align="left"):
+        text = str(text)
         font = ImageFont.truetype("/usr/share/fonts/truetype/freefont/FreeSans.ttf", size)
         width, height = ImageDraw.Draw(self.disp.buffer).textsize(text, font=font)
         tempx = self.screenXFromImageCoords(x,y)
@@ -850,23 +851,16 @@ class mindsensorsUI():
     #  @param image An optional image to be included on the button, should be 32x32.
     #  @param imageX The x-coordinate of the optional image icon.
     #  @param imageY The y-coordinate of the optional image icon.
-    def drawButton(self, x, y, width, height, prefix="btns_", text="OK", display=True, align="left", image=None, imageX=None, imageY=None):
+    def drawButton(self, x, y, width, height, prefix="btns_",text="OK", display=True, align="left", image=None, imageX=None, imageY=None):
         self.fillBmp(x, y, 14, height, prefix+"left.png", display=display)
         self.fillBmp(x+14, y, width-28, height, prefix+"center.png", display=display)
         self.fillBmp(x+width-14, y, 14, height, prefix+"right.png", display=display)
         
-        if (image == None):
-            textX = x+10
-        else:
-            textX = x+42
-            if (imageY == None):
-                imgY = y+((height-32)/2)
-            else:
-                imgY = imageY
-            if (imageX == None):
-                imgX = x+4
-            else:
-                imgX = imageX
+        textX = x+10
+        if image:
+            textX += 32
+            imgY = imageY or y+((height-32)/2)
+            imgX = imageX or x+4
             self.fillBmp(imgX, imgY, 32, 32, image, display=display)
         
         self.drawAutoText(text,textX, y+(height/2)-10, size=16, fill = (0,0,0), display=display, align=align)
