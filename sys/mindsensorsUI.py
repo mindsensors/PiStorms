@@ -714,10 +714,11 @@ class mindsensorsUI():
     ## Displays text on the screen with adjusted position and rotation
     #  @param self The object pointer.
     #  @param text The text to display on the screen
-    #  @param x The upper left x coordinate of the text.
+    #  @param x The upper left x coordinate of the text. Optional, defaults to "left". Irrelevant if align is "center"
     #  @param y The upper left y coordinate of the text.
     #  @param fill The color of the text. Optional, defaults to white.
     #  @param size The pixel size of the text. Optional, defaults to 20.
+    #  @param align The text alignment, "left" or "center" or "right". Optional, defaults to "left".
     #  @param display Choose to immediately push the drawing to the screen. Optional, defaults to True.
     #  @remark
     #  To use this function in your program:
@@ -725,30 +726,45 @@ class mindsensorsUI():
     #  ...
     #  screen.drawAutoText("Wow!", 10, 20, fill = (255,255,255), size = 25)
     #  @endcode
-    def drawAutoText(self, text, x, y, fill = (255,255,255), size = 20, display = True, align="left"):
+    def drawAutoText(self, text, x, y, fill = (255,255,255), size = 20, align="left", display = True):
         text = str(text)
         font = ImageFont.truetype("/usr/share/fonts/truetype/freefont/FreeSans.ttf", size)
         width, height = ImageDraw.Draw(self.disp.buffer).textsize(text, font=font)
         tempx = self.screenXFromImageCoords(x,y)
         tempy = self.screenYFromImageCoords(x,y)
+        
         cr = self.currentRotation
-        # FIXME: the center aligned text is not quite right.
-        # also implement it for other orientations.
-        if(cr == 1):
-            tempx -= height
-        if(cr == 2):
-            tempy -= height
-            tempx -= width
-        if(cr == 3):
-            if ( align == "center" ):
-                tempy = (tempy - width)/2 + 10
-            else:
+        if align == "center":
+            tempy = (self.screenWidth() - width)/2
+            if cr == 1 or cr == 2:
+                tempx = self.screenHeight() - height - y
+            if cr == 0 or cr == 2:
+                tempx, tempy = tempy, tempx
+            if cr == 0:
+                tempy = y
+        elif align == "right":
+            if cr == 0:
+                tempx = self.screenWidth() - width - x
+                tempy = y
+            if cr == 1:
+                tempx = self.screenHeight() - height - y
+                tempy = self.screenWidth() - width - x
+            if cr == 2:
+                tempx, tempy = x, self.screenHeight() - height - y
+            if cr == 3:
+                tempy = x
+        else:
+            if cr == 1:
+                tempx -= height
+            if cr == 2:
+                tempy -= height
+                tempx -= width
+            if cr == 3:
                 tempy -= width
         
-        angletemp = 0
-        angletemp -= 90*self.currentRotation
+        angletemp = -90*self.currentRotation
         
-        self.draw_rotated_text(self.disp.buffer,text,(tempx,tempy),angletemp,font,fill, display = display)
+        self.draw_rotated_text(self.disp.buffer, text, (tempx,tempy), angletemp, font, fill, display = display)
     
     ## Set the cursor to a specific line of the of the screen
     #  @param self The object pointer.
