@@ -90,7 +90,6 @@ class mindsensorsUI():
     ## Constant to defualt screen height
     PS_SCREENHEIGHT = 320
     
-    ### @cond
     #PS_XMIN = 0x5A
     #PS_XMAX = 0x5C
     #PS_YMIN = 0x5E
@@ -122,13 +121,12 @@ class mindsensorsUI():
     
     touchIgnoreX = 0
     touchIgnoreY = 0
-    ### @endcond
     
     ## Initialize the UI device.
     #  @param self The object pointer.
-    #  @param name The display title that will appear at the top of the LCD touchscreen.
-    #  @param rotation The rotation of the LCD touchscreen.
-    #  @param device The device on which the LCD touchscreen is used.
+    #  @param name The display title that will appear at the top of the LCD touchscreen. Optional, defaults to "PiStorms" (unused).
+    #  @param rotation The rotation of the LCD touchscreen. Optional, defaults to 3 (standard rotation).
+    #  @param device The device on which the LCD touchscreen is used. Optional, defaults to PiStorms.
     #  @remark
     #  There is no need to use this function directly. To initialize the mindsensorsUI class in your program:
     #  @code
@@ -166,10 +164,9 @@ class mindsensorsUI():
             except IOError:
                 print 'Touchscreen Error: Failed to read touchscreen calibration values in mindsensorsUI.py'
     
-    ### @cond
     ## Dumps the screen buffer
     #  @param self The object pointer.
-    #  @param display Choose to immediately push the drawing to the screen.
+    #  @param display Choose to immediately push the drawing to the screen. Optional, defaults to True.
     def dumpTerminal(self, display = True):
         self.terminalBuffer = [""] * ((self.screenHeight()-40)/20)
         self.terminalCursor = 0
@@ -178,7 +175,7 @@ class mindsensorsUI():
     
     ## Sets the mode (Experienced users)
     #  @param self The object pointer.
-    #  @param mode The new mode: PS_MODE_TERMINAL, PS_MODE_POPUP, or PS_MODE_DEAD
+    #  @param mode The new mode: PS_MODE_TERMINAL, PS_MODE_POPUP, or PS_MODE_DEAD. Optional, defaults to PS_MODE_TERMINAL.
     def setMode(self, mode = 0):
         if(mode<0 or mode>2):
             self.currentMode = self.PS_MODE_DEAD
@@ -204,8 +201,8 @@ class mindsensorsUI():
     #  @param width The width of the rectangle.
     #  @param height The height of the rectangle.
     #  @param radius The arc of the rectangle corners.
-    #  @param fill The color of the inside of the rectangle.
-    #  @param display Choose to immediately push the drawing to the screen.
+    #  @param fill The color of the inside of the rectangle. Optional, defaults to white.
+    #  @param display Choose to immediately push the drawing to the screen. Optional, defaults to True.
     def fillRoundRect(self, x, y, width, height, radius, fill = (255,255,255), display = True):
         self.fillRect(x,y + radius,width, height-(radius*2), fill = fill, display = False)
         self.fillRect(x + radius, y, width - (radius*2), height, fill = fill, display = False)
@@ -281,8 +278,8 @@ class mindsensorsUI():
     #  @param position The position of the text as a set of x and y-coordinates
     #  @param angle The angle at which to rotate the text
     #  @param font The font of the text
-    #  @param fill The color of the text
-    #  @param display Choose to immediately push the drawing to the screen.
+    #  @param fill The color of the text. Optional, defaults to white.
+    #  @param display Choose to immediately push the drawing to the screen. Optional, defaults to True.
     def draw_rotated_text(self, image, text, position, angle, font, fill=(255,255,255), display = True):
         draw = ImageDraw.Draw(image)
         width, height = draw.textsize(text, font=font)
@@ -310,16 +307,16 @@ class mindsensorsUI():
         else:
             return 320
     
-    ## Prints the name text on the screen
+    ## Prints the name text on the screen, intended for terminal mode.
     #  @param self The object pointer.
     #  @param name The display title that will appear at the top of the LCD touchscreen.
-    #  @param display Choose to immediately push the drawing to the screen.
+    #  @param display Choose to immediately push the drawing to the screen. Optional, defaults to True.
     def drawDisplay(self, name, display = True):
         self.drawAutoText(name,0,5,fill = (0,255,255), size = 30, display = display, align="center")
     
     ## Draw forward and back arrows on the screen
     #  @param self The object pointer.
-    #  @param display Choose to immediately push the drawing to the screen.
+    #  @param display Choose to immediately push the drawing to the screen. Optional, defaults to True.
     def drawArrows(self, display = True):
         self.drawButton(0, 0, width = 50, height = 40, text = "<", display = False)
         self.drawButton(self.screenWidth()-50, 0, width = 50, height = 40, text = ">", display = display)
@@ -381,7 +378,6 @@ class mindsensorsUI():
             n += 1
         
         return -1
-    ### @endcond
     
     ## Returns a tuple of the x and y touchscreen coordinates, or (0,0) if the screen is not touched
     #  @param self The object pointer.
@@ -530,7 +526,7 @@ class mindsensorsUI():
     
     ## Clears the LCD screen to defualt black
     #  @param self The object pointer.
-    #  @param display Choose to immediately push the drawing to the screen.
+    #  @param display Choose to immediately push the drawing to the screen. Optional, defaults to True.
     #  To use this function in your program:
     #  @code
     #  ...
@@ -547,9 +543,9 @@ class mindsensorsUI():
     #  @param y The upper left y coordinate of the rectangle.
     #  @param width The width of the rectangle.
     #  @param height The height of the rectangle.
-    #  @param fill The color of inside of the rectangle.
-    #  @param outline The color of the outer edge of the rectangle.
-    #  @param display Choose to immediately push the drawing to the screen.
+    #  @param fill The color of inside of the rectangle. Optional, defaults to white.
+    #  @param outline The color of the outer edge of the rectangle. Optional, defaults to no outline.
+    #  @param display Choose to immediately push the drawing to the screen. Optional, defaults to True.
     #  @remark
     #  To use this function in your program:
     #  @code
@@ -571,8 +567,8 @@ class mindsensorsUI():
     #  @param x The center x coordinate of the circle.
     #  @param y The center y coordinate of the circle.
     #  @param radius The radius of the circle.
-    #  @param fill The color of the inside of the circle.
-    #  @param display Choose to immediately push the drawing to the screen.
+    #  @param fill The color of the inside of the circle. Optional, defaults to white.
+    #  @param display Choose to immediately push the drawing to the screen. Optional, defaults to True.
     #  @remark
     #  To use this function in your program:
     #  @code
@@ -593,8 +589,8 @@ class mindsensorsUI():
     #  @param y The upper left y coordinate of the image.
     #  @param width The width of the image.
     #  @param height The width of the image.
-    #  @param path The image file path.
-    #  @param display Choose to immediately push the drawing to the screen.
+    #  @param path The image file path. Optional, defaults to the popup background image.
+    #  @param display Choose to immediately push the drawing to the screen. Optional, defaults to True.
     #  @remark
     #  To use this function in your program:
     #  @code
@@ -649,7 +645,7 @@ class mindsensorsUI():
     #  @param width The width of the image.
     #  @param height The width of the image.
     #  @param image data
-    #  @param display Choose to immediately push the drawing to the screen.
+    #  @param display Choose to immediately push the drawing to the screen. Optional, defaults to True.
     #  @remark
     #  To use this function in your program:
     #  @code
@@ -720,9 +716,9 @@ class mindsensorsUI():
     #  @param text The text to display on the screen
     #  @param x The upper left x coordinate of the text.
     #  @param y The upper left y coordinate of the text.
-    #  @param fill The color of the text
-    #  @param size The pixel size of the text
-    #  @param display Choose to immediately push the drawing to the screen.
+    #  @param fill The color of the text. Optional, defaults to white.
+    #  @param size The pixel size of the text. Optional, defaults to 20.
+    #  @param display Choose to immediately push the drawing to the screen. Optional, defaults to True.
     #  @remark
     #  To use this function in your program:
     #  @code
@@ -778,8 +774,8 @@ class mindsensorsUI():
     
     ## Clear a terminal line
     #  @param lineno The line number at which to clear.
-    #  @param visualOnly Choose to clear the space on screen but not modify the terminal buffer
-    #  @param display Choose to immediately push the drawing to the screen.
+    #  @param visualOnly Choose to clear the space on screen but not modify the terminal buffer. Optional, defaults to False.
+    #  @param display Choose to immediately push the drawing to the screen. Optional, defaults to True.
     def termClearLine(self, lineno, visualOnly = False, display = True):
         self.termCheckCursorValid(lineno)
         if not visualOnly: self.terminalBuffer[lineno] = ""
@@ -789,7 +785,7 @@ class mindsensorsUI():
     #  @param self The object pointer.
     #  @param lineno The line number at which to set the cursor.
     #  @param text The text to print to the screen.
-    #  @param display Choose to immediately push the drawing to the screen.
+    #  @param display Choose to immediately push the drawing to the screen. Optional, defaults to True.
     #  @remark
     #  To use this function in your program:
     #  @code
@@ -806,7 +802,7 @@ class mindsensorsUI():
     ## Print to the current line of the screen
     #  @param self The object pointer.
     #  @param text The text to print to the screen.
-    #  @param display Choose to immediately push the drawing to the screen.
+    #  @param display Choose to immediately push the drawing to the screen. Optional, defaults to True.
     #  @remark
     #  To use this function in your program:
     #  @code
@@ -821,7 +817,7 @@ class mindsensorsUI():
     ## Print to the current line and then go to the next line
     #  @param self The object pointer.
     #  @param text The text to print to the screen.
-    #  @param display Choose to immediately push the drawing to the screen.
+    #  @param display Choose to immediately push the drawing to the screen. Optional, defaults to True.
     #  @remark
     #  To use this function in your program:
     #  @code
@@ -845,7 +841,7 @@ class mindsensorsUI():
     ## Print new text in place of last line. This will not affect the current cursor position.
     #  @param self The object pointer.
     #  @param text The text to print to the screen.
-    #  @param display Choose to immediately push the drawing to the screen.
+    #  @param display Choose to immediately push the drawing to the screen. Optional, defaults to True.
     #  @remark
     #  To use this function in your program:
     #  @code
@@ -858,7 +854,7 @@ class mindsensorsUI():
     ## Draw a terminal text line to the screen
     #  @param self The object pointer.
     #  @param text The text to print to the screen.
-    #  @param display Choose to immediately push the drawing to the screen.
+    #  @param display Choose to immediately push the drawing to the screen. Optional, defaults to True.
     #  @remark
     #  To use this function in your program:
     #  @code
@@ -879,9 +875,9 @@ class mindsensorsUI():
     #  @param y The upper left y coordinate of the rectangle.
     #  @param width The width of the button.
     #  @param height The height of the button.
-    #  @param prefix The button images filename prefix.
-    #  @param text The button label.
-    #  @param display Choose to immediately push the drawing to the screen.
+    #  @param prefix The button images filename prefix. Optional, defaults to "btns_"
+    #  @param text The button label. Defaults to "OK"
+    #  @param display Choose to immediately push the drawing to the screen. Optional, defaults to True.
     #  @param align The alignment for the button's text label.
     #  @param image An optional image to be included on the button, should be 32x32.
     #  @param imageX The x-coordinate of the optional image icon.
@@ -954,8 +950,8 @@ class mindsensorsUI():
     #  @param self The object pointer.
     #  @param x The upper left x-coordinate of the button.
     #  @param y The upper left y-coordinate of the button.
-    #  @param width The width of the button.
-    #  @param height The height of the button.
+    #  @param width The width of the button. Optional, defaults to 150.
+    #  @param height The height of the button. Optional, defaults to 50.
     #  @remark
     #  To use this function in your program:
     #  @code
@@ -999,9 +995,9 @@ class mindsensorsUI():
     ## Display pop-up of a question on the screen
     #  @param self The object pointer.
     #  @param question The question that will pop-up on the screen. The first string will be the titlebar.
-    #  @param options The possible answers to the question.
-    #  @param touch Whether to check if on screen buttons are pressed.
-    #  @param goBtn Whether to check for the GO button to close the question.
+    #  @param options The possible answers to the question. Optional, defaults to Yes/No.
+    #  @param touch Whether to check if the on screen buttons are pressed. Optional, defaults to True.
+    #  @param goBtn Whether to check for the GO button to close the question. Optional, defaults to False.
     #  @note If goBtn is True, pressing GO will close the dialog and return -1
     #  @remark
     #  To use this function in your program:
@@ -1047,8 +1043,8 @@ class mindsensorsUI():
     ## Display Pop-up of 'Yes' or 'No' question on the screen, returning True or False
     #  @param self The object pointer.
     #  @param question The question that will pop-up on the screen.
-    #  @param touch Whether to check if on screen buttons are pressed.
-    #  @param goBtn Whether to check for the GO button to close the question.
+    #  @param touch Whether to check if on screen buttons are pressed. Optional, defaults to True.
+    #  @param goBtn Whether to check for the GO button to close the question. Optional, defaults to False.
     #  @note If goBtn is True, pressing GO will close the dialog and return False
     #  @remark
     #  To use this function in your program:
@@ -1062,8 +1058,8 @@ class mindsensorsUI():
     ## Display pop-up of a message on the screen with a single option "OK"
     #  @param self The object pointer.
     #  @param message The message that will pop-up on the screen.
-    #  @param touch Whether to check if on screen buttons are pressed.
-    #  @param goBtn Whether to check for the GO button to close the question.
+    #  @param touch Whether to check if on screen buttons are pressed. Optional, defaults to True.
+    #  @param goBtn Whether to check for the GO button to close the question. Optional, defaults to True.
     #  @note If goBtn is True, pressing GO will close the dialog and return False
     #  @remark
     #  To use this function in your program:
@@ -1105,9 +1101,9 @@ class mindsensorsUI():
     ## Draw a line on the screen (rotated to screen)
     #  @param self The object pointer.
     #  @param x1, y1, x2, y2 The x and y coordinates of each endpoint of the line.
-    #  @param width The width of the line.
-    #  @param fill The color of line.
-    #  @param display Choose to immediately push the drawing to the screen.
+    #  @param width The width of the line. Optional, defaults to 0.
+    #  @param fill The color of line. Optional, defaults to white.
+    #  @param display Choose to immediately push the drawing to the screen. Optional, defaults to True.
     #  @remark
     #  To use this function in your program:
     #  @code
@@ -1127,9 +1123,9 @@ class mindsensorsUI():
     ## Draw a polyline on the screen (rotated to screen)
     #  @param self The object pointer.
     #  @param endpoints [x1, y1, x2, y2...] The x and y coordinates of each endpoint of the polyline.
-    #  @param width The width of the polyline.
-    #  @param fill The color of polyline.
-    #  @param display Choose to immediately push the drawing to the screen.
+    #  @param width The width of the polyline. Optional, defaults to 0.
+    #  @param fill The color of polyline. Optional, defaults to white.
+    #  @param display Choose to immediately push the drawing to the screen. Optional, defaults to True.
     #  @remark
     #  To use this function in your program:
     #  @code
