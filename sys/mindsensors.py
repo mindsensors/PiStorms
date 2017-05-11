@@ -67,14 +67,14 @@ class ABSIMU(mindsensors_i2c):
     
     ## Initialize the class with the i2c address of your AbsoluteIMU
     #  @param self The object pointer.
-    #  @param i2c_address Address of your AbsoluteIMU.
+    #  @param absimu_address Address of your AbsoluteIMU.
     #  @remark
     def __init__(self, absimu_address = ABSIMU_ADDRESS):
         mindsensors_i2c.__init__(self, absimu_address >> 1)        
         
     ## Writes a value to the command register
     #  @param self The object pointer.
-    #  @param commands Value to write to the command register.
+    #  @param command Value to write to the command register.
     def command(self, command):
         self.writeByte(COMMAND, int(command)) 
     
@@ -317,14 +317,14 @@ class ANGLE(mindsensors_i2c):
     
     ## Initialize the class with the i2c address of your AngleSensor
     #  @param self The object pointer.
-    #  @param i2c_address Address of your AngleSensor.
+    #  @param angle_address Address of your AngleSensor.
     def __init__(self, angle_address = ANGLE_ADDRESS):
         #the ANGLE address
         mindsensors_i2c.__init__(self, angle_address >> 1)        
         
     ## Writes a value to the command register
     #  @param self The object pointer.
-    #  @param commands Value to write to the command register.
+    #  @param command Value to write to the command register.
     def command(self, command):
         self.writeByte(self.COMMAND, int(cmd)) 
     
@@ -372,14 +372,14 @@ class CURRENT(mindsensors_i2c):
    
     ## Initialize the class with the i2c address of your NXTCurrentMeter
     #  @param self The object pointer.
-    #  @param i2c_address Address of your NXTCurrentMeter.
+    #  @param current_address Address of your NXTCurrentMeter.
     def __init__(self, current_address = CURRENT_ADDRESS):
         #the DIST address
         mindsensors_i2c.__init__(self, current_address >> 1)
                 
     ## Writes a value to the command register
     #  @param self The object pointer.
-    #  @param commands Value to write to the command register.
+    #  @param cmd Value to write to the command register.
     def command(self, cmd):
         self.writeByte(self.COMMAND, int(cmd)) 
     
@@ -435,14 +435,14 @@ class DIST(mindsensors_i2c):
    
     ## Initialize the class with the i2c address of your Dist-Nx
     #  @param self The object pointer.
-    #  @param i2c_address Address of your Dist-Nx.
+    #  @param dist_address Address of your Dist-Nx.
     def __init__(self, dist_address = DIST_ADDRESS):
         #the DIST address
         mindsensors_i2c.__init__(self, dist_address >> 1)
                 
     ## Writes a value to the command register
     #  @param self The object pointer.
-    #  @param commands Value to write to the command register.
+    #  @param command Value to write to the command register.
     def command(self, command):
         self.writeByte(self.COMMAND, int(cmd)) 
     
@@ -501,7 +501,7 @@ class EV3SensAdapt(mindsensors_i2c):
    
     ## Initialize the class with the i2c address of your Dist-Nx
     #  @param self The object pointer.
-    #  @param i2c_address Address of your Dist-Nx.
+    #  @param ev3SensAdapt_address Address of your Dist-Nx.
     def __init__(self, ev3SensAdapt_address = EV3SensAdapt_ADDRESS):
         #the EV3SensorAdapter or EV3SensorMux channel address
         mindsensors_i2c.__init__(self, ev3SensAdapt_address >> 1)
@@ -514,7 +514,6 @@ class EV3SensAdapt(mindsensors_i2c):
                 
     ## Reads the status of the EV3 Touch Sensor on the EV3SensorAdapter or EV3SensorMux
     #  @param self The object pointer.
-    #  @param commands Value to write to the command register.
     def isTouchedEV3(self):
         try:
             self.setMode(15) 
@@ -691,14 +690,14 @@ class LINELEADER(mindsensors_i2c):
        
     ## Initialize the class with the i2c address of your Lineleader
     #  @param self The object pointer.
-    #  @param i2c_address Address of your LightSensorArray.
+    #  @param ll_address Address of your LightSensorArray.
     def __init__(self, ll_address = LL_ADDRESS):
         #the LSA address
         mindsensors_i2c.__init__(self, ll_address >> 1)        
         
     ## Writes a value to the command register
     #  @param self The object pointer.
-    #  @param commands Value to write to the command register.
+    #  @param cmd Value to write to the command register.
     def command(self, cmd):
         self.writeByte(self.LL_COMMAND, int(cmd)) 
 
@@ -917,14 +916,14 @@ class LSA(mindsensors_i2c):
     
     ## Initialize the class with the i2c address of your LightSensorArray
     #  @param self The object pointer.
-    #  @param i2c_address Address of your LightSensorArray.
+    #  @param lsa_address Address of your LightSensorArray.
     def __init__(self, lsa_address = LSA_ADDRESS):
         #the LSA address
         mindsensors_i2c.__init__(self, lsa_address >> 1)        
         
     ## Writes a value to the command register
     #  @param self The object pointer.
-    #  @param commands Value to write to the command register.
+    #  @param cmd Value to write to the command register.
     def command(self, cmd):
         self.writeByte(self.LSA_COMMAND, int(cmd)) 
 
@@ -1090,7 +1089,7 @@ class MMX(mindsensors_i2c):
     
     ## Initialize the class with the i2c address of your NXTMMX
     #  @param self The object pointer.
-    #  @param PiDrive_address Address of your NXTMMX.
+    #  @param mmx_address Address of your NXTMMX.
     def __init__(self, mmx_address = MMX_ADDRESS):
         #the NXTMMX address
         mindsensors_i2c.__init__(self, mmx_address >> 1)       
@@ -1103,7 +1102,6 @@ class MMX(mindsensors_i2c):
        
     ## Reset the both motor encoders of the NXTMMX
     #  @param self The object pointer.
-    #  @param motor_number Number of the motor you wish to read. 
     def resPos(self):
        self.command(82)
        
@@ -1153,7 +1151,7 @@ class MMX(mindsensors_i2c):
     ### @cond
     ## Stops the specified motor(s)
     #  @param self The object pointer.
-    #  @param motor_number Number of the motor(s) you wish to turn.
+    #  @param motor_number Number of the motor(s) you wish to stop.
     #  @param next_action How you wish to stop the motor(s).        
     def MMX_Stop( self, motor_number, next_action ):
         
@@ -1184,29 +1182,31 @@ class MMX(mindsensors_i2c):
                 
     ## Stop the motor with abruptly with brake
     #  @param self The object pointer.
-    #  @param motor_number Number of the motor(s) you wish to turn.
+    #  @param motor_number Number of the motor(s) you wish to brake.
     def brake(self, motor_number):
         self.MMX_Stop(motor_number, self.MMX_Next_Action_Brake)
             
     ## Stop the motor smoothly with float
     #  @param self The object pointer. 
-    #  @param motor_number Number of the motor(s) you wish to turn.
+    #  @param motor_number Number of the motor(s) you wish to float.
     def float(self, motor_number):
         self.MMX_Stop(motor_number, self.MMX_Next_Action_Float)
         
     ## Stop the motor abruptly and hold the current position
     #  @param self The object pointer. 
-    #  @param motor_number Number of the motor(s) you wish to turn.
+    #  @param motor_number Number of the motor(s) you wish to hold.
     def hold(self, motor_number):
         self.MMX_Stop(motor_number, self.MMX_Next_Action_BrakeHold)
         
     ## Check if the motor is running
     #  @param self The object pointer.
+    #  @param motor_number Number of the motor(s) you wish to check.
     def isBusy(self, motor_number):
         return self.statusBit(motor_number, 0) == 1 or self.statusBit(motor_number, 1) == 1 or self.statusBit(motor_number, 3) == 1 or self.statusBit(motor_number, 6) == 1
     
     ## Wait until the motor is no longer running
     #  @param self The object pointer.
+    #  @param motor_number Number of the motor(s) you wish to wait for.
     #  @param timeout The timeout value as a factor of 10ms.
     def waitUntilNotBusy(self, motor_number, timeout=-1):
         while(self.isBusy(motor_number)):
@@ -1220,6 +1220,7 @@ class MMX(mindsensors_i2c):
         return 0
     
     ## Check if the motor is stalled
+    #  @param motor_number Number of the motor(s) you wish to check.
     #  @param self The object pointer.
     def isStalled(self, motor_number):
         return self.statusBit(motor_number, 7) == 1
@@ -1536,14 +1537,14 @@ class NXTCAM(mindsensors_i2c):
     
     ## Initialize the class with the i2c address of your NXTCAM
     #  @param self The object pointer.
-    #  @param i2c_address Address of your AngleSensor.
+    #  @param nxtcam_address Address of your AngleSensor.
     #  @remark
     def __init__(self, nxtcam_address = NXTCAM_ADDRESS):
         mindsensors_i2c.__init__(self, nxtcam_address >> 1)        
         
     ## Writes a value to the command register
     #  @param self The object pointer.
-    #  @param commands Value to write to the command register.
+    #  @param command Value to write to the command register.
     def command(self, command):
         self.writeByte(COMMAND, int(cmd)) 
     
@@ -1601,7 +1602,7 @@ class NXTCAM(mindsensors_i2c):
             print "Error: couldn't write command to Cam."
             return ""
             
-##    ## Turn on illumination
+    ## Turn on illumination
     #  @param self The object pointer.
     def illuminationOn(self):
         try:
@@ -1717,6 +1718,7 @@ class NXTCAM(mindsensors_i2c):
     #  print "Top: " + str(b.top)
     #  print "Right: " + str(b.right)
     #  print "Bottom: " + str(b.bottom)   
+    #  @endcode
     def getBlobs(self, blobNum = 1):
         try:
             
@@ -1753,7 +1755,7 @@ class NXTSERVO(mindsensors_i2c):
     
     ## Initialize the class with the i2c address of your NXTServo
     #  @param self The object pointer.
-    #  @param PiDrive_address Address of your NXTServo.
+    #  @param nxtservo_address Address of your NXTServo.
     def __init__(self, nxtservo_address = NXTSERVO_ADDRESS):
         mindsensors_i2c.__init__(self, nxtservo_address >> 1)  
         self.command('S')
@@ -1903,7 +1905,7 @@ class PFMATE(mindsensors_i2c):
     
     ## Initialize the class with the i2c address of your PFMate
     #  @param self The object pointer.
-    #  @param PiDrive_address Address of your PFMate.
+    #  @param pfmate_address Address of your PFMate.
     def __init__(self, pfmate_address = PFMATE_ADDRESS):
         #the NXTMMX address
         mindsensors_i2c.__init__(self, pfmate_address >> 1)       
@@ -1975,14 +1977,14 @@ class PPS58(mindsensors_i2c):
    
     ## Initialize the class with the i2c address of your PPS58
     #  @param self The object pointer.
-    #  @param i2c_address Address of your PPS58.
+    #  @param pps58_address Address of your PPS58.
     def __init__(self, pps58_address = PPS58_ADDRESS):
         #the DIST address
         mindsensors_i2c.__init__(self, pps58_address >> 1)
                 
     ## Writes a value to the command register
     #  @param self The object pointer.
-    #  @param commands Value to write to the command register.
+    #  @param cmd Value to write to the command register.
     def command(self, cmd):
         self.writeByte(self.COMMAND, int(cmd)) 
     
@@ -2084,14 +2086,14 @@ class VOLT(mindsensors_i2c):
    
     ## Initialize the class with the i2c address of your NXTVoltMeter
     #  @param self The object pointer.
-    #  @param i2c_address Address of your NXTVoltMeter.
+    #  @param volt_address Address of your NXTVoltMeter.
     def __init__(self, volt_address = VOLT_ADDRESS):
         #the DIST address
         mindsensors_i2c.__init__(self, volt_address >> 1)
                 
     ## Writes a value to the command register
     #  @param self The object pointer.
-    #  @param commands Value to write to the command register.
+    #  @param cmd Value to write to the command register.
     def command(self, cmd):
         self.writeByte(self.COMMAND, int(cmd)) 
     
@@ -2143,14 +2145,14 @@ class EV3Lights(mindsensors_i2c):
     
     ## Initialize the class with the i2c address of your EV3Lights
     #  @param self The object pointer.
-    #  @param i2c Address of your EV3Lights
+    #  @param ev3lights_address Address of your EV3Lights
     def __init__(self, ev3lights_address = EV3Lights_ADDRESS):
         mindsensors_i2c.__init__(self, ev3lights_address >> 1)       
     
     ## Sets the Intensity of Color on the strip
     #  @param self The object pointer
     #  @param Color Name you wish to control
-    #  @param Light intensity of that color (0 to 255)
+    #  @param intensity intensity of that color (0 to 255)
     def setColor(self, Color, intensity):
         array = [intensity]
         self.writeArray(Color, array)
