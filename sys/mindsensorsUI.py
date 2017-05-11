@@ -888,7 +888,7 @@ class mindsensorsUI():
     
     ## Draw a terminal text line to the screen
     #  @param self The object pointer.
-    #  @param text The text to print to the screen.
+    #  @param lineNum The line number at which to refresh.
     #  @param display Choose to immediately push the drawing to the screen. Optional, defaults to True.
     #  @remark
     #  To use this function in your program:
@@ -1030,7 +1030,7 @@ class mindsensorsUI():
     ## Display pop-up of a question on the screen
     #  @param self The object pointer.
     #  @param question The question that will pop-up on the screen. The first string will be the titlebar.
-    #  @param options The possible answers to the question. Optional, defaults to Yes/No.
+    #  @param options The possible answers to the question.
     #  @param touch Whether to check if the on screen buttons are pressed. Optional, defaults to True.
     #  @param goBtn Whether to check for the GO button to close the question. Optional, defaults to False.
     #  @note If goBtn is True, pressing GO will close the dialog and return -1
@@ -1038,9 +1038,9 @@ class mindsensorsUI():
     #  To use this function in your program:
     #  @code
     #  ...
-    #  answer = screen.askQuestion(["Continue?", "Do you want to continue?"], ["OK","Cancel"])
+    #  answer = screen.askQuestion(["Color Picker", "Pick a color!"], ["Red", "Green", "Blue"])
     #  @endcode
-    def askQuestion(self, question = ["Continue?"], options = ["Yes","No"], touch = True, goBtn = False):
+    def askQuestion(self, question, options, touch = True, goBtn = False):
         self.popupText = question
         self.buttonText = options
         oldMode = self.currentMode
@@ -1087,7 +1087,7 @@ class mindsensorsUI():
     #  ...
     #  answer = screen.askYesOrNoQuestion(["Continue?", "Do you want to continue?"])
     #  @endcode
-    def askYesOrNoQuestion(self, question = ["Continue?", "Do you want to continue?"], touch = True, goBtn = False):
+    def askYesOrNoQuestion(self, question, touch = True, goBtn = False):
         return self.askQuestion(question, ["Yes","No"], touch = touch, goBtn = goBtn) == 0
     
     ## Display pop-up of a message on the screen with a single option "OK"
