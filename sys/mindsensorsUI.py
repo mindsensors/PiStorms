@@ -90,6 +90,7 @@ class mindsensorsUI():
     ## Constant to defualt screen height
     PS_SCREENHEIGHT = 320
     
+    ### @cond Doxygen_ignore_this
     #PS_XMIN = 0x5A
     #PS_XMAX = 0x5C
     #PS_YMIN = 0x5E
@@ -121,6 +122,7 @@ class mindsensorsUI():
     
     touchIgnoreX = 0
     touchIgnoreY = 0
+    ### @endcond
     
     ## Initialize the UI device.
     #  @param self The object pointer.
@@ -1178,6 +1180,7 @@ class mindsensorsUI():
             self.disp.display()
 
 
+### @cond Doxygen_ignore_this
 # the following code demonstrates screen rotation, popup menus, terminal printing, and custom buttons
 if __name__ == '__main__':
     psb = mindsensorsUI("UI",2,Dev_PiStorms)
@@ -1248,3 +1251,4 @@ if __name__ == '__main__':
         psb.setMode(psb.PS_MODE_TERMINAL)
         psb.termPrintln("Exiting Program...")
         sys.exit(0)
+### @endcond

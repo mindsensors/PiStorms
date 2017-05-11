@@ -93,7 +93,7 @@ class PiStormsSensor:
     ## Constant to specify brown color
     PS_SENSOR_COLOR_BROWN = 7
     
-    ### @cond 
+    ### @cond Doxygen_ignore_this
     ## Initialize the PiStorms sensor port
     #  @param self The object pointer.
     #  @param sensor The sensor port to use.
@@ -1035,6 +1035,7 @@ class PiStorms:
     ### @endcond
     
 
+### @cond Doxygen_ignore_this
 if __name__ == '__main__':
     psm = PiStorms("PiStorms",rotation =3)
     buttonCount = 0
@@ -1055,3 +1056,4 @@ if __name__ == '__main__':
         
         
 
+### @endcond

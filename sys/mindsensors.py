@@ -1148,7 +1148,7 @@ class MMX(mindsensors_i2c):
         if ( motor_number == self.MMX_Motor_Both ) :
             self.writeByte(self.MMX_COMMAND, 83)  
     
-    ### @cond
+    ### @cond Doxygen_ignore_this
     ## Stops the specified motor(s)
     #  @param self The object pointer.
     #  @param motor_number Number of the motor(s) you wish to stop.
