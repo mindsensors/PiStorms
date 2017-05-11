@@ -807,16 +807,26 @@ class PiStorms:
     #  @endcode    
     def __init__(self, name = "PiStorms", rotation = 3 ):
         
+        ## An instance of mindsensorsUI.mindsensorsUI representing the PiStorms's touchscreen.
         self.screen = mindsensorsUI(name, rotation)
+        ## An instance of PiStormsCom.PiStormsCom.
         self.psc = PiStormsCom()
+        ## An instance of PiStormsSensor representing Bank A sensor 1.
         self.BAS1 = PiStormsSensor(self.psc.BAS1)
+        ## An instance of PiStormsSensor representing Bank A sensor 2.
         self.BAS2 = PiStormsSensor(self.psc.BAS2)
+        ## An instance of PiStormsSensor representing Bank B sensor 1.
         self.BBS1 = PiStormsSensor(self.psc.BBS1)
+        ## An instance of PiStormsSensor representing Bank B sensor 2.
         self.BBS2 = PiStormsSensor(self.psc.BBS2)
-            
+        
+        ## An instance of PiStormsMotor representing Bank A motor 1.
         self.BAM1 = PiStormsMotor(self.psc.BAM1)
+        ## An instance of PiStormsMotor representing Bank A motor 2.
         self.BAM2 = PiStormsMotor(self.psc.BAM2)
+        ## An instance of PiStormsMotor representing Bank B motor 1.
         self.BBM1 = PiStormsMotor(self.psc.BBM1)
+        ## An instance of PiStormsMotor representing Bank B motor 2.
         self.BBM2 = PiStormsMotor(self.psc.BBM2)
         
     def command (self, cmd, bank):
@@ -1044,8 +1054,8 @@ if __name__ == '__main__':
     print "Vendor = "+ str(psm.GetVendorName())
     print "Device = "+ str(psm.GetDeviceId())
     psm.screen.termPrintAt(3," Version is  "+ str(psm.GetFirmwareVersion() )[:5])
-    psm.screen.termPrintAt(4," Version is  "+ str(psm.GetVendorName() ))
-    psm.screen.termPrintAt(5," Version is  "+ str(psm.GetDeviceId() ))
+    psm.screen.termPrintAt(4," Vendor is  "+ str(psm.GetVendorName() ))
+    psm.screen.termPrintAt(5," Device is  "+ str(psm.GetDeviceId() ))
    
     while(True):
         time.sleep(.300)
@@ -1053,7 +1063,4 @@ if __name__ == '__main__':
         psm.screen.termPrintAt(6,' Touched at  ('+str(psm.screen.TS_X())+' , '+str(psm.screen.TS_Y())+')')
         print " Voltage = "+str( psm.battVoltage())
         psm.screen.termPrintAt(7," Voltage = "+str( psm.battVoltage()))
-        
-        
-
 ### @endcond
