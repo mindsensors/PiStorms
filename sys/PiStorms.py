@@ -27,11 +27,11 @@
 
 ## @file PiStorms.py
 #  PiStorms.py defines the main interfaces used in the PiStorms library.
-#  @mainpage PiStorms Library Reference
+#  @mainpage %PiStorms Library Reference
 #  @section intro_sec  Introduction
-#  PiStorms library provides interfaces to use PiStorms by mindsensors.com on Raspberry Pi.
+#  %PiStorms library provides interfaces to use %PiStorms by mindsensors.com on Raspberry Pi.
 #
-#  At the time of this writing, PiStorms and this library can be used with the following boards:
+#  At the time of this writing, %PiStorms and this library can be used with the following boards:
 #
 #    <b>Supported Raspberry Pi boards:</b>\n
 #    - Raspberry Pi 1 Model A+
@@ -39,15 +39,23 @@
 #    - Raspberry Pi 2 model B
 #    - Raspberry Pi 3 model B
 #
+#  @section shortcuts  Quick Links
+#  Here are some shortcuts to common documentation you might be looking for:
+#    - The main %PiStorms class: PiStorms.PiStorms
+#    - Sensors PiStorms.PiStormsSensor and motors PiStorms.PiStormsMotor
+#    - Drawing on the screen: mindsensorsUI.mindsensorsUI
+#
 #  @section more_info  More Information
-#  More information about PiStorms is available at: http://www.mindsensors.com/stem-education/13-pistorms-base-kit
+#  More information about %PiStorms is available at: http://www.mindsensors.com/stem-education/13-pistorms-base-kit
+#
+#  Many blog posts with instructions and example projects can be found at: http://www.mindsensors.com/blog/PiStorms
 #
 #  Online documentation of this Library Reference is available at:
 #  http://www.mindsensors.com/reference/PiStorms/html/
 #  (Note however, the online version may not match exactly with the library files you have installed on your computer).
 #
 #  @section install_sec Installation Instructions
-#  To download PiStorms libary and features to your Raspberry Pi:\n
+#  To download %PiStorms libary and features to your Raspberry Pi:\n
 #  follow instructions from following post:
 #  http://www.mindsensors.com/blog/news/upgrade-your-pistorms-software-tutorial
 #
