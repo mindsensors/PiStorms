@@ -20,6 +20,9 @@ find /usr/local/lib/python2.7/dist-packages -samefile /home/pi/PiStorms/sys/PiSt
 
 ## artwork
 
+## html
+- Documentation, available [online](http://www.mindsensors.com/reference/PiStorms/html/index.html) and updated each new software release
+
 ## .gitattributes
 - Marks the www/html/assets folder as documentation so GitHub recognizes this as a primarily Python project, not HTML and Javascript
 
