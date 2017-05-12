@@ -11,14 +11,18 @@ stat {/home/pi/sys,/usr/local/lib/python2.7/dist-packages}/PiStorms.py
 find /usr/local/lib/python2.7/dist-packages -samefile /home/pi/PiStorms/sys/PiStorms.py
 ```
 
-
 ## programs
 
 ## www
 
 ## scratch
+- Examples files of using Scratch to connect to the PiStorms
+- You would use VNC to connect to the Raspberry Pi desktop, then run [00-Scratch_PiStorms](https://github.com/mindsensors/PiStorms/blob/master/programs/00-Scratch_PiStorms.py) on the PiStorms to let it connect with Scratch. The PiStorms will broadcast `READY`, there is no need to click the green flag.
+- We have a [programming guide](http://www.mindsensors.com/index.php?controller=attachment&id_attachment=307) and a getting started [blog post](http://www.mindsensors.com/blog/how-to/program-pistorms-with-scratch-getting-started)
 
 ## artwork
+- Contains the desktop background and mindsensors.com logo
+- Also contains the PiStorms case image used when taking screenshots from the web interface
 
 ## html
 - Documentation, available [online](http://www.mindsensors.com/reference/PiStorms/html/index.html) and updated each new software release
