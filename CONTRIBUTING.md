@@ -24,9 +24,9 @@ This document will introduce you to the repository's structure and how the PiSto
 #### Suggestions
 - When developing, hard link the source files from `/home/pi/PiStorms/...` to their destinations from `setup.sh`
 ```bash
-b=/home/pi/PiStorms # base directory (TODO: read homefolder from msdev.cfg)
+b=`grep homefolder /usr/local/mindsensors/conf/msdev.cfg | cut -d"=" -f2 | cut -c 2-`
 for f in 'MSDriver.py' 'MSBrowser.py' 'psm_shutdown' 'swarmserver' 'pistorms-diag.sh'; do sudo ln -f $b/sys/$f /usr/local/bin/$f; done
-chmod +x $b/sys/swarmserver $b/sys/pistorms-diag.sh $b/programs/addresschange # might be unnecessary
+chmod +x $b/sys/swarmserver $b/sys/pistorms-diag.sh $b/programs/addresschange
 for f in 'rmap.py'  'rmapcfg.py' 'scratch.py' 'PiStorms.py' 'PiStormsCom.py' 'TouchScreenInput.py' 'mindsensorsUI.py' 'MS_ILI9341.py' 'mindsensors.py' 'MsDevices.py' 'LegoDevices.py' 'swarmclient.py'; do sudo ln -f $b/sys/$f /usr/local/lib/python2.7/dist-packages/$f; done
 sudo rm -rf /var/www
 sudo ln -s $b/www /var/www
