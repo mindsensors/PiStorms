@@ -21,7 +21,7 @@ find /usr/local/lib/python2.7/dist-packages -samefile /home/pi/PiStorms/sys/PiSt
 ## artwork
 
 ## .gitattributes
-- Marks the www/html folder as documentation so GitHub recognizes this as a primarily Python project, not HTML and Javascript
+- Marks the www/html/assets folder as documentation so GitHub recognizes this as a primarily Python project, not HTML and Javascript
 
 ## .version
 - The version number corresponding with each software release
