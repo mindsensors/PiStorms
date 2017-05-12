@@ -22,11 +22,8 @@
 # History:
 # Date         Author          Comments
 # July 2016    Roman Bohuk     Initial Authoring 
+# May 2017     Seth Tenembaum  Remove login requirement
 */
-if (!isset($_SESSION['logged_in']) || !$_SESSION['logged_in']) {
-    header('Location: ./login.php');
-    exit();
-}
 
 $pg = basename($_SERVER['PHP_SELF']);
 $act = 'class="active"';

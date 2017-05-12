@@ -22,14 +22,10 @@
 # History:
 # Date         Author          Comments
 # July 2016    Roman Bohuk     Initial Authoring 
+# May 2017     Seth Tenembaum  Remove login requirement
 */
 
 include "api/config.php";
-
-if (!isset($_SESSION['logged_in']) || !$_SESSION['logged_in']) {
-    header('Location: ./login.php');
-    exit();
-}
 
 ?><!DOCTYPE html>
 <html>
@@ -73,14 +69,6 @@ if (!isset($_SESSION['logged_in']) || !$_SESSION['logged_in']) {
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </a>
-
-      <div class="navbar-custom-menu">
-        <ul class="nav navbar-nav">
-          <li>
-            <a href="./logout.php">Logout&nbsp;&nbsp;<i class="fa fa-sign-out"></i></a>
-          </li>
-        </ul>
-      </div>
     </nav>
   </header>
 

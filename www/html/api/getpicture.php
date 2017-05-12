@@ -22,12 +22,9 @@
 # History:
 # Date         Author          Comments
 # July 2016    Roman Bohuk     Initial Authoring 
+# May 2017     Seth Tenembaum  Remove login requirement
 */
 include "config.php";
-
-if (!isset($_SESSION['logged_in']) || !$_SESSION['logged_in']) {
-    die();
-}
 
 $pic = $_GET["image"];
 
