@@ -21,15 +21,23 @@ This document will introduce you to the repository's structure and how the PiSto
 ## Repository files
 
 ### setup
-
-### sys
 #### Suggestions
 - When developing, hard link the source files from `/home/pi/PiStorms/...` to their destinations from `setup.sh`
 ```bash
-# note: section in progress
-stat {/home/pi/sys,/usr/local/lib/python2.7/dist-packages}/PiStorms.py
-find /usr/local/lib/python2.7/dist-packages -samefile /home/pi/PiStorms/sys/PiStorms.py
+b=/home/pi/PiStorms # base directory (TODO: read homefolder from msdev.cfg)
+for f in 'MSDriver.py' 'MSBrowser.py' 'psm_shutdown' 'swarmserver' 'pistorms-diag.sh'; do sudo ln -f $b/sys/$f /usr/local/bin/$f; done
+chmod +x $b/sys/swarmserver $b/sys/pistorms-diag.sh $b/programs/addresschange # might be unnecessary
+for f in 'rmap.py'  'rmapcfg.py' 'scratch.py' 'PiStorms.py' 'PiStormsCom.py' 'TouchScreenInput.py' 'mindsensorsUI.py' 'MS_ILI9341.py' 'mindsensors.py' 'MsDevices.py' 'LegoDevices.py' 'swarmclient.py'; do sudo ln -f $b/sys/$f /usr/local/lib/python2.7/dist-packages/$f; done
+sudo rm -rf /var/www
+sudo ln -s $b/www /var/www
+sudo ln -f $b/sys/msdev.cfg /usr/local/mindsensors/conf/msdev.cfg
+# skipping images, art, scratch, changing ownerships... programs are still only in /home/pi/PiStorms
+for f in 'MSDriver.sh' 'MSBrowser.sh' 'MSWeb.sh' 'SwarmServer.sh'; do sudo ln -f $b/setup/$f /etc/init.d/$f; done
+for f in 'MSDriver.sh' 'MSBrowser.sh' 'MSWeb.sh' 'SwarmServer.sh'; do chmod +x $b/setup/$f; done
+for f in 'ps_messenger_check.py' 'ps_updater.py'; do sudo ln -f $b/sys/$f /usr/local/bin/$f; done
 ```
+
+### sys
 
 ### programs
 - This folder is what the user will see on the PiStorms screen (through the [browser program](https://github.com/mindsensors/PiStorms/blob/master/CONTRIBUTING.md#MSBrowser))
