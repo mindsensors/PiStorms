@@ -90,6 +90,7 @@ class mindsensorsUI():
     ## Constant to defualt screen height
     PS_SCREENHEIGHT = 320
     
+    ### @cond Doxygen_ignore_this
     #PS_XMIN = 0x5A
     #PS_XMAX = 0x5C
     #PS_YMIN = 0x5E
@@ -121,6 +122,7 @@ class mindsensorsUI():
     
     touchIgnoreX = 0
     touchIgnoreY = 0
+    ### @endcond
     
     ## Initialize the UI device.
     #  @param self The object pointer.
@@ -886,7 +888,7 @@ class mindsensorsUI():
     
     ## Draw a terminal text line to the screen
     #  @param self The object pointer.
-    #  @param text The text to print to the screen.
+    #  @param lineNum The line number at which to refresh.
     #  @param display Choose to immediately push the drawing to the screen. Optional, defaults to True.
     #  @remark
     #  To use this function in your program:
@@ -1028,7 +1030,7 @@ class mindsensorsUI():
     ## Display pop-up of a question on the screen
     #  @param self The object pointer.
     #  @param question The question that will pop-up on the screen. The first string will be the titlebar.
-    #  @param options The possible answers to the question. Optional, defaults to Yes/No.
+    #  @param options The possible answers to the question.
     #  @param touch Whether to check if the on screen buttons are pressed. Optional, defaults to True.
     #  @param goBtn Whether to check for the GO button to close the question. Optional, defaults to False.
     #  @note If goBtn is True, pressing GO will close the dialog and return -1
@@ -1036,9 +1038,9 @@ class mindsensorsUI():
     #  To use this function in your program:
     #  @code
     #  ...
-    #  answer = screen.askQuestion(["Continue?", "Do you want to continue?"], ["OK","Cancel"])
+    #  answer = screen.askQuestion(["Color Picker", "Pick a color!"], ["Red", "Green", "Blue"])
     #  @endcode
-    def askQuestion(self, question = ["Continue?"], options = ["Yes","No"], touch = True, goBtn = False):
+    def askQuestion(self, question, options, touch = True, goBtn = False):
         self.popupText = question
         self.buttonText = options
         oldMode = self.currentMode
@@ -1085,7 +1087,7 @@ class mindsensorsUI():
     #  ...
     #  answer = screen.askYesOrNoQuestion(["Continue?", "Do you want to continue?"])
     #  @endcode
-    def askYesOrNoQuestion(self, question = ["Continue?", "Do you want to continue?"], touch = True, goBtn = False):
+    def askYesOrNoQuestion(self, question, touch = True, goBtn = False):
         return self.askQuestion(question, ["Yes","No"], touch = touch, goBtn = goBtn) == 0
     
     ## Display pop-up of a message on the screen with a single option "OK"
@@ -1178,6 +1180,7 @@ class mindsensorsUI():
             self.disp.display()
 
 
+### @cond Doxygen_ignore_this
 # the following code demonstrates screen rotation, popup menus, terminal printing, and custom buttons
 if __name__ == '__main__':
     psb = mindsensorsUI("UI",2,Dev_PiStorms)
@@ -1248,3 +1251,4 @@ if __name__ == '__main__':
         psb.setMode(psb.PS_MODE_TERMINAL)
         psb.termPrintln("Exiting Program...")
         sys.exit(0)
+### @endcond

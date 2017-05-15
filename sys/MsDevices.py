@@ -64,7 +64,8 @@ class AbsoluteIMU(mindsensors_i2c):
     
     ## Initialize the class with the i2c address of your AbsoluteIMU
     #  @param self The object pointer.
-    #  @param i2c_address Address of your AbsoluteIMU.
+    #  @param port The PiStorms bank.
+    #  @param address Address of your AbsoluteIMU.
     #  @remark
     def __init__(self, port, address=ABSIMU_ADDRESS):
         port.activateCustomSensorI2C()
@@ -72,7 +73,7 @@ class AbsoluteIMU(mindsensors_i2c):
 
     ## Writes a value to the command register
     #  @param self The object pointer.
-    #  @param commands Value to write to the command register.
+    #  @param command Value to write to the command register.
     def command(self, command):
         self.writeByte(COMMAND, int(command)) 
     
@@ -332,7 +333,9 @@ class LineLeader(mindsensors_i2c):
     LL_UNCALIBRATED = 0x74
 
     ## Initialize the class with the i2c address of your LineLeader
-    #  @param i2c_address Address of your LineLeader
+    #  @param self The object pointer.
+    #  @param port The PiStorms bank.
+    #  @param address Address of your LineLeader
     #  @remark
     def __init__(self, port, address=LL_ADDRESS):
         port.activateCustomSensorI2C()
@@ -340,7 +343,7 @@ class LineLeader(mindsensors_i2c):
 
     ## Writes a value to the command register
     #  @param self The object pointer.
-    #  @param commands Value to write to the command register.
+    #  @param command Value to write to the command register.
     def command(self, command):
         self.writeByte(COMMAND, int(command)) 
     
@@ -558,7 +561,9 @@ class LightSensorArray(mindsensors_i2c):
     LSA_UNCALIBRATED = 0x6A
     
     ## Initialize the class with the i2c address of your device
-    #  @param i2c_address Address of your device
+    #  @param self The object pointer.
+    #  @param port The PiStorms bank.
+    #  @param address Address of your device
     #  @remark
     def __init__(self, port, address=LSA_ADDRESS):
         port.activateCustomSensorI2C()
@@ -566,7 +571,7 @@ class LightSensorArray(mindsensors_i2c):
 
     ## Writes a value to the command register
     #  @param self The object pointer.
-    #  @param commands Value to write to the command register.
+    #  @param cmd Value to write to the command register.
     def command(self, cmd):
         self.writeByte(self.LSA_COMMAND, int(cmd)) 
 
@@ -729,7 +734,9 @@ class IRThermometer(mindsensors_i2c):
     IRT_TARGET_FAHR = 0x48
     
     ## Initialize the class with the i2c address of your device
-    #  @param i2c_address Address of your device
+    #  @param self The object pointer.
+    #  @param port The PiStorms bank.
+    #  @param address Address of your device
     #  @remark
     def __init__(self, port, address=IRT_ADDRESS):
         port.activateCustomSensorI2C()

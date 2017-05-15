@@ -27,11 +27,11 @@
 
 ## @file PiStorms.py
 #  PiStorms.py defines the main interfaces used in the PiStorms library.
-#  @mainpage PiStorms Library Reference
+#  @mainpage %PiStorms Library Reference
 #  @section intro_sec  Introduction
-#  PiStorms library provides interfaces to use PiStorms by mindsensors.com on Raspberry Pi.
+#  %PiStorms library provides interfaces to use %PiStorms by mindsensors.com on Raspberry Pi.
 #
-#  At the time of this writing, PiStorms and this library can be used with the following boards:
+#  At the time of this writing, %PiStorms and this library can be used with the following boards:
 #
 #    <b>Supported Raspberry Pi boards:</b>\n
 #    - Raspberry Pi 1 Model A+
@@ -39,15 +39,23 @@
 #    - Raspberry Pi 2 model B
 #    - Raspberry Pi 3 model B
 #
+#  @section shortcuts  Quick Links
+#  Here are some shortcuts to common documentation you might be looking for:
+#    - The main %PiStorms class: PiStorms.PiStorms
+#    - Sensors PiStorms.PiStormsSensor and motors PiStorms.PiStormsMotor
+#    - Drawing on the screen: mindsensorsUI.mindsensorsUI
+#
 #  @section more_info  More Information
-#  More information about PiStorms is available at: http://www.mindsensors.com/stem-education/13-pistorms-base-kit
+#  More information about %PiStorms is available at: http://www.mindsensors.com/stem-education/13-pistorms-base-kit
+#
+#  Many blog posts with instructions and example projects can be found at: http://www.mindsensors.com/blog/PiStorms
 #
 #  Online documentation of this Library Reference is available at:
 #  http://www.mindsensors.com/reference/PiStorms/html/
 #  (Note however, the online version may not match exactly with the library files you have installed on your computer).
 #
 #  @section install_sec Installation Instructions
-#  To download PiStorms libary and features to your Raspberry Pi:\n
+#  To download %PiStorms libary and features to your Raspberry Pi:\n
 #  follow instructions from following post:
 #  http://www.mindsensors.com/blog/news/upgrade-your-pistorms-software-tutorial
 #
@@ -93,7 +101,7 @@ class PiStormsSensor:
     ## Constant to specify brown color
     PS_SENSOR_COLOR_BROWN = 7
     
-    ### @cond 
+    ### @cond Doxygen_ignore_this
     ## Initialize the PiStorms sensor port
     #  @param self The object pointer.
     #  @param sensor The sensor port to use.
@@ -807,16 +815,26 @@ class PiStorms:
     #  @endcode    
     def __init__(self, name = "PiStorms", rotation = 3 ):
         
+        ## An instance of mindsensorsUI.mindsensorsUI representing the PiStorms's touchscreen.
         self.screen = mindsensorsUI(name, rotation)
+        ## An instance of PiStormsCom.PiStormsCom.
         self.psc = PiStormsCom()
+        ## An instance of PiStormsSensor representing Bank A sensor 1.
         self.BAS1 = PiStormsSensor(self.psc.BAS1)
+        ## An instance of PiStormsSensor representing Bank A sensor 2.
         self.BAS2 = PiStormsSensor(self.psc.BAS2)
+        ## An instance of PiStormsSensor representing Bank B sensor 1.
         self.BBS1 = PiStormsSensor(self.psc.BBS1)
+        ## An instance of PiStormsSensor representing Bank B sensor 2.
         self.BBS2 = PiStormsSensor(self.psc.BBS2)
-            
+        
+        ## An instance of PiStormsMotor representing Bank A motor 1.
         self.BAM1 = PiStormsMotor(self.psc.BAM1)
+        ## An instance of PiStormsMotor representing Bank A motor 2.
         self.BAM2 = PiStormsMotor(self.psc.BAM2)
+        ## An instance of PiStormsMotor representing Bank B motor 1.
         self.BBM1 = PiStormsMotor(self.psc.BBM1)
+        ## An instance of PiStormsMotor representing Bank B motor 2.
         self.BBM2 = PiStormsMotor(self.psc.BBM2)
         
     def command (self, cmd, bank):
@@ -1035,6 +1053,7 @@ class PiStorms:
     ### @endcond
     
 
+### @cond Doxygen_ignore_this
 if __name__ == '__main__':
     psm = PiStorms("PiStorms",rotation =3)
     buttonCount = 0
@@ -1043,8 +1062,8 @@ if __name__ == '__main__':
     print "Vendor = "+ str(psm.GetVendorName())
     print "Device = "+ str(psm.GetDeviceId())
     psm.screen.termPrintAt(3," Version is  "+ str(psm.GetFirmwareVersion() )[:5])
-    psm.screen.termPrintAt(4," Version is  "+ str(psm.GetVendorName() ))
-    psm.screen.termPrintAt(5," Version is  "+ str(psm.GetDeviceId() ))
+    psm.screen.termPrintAt(4," Vendor is  "+ str(psm.GetVendorName() ))
+    psm.screen.termPrintAt(5," Device is  "+ str(psm.GetDeviceId() ))
    
     while(True):
         time.sleep(.300)
@@ -1052,6 +1071,4 @@ if __name__ == '__main__':
         psm.screen.termPrintAt(6,' Touched at  ('+str(psm.screen.TS_X())+' , '+str(psm.screen.TS_Y())+')')
         print " Voltage = "+str( psm.battVoltage())
         psm.screen.termPrintAt(7," Voltage = "+str( psm.battVoltage()))
-        
-        
-
+### @endcond
