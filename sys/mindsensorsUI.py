@@ -789,10 +789,11 @@ class mindsensorsUI():
             raise IndexError("Invalid terminal line number. lineno must be between 0 and %s, inclusive." % (len(self.terminalBuffer)-1))
     
     ## Clear a terminal line
-    #  @param lineno The line number at which to clear.
+    #  @param lineno The line number at which to clear. Defaults to current cursor line.
     #  @param visualOnly Choose to clear the space on screen but not modify the terminal buffer. Optional, defaults to False.
     #  @param display Choose to immediately push the drawing to the screen. Optional, defaults to True.
-    def termClearLine(self, lineno, visualOnly = False, display = True):
+    def termClearLine(self, lineno = None, visualOnly = False, display = True):
+        if not lineno: lineno = self.terminalCursor
         self.termCheckCursorValid(lineno)
         if not visualOnly: self.terminalBuffer[lineno] = ""
         self.fillRect(10, lineno*20+42, self.screenWidth(), 19, (0,0,0), display = display)
@@ -823,7 +824,7 @@ class mindsensorsUI():
     #  To use this function in your program:
     #  @code
     #  ...
-    #  screen.termPrint("Print Now")
+    #  screen.termPrint("Regular print, no newline")
     #  @endcode
     def termPrint(self, text, display = True):
         self.termCheckCursorValid(self.terminalCursor)
@@ -838,7 +839,7 @@ class mindsensorsUI():
     #  To use this function in your program:
     #  @code
     #  ...
-    #  screen.termPrintln("Print Now")
+    #  screen.termPrintln("Hello, world!")
     #  @endcode
     def termPrintln(self, text, display = True):
         try:
@@ -854,7 +855,9 @@ class mindsensorsUI():
         self.termPrint(text, display)
         self.termGotoLine(self.terminalCursor+1)
     
-    ## Print new text in place of last line. This will not affect the current cursor position.
+    ## Print new text in place of the last line you printed to
+    #  @note May cause confusion when used directly after termPrintln. The cursor has moved to the next line,
+    #        so termReplaceLastLine will replace the line beneath what was printed.
     #  @param self The object pointer.
     #  @param text The text to print to the screen.
     #  @param display Choose to immediately push the drawing to the screen. Optional, defaults to True.
@@ -862,9 +865,23 @@ class mindsensorsUI():
     #  To use this function in your program:
     #  @code
     #  ...
-    #  screen.termReplaceLastLine("Print Now")
+    #  screen.termReplaceLastLine("Replaced!")
     #  @endcode
     def termReplaceLastLine(self, text, display = True):
+        self.termClearLine(display = False)
+        self.termPrint(text)
+    
+    ## Replace the line at the bottom of the screen. This will not affect the current cursor position.
+    #  @param self The object pointer.
+    #  @param text The text to print to the last line.
+    #  @param display Choose to immediately push the drawing to the screen. Optional, defaults to True.
+    #  @remark
+    #  To use this function in your program:
+    #  @code
+    #  ...
+    #  screen.termReplaceLastLine("Status: OK")
+    #  @endcode
+    def termStatusLine(self, text, display = True):
         self.termPrintAt(len(self.terminalBuffer)-1, text, display)
     
     ## Draw a terminal text line to the screen
