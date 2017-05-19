@@ -123,25 +123,14 @@ else:
         scrn.askQuestion(ts_cal_error, ["Press GO to continue..."], touch = False, goBtn = True)
 
 def listPrograms(directory):
-    files =  os.listdir(directory)
-    x = 0
-    returnFiles = list()
+    return map(lambda i: i if not i.endswith('.py') else i[:-3], sorted(filter(lambda i: i[:2].isdigit(), os.listdir(directory))))
 
-    while(x<len(files)):
-        if (os.path.isfile(directory+"/"+files[x])):
-            # if it's a file, strip the extension to display.
-            if(files[x].endswith(".py")) and (files[x][0:2].isdigit()):
-                f = files[x][0:len(files[x])-3]
-                returnFiles.append(f)
-        elif (os.path.isdir(directory+"/"+files[x]) and files[x][0:2].isdigit()):
-        # if it is a folder, display it
-            returnFiles.append(files[x])
-
-        x += 1
-            
-    #print "returnFiles: " + str(returnFiles)
-
-    return sorted(returnFiles)
+    # separate lines for readability:
+    allFiles = os.listdir(directory)
+    beginsWithNum = filter(lambda i: i[:2].isdigit(), allFiles)
+    sortedFiles = sorted(beginsWithNum)
+    withoutPy = map(lambda i: i if not i.endswith('.py') else i[:-3], sortedFiles)
+    return withoutPy
 
 def checkIfUpdateNeeded():
     try:
