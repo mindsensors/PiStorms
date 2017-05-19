@@ -452,12 +452,9 @@ try:
             result = 0 
             file_id = 0
 
-        # FIXME: find a method (without psm) to float the motors.
-        # possibly with direct i2c access.
-        #psm.BAM1.float()
-        #psm.BAM2.float()
-        #psm.BBM1.float()
-        #psm.BBM2.float()
+        psc.bankA.writeByte(PiStormsCom.PS_Command, PiStormsCom.c)
+        psc.bankB.writeByte(PiStormsCom.PS_Command, PiStormsCom.c)
+
         if(result != 0):
             scrn.refresh()
             scrn.askQuestion(["ERROR","Program exited with error.","(Error Code " + str(result) + ")"],["OK"])
