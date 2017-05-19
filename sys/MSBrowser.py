@@ -25,6 +25,7 @@
 # 10/18/15   Deepak     UI improvements and messenger integration
 # 12/27/16   Roman      Fix to allow to run programs with a space
 # 1/25/17    Seth       Reorder touschreen calibration value loading
+# 5/19/17    Seth       Rewrite
 
 from mindsensorsUI import mindsensorsUI
 from mindsensors_i2c import mindsensors_i2c
@@ -152,7 +153,7 @@ def checkIfUpdateNeeded():
         return u
     else:
         return 'none'
-    
+
 def newMessageExists():
     try:
         f = open(json_file, 'r')
@@ -186,15 +187,35 @@ def message_update_status( json_data, new_status ):
     json.dump(json_data, f)
     f.close()
 
-def runProgram(progName,progDir):
+def runProgram(program):
     scrn.clearScreen()
-    return os.system("sudo python '" +   progDir + "/" + progName + ".py'")
-    
-# signum and stack come from when this method is called from signal, accept but ignore these arguments
-def drawBatteryIndicator(signum=None, stack=None):
+    exitStatus = os.system('sudo python {}'.format(program))
+    # stop (float) motors, if they are still running after the program finishes
+    psc.bankA.writeByte(PiStormsCom.PS_Command, PiStormsCom.c)
+    psc.bankB.writeByte(PiStormsCom.PS_Command, PiStormsCom.c)
+    return exitStatus
+
+def drawHostnameTitle():
+    scrn.drawDisplay(host_name, display=False)
+def drawItemButton(folder, file, i):
+    if os.path.isdir(os.path.join(folder, file)):
+        icon = 'folder.png'
+    elif os.path.isfile(os.path.join(folder, file+'.py')):
+        icon = 'python.png'
+    else:
+        icon = 'missing.png'
+    scrn.drawButton(50, 50+(i%FILES_PER_PAGE)*45, width=320-50*2, height=45, text=file, image=icon, display=False)
+def drawRightArrow():
+    scrn.drawButton(320-50, 0, 50, 50, image='rightarrow.png', text='', display=False, imageX=320-50+8)
+def drawLeftArrow():
+    scrn.drawButton(0, 0, 50, 50, image='leftarrow.png', text='', display=False, imageX=8)
+def drawUpArrow():
+    scrn.drawButton(0, 0, 50, 50, image='uparrow.png', text='', display=False, imageX=8)
+def drawExclamation():
+    scrn.fillBmp(220, 7, 34, 34, 'Exclamation-mark-icon.png', display=False);
+def drawBatteryIndicator(*ignored):
     if scrn.currentMode == scrn.PS_MODE_POPUP:
         return
-    
     battVoltage = psc.battVoltage()
     batteryFill = (255,255,255) # white: error, could not read
     if ( battVoltage >= 7.7 ):
@@ -208,246 +229,101 @@ def drawBatteryIndicator(signum=None, stack=None):
     scrn.fillRect(294, 185,  7,  3, fill=batteryFill, display=False)
     scrn.drawAutoText(("%1.1f V" if battVoltage < 10 else "%2.0f V") % battVoltage, 281, 213, size=16, display=True)
 
-    signal.alarm(30) # redraw battery indicator every second like the web interface
-    
-def displaySmallFileList(folder, fileList, displayLeft = 1):
-    initialYpos = 50
-    xpos = 50
-    height = 45
-    width = 225
-    
-    scrn.clearScreen(display=False)
-    scrn.drawDisplay(host_name, display=False)
-    counter = 0
+    signal.alarm(30) # redraw battery indicator in thirty seconds
 
-    while(counter<4 and counter<len(fileList)):
-        if (os.path.isdir(folder+"/"+fileList[counter])):
-            img="folder.png"
-        elif (os.path.isfile(folder+"/"+fileList[counter]+".py")):
-            img="python.png"
-        scrn.drawButton(xpos,initialYpos + (height*counter),width=width,height=height,text=fileList[counter], image=img, display=False)
-        counter += 1
-
-    pageXPos = 0
-    pageYPos = 0
-    pageWidth = 50
-    pageHeight = 50
-
-    if(displayLeft == 1):
-        scrn.drawButton(pageXPos, pageYPos, width=pageWidth, height=pageHeight, image="leftarrow.png", text="", display=False, imageX=8)
-    elif(displayLeft == 2):
-        scrn.drawButton(pageXPos, pageYPos, width=pageWidth, height=pageHeight, image="uparrow.png", text="", display=False, imageX=8)
-
-    scrn.drawButton((320-pageXPos)-pageWidth, pageYPos, pageWidth, pageHeight, image="rightarrow.png", text="", display=False, imageX=(320-pageXPos)-pageWidth+8)
-
-    updateReqd = checkIfUpdateNeeded()
-    if ( updateReqd != 'none' ):
-        scrn.fillBmp(220,7,34,34, "Exclamation-mark-icon.png", False);
-    
-    newMessage = newMessageExists()
-    if ( newMessage == True ):
-        scrn.fillBmp(220,7,34,34, "Exclamation-mark-icon.png", False);
-    
-    drawBatteryIndicator()
-
-    # display the buffered data on screen.
-    scrn.disp.display()
-
-    while(True):
-        
-        if ( newMessage ):
-            # handle the exclamation button
-            if ( scrn.checkButton(218,5,38,38)):
-                # exclamation button was clicked
-                return "message"
-        elif ( updateReqd ):
-            # handle the exclamation button
-            #if ( scrn.checkButton(278,53,38,38)):
-            if ( scrn.checkButton(218,5,38,38)):
-                # exclamation button was clicked
-                return "update:"+updateReqd
-
-
-        if(displayLeft != 0 and scrn.checkButton(pageXPos,pageYPos,pageWidth,pageHeight)):
-            return 4
-        if(scrn.checkButton((320-pageXPos)-pageWidth,pageYPos,pageWidth,pageHeight)):
-            return 5
-        counter = 0
-        while(counter<4 and counter<len(fileList)):
-            if(scrn.checkButton(xpos,initialYpos + (height*counter),width=width,height=height)):
-                return counter
-            counter += 1
-            
-def displayFullFileList(folder, fileList, index, isSubFolder):
-    newPath = folder
-    if(index*4>len(fileList)):
-        return displayFullFileList(folder, fileList, 0, isSubFolder)
-    if(index <0):
-        return displayFullFileList(folder, fileList, 0, isSubFolder)
-    
-    result = 0
-    #displayLeft = index != 0
-    if (index != 0):
-        displayLeft = 1
-    else:
-        displayLeft = 0
-
-    if (isSubFolder == True):
-        if (index != 0):
-            displayLeft = 1
-        else:
-            displayLeft = 2
-
-    if(index*4+4<len(fileList)):
-        result = displaySmallFileList(folder, fileList[index*4:index*4+4], displayLeft)
-    else:
-        result = displaySmallFileList(folder, fileList[index*4:len(fileList)], displayLeft)
-
-    if(result == 4):
-        # User clicked left arrow
-        if ( isSubFolder == True):
-            if (index == 0):
-                # if the index is zero, then go back to parent folder.
-                if ( not os.path.samefile(folder, PROGRAM_DIRECTORY) ):
-                    # go back only if we are already not at the home folder
-                    newPath = os.path.dirname(folder)
-                    f2 = listPrograms(newPath)
-                    # On home directory, don't show left icon
-                    if ( os.path.samefile(newPath, PROGRAM_DIRECTORY) ):
-                        showLeftIcon = False
-                    else:
-                        showLeftIcon = True
-                    return displayFullFileList(newPath, f2, 0, showLeftIcon)
-                else:
-                    return displayFullFileList(newPath, fileList, 0, False)
+def rightArrowPressed():
+    return scrn.checkButton(320-50, 0, 50, 50)
+def leftArrowPressed(index, filesPerPage):
+    return scrn.checkButton(0, 0, 50, 50) and index >= filesPerPage
+def upArrowPressed(stack):
+    return scrn.checkButton(0, 0, 50, 50) and len(stack) > 1
+def exclamationPressed():
+    return scrn.checkButton(218, 5, 38, 38)
+def itemButtonPressed(folder, files, index, filesPerPage):
+    for i in getPageOfItems(files, index, filesPerPage):
+        if scrn.checkButton(50, 50+(i%filesPerPage)*45, 320-50*2, 45):
+            item = os.path.join(folder, files[i])
+            isFolder = os.path.isdir(item)
+            if not isFolder:
+                return (item+'.py', False)
             else:
-                # if index is not zero, just go to previous page.
-                return displayFullFileList(folder, fileList,index - 1, isSubFolder)
-        else:
-            return displayFullFileList(folder, fileList,index - 1, isSubFolder)
+                return (item, True)
+    return (False, None)
 
-    if(result == 5):
-        # User clicked right arrow
-        if ((index+1)*4==len(fileList)):
-            # number of files is divisible by 4, don't show a blank page
-            return displayFullFileList(folder, fileList, 0, isSubFolder)
-        else:
-            # there are more files, go to the next page
-            return displayFullFileList(folder, fileList,index + 1, isSubFolder)
-    
-    try:
-        newResult = result + (index*4)
-        ff = folder+"/"+fileList[newResult]
-        if (os.path.isdir(ff)):
-            newPath = ff
-            f2 = listPrograms(newPath)
-            return displayFullFileList(newPath, f2, 0, True)
-        else:
-            newFile = fileList[newResult]
-    except TypeError:
-        newResult = result
-        newFile = ""
-        
-    return [newResult, newPath, newFile]
+def getPageOfItems(files, index, filePerPage):
+    if index+filePerPage-1 > len(files)-1:
+        return range(INDEX, len(files))
+    else:
+        return range(INDEX, INDEX+FILES_PER_PAGE)
 
-#
-# main program loop
-#
+
+
+
+# features to reimplement:
+# nonintrusive message on low battery (maybe)
+
+# main program
 try:
-    folder = PROGRAM_DIRECTORY
-    file_id = 0
+    # A stack of lists. One list is pushed each time a folder is opened,
+    # and popped when going up a directory. The 0th element of the list is a string
+    # for the folder, followed by a list of files in that folder, and finally
+    # an integer for the index of which file will appear first in the list.
+    # Note that stack[-1] is the "current" directory.
+    stack = [[PROGRAM_DIRECTORY, listPrograms(PROGRAM_DIRECTORY), 0]]
 
+    FILES_PER_PAGE = 4
+
+    # Start the battery indicator routine update.
     signal.signal(signal.SIGALRM, drawBatteryIndicator)
 
-    while(True):
-        result = 0
-        #if(psm.battVoltage()<=6.5):
-        #    scrn.askQuestion(["LOW BATTERY","Your battery is low","Change or charge your batteries"],["Ignore"])
-        #if(psm.isKeyPressed()):
-        #     scrn.refresh()
-        #files = listPrograms(PROGRAM_DIRECTORY)
-        files = listPrograms(folder)
-        if ( os.path.samefile(folder, PROGRAM_DIRECTORY) ):
-            showLeftIcon = False
-        else:
-            showLeftIcon = True
-        
-        file_id, folder, fileName = displayFullFileList(folder, files, file_id/4, showLeftIcon)
-        
-        if ( isinstance( file_id, int ) ):
-            # if the value returned was integer
-            #result = runProgram(files[file_id], folder)
-            result = runProgram(fileName, folder)
+    while True:
+        print([(s[0],s[2]) for s in stack])
+        sys.stdout.flush()
+        FOLDER, FILES, INDEX = stack[-1]
 
-        elif ( "update:" in file_id  and file_id != "update:none"):
-            #
-            # check what kind of update is available
-            # and prompt message in dialog box
-            #
-            msg = ""
-            msg2 = ""
-            if ( file_id == "update:hardware" ):
-                msg = "New Firmware for PiStorms is available"
-                msg2 = ""
-            if ( file_id == "update:software" ):
-                msg = "New Software, libraries and samples"
-                msg2 = "for PiStorms are available"
-            if ( file_id == "update:both" ):
-                msg = "New Firmware, Software, libraries and"
-                msg2 = "samples for PiStorms are available"
-            msg3 = "Install Updates?"
-            answer = scrn.askQuestion(["Software Update", msg, msg2, "", msg3],["Yes", "Later", "Never"])
+        scrn.clearScreen(display=False)
+        drawHostnameTitle()
 
-            if ( answer == 0 ):
-                #print "User clicked OK"
-                # perform the update
-                result = os.system("sudo python " +   PROGRAM_DIRECTORY +
-                          "/" + "utils/updater.py " + file_id)
-                if (result == 0):
-                    version_json_update_field('status', 'Done')
+        for i in getPageOfItems(FILES, INDEX, FILES_PER_PAGE):
+            drawItemButton(FOLDER, FILES[i], i)
 
-            if ( answer == 1 ):
-                #print "User clicked Later"
-                # User clicked Later, 
-                # write the current time & status in the json file,
-                # json updates will be deferred for some time
-                # length of that time is defined in cron script
-                version_json_update_field('status', 'Later')
-                now = datetime.now()
-                dd = now.strftime("%Y:%m:%d:%H:%M")
-                version_json_update_field('date', dd)
-            if ( answer == 2 ):
-                #print "User clicked Never"
-                # cron script will never update the json
-                version_json_update_field('status', 'Never')
+        drawRightArrow()
+        if INDEX >= FILES_PER_PAGE:
+            drawLeftArrow()
+        elif len(stack) > 1:
+            drawUpArrow()
 
-            # All errors must be gracefully handled by our updater script.
-            # Force the result to be zero, so that even if there was error
-            # browser does not show error dialog
-            result = 0
-            file_id = 0
+        if newMessageExists() or checkIfUpdateNeeded():
+            drawExclamation()
 
-        elif ( file_id == "message"):
-            f = open(json_file, 'r')
-            try:
-                data = json.loads(f.read())
-                m = data['message'].split("\n")
-                s = data['status']
-                f.close()
-            except:
+        drawBatteryIndicator()
+
+        #scrn.disp.display() # note: call to drawBatteryIndicator will already refresh the display
+
+        while True:
+            if exclamationPressed():
                 pass
-            message_update_status( data, "Read" )
-            scrn.askQuestion(m,["OK"])
-            result = 0 
-            file_id = 0
+            if rightArrowPressed():
+                newIndex = INDEX+FILES_PER_PAGE
+                if newIndex > len(FILES)-1:
+                    newIndex = 0
+                stack[-1][2] = newIndex
+                break
+            if leftArrowPressed(INDEX, FILES_PER_PAGE):
+                stack[-1][2] = INDEX-4 if INDEX >= 4 else 0
+                break
+            if upArrowPressed(stack):
+                stack.pop()
+                break
 
-        psc.bankA.writeByte(PiStormsCom.PS_Command, PiStormsCom.c)
-        psc.bankB.writeByte(PiStormsCom.PS_Command, PiStormsCom.c)
+            item, isFolder = itemButtonPressed(FOLDER, FILES, INDEX, FILES_PER_PAGE)
+            if item and isFolder:
+                stack.append([item, listPrograms(item), 0])
+                break
+            if item and not isFolder:
+                runProgram(item)
+                break
 
-        if(result != 0):
-            scrn.refresh()
-            scrn.askQuestion(["ERROR","Program exited with error.","(Error Code " + str(result) + ")"],["OK"])
-            
 except KeyboardInterrupt:
     print "Quitting..."
     scrn.refresh()
