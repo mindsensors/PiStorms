@@ -22,7 +22,7 @@ This document will introduce you to the repository's structure and how the PiSto
 
 ### setup
 #### Suggestions
-- When developing, hard link the source files from `/home/pi/PiStorms/...` to their destinations from `setup.sh`
+- When developing, hard link the source files from `/home/pi/PiStorms/...` to their destinations from `setup.sh` ([script](https://gist.github.com/seth10/e41a091ef56d0044474e82f3541755e4))
 ```bash
 b=`grep homefolder /usr/local/mindsensors/conf/msdev.cfg | cut -d"=" -f2 | cut -c 2-`
 for f in 'MSDriver.py' 'MSBrowser.py' 'psm_shutdown' 'swarmserver' 'pistorms-diag.sh'; do sudo ln -f $b/sys/$f /usr/local/bin/$f; done
