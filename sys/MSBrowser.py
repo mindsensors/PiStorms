@@ -53,8 +53,9 @@ config.read(cfg_file)
 device_name = config.get('msdev', 'device') 
 host_name = socket.gethostname()
 
-#rotation = 3 
 rotation = config.getint('msdev', 'rotation') 
+
+psc = PiStormsCom()
 
 if(os.getenv("PSREVERSE","0")=="1"):
     rotation = 3
@@ -71,7 +72,7 @@ else:
     print "Unknown device in configuration file, exiting..."
     sys.exit(1)
 
-if PiStormsCom().GetFirmwareVersion() < 'V2.10':
+if psc.GetFirmwareVersion() < 'V2.10':
     try:
         bootmode = mindsensors_i2c(0xEA>>1) 
         bootmode.readbyte()
@@ -85,7 +86,6 @@ else:
     ts_cal = None
     ts_cal_error = None
     try:
-        psc = PiStormsCom()
         oldBAS1type = psc.BAS1.getType()
         psc.BAS1.setType(psc.BAS1.PS_SENSOR_TYPE_NONE)
         psc.bankA.writeByte(psc.PS_Command, psc.l) # copy from permanent memory to temporary memory
@@ -206,7 +206,7 @@ def drawBatteryIndicator(signum=None, stack=None):
     if scrn.currentMode == scrn.PS_MODE_POPUP:
         return
     
-    battVoltage = PiStormsCom().battVoltage()
+    battVoltage = psc.battVoltage()
     batteryFill = (255,255,255) # white: error, could not read
     if ( battVoltage >= 7.7 ):
         batteryFill = (0,  166,90) # green: voltage >= 7.7V
