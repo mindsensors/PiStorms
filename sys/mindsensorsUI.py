@@ -1036,7 +1036,23 @@ class mindsensorsUI():
     #  @endcode
     def askQuestion(self, question, options, touch=True, goBtn=False, wrapText=False):
         if wrapText:
-            self.popupText = [question[0]] + [y for x in (textwrap.fill(t, width=36).split("\n") for t in question[1:]) for y in x]
+            wrap = 50
+            maxWidth = 424
+            getTextSize = ImageDraw.Draw(self.disp.buffer).textsize
+            font = ImageFont.truetype("/usr/share/fonts/truetype/freefont/FreeSans.ttf", 15)
+            def widestLine():
+                largestWidth = 0
+                for str in self.popupText:
+                    width, height = getTextSize(str, font=font)
+                    if width > largestWidth:
+                        largestWidth = width
+                return largestWidth
+            self.popupText = [question[0]] + [y for x in (textwrap.fill(t, width=36).split("\n") for t in question[1:]) for y in x][:5]
+            while (widestLine() > maxWidth):
+                wrap -= 1
+                self.popupText = [question[0]] + [y for x in (textwrap.fill(t, width=36).split("\n") for t in question[1:]) for y in x][:5]
+            if len([y for x in (textwrap.fill(t, width=36).split("\n") for t in question[1:]) for y in x]) > 5:
+                self.popupText[5] += "..."
         else:
             self.popupText = question
         self.buttonText = options
