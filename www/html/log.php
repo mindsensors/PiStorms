@@ -84,74 +84,80 @@ include "api/config.php";
         <div class="col-md-12">
           <div class="nav-tabs-custom">
             <ul class="nav nav-tabs">
-              <li class="active"><a href="#tab_1" data-toggle="tab">psmb.out</a></li>
-              <li><a href="#tab_2" data-toggle="tab">psmd.out</a></li>
-              <li><a href="#tab_3" data-toggle="tab">sws.out</a></li>
-              <li><a href="#tab_4" data-toggle="tab">webapi.out</a></li>
-              <li><a href="#tab_5" data-toggle="tab">Apache error.log</a></li>
+              <li class="active" data-toggle="tooltip" data-trigger="hover" data-html="true" title="Your general program output (print statements) will also appear here.<br><br>Written to /var/tmp/psmb.out from /usr/local/bin/MSBrowser.py"><a href="#tab_1" data-toggle="tab">Mindsensors Browser</a></li>
+              <li data-toggle="tooltip" data-trigger="hover" title="Written to /var/tmp/psmd.out from /usr/local/bin/MSDriver.py"><a href="#tab_2" data-toggle="tab">MSDriver</a></li>
+              <li data-toggle="tooltip" data-trigger="hover" title="Written to /var/tmp/sws.out by /usr/local/bin/swarmserver"><a href="#tab_3" data-toggle="tab">Swarm server</a></li>
+              <li data-toggle="tooltip" data-trigger="hover" title="Written to /var/tmp/webapi.out from /var/www/web_api/MSWeb.py"><a href="#tab_4" data-toggle="tab">MSWeb</a></li>
+              <li data-toggle="tooltip" data-trigger="hover" data-html="true" title="Only the last 25 lines are displayed.<br><br>Written to /var/log/apache2/error.log by /usr/sbin/apache2"><a href="#tab_5" data-toggle="tab">Apache</a></li>
               <li><a href="javascript:window.scrollTo(0,document.body.scrollHeight);">Scroll to the Bottom</a></li>
             </ul>
             <div class="tab-content">
               <div class="tab-pane active" id="tab_1">
                 <pre><?php
-                    $data = 'empty';
+                    $data = '[empty]';
                     $nf = false;
-                    $file = fopen("/var/tmp/psmb.out", "r") or $nf = true;
-                    if (!$nf) {
-                        $data = fread($file,filesize("/var/tmp/psmb.out"));
+                    $file = fopen("/var/tmp/psmb.out", "r") || $nf = true;
+                    $filesize = filesize("/var/tmp/psmb.out");
+                    if (!$nf && $filesize > 0) {
+                        $data = fread($file, filesize("/var/tmp/psmb.out"));
                         fclose($file);
+                    }
+                    if (strlen($data) == 0) {
+                        $data = "[empty]";
                     }
                     echo $data;
                 ?></pre>
               </div>
               <div class="tab-pane" id="tab_2">
                 <pre><?php
-                    $data = 'empty';
+                    $data = '[empty]';
                     $nf = false;
-                    $file = fopen("/var/tmp/psmb.out", "r") or $nf = true;
-                    if (!$nf) {
-                        $data = fread($file,filesize("/var/tmp/psmd.out"));
+                    $file = fopen("/var/tmp/psmb.out", "r") || $nf = true;
+                    $filesize = filesize("/var/tmp/sws.out");
+                    if (!$nf && $filesize > 0) {
+                        $data = fread($file, filesize("/var/tmp/sws.out"));
                         fclose($file);
                     }
                     if (strlen($data) == 0) {
-                        $data = "empty";
+                        $data = "[empty]";
                     }
                     echo $data;
                 ?></pre>
               </div>
               <div class="tab-pane" id="tab_3">
                 <pre><?php
-                    $data = 'empty';
+                    $data = '[empty]';
                     $nf = false;
-                    $file = fopen("/var/tmp/psmb.out", "r") or $nf = true;
-                    if (!$nf) {
-                        $data = fread($file,filesize("/var/tmp/sws.out"));
+                    $file = fopen("/var/tmp/psmb.out", "r") || $nf = true;
+                    $filesize = filesize("/var/tmp/sws.out");
+                    if (!$nf && $filesize > 0) {
+                        $data = fread($file, filesize("/var/tmp/sws.out"));
                         fclose($file);
                     }
                     if (strlen($data) == 0) {
-                        $data = "empty";
+                        $data = "[empty]";
                     }
                     echo $data;
                 ?></pre>
               </div>
               <div class="tab-pane" id="tab_4">
                 <pre><?php
-                    $data = 'empty';
+                    $data = '[empty]';
                     $nf = false;
-                    $file = fopen("/var/tmp/webapi.out", "r") or $nf = true;
-                    if (!$nf) {
-                        $data = fread($file,filesize("/var/tmp/sws.out"));
+                    $file = fopen("/var/tmp/webapi.out", "r") || $nf = true;
+                    $filesize = filesize("/var/tmp/sws.out");
+                    if (!$nf && $filesize > 0) {
+                        $data = fread($file, filesize("/var/tmp/sws.out"));
                         fclose($file);
                     }
                     if (strlen($data) == 0) {
-                        $data = "empty";
+                        $data = "[empty]";
                     }
                     echo $data;
                 ?></pre>
               </div>
               <div class="tab-pane" id="tab_5">
-                <h4>Only the last 25 lines are displayed</h4>
-                <pre id="apacheerros"></pre>
+                <pre id="apacheerros">[empty]</pre>
               </div>
             </div>
           </div>
@@ -188,12 +194,8 @@ function notify(tt,tx,tp) {
 
 var api = "http://<?=$_SERVER['SERVER_NAME']?>:3141/";
 
-$.get(api+"firmware", function(data){
-    $(".firmware_version").html(data);
-});
-
 $.get(api+"getapacheerrors", function(data){
-    $("#apacheerros").html(data);
+    $("#apacheerros").html(data || "[empty]");
 });
 
 </script>
