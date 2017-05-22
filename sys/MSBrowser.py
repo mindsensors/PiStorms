@@ -31,6 +31,7 @@ import sys, os, time, json, socket, signal, logging
 from mindsensors_i2c import mindsensors_i2c
 from mindsensorsUI import mindsensorsUI
 from PiStormsCom import PiStormsCom
+import Image, ImageDraw, ImageFont
 from datetime import datetime
 import ConfigParser
 
@@ -183,8 +184,24 @@ def promptUpdate():
             file.truncate()
     except:
         logging.warning("Could not prompt update.")
+
 def drawHostnameTitle():
-    scrn.drawDisplay(deviceName, display=False)
+    size = 30
+    maxWidth = 320-50-50-5-5 # screen width is 320, each arrow is 50px wide, 5px margin
+    if newMessageExists() or updateNeeded():
+        maxWidth -= 34
+    getTextSize = ImageDraw.Draw(scrn.disp.buffer).textsize
+    font = ImageFont.truetype("/usr/share/fonts/truetype/freefont/FreeSans.ttf", size)
+    width, height = getTextSize(deviceName, font=font)
+    while (width > maxWidth):
+        size -= 1
+        font = ImageFont.truetype("/usr/share/fonts/truetype/freefont/FreeSans.ttf", size)
+        width, height = getTextSize(deviceName, font=font)
+    scrn.fillRect(55, 0, maxWidth, 50, fill=(0,0,0), display=False)
+    if not (newMessageExists() or updateNeeded()):
+        scrn.drawAutoText(deviceName, 0, (50-height)/2-5, fill=(0,255,255), size=size, display=False, align="center")
+    else:
+        scrn.drawAutoText(deviceName, 55, (50-height)/2-5, fill=(0,255,255), size=size, display=False)
 def drawItemButton(folder, file, i):
     if os.path.isdir(os.path.join(folder, file)):
         icon = "folder.png"
@@ -200,7 +217,7 @@ def drawLeftArrow():
 def drawUpArrow():
     scrn.drawButton(0, 0, 50, 50, image="uparrow.png", text="", display=False, imageX=8)
 def drawExclamation():
-    scrn.fillBmp(220, 7, 34, 34, "Exclamation-mark-icon.png", display=False);
+    scrn.fillBmp(230, 7, 34, 34, "Exclamation-mark-icon.png", display=False);
 def drawBatteryIndicator(*ignored):
     if (scrn.currentMode == scrn.PS_MODE_POPUP):
         return
