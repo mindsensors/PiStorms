@@ -26,7 +26,6 @@
 import time
 from LegoDevices import *
 from PiStorms import PiStorms
-print "running program"
 psm = PiStorms()
 
 m = ["NXTLightSensor-Demo", "Connect NXT Light sensor to BAS1",

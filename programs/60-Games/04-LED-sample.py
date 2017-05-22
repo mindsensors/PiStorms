@@ -29,7 +29,6 @@ currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentfram
 parentdir = os.path.dirname(currentdir)
 sys.path.insert(0,parentdir) 
 from PiStorms import PiStorms
-print "running program"
 psm = PiStorms()
 version = float(psm.GetFirmwareVersion()[1:5])
 

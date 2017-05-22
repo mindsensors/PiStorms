@@ -321,6 +321,7 @@ try:
                 stack.append([item, listPrograms(item), 0])
                 break
             if item and not isFolder:
+                print('Running program "{}"'.format(item))
                 runProgram(item)
                 break
 

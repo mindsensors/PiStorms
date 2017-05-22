@@ -25,7 +25,6 @@
 #
 
 from PiStorms import PiStorms
-print "running program"
 psm = PiStorms()
 
 m = ["Motors-Synchronised", "Connect motors to Bank A M1 &M2.",

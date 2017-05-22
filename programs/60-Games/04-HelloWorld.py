@@ -31,7 +31,6 @@ parentdir = os.path.dirname(currentdir)
 sys.path.insert(0,parentdir) 
 from PiStorms import PiStorms
 
-print "running program"
 psm = PiStorms()
 psm.screen.drawButton(75, 70, width = 75, height = 40, text="Greet", display=False)
 psm.screen.drawButton(75, 115, width = 75, height = 40, text="Exit", display=True)

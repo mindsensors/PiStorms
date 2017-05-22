@@ -36,7 +36,6 @@ from PiStorms import PiStorms
 psm = PiStorms()
 
 
-print "running program"
 psm.screen.termPrintln(" ")
 #
 # To exit this program, press & hold GO button and touch the screen 

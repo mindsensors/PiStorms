@@ -25,7 +25,6 @@
 #
 
 from PiStorms import PiStorms
-print "running program"
 psm = PiStorms()
 
 m = ["EV3Gyro-Rate-Demo", "Connect EV3 Gyro to BAS1",

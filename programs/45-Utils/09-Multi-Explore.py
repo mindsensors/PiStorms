@@ -31,7 +31,6 @@ parentdir = os.path.dirname(currentdir)
 sys.path.insert(0,parentdir) 
 from PiStorms import PiStorms
 
-print "running program"
 psm = PiStorms()
 psm.screen.termPrintln("Connect I2C device(s) to BAS1")
 psm.screen.termPrintln("and click Explore")

@@ -26,7 +26,6 @@
 
 from PiStorms import PiStorms
 import LegoDevices
-print "running program"
 psm = PiStorms()
 
 m = ["EV3TouchSensor-Demo", "Connect EV3 Touch sensor",

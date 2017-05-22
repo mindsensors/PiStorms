@@ -27,7 +27,6 @@
 from PiStorms import PiStorms
 import MsDevices
 import time
-print "running program"
 psm = PiStorms()
 
 m = ["LineLeader-Demo", "Connect LineLeader-v2 sensor",

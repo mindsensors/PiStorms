@@ -26,7 +26,6 @@
 
 import time
 from PiStorms import PiStorms
-print "running program"
 psm = PiStorms()
 
 m = ["Motor-Demo", "Connect NXT motor to Bank A M1.",
