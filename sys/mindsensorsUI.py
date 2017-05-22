@@ -314,7 +314,6 @@ class mindsensorsUI():
     #  @param name The display title that will appear at the top of the LCD touchscreen in cyan.
     #  @param display Choose to immediately push the drawing to the screen. Optional, defaults to True.
     def drawDisplay(self, name, display = True):
-        # TODO: shink if needed to not chop off arrows or exclamation (add optional parameter to enable)
         self.drawAutoText(name, 0, 5, fill = (0,255,255), size = 30, display = display, align="center")
     
     ## Draw forward and back arrows on the screen
@@ -801,7 +800,7 @@ class mindsensorsUI():
         if not visualOnly: self.terminalBuffer[lineno] = ""
         self.fillRect(10, lineno*20+42, self.screenWidth(), 19, (0,0,0), display = display)
     
-    ## Print to a specific line of the screen. This will not affect the current cursor position.
+    ## Print to a specific line of the screen. This *will* affect the current cursor position.
     #  @param self The object pointer.
     #  @param lineno The line number at which to set the cursor.
     #  @param text The text to print to the screen.
@@ -813,11 +812,9 @@ class mindsensorsUI():
     #  screen.termPrintAt(5, "Printing at line 5")
     #  @endcode
     def termPrintAt(self, lineno, text, display = True):
-        old_lineno = self.terminalCursor
         self.termGotoLine(lineno)
-        self.termClearLine(lineno, display = False)
-        self.termPrint(text, display)
-        self.terminalCursor = old_lineno
+        self.termClearLine(display = False)
+        self.termPrintln(text, display)
     
     ## Print to the current line of the screen
     #  @param self The object pointer.
