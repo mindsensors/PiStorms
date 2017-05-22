@@ -309,12 +309,13 @@ class mindsensorsUI():
         else:
             return 320
     
-    ## Prints the name text on the screen, intended for terminal mode.
+    ## Prints a large title, intended for terminal mode.
     #  @param self The object pointer.
-    #  @param name The display title that will appear at the top of the LCD touchscreen.
+    #  @param name The display title that will appear at the top of the LCD touchscreen in cyan.
     #  @param display Choose to immediately push the drawing to the screen. Optional, defaults to True.
     def drawDisplay(self, name, display = True):
-        self.drawAutoText(name,0,5,fill = (0,255,255), size = 30, display = display, align="center")
+        # TODO: shink if needed to not chop off arrows or exclamation (add optional parameter to enable)
+        self.drawAutoText(name, 0, 5, fill = (0,255,255), size = 30, display = display, align="center")
     
     ## Draw forward and back arrows on the screen
     #  @param self The object pointer.
