@@ -309,13 +309,26 @@ class mindsensorsUI():
         else:
             return 320
     
-    ## Prints a large title, intended for terminal mode.
+    ## Prints a large title, intended for terminal mode. Note this will not clear anything.
     #  @param self The object pointer.
     #  @param name The display title that will appear at the top of the LCD touchscreen in cyan.
+    #  @param shrink True will shrink the title to leave a 50px margin on each side. Optional, defaults to False.
     #  @param display Choose to immediately push the drawing to the screen. Optional, defaults to True.
-    def drawDisplay(self, name, display = True):
-        # TODO: shink if needed to not chop off arrows or exclamation (add optional parameter to enable)
-        self.drawAutoText(name, 0, 5, fill = (0,255,255), size = 30, display = display, align="center")
+    def drawDisplay(self, name, shrink = False, clear = False, display = True):
+        if not shrink:
+            if clear: self.fillRect(0, 0, 320, 40, fill=(0,0,0), display=False)
+            self.drawAutoText(name, 0, 5, fill = (0,255,255), size = 30, display = display, align="center")
+        else:
+            size = 30
+            getTextSize = ImageDraw.Draw(self.disp.buffer).textsize
+            font = ImageFont.truetype("/usr/share/fonts/truetype/freefont/FreeSans.ttf", size)
+            width, height = getTextSize(name, font=font)
+            while (width > 220): # screen width is 320, each arrow is 50px wide
+                size -= 1
+                font = ImageFont.truetype("/usr/share/fonts/truetype/freefont/FreeSans.ttf", size)
+                width, height = getTextSize(name, font=font)
+            if clear: self.fillRect(50, 0, 220, height+10, fill=(0,0,0), display=False)
+            self.drawAutoText(name, 0, 5, fill = (0,255,255), size = size, display = display, align="center")
     
     ## Draw forward and back arrows on the screen
     #  @param self The object pointer.

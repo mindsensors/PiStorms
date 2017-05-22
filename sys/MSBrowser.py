@@ -183,8 +183,9 @@ def promptUpdate():
             file.truncate()
     except:
         logging.warning("Could not prompt update.")
+
 def drawHostnameTitle():
-    scrn.drawDisplay(deviceName, display=False)
+    scrn.drawDisplay(deviceName, shrink=True, display=False)
 def drawItemButton(folder, file, i):
     if os.path.isdir(os.path.join(folder, file)):
         icon = "folder.png"
