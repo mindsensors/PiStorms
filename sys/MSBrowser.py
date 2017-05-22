@@ -35,8 +35,7 @@ from datetime import datetime
 import ConfigParser
 
 if (len(sys.argv) > 1):
-    # normalize the path that was provided
-    # to remove extra slash if there is.
+    # normalize the path that was provided to remove any trailing slash.
     PROGRAM_DIRECTORY = os.path.normpath(str(sys.argv[1]))
 else:
     print "  ERROR: not enough arguments supplied"
@@ -44,42 +43,41 @@ else:
     print "  python MSBrowser.py <programs_folder>"
     sys.exit(1)
 
-json_file = '/var/tmp/ps_data.json'
-version_json_file = '/var/tmp/ps_versions.json'
-cfg_file = '/usr/local/mindsensors/conf/msdev.cfg'
+json_file = "/var/tmp/ps_data.json"
+version_json_file = "/var/tmp/ps_versions.json"
+cfg_file = "/usr/local/mindsensors/conf/msdev.cfg"
 
 config = ConfigParser.RawConfigParser()
 config.read(cfg_file)
 
-device_name = config.get('msdev', 'device') 
+device_name = config.get("msdev", "device") 
 host_name = socket.gethostname()
 
-rotation = config.getint('msdev', 'rotation') 
+rotation = config.getint("msdev", "rotation") 
 
 psc = PiStormsCom()
 
-if(os.getenv("PSREVERSE","0")=="1"):
+if(os.getenv("PSREVERSE","0") == "1"):
     rotation = 3
-#print os.getcwd()
 
 device_number = 1
-if ( device_name == "PiStorms"):
+if (device_name == "PiStorms"):
     device_number = 1
-elif ( device_name == "SensorShield"):
+elif (device_name == "SensorShield"):
     device_number = 2
-elif ( device_name == "SRVController"):
+elif (device_name == "SRVController"):
     device_number = 3
 else:
     print "Unknown device in configuration file, exiting..."
     sys.exit(1)
 
-if psc.GetFirmwareVersion() < 'V2.10':
+# init scrn
+if (psc.GetFirmwareVersion() < "V2.10"):
     try:
         bootmode = mindsensors_i2c(0xEA>>1) 
         bootmode.readbyte()
-        #psm = PiStorms("PiStorms",rotation)
         scrn = mindsensorsUI(host_name, rotation, device=device_number)
-        scrn.termPrintAt(4,"PiStorms in fw upgrade mode")
+        scrn.termPrintAt(4, "PiStorms in fw upgrade mode")
     except:
         scrn = mindsensorsUI(host_name, rotation, device=device_number)
 else:
@@ -91,105 +89,93 @@ else:
         psc.BAS1.setType(psc.BAS1.PS_SENSOR_TYPE_NONE)
         psc.bankA.writeByte(psc.PS_Command, psc.l) # copy from permanent memory to temporary memory
         timeout = time.time() + 1 # wait for up to a second
-        while psc.bankA.readByte(psc.PS_TS_CALIBRATION_DATA_READY) != 1: # wait for ready byte
+        while (psc.bankA.readByte(psc.PS_TS_CALIBRATION_DATA_READY) != 1): # wait for ready byte
             time.sleep(0.01)
-            if time.time() > timeout:
+            if (time.time() > timeout):
                 raise TypeError() # same as failure from readInteger
-        ts_cal = { 'x1': psc.bankA.readInteger(psc.PS_TS_CALIBRATION_DATA + 0x00),
-                   'y1': psc.bankA.readInteger(psc.PS_TS_CALIBRATION_DATA + 0x02),
-                   'x2': psc.bankA.readInteger(psc.PS_TS_CALIBRATION_DATA + 0x04),
-                   'y2': psc.bankA.readInteger(psc.PS_TS_CALIBRATION_DATA + 0x06),
-                   'x3': psc.bankA.readInteger(psc.PS_TS_CALIBRATION_DATA + 0x08),
-                   'y3': psc.bankA.readInteger(psc.PS_TS_CALIBRATION_DATA + 0x0A),
-                   'x4': psc.bankA.readInteger(psc.PS_TS_CALIBRATION_DATA + 0x0C),
-                   'y4': psc.bankA.readInteger(psc.PS_TS_CALIBRATION_DATA + 0x0E) }
+        ts_cal = { "x1": psc.bankA.readInteger(psc.PS_TS_CALIBRATION_DATA + 0x00),
+                   "y1": psc.bankA.readInteger(psc.PS_TS_CALIBRATION_DATA + 0x02),
+                   "x2": psc.bankA.readInteger(psc.PS_TS_CALIBRATION_DATA + 0x04),
+                   "y2": psc.bankA.readInteger(psc.PS_TS_CALIBRATION_DATA + 0x06),
+                   "x3": psc.bankA.readInteger(psc.PS_TS_CALIBRATION_DATA + 0x08),
+                   "y3": psc.bankA.readInteger(psc.PS_TS_CALIBRATION_DATA + 0x0A),
+                   "x4": psc.bankA.readInteger(psc.PS_TS_CALIBRATION_DATA + 0x0C),
+                   "y4": psc.bankA.readInteger(psc.PS_TS_CALIBRATION_DATA + 0x0E) }
         psc.BAS1.setType(oldBAS1type)
     except TypeError: # failed readInteger
-        ts_cal_error = ['Touchscreen Error', 'Failed to load', 'touchscreen calibration values']
+        ts_cal_error = ["Touchscreen Error", "Failed to load", "touchscreen calibration values"]
     except IOError: # failed open in json.dump
-        ts_cal_error = ['Touchscreen Error', 'Failed to write', 'touchscreen calibration values']
+        ts_cal_error = ["Touchscreen Error", "Failed to write", "touchscreen calibration values"]
     except:
-        ts_cal_error = ['Touchscreen Error', 'An unknown error occurred', 'while attempting to load', 'touchscreen calibration values']
-    json.dump(ts_cal or {u'x1': 0, u'y1': 0, u'x2': 0, u'x3': 0, u'y3': 0, u'y2': 0, u'y4': 0, u'x4': 0}, open('/tmp/ps_ts_cal', 'w'))
+        ts_cal_error = ["Touchscreen Error", "An unknown error occurred", "while attempting to load", "touchscreen calibration values"]
+    json.dump(ts_cal or {u"x1": 0, u"y1": 0, u"x2": 0, u"x3": 0, u"y3": 0, u"y2": 0, u"y4": 0, u"x4": 0}, open("/tmp/ps_ts_cal", "w"))
 
     scrn = mindsensorsUI(host_name, rotation, device=device_number)
 
-    if ts_cal == {u'x1': 0, u'y1': 0, u'x2': 0, u'x3': 0, u'y3': 0, u'y2': 0, u'y4': 0, u'x4': 0}:
+    if ts_cal == {u"x1": 0, u"y1": 0, u"x2": 0, u"x3": 0, u"y3": 0, u"y2": 0, u"y4": 0, u"x4": 0}:
         scrn.askQuestion(["Screen not calibrated.", "No touchscreen calibration values",
-          "were found. Press GO to calibrate."], ["Press GO to continue..."], touch = False, goBtn = True)
-        os.system("sudo python " + os.path.join(PROGRAM_DIRECTORY, "utils", "01-Calibrate") + ".py force")
+          "were found. Press GO to calibrate."], ["Press GO to continue..."], touch=False, goBtn=True)
+        os.system("sudo python {}.py force".format(os.path.join(PROGRAM_DIRECTORY, "utils", "01-Calibrate")))
         scrn = mindsensorsUI(host_name, rotation, device=device_number) # recreate with new calibration values
 
     if ts_cal_error is not None:
-        scrn.askQuestion(ts_cal_error, ["Press GO to continue..."], touch = False, goBtn = True)
+        scrn.askQuestion(ts_cal_error, ["Press GO to continue..."], touch=False, goBtn=True)
 
 def listPrograms(directory):
-    return map(lambda i: i if not i.endswith('.py') else i[:-3], sorted(filter(lambda i: i[:2].isdigit(), os.listdir(directory))))
+    return map(lambda i: i if not i.endswith(".py") else i[:-3], sorted(filter(lambda i: i[:2].isdigit(), os.listdir(directory))))
 
     # separate lines for readability:
     allFiles = os.listdir(directory)
     beginsWithNum = filter(lambda i: i[:2].isdigit(), allFiles)
     sortedFiles = sorted(beginsWithNum)
-    withoutPy = map(lambda i: i if not i.endswith('.py') else i[:-3], sortedFiles)
+    withoutPy = map(lambda i: i if not i.endswith(".py") else i[:-3], sortedFiles)
     return withoutPy
 
 def checkIfUpdateNeeded():
     try:
-        f = open(version_json_file, 'r')
-        try:
-            data = json.loads(f.read())
-            s = data['status']
-            u = data['update']
-            f.close()
-        except:
-            # no json in the file (or file missing)
-            s = ""
-            u = ""
+        f = open(version_json_file, "r")
+        data = json.loads(f.read())
+        s = data["status"]
+        u = data["update"]
+        f.close()
     except:
-            # no json in the file (or file missing)
-            s = ""        
-            u = ""
-    if ( s == 'New' and u != 'none' ):
+        # no json in the file (or file missing)
+        s = ""
+        u = ""
+    if (s == "New" and u != "none"):
         return u
     else:
-        return 'none'
+        return "none"
 
 def newMessageExists():
     try:
-        f = open(json_file, 'r')
-        try:
-            data = json.loads(f.read())
-            s = data['status']
-            f.close()
-        except:
-            # no json in the file (or file missing)
-            s = ""
+        f = open(json_file, "r")
+        data = json.loads(f.read())
+        s = data["status"]
+        f.close()
     except:
-            # no json in the file (or file missing)
-            s = ""        
-    if ( s == 'New' ):
-        return True
-    else:
-        return False
+        # no json in the file (or file missing)
+        s = ""
+    return s == "New"
 
 def version_json_update_field(field, new_value):
-    f = open(version_json_file, 'r')
+    f = open(version_json_file, "r")
     json_data = json.loads(f.read())
     f.close()
-    f = open(version_json_file, 'w')
+    f = open(version_json_file, "w")
     json_data[field] = new_value
     json.dump(json_data, f)
     f.close()
 
-def message_update_status( json_data, new_status ):
-    f = open(json_file, 'w')
-    json_data['status'] = new_status
+def message_update_status(json_data, new_status):
+    f = open(json_file, "w")
+    json_data["status"] = new_status
     json.dump(json_data, f)
     f.close()
 
 def runProgram(program):
     scrn.clearScreen()
-    exitStatus = os.system('sudo python {}'.format(program))
+    exitStatus = os.system("sudo python {}".format(program))
     # stop (float) motors, if they are still running after the program finishes
     psc.bankA.writeByte(PiStormsCom.PS_Command, PiStormsCom.c)
     psc.bankB.writeByte(PiStormsCom.PS_Command, PiStormsCom.c)
@@ -199,44 +185,43 @@ def drawHostnameTitle():
     scrn.drawDisplay(host_name, display=False)
 def drawItemButton(folder, file, i):
     if os.path.isdir(os.path.join(folder, file)):
-        icon = 'folder.png'
-    elif os.path.isfile(os.path.join(folder, file+'.py')):
-        icon = 'python.png'
+        icon = "folder.png"
+    elif os.path.isfile(os.path.join(folder, file+".py")):
+        icon = "python.png"
     else:
-        icon = 'missing.png'
+        icon = "missing.png"
     scrn.drawButton(50, 50+(i%FILES_PER_PAGE)*45, width=320-50*2, height=45, text=file, image=icon, display=False)
 def drawRightArrow():
-    scrn.drawButton(320-50, 0, 50, 50, image='rightarrow.png', text='', display=False, imageX=320-50+8)
+    scrn.drawButton(320-50, 0, 50, 50, image="rightarrow.png", text="", display=False, imageX=320-50+8)
 def drawLeftArrow():
-    scrn.drawButton(0, 0, 50, 50, image='leftarrow.png', text='', display=False, imageX=8)
+    scrn.drawButton(0, 0, 50, 50, image="leftarrow.png", text="", display=False, imageX=8)
 def drawUpArrow():
-    scrn.drawButton(0, 0, 50, 50, image='uparrow.png', text='', display=False, imageX=8)
+    scrn.drawButton(0, 0, 50, 50, image="uparrow.png", text="", display=False, imageX=8)
 def drawExclamation():
-    scrn.fillBmp(220, 7, 34, 34, 'Exclamation-mark-icon.png', display=False);
+    scrn.fillBmp(220, 7, 34, 34, "Exclamation-mark-icon.png", display=False);
 def drawBatteryIndicator(*ignored):
-    if scrn.currentMode == scrn.PS_MODE_POPUP:
+    if (scrn.currentMode == scrn.PS_MODE_POPUP):
         return
     battVoltage = psc.battVoltage()
-    batteryFill = (255,255,255) # white: error, could not read
-    if ( battVoltage >= 7.7 ):
-        batteryFill = (0,  166,90) # green: voltage >= 7.7V
-    elif (battVoltage >= 6.9 ):
-        batteryFill = (243,156,18) # yellow: 7.7V > voltage >= 6.9V
+    batteryFill = (255, 255, 255) # white: error, could not read
+    if (battVoltage >= 7.7):
+        batteryFill = (0, 166, 90) # green: voltage >= 7.7V
+    elif (battVoltage >= 6.9):
+        batteryFill = (243, 156,18) # yellow: 7.7V > voltage >= 6.9V
     else:
-        batteryFill = (221,75, 57) #red: 6.9V > voltage
-    scrn.fillRect(281, 185, 39, 45, fill=(0,0,0), display=False)
+        batteryFill = (221, 75, 57) #red: 6.9V > voltage
+    scrn.fillRect(281, 185, 39, 45, fill=(0, 0, 0), display=False)
     scrn.fillRect(291, 188, 13, 20, fill=batteryFill, display=False)
     scrn.fillRect(294, 185,  7,  3, fill=batteryFill, display=False)
     scrn.drawAutoText(("%1.1f V" if battVoltage < 10 else "%2.0f V") % battVoltage, 281, 213, size=16, display=True)
-
     signal.alarm(30) # redraw battery indicator in thirty seconds
 
 def rightArrowPressed():
     return scrn.checkButton(320-50, 0, 50, 50)
 def leftArrowPressed(index, filesPerPage):
-    return scrn.checkButton(0, 0, 50, 50) and index >= filesPerPage
+    return (scrn.checkButton(0, 0, 50, 50) and index >= filesPerPage)
 def upArrowPressed(stack):
-    return scrn.checkButton(0, 0, 50, 50) and len(stack) > 1
+    return (scrn.checkButton(0, 0, 50, 50) and len(stack) > 1)
 def exclamationPressed():
     return scrn.checkButton(218, 5, 38, 38)
 def itemButtonPressed(folder, files, index, filesPerPage):
@@ -245,13 +230,13 @@ def itemButtonPressed(folder, files, index, filesPerPage):
             item = os.path.join(folder, files[i])
             isFolder = os.path.isdir(item)
             if not isFolder:
-                return (item+'.py', False)
+                return (item+".py", False)
             else:
                 return (item, True)
     return (False, None)
 
 def getPageOfItems(files, index, filePerPage):
-    if index+filePerPage-1 > len(files)-1:
+    if (index+filePerPage-1 > len(files)-1):
         return range(INDEX, len(files))
     else:
         return range(INDEX, INDEX+FILES_PER_PAGE)
@@ -321,7 +306,7 @@ try:
                 stack.append([item, listPrograms(item), 0])
                 break
             if item and not isFolder:
-                print('Running program "{}"'.format(item))
+                print("Running program "{}"".format(item))
                 runProgram(item)
                 break
 
