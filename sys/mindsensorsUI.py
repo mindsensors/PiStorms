@@ -1037,9 +1037,18 @@ class mindsensorsUI():
     def askQuestion(self, question, options, touch=True, goBtn=False, wrapText=False):
         if wrapText:
             wrap = 50
-            maxWidth = 424
+            maxWidth = self.screenWidth()-60 # see fillBpm of dialogbg.png in refresh()
             getTextSize = ImageDraw.Draw(self.disp.buffer).textsize
             font = ImageFont.truetype("/usr/share/fonts/truetype/freefont/FreeSans.ttf", 15)
+            def makeWrappedText():
+                arr = [textwrap.fill(t, width=wrap).split("\n") for t in question[1:]]
+                arr = [y for x in arr for y in x]
+                self.popupText = [question[0]] + arr[:5]
+                if len(arr) > 5:
+                    if self.popupText[5][-1] == ".":
+                        self.popupText[5] += " ..."
+                    else:
+                        self.popupText[5] += "..."
             def widestLine():
                 largestWidth = 0
                 for str in self.popupText:
@@ -1047,12 +1056,11 @@ class mindsensorsUI():
                     if width > largestWidth:
                         largestWidth = width
                 return largestWidth
-            self.popupText = [question[0]] + [y for x in (textwrap.fill(t, width=36).split("\n") for t in question[1:]) for y in x][:5]
+            makeWrappedText()
+            print wrap, widestLine()
             while (widestLine() > maxWidth):
                 wrap -= 1
-                self.popupText = [question[0]] + [y for x in (textwrap.fill(t, width=36).split("\n") for t in question[1:]) for y in x][:5]
-            if len([y for x in (textwrap.fill(t, width=36).split("\n") for t in question[1:]) for y in x]) > 5:
-                self.popupText[5] += "..."
+                makeWrappedText()
         else:
             self.popupText = question
         self.buttonText = options
