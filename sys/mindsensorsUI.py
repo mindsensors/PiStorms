@@ -31,16 +31,12 @@
 
 from mindsensors_i2c import mindsensors_i2c
 from PiStormsCom import PiStormsCom
-import time, math ,os
-import Image
-import ImageDraw
-import ImageFont
-#import Adafruit_ILI9341 as TFT
+import time, math , os, sys
+import Image, ImageDraw, ImageFont
+import textwrap
 import MS_ILI9341 as TFT
-
 import Adafruit_GPIO as GPIO
 import Adafruit_GPIO.SPI as SPI
-import sys,os
 from threading import Thread, Lock
 
 # for new touchscreen functionality
@@ -1038,8 +1034,11 @@ class mindsensorsUI():
     #  ...
     #  answer = screen.askQuestion(["Color Picker", "Pick a color!"], ["Red", "Green", "Blue"])
     #  @endcode
-    def askQuestion(self, question, options, touch = True, goBtn = False):
-        self.popupText = question
+    def askQuestion(self, question, options, touch=True, goBtn=False, wrapText=False):
+        if wrapText:
+            self.popupText = [question[0]] + [y for x in (textwrap.fill(t, width=36).split("\n") for t in question[1:]) for y in x]
+        else:
+            self.popupText = question
         self.buttonText = options
         oldMode = self.currentMode
         self.setMode(self.PS_MODE_POPUP)
