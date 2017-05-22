@@ -27,13 +27,17 @@
 # 1/25/17    Seth       Reorder touschreen calibration value loading
 # 5/19/17    Seth       Rewrite
 
-from mindsensorsUI import mindsensorsUI
-from mindsensors_i2c import mindsensors_i2c
-from PiStormsCom import PiStormsCom
 import sys, os, time, json, socket, signal, logging
+from mindsensors_i2c import mindsensors_i2c
+from mindsensorsUI import mindsensorsUI
+from PiStormsCom import PiStormsCom
 from datetime import datetime
 import ConfigParser
 
+def getConfig():
+    config = ConfigParser.RawConfigParser()
+    config.read(configFile)
+    return config
 def getProgramDir():
     if (len(sys.argv) > 1):
         # normalize the path that was provided to remove any trailing slash.
@@ -141,39 +145,44 @@ def runProgram(program):
     psc.bankB.writeByte(PiStormsCom.PS_Command, PiStormsCom.c)
     return exitStatus
 def promptUpdate():
-    with open(messageFile, "r+") as file:
-        data = json.loads(file.read())
-        if data["status"] == "New":
-            scrn.showMessage(data["message"].split("\n"))
-            data["status"] = "Read"
+    try:
+        with open(messageFile, "r+") as file:
+            data = json.loads(file.read())
+            if data["status"] == "New":
+                scrn.showMessage(data["message"].split("\n"))
+                data["status"] = "Read"
+                file.seek(0)
+                json.dump(data, file)
+                file.truncate()
+                return
+        with open(updateStatusFile, "r+") as file:
+            data = json.loads(file.read())
+            if data["status"] != "New" or data["update"] == "none":
+                return
+            message = {
+                "none": ["There are no updates available."],
+                "hardware": ["New PiStorms firmware is available."],
+                "software": ["New software, libraries, and samples", "are available."],
+                "both": ["New firmware, software, libraries and", "samples are available."]
+            }
+            response = scrn.askQuestion(
+                    ["Software Update"] + message[data["update"][7:]] + ["Install updates?"],
+                    ["Yes", "Later", "Never"])
+            if response == 0:
+                exitCode = os.system("sudo python {} {}"
+                        .format(os.path.join(PROGRAM_DIRECTORY, "utils", "updater.py"), data["update"]))
+                if exitCode == 0:
+                    data["status"] = "Done"
+            elif response == 1:
+                data["status"] = "Later"
+                data["date"] = datetime.now().strftime("%Y:%m:%d:%H:%M")
+            elif response == 2:
+                data["status"] = "Never"
             file.seek(0)
             json.dump(data, file)
             file.truncate()
-    with open(updateStatusFile, "r+") as file:
-        data = json.loads(file.read())
-        message = {
-            "none": ["There are no updates available."],
-            "hardware": ["New PiStorms firmware is available."],
-            "software": ["New software, libraries, and samples", "are available."],
-            "both": ["New firmware, software, libraries and", "samples are available"]
-        }
-        response = scrn.askQuestion(
-                ["Software Update"] + message[data["update"][7:]] + ["Install updates?"],
-                ["Yes", "Later", "Never"])
-        if response == 0:
-            exitCode = os.system("sudo python {} {}"
-                    .format(os.path.join(PROGRAM_DIRECTORY, "utils", "updater.py"), data["update"]))
-            if exitCode == 0:
-                data["status"] = "Done"
-        elif response == 1:
-            data["status"] = "Later"
-            data["date"] = datetime.now().strftime("%Y:%m:%d:%H:%M")
-        elif response == 2:
-            data["status"] = "Never"
-        file.seek(0)
-        json.dump(data, file)
-        file.truncate()
-
+    except:
+        logging.warning("Could not prompt update.")
 def drawHostnameTitle():
     scrn.drawDisplay(deviceName, display=False)
 def drawItemButton(folder, file, i):
@@ -240,12 +249,11 @@ if __name__ == "__main__":
         messageFile = "/var/tmp/ps_data.json"
         updateStatusFile = "/var/tmp/ps_versions.json"
         configFile = "/usr/local/mindsensors/conf/msdev.cfg"
+        config = getConfig()
         deviceType = getDeviceType()
         deviceName = socket.gethostname()
         rotation = getRotation()
         psc = PiStormsCom()
-        config = ConfigParser.RawConfigParser()
-        config.read(configFile)
         scrn = initScreen()
         # A stack of lists. One list is pushed each time a folder is opened,
         # and popped when going up a directory. The 0th element of the list is a string
@@ -283,6 +291,7 @@ if __name__ == "__main__":
             while True:
                 if exclamationPressed():
                     promptUpdate()
+                    break
                 if rightArrowPressed():
                     newIndex = INDEX + FILES_PER_PAGE
                     if newIndex > len(FILES)-1:
