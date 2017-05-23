@@ -161,14 +161,14 @@ def promptUpdate():
             if data["status"] != "New" or data["update"] == "none":
                 return
             message = {
-                "none": ["There are no updates available."],
-                "hardware": ["New PiStorms firmware is available."],
-                "software": ["New software, libraries, and samples", "are available."],
-                "both": ["New firmware, software, libraries and", "samples are available."]
+                "update:none": "There are no updates available.",
+                "update:hardware": "New PiStorms firmware is available.",
+                "update:software": "New software, libraries, and samples are available.",
+                "update:both": "New firmware, software, libraries, and samples are available."
             }
             response = scrn.askQuestion(
-                    ["Software Update"] + message[data["update"][7:]] + ["Install updates?"],
-                    ["Yes", "Later", "Never"])
+                    ["Software Update", message[data["update"]], "Install updates?"],
+                    ["Yes", "Later", "Never"], wrapText=True)
             if response == 0:
                 exitCode = os.system("sudo python {} {}"
                         .format(os.path.join(PROGRAM_DIRECTORY, "utils", "updater.py"), data["update"]))
