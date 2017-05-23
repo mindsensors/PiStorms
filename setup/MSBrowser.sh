@@ -14,6 +14,12 @@ PATH=/sbin:/usr/sbin:/bin:/usr/bin
 . /lib/init/vars.sh
 
 do_start () {
+    if ! mkdir /usr/local/mindsensors/lock_MSBrowser 2> /dev/null
+    then
+        echo "MSBrowser already running."
+        exit 4
+    fi
+
     if [ -f /usr/local/mindsensors/conf/msdev.cfg ]
     then
         homefolder=`grep homefolder /usr/local/mindsensors/conf/msdev.cfg | cut -d"=" -f2`
@@ -54,11 +60,13 @@ case "$1" in
 	;;
   restart|reload|force-reload)
 	sudo kill -9 `ps -ef | grep MSBrowser.py |grep -v grep| cut -c11-16`
+    rmdir /usr/local/mindsensors/lock_MSBrowser 2> /dev/null
     do_start
 	exit 3
 	;;
   stop)
 	sudo kill -9 `ps -ef | grep MSBrowser.py |grep -v grep| cut -c11-16`
+    rmdir /usr/local/mindsensors/lock_MSBrowser 2> /dev/null
 	;;
   status)
 	do_status
