@@ -5,18 +5,25 @@ The [PiStorms](http://www.mindsensors.com/content/78-pistorms-lego-interface) is
 This document will introduce you to the repository's structure and how the PiStorms functions overall.
 
 
-## Platform structure
+## Platform structure and systems
 
-### MSBrowser
-- This is the program the end-user will use to launch Python programs on the PiStorms
+### The Browser
+- MSBrowser is the program the end-user will use to launch Python programs on the PiStorms
 - Each page displays four items (files and folders). Left and right arrows in the top corner allow for page navigation.
 - Tapping a folder will open it, and the leftmost page will have an up arrow to close it and go back
 - The hostname appears in cyan at the top, and a battery indicator is shown in the bottom-right
+- An red exclamation mark icon will appear in the top-right if there is a new message or update available
 
-### Screenshots
+### The Web Interface
+- Accessing the PiStorms's hostname via a web browser will yield the [PiStorms Web Interface](http://www.mindsensors.com/blog/how-to/how-to-access-pistorms-web-interface)
+- The dashboard provides basic information including the software and firmware versions, Ethernet and WiFI IP addresses, and current battery voltage. Additionally there are buttons to shutdown or restart the Raspberry Pi, stop or start the browser, and begin touchscreen calibration.
+- There is a tab to write and edit programs from your web browser. You can write Python or use the [Blockly](http://www.mindsensors.com/blog/pistorms/visual-programming-for-pistorms-robots) visual programming interface here.
+- Screenshots can be taken at any time. This page lets you start and stop recording screenshots, as well as download individual screenshots or clear them all.
+- A remote control is available, which is particularly useful on a mobile device. There is a joystick to move your robot (using motors B and C). There are also sliders to set the LED colors.
+- Log files are also accessible from the web interface 
 
-### Log files and diagnostics
-
+### Diagnostics
+- psm-diag.txt is written to the boot partition
 
 ## Repository files
 
@@ -41,13 +48,26 @@ for f in 'ps_messenger_check.py' 'ps_updater.py'; do sudo ln -f $b/sys/$f /usr/l
 
 ### programs
 - This folder is what the user will see on the PiStorms screen (through the [browser program](https://github.com/mindsensors/PiStorms/blob/master/CONTRIBUTING.md#MSBrowser))
-- **00-About_Me**: A useful diagnostics program that displays useful information about the device. This includes the device name, firmware and software versions, hostname, battery level, and IP addresses for Ethernet and WiFi.
-- **00-Scratch_PiStorms**: Used to connect with [Scratch](https://github.com/mindsensors/PiStorms/blob/master/CONTRIBUTING.md#scratch) and execute instructions from it.
-- **00-TestInternetConnection**: Pings Google's domain name server to determine if the device is connected to the internet.
-- **00-WiFi_Setup**: Used to connect to the internet directly from the PiStorms. It displays a list of scanned WiFi networks and will let you enter a passphrase using an on-screen keyboard.
-- **03-Swarm_Demo**: ?
-- **09-refresh**: If anything changes in the programs folder, they will not be reflected in the browser until it is refreshed. Another way to achieve this is to enter and exit any folder. A program might have been created or renamed from the web interface (or an SSH session).
-- **09-shutdown**: Let's you shutdown the PiStorms from the device itself. It will display a confirmation before shutting down. Note there is also a shutdown (and restart) button on the PiStorms Web Interface dashboard. Also note holding the GO button for five seconds will restart the PiStorms.
+- **00-About_Me.py**: A useful diagnostics program that displays useful information about the device. This includes the device name, firmware and software versions, hostname, battery level, and IP addresses for Ethernet and WiFi.
+- **00-Scratch_PiStorms.py**: Used to connect with [Scratch](https://github.com/mindsensors/PiStorms/blob/master/CONTRIBUTING.md#scratch) and execute instructions from it.
+- **00-TestInternetConnection.py**: Pings Google's domain name server to determine if the device is connected to the internet.
+- **00-WiFi_Setup.py**: Used to connect to the internet directly from the PiStorms. It displays a list of scanned WiFi networks and will let you enter a passphrase using an on-screen keyboard.
+- **03-Swarm_Demo.py**: ?
+- **09-refresh.py**: If anything changes in the programs folder, they will not be reflected in the browser until it is refreshed. Another way to achieve this is to enter and exit any folder. A program might have been created or renamed from the web interface (or an SSH session).
+- **09-shutdown.py**: Let's you shutdown the PiStorms from the device itself. It will display a confirmation before shutting down. Note there is also a shutdown (and restart) button on the PiStorms Web Interface dashboard. Also note holding the GO button for five seconds will restart the PiStorms.
+- **10-ico**: These are files from the image recognition robot [blog post](http://www.mindsensors.com/blog/pistorms/image-recognition-robot-with-pistorms-and-pi-camera)
+- **20-BlocklyDemos**: Examples using the [Blockly](https://github.com/mindsensors/PiStorms/blob/master/CONTRIBUTING.md#the-web-interface) visual programming interface. These files should be modified through the web interface. However, it might be enlightening to view the code and learn how the blocks align with real Python code.
+- **30-DataVisualization**: Examples of using matplotlib to display graphs on the PiStorms's screen. Introduce in this [blog post](http://www.mindsensors.com/blog/how-to/pistorms-data-logging) and projects include a pendulum and car impact.
+- **45-Utils**: Various utility programs, including those to revert WiFi settings, calibrate an AbsoluteIMU, check battery voltage, change the PiStorms's I2C address, and the Explorer program to debug I2C devices
+- **50-CameraDemos**: Examples using the Raspberry Pi camera
+- **50-MotorDemos**: Examples of controlling the motor ports in various ways, and of the NXTServo
+- **50-SensorDemos**: Example programs for most all supported sensors
+- **60-Games**: Demo games and graphics tests act as examples of using the touchscreen
+- **60-Robots**: Programs for some robots features in blog posts, including [My Loyal PyDog Companion](http://www.mindsensors.com/blog/how-to/my-loyal-pydog-companion) and [Sam the Emotional Robot](http://www.mindsensors.com/blog/how-to/sam-the-emotional-robot).
+- **utils**: Various system utility programs. This folder is not visible in the browser as it is not preceded by two digits.
+- **addresschange**: A binary used by `45-Utils/09-Change_i2c_addr.py` to change the PiStorms's I2C address
+- **touch_sensor_tutorial.py**: The program written in the [PiStorms Python Programming Tutorial](http://www.mindsensors.com/blog/how-to/pistorms-python-programming-tutorial)
+- **\*.png, \*.jpg, \*.mp3**: This folder also contains many resources used for the system, browser, and examples programs
 
 ### www
 - These files power the [PiStorms Web Interface](http://www.mindsensors.com/blog/how-to/how-to-access-pistorms-web-interface)
@@ -67,7 +87,7 @@ for f in 'ps_messenger_check.py' 'ps_updater.py'; do sudo ln -f $b/sys/$f /usr/l
 - Documentation, available [online](http://www.mindsensors.com/reference/PiStorms/html/index.html) and updated each new software release
 
 ### .gitattributes
-- Marks the www/html/assets folder as documentation so GitHub recognizes this as a primarily Python project, not HTML and Javascript
+- Marks the html and www/html/assets folders as documentation so GitHub recognizes this as a primarily Python project, not HTML and Javascript
 
 ### .version
 - The version number corresponding with each software release
