@@ -22,9 +22,6 @@ This document will introduce you to the repository's structure and how the PiSto
 - A remote control is available, which is particularly useful on a mobile device. There is a joystick to move your robot (using motors B and C). There are also sliders to set the LED colors.
 - Log files are also accessible from the web interface 
 
-### Diagnostics
-- psm-diag.txt is written to the boot partition
-
 ## Repository files
 
 ### setup
@@ -45,9 +42,29 @@ for f in 'ps_messenger_check.py' 'ps_updater.py'; do sudo ln -f $b/sys/$f /usr/l
 ```
 
 ### sys
+- **LegoDevices.py**: Basic NXT and EV3 sensors
+- **MSBrowser.py**: The [browser program](https://github.com/mindsensors/PiStorms/blob/master/CONTRIBUTING.md#the-browser)
+- **MSDriver.py**: Shuts down the Raspberry Pi after GO is held for 5 seconds
+- **MS_ILI9341.py**: Inherits from `Adafruit_ILI9341` and adds screenshot support
+- **MsDevices.py**: Implementations of mindsensors sensors
+- **PiStorms.py**: The wrapper class users instantiate and use. It mainly aligns one-to-one with PiStormsCom functions.
+- **PiStormsCom.py**: Handles primary I2C communications
+- **TouchScreenInput.py**: A convenience module to get text input using a touchscreen keyboard
+- **mindsensors.py**: Implementations of more mindsensors sensors
+- **mindsensorsUI.py**: Represents the screen, providing useful graphics functions
+- **msdev.cfg**: Configurations including the device type, default screen rotation, home folder, and from what URLs messages and updates are found
+- **pistorms-diag.sh**: Diagnostics are written to psm-diag.txt on the boot partition
+- **ps_messenger_check.py**: Checks the [message server](http://pistorms.mindsensors.com/messenger.php) and keeps `/var/tmp/ps_data.json` up-to-date
+- **ps_updater.py**: Checks the [update server](http://pistorms.mindsensors.com/versions.php) (while sending analytics) to keep `/var/tmp/ps_versions.json` up-to-date
+- **psm_shutdown**: Wraps the OS shutdown command, but also writes to `/tmp/.psm_shutdown.lck`
+- **rmap.py**: Used for [Scratch](https://github.com/mindsensors/PiStorms/blob/master/CONTRIBUTING.md#scratch) integration
+- **rmapcfg.py**: IP and port to use for Scratch integration
+- **scratch.py**: Methods for sending messages with Scratch
+- **swarmclient.py**: Examples of communicating between multiple PiStorms
+- **swarmserver**: Binary used for inter-PiStorms communication
 
 ### programs
-- This folder is what the user will see on the PiStorms screen (through the [browser program](https://github.com/mindsensors/PiStorms/blob/master/CONTRIBUTING.md#MSBrowser))
+- This folder is what the user will see on the PiStorms screen (through the [browser program](https://github.com/mindsensors/PiStorms/blob/master/CONTRIBUTING.md#the-browser))
 - **00-About_Me.py**: A useful diagnostics program that displays useful information about the device. This includes the device name, firmware and software versions, hostname, battery level, and IP addresses for Ethernet and WiFi.
 - **00-Scratch_PiStorms.py**: Used to connect with [Scratch](https://github.com/mindsensors/PiStorms/blob/master/CONTRIBUTING.md#scratch) and execute instructions from it.
 - **00-TestInternetConnection.py**: Pings Google's domain name server to determine if the device is connected to the internet.
