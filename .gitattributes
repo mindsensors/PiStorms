@@ -1,3 +1,7 @@
 # Ignore the generated html documentation for the purposes of
 # language percentages for Linguist
-www/html/* linguist-documentation
+html/* linguist-documentation
+
+# Ignore the html assets for the purposes of
+# language percentages for Linguist
+www/html/assets/* linguist-vendored
