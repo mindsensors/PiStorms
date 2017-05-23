@@ -25,7 +25,6 @@
 #
 from PiStorms import PiStorms
 from LegoDevices import *
-print "running program"
 psm = PiStorms()
 
 m = ["EV3Ultrasonic-Demo", "Connect EV3 Ultrasonic sensor",

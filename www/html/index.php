@@ -196,11 +196,11 @@ function update_voltage() {
 }
 
 var battery_status = {
-    0: ["Critical","red"],
-    1: ["Very Low","yellow"],
-    2: ["Low","yellow"],
-    3: ["Normal","green"],
-    4: ["Well Charged","green"]
+    0: ["Critical","red"], // 6.5
+    1: ["Very Low","yellow"], // 6.9
+    2: ["Low","yellow"], // 7.3
+    3: ["Normal","green"], // 7.7
+    4: ["Well Charged","green"] // 8.1
 }
 function update_battery_box(volt) {
     var tier = Math.floor((volt - 6.5) / 0.4);

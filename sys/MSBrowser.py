@@ -25,444 +25,312 @@
 # 10/18/15   Deepak     UI improvements and messenger integration
 # 12/27/16   Roman      Fix to allow to run programs with a space
 # 1/25/17    Seth       Reorder touschreen calibration value loading
+# 5/19/17    Seth       Rewrite
 
-from mindsensorsUI import mindsensorsUI
+import sys, os, time, json, socket, signal, logging
 from mindsensors_i2c import mindsensors_i2c
+from mindsensorsUI import mindsensorsUI
 from PiStormsCom import PiStormsCom
-import sys, os, time, json, socket, signal
+import Image, ImageDraw, ImageFont
 from datetime import datetime
 import ConfigParser
 
-if (len(sys.argv) > 1):
-    # normalize the path that was provided
-    # to remove extra slash if there is.
-    PROGRAM_DIRECTORY = os.path.normpath(str(sys.argv[1]))
-else:
-    print "  ERROR: not enough arguments supplied"
-    print "  Usage: "
-    print "  python MSBrowser.py <programs_folder>"
-    sys.exit(1)
-
-json_file = '/var/tmp/ps_data.json'
-version_json_file = '/var/tmp/ps_versions.json'
-cfg_file = '/usr/local/mindsensors/conf/msdev.cfg'
-
-config = ConfigParser.RawConfigParser()
-config.read(cfg_file)
-
-device_name = config.get('msdev', 'device') 
-host_name = socket.gethostname()
-
-#rotation = 3 
-rotation = config.getint('msdev', 'rotation') 
-
-if(os.getenv("PSREVERSE","0")=="1"):
-    rotation = 3
-#print os.getcwd()
-
-device_number = 1
-if ( device_name == "PiStorms"):
-    device_number = 1
-elif ( device_name == "SensorShield"):
-    device_number = 2
-elif ( device_name == "SRVController"):
-    device_number = 3
-else:
-    print "Unknown device in configuration file, exiting..."
-    sys.exit(1)
-
-if PiStormsCom().GetFirmwareVersion() < 'V2.10':
-    try:
-        bootmode = mindsensors_i2c(0xEA>>1) 
-        bootmode.readbyte()
-        #psm = PiStorms("PiStorms",rotation)
-        scrn = mindsensorsUI(host_name, rotation, device=device_number)
-        scrn.termPrintAt(4,"PiStorms in fw upgrade mode")
-    except:
-        scrn = mindsensorsUI(host_name, rotation, device=device_number)
-else:
-    # load touchscreen calibration values from PiStorms and write to cache file
-    ts_cal = None
-    ts_cal_error = None
-    try:
-        psc = PiStormsCom()
-        oldBAS1type = psc.BAS1.getType()
-        psc.BAS1.setType(psc.BAS1.PS_SENSOR_TYPE_NONE)
-        psc.bankA.writeByte(psc.PS_Command, psc.l) # copy from permanent memory to temporary memory
-        timeout = time.time() + 1 # wait for up to a second
-        while psc.bankA.readByte(psc.PS_TS_CALIBRATION_DATA_READY) != 1: # wait for ready byte
-            time.sleep(0.01)
-            if time.time() > timeout:
-                raise TypeError() # same as failure from readInteger
-        ts_cal = { 'x1': psc.bankA.readInteger(psc.PS_TS_CALIBRATION_DATA + 0x00),
-                   'y1': psc.bankA.readInteger(psc.PS_TS_CALIBRATION_DATA + 0x02),
-                   'x2': psc.bankA.readInteger(psc.PS_TS_CALIBRATION_DATA + 0x04),
-                   'y2': psc.bankA.readInteger(psc.PS_TS_CALIBRATION_DATA + 0x06),
-                   'x3': psc.bankA.readInteger(psc.PS_TS_CALIBRATION_DATA + 0x08),
-                   'y3': psc.bankA.readInteger(psc.PS_TS_CALIBRATION_DATA + 0x0A),
-                   'x4': psc.bankA.readInteger(psc.PS_TS_CALIBRATION_DATA + 0x0C),
-                   'y4': psc.bankA.readInteger(psc.PS_TS_CALIBRATION_DATA + 0x0E) }
-        psc.BAS1.setType(oldBAS1type)
-    except TypeError: # failed readInteger
-        ts_cal_error = ['Touchscreen Error', 'Failed to load', 'touchscreen calibration values']
-    except IOError: # failed open in json.dump
-        ts_cal_error = ['Touchscreen Error', 'Failed to write', 'touchscreen calibration values']
-    except:
-        ts_cal_error = ['Touchscreen Error', 'An unknown error occurred', 'while attempting to load', 'touchscreen calibration values']
-    json.dump(ts_cal or {u'x1': 0, u'y1': 0, u'x2': 0, u'x3': 0, u'y3': 0, u'y2': 0, u'y4': 0, u'x4': 0}, open('/tmp/ps_ts_cal', 'w'))
-
-    scrn = mindsensorsUI(host_name, rotation, device=device_number)
-
-    if ts_cal == {u'x1': 0, u'y1': 0, u'x2': 0, u'x3': 0, u'y3': 0, u'y2': 0, u'y4': 0, u'x4': 0}:
-        scrn.askQuestion(["Screen not calibrated.", "No touchscreen calibration values",
-          "were found. Press GO to calibrate."], ["Press GO to continue..."], touch = False, goBtn = True)
-        os.system("sudo python " + os.path.join(PROGRAM_DIRECTORY, "utils", "01-Calibrate") + ".py force")
-        scrn = mindsensorsUI(host_name, rotation, device=device_number) # recreate with new calibration values
-
-    if ts_cal_error is not None:
-        scrn.askQuestion(ts_cal_error, ["Press GO to continue..."], touch = False, goBtn = True)
-
-def listPrograms(directory):
-    files =  os.listdir(directory)
-    x = 0
-    returnFiles = list()
-
-    while(x<len(files)):
-        if (os.path.isfile(directory+"/"+files[x])):
-            # if it's a file, strip the extension to display.
-            if(files[x].endswith(".py")) and (files[x][0:2].isdigit()):
-                f = files[x][0:len(files[x])-3]
-                returnFiles.append(f)
-        elif (os.path.isdir(directory+"/"+files[x]) and files[x][0:2].isdigit()):
-        # if it is a folder, display it
-            returnFiles.append(files[x])
-
-        x += 1
-            
-    #print "returnFiles: " + str(returnFiles)
-
-    return sorted(returnFiles)
-
-def checkIfUpdateNeeded():
-    try:
-        f = open(version_json_file, 'r')
-        try:
-            data = json.loads(f.read())
-            s = data['status']
-            u = data['update']
-            f.close()
-        except:
-            # no json in the file (or file missing)
-            s = ""
-            u = ""
-    except:
-            # no json in the file (or file missing)
-            s = ""        
-            u = ""
-    if ( s == 'New' and u != 'none' ):
-        return u
+def getConfig():
+    config = ConfigParser.RawConfigParser()
+    config.read(configFile)
+    return config
+def getProgramDir():
+    if (len(sys.argv) > 1):
+        # normalize the path that was provided to remove any trailing slash.
+        return os.path.normpath(str(sys.argv[1]))
     else:
-        return 'none'
-    
+        logging.error("ERROR: not enough arguments supplied\n"
+              "Usage:\n"
+              "python MSBrowser.py <programs_folder>")
+        sys.exit(1)
+def getDeviceType():
+    deviceID = config.get("msdev", "device") 
+    if (deviceID == "PiStorms"):
+        return 1
+    elif (deviceID == "SensorShield"):
+        return 2
+    elif (deviceID == "SRVController"):
+        return 3
+    else:
+        logging.error("Unknown device in configuration file, exiting...")
+        sys.exit(1)
+def getRotation():
+    if (os.getenv("PSREVERSE", "0") == "1"):
+        return 3
+    else:
+        return config.getint("msdev", "rotation") 
+def initScreen():
+    if (psc.GetFirmwareVersion() < "V2.10"):
+        try:
+            bootmode = mindsensors_i2c(0xEA>>1) 
+            bootmode.readbyte()
+            scrn = mindsensorsUI(deviceName, rotation, device=deviceType)
+            scrn.termPrintAt(4, "PiStorms in fw upgrade mode")
+            return scrn
+        except:
+            return mindsensorsUI(deviceName, rotation, device=deviceType)
+    else:
+        # load touchscreen calibration values from PiStorms and write to cache file
+        ts_cal = None
+        ts_cal_error = None
+        ts_null = {u"x1": 0, u"y1": 0, u"x2": 0, u"x3": 0, u"y3": 0, u"y2": 0, u"y4": 0, u"x4": 0}
+        try:
+            oldBAS1type = psc.BAS1.getType()
+            psc.BAS1.setType(psc.BAS1.PS_SENSOR_TYPE_NONE)
+            psc.bankA.writeByte(psc.PS_Command, psc.l) # copy from permanent memory to temporary memory
+            timeout = time.time() + 1 # wait for up to a second
+            while (psc.bankA.readByte(psc.PS_TS_CALIBRATION_DATA_READY) != 1): # wait for ready byte
+                time.sleep(0.01)
+                if (time.time() > timeout):
+                    raise TypeError() # same as failure from readInteger
+            ts_cal = { "x1": psc.bankA.readInteger(psc.PS_TS_CALIBRATION_DATA + 0x00),
+                       "y1": psc.bankA.readInteger(psc.PS_TS_CALIBRATION_DATA + 0x02),
+                       "x2": psc.bankA.readInteger(psc.PS_TS_CALIBRATION_DATA + 0x04),
+                       "y2": psc.bankA.readInteger(psc.PS_TS_CALIBRATION_DATA + 0x06),
+                       "x3": psc.bankA.readInteger(psc.PS_TS_CALIBRATION_DATA + 0x08),
+                       "y3": psc.bankA.readInteger(psc.PS_TS_CALIBRATION_DATA + 0x0A),
+                       "x4": psc.bankA.readInteger(psc.PS_TS_CALIBRATION_DATA + 0x0C),
+                       "y4": psc.bankA.readInteger(psc.PS_TS_CALIBRATION_DATA + 0x0E) }
+            psc.BAS1.setType(oldBAS1type)
+        except TypeError: # failed readInteger
+            ts_cal_error = ["Touchscreen Error", "Failed to load", "touchscreen calibration values"]
+        except IOError: # failed open in json.dump
+            ts_cal_error = ["Touchscreen Error", "Failed to write", "touchscreen calibration values"]
+        except:
+            ts_cal_error = ["Touchscreen Error", "An unknown error occurred", "while attempting to load", "touchscreen calibration values"]
+        json.dump(ts_cal or ts_null, open("/tmp/ps_ts_cal", "w"))
+
+        scrn = mindsensorsUI(deviceName, rotation, device=deviceType)
+        if ts_cal == ts_null:
+            scrn.askQuestion(["Screen not calibrated.", "No touchscreen calibration values",
+              "were found. Press GO to calibrate."], ["Press GO to continue..."], touch=False, goBtn=True)
+            os.system("sudo python {}.py force".format(os.path.join(PROGRAM_DIRECTORY, "utils", "01-Calibrate")))
+            return mindsensorsUI(deviceName, rotation, device=deviceType) # recreate with new calibration values
+        if ts_cal_error is not None:
+            logging.error('\n'.join(ts_cal_error))
+            scrn.askQuestion(ts_cal_error, ["Press GO to continue..."], touch=False, goBtn=True)
+            return scrn
+def listPrograms(directory):
+    return map(lambda i: i if not i.endswith(".py") else i[:-3], sorted(filter(lambda i: i[:2].isdigit(), os.listdir(directory))))
+
+    # separate lines for readability:
+    allFiles = os.listdir(directory)
+    beginsWithNum = filter(lambda i: i[:2].isdigit(), allFiles)
+    sortedFiles = sorted(beginsWithNum)
+    withoutPy = map(lambda i: i if not i.endswith(".py") else i[:-3], sortedFiles)
+    return withoutPy
+def updateNeeded():
+    try:
+        with open(updateStatusFile, "r") as file:
+            data = json.loads(file.read())
+        return data["status"] == "New" and data["update"] != "none"
+    except:
+        return False
 def newMessageExists():
     try:
-        f = open(json_file, 'r')
-        try:
-            data = json.loads(f.read())
-            s = data['status']
-            f.close()
-        except:
-            # no json in the file (or file missing)
-            s = ""
+        with open(messageFile, "r") as file:
+            data = json.loads(file.read())
+        return data["status"] == "New"
     except:
-            # no json in the file (or file missing)
-            s = ""        
-    if ( s == 'New' ):
-        return True
-    else:
         return False
-
-def version_json_update_field(field, new_value):
-    f = open(version_json_file, 'r')
-    json_data = json.loads(f.read())
-    f.close()
-    f = open(version_json_file, 'w')
-    json_data[field] = new_value
-    json.dump(json_data, f)
-    f.close()
-
-def message_update_status( json_data, new_status ):
-    f = open(json_file, 'w')
-    json_data['status'] = new_status
-    json.dump(json_data, f)
-    f.close()
-
-def runProgram(progName,progDir):
+def runProgram(program):
     scrn.clearScreen()
-    return os.system("sudo python '" +   progDir + "/" + progName + ".py'")
-    
-# signum and stack come from when this method is called from signal, accept but ignore these arguments
-def drawBatteryIndicator(signum=None, stack=None):
-    if scrn.currentMode == scrn.PS_MODE_POPUP:
-        return
-    
-    battVoltage = PiStormsCom().battVoltage()
-    batteryFill = (255,255,255) # white: error, could not read
-    if ( battVoltage >= 7.7 ):
-        batteryFill = (0,  166,90) # green: voltage >= 7.7V
-    elif (battVoltage >= 6.9 ):
-        batteryFill = (243,156,18) # yellow: 7.7V > voltage >= 6.9V
+    exitStatus = os.system("sudo python {}".format(program))
+    # stop (float) motors, if they are still running after the program finishes
+    psc.bankA.writeByte(PiStormsCom.PS_Command, PiStormsCom.c)
+    psc.bankB.writeByte(PiStormsCom.PS_Command, PiStormsCom.c)
+    return exitStatus
+def promptUpdate():
+    try:
+        with open(messageFile, "r+") as file:
+            data = json.loads(file.read())
+            if data["status"] == "New":
+                scrn.showMessage(data["message"].split("\n"))
+                data["status"] = "Read"
+                file.seek(0)
+                json.dump(data, file)
+                file.truncate()
+                return
+        with open(updateStatusFile, "r+") as file:
+            data = json.loads(file.read())
+            if data["status"] != "New" or data["update"] == "none":
+                return
+            message = {
+                "update:none": "There are no updates available.",
+                "update:hardware": "New PiStorms firmware is available.",
+                "update:software": "New software, libraries, and samples are available.",
+                "update:both": "New firmware, software, libraries, and samples are available."
+            }
+            response = scrn.askQuestion(
+                    ["Software Update", message[data["update"]], "Install updates?"],
+                    ["Yes", "Later", "Never"], wrapText=True)
+            if response == 0:
+                exitCode = os.system("sudo python {} {}"
+                        .format(os.path.join(PROGRAM_DIRECTORY, "utils", "updater.py"), data["update"]))
+                if exitCode == 0:
+                    data["status"] = "Done"
+            elif response == 1:
+                data["status"] = "Later"
+                data["date"] = datetime.now().strftime("%Y:%m:%d:%H:%M")
+            elif response == 2:
+                data["status"] = "Never"
+            file.seek(0)
+            json.dump(data, file)
+            file.truncate()
+    except:
+        logging.warning("Could not prompt update.")
+
+def drawHostnameTitle():
+    size = 30
+    maxWidth = 320-50-50-5-5 # screen width is 320, each arrow is 50px wide, 5px margin
+    if newMessageExists() or updateNeeded():
+        maxWidth -= 34
+    getTextSize = ImageDraw.Draw(scrn.disp.buffer).textsize
+    font = ImageFont.truetype("/usr/share/fonts/truetype/freefont/FreeSans.ttf", size)
+    width, height = getTextSize(deviceName, font=font)
+    while (width > maxWidth):
+        size -= 1
+        font = ImageFont.truetype("/usr/share/fonts/truetype/freefont/FreeSans.ttf", size)
+        width, height = getTextSize(deviceName, font=font)
+    scrn.fillRect(55, 0, maxWidth, 50, fill=(0,0,0), display=False)
+    if not (newMessageExists() or updateNeeded()):
+        scrn.drawAutoText(deviceName, 0, (50-height)/2-5, fill=(0,255,255), size=size, display=False, align="center")
     else:
-        batteryFill = (221,75, 57) #red: 6.9V > voltage
-    scrn.fillRect(281, 185, 39, 45, fill=(0,0,0), display=False)
+        scrn.drawAutoText(deviceName, 55, (50-height)/2-5, fill=(0,255,255), size=size, display=False)
+def drawItemButton(folder, file, i):
+    if os.path.isdir(os.path.join(folder, file)):
+        icon = "folder.png"
+    elif os.path.isfile(os.path.join(folder, file+".py")):
+        icon = "python.png"
+    else:
+        icon = "missing.png"
+    scrn.drawButton(50, 50+(i%FILES_PER_PAGE)*45, width=320-50*2, height=45, text=file, image=icon, display=False)
+def drawRightArrow():
+    scrn.drawButton(320-50, 0, 50, 50, image="rightarrow.png", text="", display=False, imageX=320-50+8)
+def drawLeftArrow():
+    scrn.drawButton(0, 0, 50, 50, image="leftarrow.png", text="", display=False, imageX=8)
+def drawUpArrow():
+    scrn.drawButton(0, 0, 50, 50, image="uparrow.png", text="", display=False, imageX=8)
+def drawExclamation():
+    scrn.fillBmp(230, 7, 34, 34, "Exclamation-mark-icon.png", display=False);
+def drawBatteryIndicator(*ignored):
+    if (scrn.currentMode == scrn.PS_MODE_POPUP):
+        return
+    battVoltage = psc.battVoltage()
+    batteryFill = (255, 255, 255) # white: error, could not read
+    if (battVoltage >= 7.7):
+        batteryFill = (0, 166, 90) # green: voltage >= 7.7V
+    elif (battVoltage >= 6.9):
+        batteryFill = (243, 156,18) # yellow: 7.7V > voltage >= 6.9V
+    else:
+        batteryFill = (221, 75, 57) #red: 6.9V > voltage
+    scrn.fillRect(281, 185, 39, 45, fill=(0, 0, 0), display=False)
     scrn.fillRect(291, 188, 13, 20, fill=batteryFill, display=False)
     scrn.fillRect(294, 185,  7,  3, fill=batteryFill, display=False)
     scrn.drawAutoText(("%1.1f V" if battVoltage < 10 else "%2.0f V") % battVoltage, 281, 213, size=16, display=True)
+    signal.alarm(30) # redraw battery indicator in thirty seconds
 
-    signal.alarm(30) # redraw battery indicator every second like the web interface
-    
-def displaySmallFileList(folder, fileList, displayLeft = 1):
-    initialYpos = 50
-    xpos = 50
-    height = 45
-    width = 225
-    
-    scrn.clearScreen(display=False)
-    scrn.drawDisplay(host_name, display=False)
-    counter = 0
-
-    while(counter<4 and counter<len(fileList)):
-        if (os.path.isdir(folder+"/"+fileList[counter])):
-            img="folder.png"
-        elif (os.path.isfile(folder+"/"+fileList[counter]+".py")):
-            img="python.png"
-        scrn.drawButton(xpos,initialYpos + (height*counter),width=width,height=height,text=fileList[counter], image=img, display=False)
-        counter += 1
-
-    pageXPos = 0
-    pageYPos = 0
-    pageWidth = 50
-    pageHeight = 50
-
-    if(displayLeft == 1):
-        scrn.drawButton(pageXPos, pageYPos, width=pageWidth, height=pageHeight, image="leftarrow.png", text="", display=False, imageX=8)
-    elif(displayLeft == 2):
-        scrn.drawButton(pageXPos, pageYPos, width=pageWidth, height=pageHeight, image="uparrow.png", text="", display=False, imageX=8)
-
-    scrn.drawButton((320-pageXPos)-pageWidth, pageYPos, pageWidth, pageHeight, image="rightarrow.png", text="", display=False, imageX=(320-pageXPos)-pageWidth+8)
-
-    updateReqd = checkIfUpdateNeeded()
-    if ( updateReqd != 'none' ):
-        scrn.fillBmp(220,7,34,34, "Exclamation-mark-icon.png", False);
-    
-    newMessage = newMessageExists()
-    if ( newMessage == True ):
-        scrn.fillBmp(220,7,34,34, "Exclamation-mark-icon.png", False);
-    
-    drawBatteryIndicator()
-
-    # display the buffered data on screen.
-    scrn.disp.display()
-
-    while(True):
-        
-        if ( newMessage ):
-            # handle the exclamation button
-            if ( scrn.checkButton(218,5,38,38)):
-                # exclamation button was clicked
-                return "message"
-        elif ( updateReqd ):
-            # handle the exclamation button
-            #if ( scrn.checkButton(278,53,38,38)):
-            if ( scrn.checkButton(218,5,38,38)):
-                # exclamation button was clicked
-                return "update:"+updateReqd
-
-
-        if(displayLeft != 0 and scrn.checkButton(pageXPos,pageYPos,pageWidth,pageHeight)):
-            return 4
-        if(scrn.checkButton((320-pageXPos)-pageWidth,pageYPos,pageWidth,pageHeight)):
-            return 5
-        counter = 0
-        while(counter<4 and counter<len(fileList)):
-            if(scrn.checkButton(xpos,initialYpos + (height*counter),width=width,height=height)):
-                return counter
-            counter += 1
-            
-def displayFullFileList(folder, fileList, index, isSubFolder):
-    newPath = folder
-    if(index*4>len(fileList)):
-        return displayFullFileList(folder, fileList, 0, isSubFolder)
-    if(index <0):
-        return displayFullFileList(folder, fileList, 0, isSubFolder)
-    
-    result = 0
-    #displayLeft = index != 0
-    if (index != 0):
-        displayLeft = 1
-    else:
-        displayLeft = 0
-
-    if (isSubFolder == True):
-        if (index != 0):
-            displayLeft = 1
-        else:
-            displayLeft = 2
-
-    if(index*4+4<len(fileList)):
-        result = displaySmallFileList(folder, fileList[index*4:index*4+4], displayLeft)
-    else:
-        result = displaySmallFileList(folder, fileList[index*4:len(fileList)], displayLeft)
-
-    if(result == 4):
-        # User clicked left arrow
-        if ( isSubFolder == True):
-            if (index == 0):
-                # if the index is zero, then go back to parent folder.
-                if ( not os.path.samefile(folder, PROGRAM_DIRECTORY) ):
-                    # go back only if we are already not at the home folder
-                    newPath = os.path.dirname(folder)
-                    f2 = listPrograms(newPath)
-                    # On home directory, don't show left icon
-                    if ( os.path.samefile(newPath, PROGRAM_DIRECTORY) ):
-                        showLeftIcon = False
-                    else:
-                        showLeftIcon = True
-                    return displayFullFileList(newPath, f2, 0, showLeftIcon)
-                else:
-                    return displayFullFileList(newPath, fileList, 0, False)
+def rightArrowPressed():
+    return scrn.checkButton(320-50, 0, 50, 50)
+def leftArrowPressed(index, filesPerPage):
+    return (scrn.checkButton(0, 0, 50, 50) and index >= filesPerPage)
+def upArrowPressed(stack):
+    return (scrn.checkButton(0, 0, 50, 50) and len(stack) > 1)
+def exclamationPressed():
+    return scrn.checkButton(218, 5, 38, 38)
+def itemButtonPressed(folder, files, index, filesPerPage):
+    for i in getPageOfItems(files, index, filesPerPage):
+        if scrn.checkButton(50, 50+(i%filesPerPage)*45, 320-50*2, 45):
+            item = os.path.join(folder, files[i])
+            isFolder = os.path.isdir(item)
+            if not isFolder:
+                return (item+".py", False)
             else:
-                # if index is not zero, just go to previous page.
-                return displayFullFileList(folder, fileList,index - 1, isSubFolder)
-        else:
-            return displayFullFileList(folder, fileList,index - 1, isSubFolder)
+                return (item, True)
+    return (False, None)
+def getPageOfItems(files, index, filePerPage):
+    if (index+filePerPage-1 > len(files)-1):
+        return range(INDEX, len(files))
+    else:
+        return range(INDEX, INDEX+FILES_PER_PAGE)
 
-    if(result == 5):
-        # User clicked right arrow
-        if ((index+1)*4==len(fileList)):
-            # number of files is divisible by 4, don't show a blank page
-            return displayFullFileList(folder, fileList, 0, isSubFolder)
-        else:
-            # there are more files, go to the next page
-            return displayFullFileList(folder, fileList,index + 1, isSubFolder)
-    
+if __name__ == "__main__":
     try:
-        newResult = result + (index*4)
-        ff = folder+"/"+fileList[newResult]
-        if (os.path.isdir(ff)):
-            newPath = ff
-            f2 = listPrograms(newPath)
-            return displayFullFileList(newPath, f2, 0, True)
-        else:
-            newFile = fileList[newResult]
-    except TypeError:
-        newResult = result
-        newFile = ""
-        
-    return [newResult, newPath, newFile]
+        logging.basicConfig(stream=sys.stderr, level=logging.INFO)
+        PROGRAM_DIRECTORY = getProgramDir()
+        messageFile = "/var/tmp/ps_data.json"
+        updateStatusFile = "/var/tmp/ps_versions.json"
+        configFile = "/usr/local/mindsensors/conf/msdev.cfg"
+        config = getConfig()
+        deviceType = getDeviceType()
+        deviceName = socket.gethostname()
+        rotation = getRotation()
+        psc = PiStormsCom()
+        scrn = initScreen()
+        # A stack of lists. One list is pushed each time a folder is opened,
+        # and popped when going up a directory. The 0th element of the list is a string
+        # for the folder, followed by a list of files in that folder, and finally
+        # an integer for the index of which file will appear first in the list.
+        # Note that stack[-1] is the "current" directory.
+        stack = [[PROGRAM_DIRECTORY, listPrograms(PROGRAM_DIRECTORY), 0]]
+        FILES_PER_PAGE = 4
 
-#
-# main program loop
-#
-try:
-    folder = PROGRAM_DIRECTORY
-    file_id = 0
+        # Start the battery indicator routine update.
+        signal.signal(signal.SIGALRM, drawBatteryIndicator)
 
-    signal.signal(signal.SIGALRM, drawBatteryIndicator)
+        while True:
+            logging.debug([(s[0],s[2]) for s in stack])
 
-    while(True):
-        result = 0
-        #if(psm.battVoltage()<=6.5):
-        #    scrn.askQuestion(["LOW BATTERY","Your battery is low","Change or charge your batteries"],["Ignore"])
-        #if(psm.isKeyPressed()):
-        #     scrn.refresh()
-        #files = listPrograms(PROGRAM_DIRECTORY)
-        files = listPrograms(folder)
-        if ( os.path.samefile(folder, PROGRAM_DIRECTORY) ):
-            showLeftIcon = False
-        else:
-            showLeftIcon = True
-        
-        file_id, folder, fileName = displayFullFileList(folder, files, file_id/4, showLeftIcon)
-        
-        if ( isinstance( file_id, int ) ):
-            # if the value returned was integer
-            #result = runProgram(files[file_id], folder)
-            result = runProgram(fileName, folder)
+            FOLDER, FILES, INDEX = stack[-1]
 
-        elif ( "update:" in file_id  and file_id != "update:none"):
-            #
-            # check what kind of update is available
-            # and prompt message in dialog box
-            #
-            msg = ""
-            msg2 = ""
-            if ( file_id == "update:hardware" ):
-                msg = "New Firmware for PiStorms is available"
-                msg2 = ""
-            if ( file_id == "update:software" ):
-                msg = "New Software, libraries and samples"
-                msg2 = "for PiStorms are available"
-            if ( file_id == "update:both" ):
-                msg = "New Firmware, Software, libraries and"
-                msg2 = "samples for PiStorms are available"
-            msg3 = "Install Updates?"
-            answer = scrn.askQuestion(["Software Update", msg, msg2, "", msg3],["Yes", "Later", "Never"])
+            scrn.clearScreen(display=False)
+            drawHostnameTitle()
 
-            if ( answer == 0 ):
-                #print "User clicked OK"
-                # perform the update
-                result = os.system("sudo python " +   PROGRAM_DIRECTORY +
-                          "/" + "utils/updater.py " + file_id)
-                if (result == 0):
-                    version_json_update_field('status', 'Done')
+            for i in getPageOfItems(FILES, INDEX, FILES_PER_PAGE):
+                drawItemButton(FOLDER, FILES[i], i)
 
-            if ( answer == 1 ):
-                #print "User clicked Later"
-                # User clicked Later, 
-                # write the current time & status in the json file,
-                # json updates will be deferred for some time
-                # length of that time is defined in cron script
-                version_json_update_field('status', 'Later')
-                now = datetime.now()
-                dd = now.strftime("%Y:%m:%d:%H:%M")
-                version_json_update_field('date', dd)
-            if ( answer == 2 ):
-                #print "User clicked Never"
-                # cron script will never update the json
-                version_json_update_field('status', 'Never')
+            drawRightArrow()
+            if INDEX >= FILES_PER_PAGE:
+                drawLeftArrow()
+            elif len(stack) > 1:
+                drawUpArrow()
 
-            # All errors must be gracefully handled by our updater script.
-            # Force the result to be zero, so that even if there was error
-            # browser does not show error dialog
-            result = 0
-            file_id = 0
+            if newMessageExists() or updateNeeded():
+                drawExclamation()
 
-        elif ( file_id == "message"):
-            f = open(json_file, 'r')
-            try:
-                data = json.loads(f.read())
-                m = data['message'].split("\n")
-                s = data['status']
-                f.close()
-            except:
-                pass
-            message_update_status( data, "Read" )
-            scrn.askQuestion(m,["OK"])
-            result = 0 
-            file_id = 0
+            drawBatteryIndicator()
 
-        # FIXME: find a method (without psm) to float the motors.
-        # possibly with direct i2c access.
-        #psm.BAM1.float()
-        #psm.BAM2.float()
-        #psm.BBM1.float()
-        #psm.BBM2.float()
-        if(result != 0):
-            scrn.refresh()
-            scrn.askQuestion(["ERROR","Program exited with error.","(Error Code " + str(result) + ")"],["OK"])
-            
-except KeyboardInterrupt:
-    print "Quitting..."
-    scrn.refresh()
-    scrn.termPrintln("PiStormsBrowser Exited")
+            while True:
+                if exclamationPressed():
+                    promptUpdate()
+                    break
+                if rightArrowPressed():
+                    newIndex = INDEX + FILES_PER_PAGE
+                    if newIndex > len(FILES)-1:
+                        newIndex = 0
+                    stack[-1][2] = newIndex
+                    break
+                if leftArrowPressed(INDEX, FILES_PER_PAGE):
+                    stack[-1][2] = INDEX-4 if INDEX >= 4 else 0
+                    break
+                if upArrowPressed(stack):
+                    stack.pop()
+                    break
+
+                item, isFolder = itemButtonPressed(FOLDER, FILES, INDEX, FILES_PER_PAGE)
+                if item and isFolder:
+                    stack.append([item, listPrograms(item), 0])
+                    break
+                if item and not isFolder:
+                    print("Running program " + item)
+                    runProgram(item)
+                    break
+    except KeyboardInterrupt:
+        logging.info("Quitting MSBrowser")
+        scrn.refresh()
+        scrn.termReplaceLastLine("PiStormsBrowser Exited")

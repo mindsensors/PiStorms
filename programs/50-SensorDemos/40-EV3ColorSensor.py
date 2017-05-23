@@ -26,7 +26,6 @@
 import time
 from LegoDevices import *
 from PiStorms import PiStorms
-print "running program"
 psm = PiStorms()
 
 m = ["EV3ColorSensor-Demo", "Connect EV3 Color sensor to BAS1",

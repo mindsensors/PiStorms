@@ -837,6 +837,8 @@ class PiStorms:
         ## An instance of PiStormsMotor representing Bank B motor 2.
         self.BBM2 = PiStormsMotor(self.psc.BBM2)
         
+        self.psc.resetKeyPressCount()
+        
     def command (self, cmd, bank):
         self.psc.command(cmd, bank)
         

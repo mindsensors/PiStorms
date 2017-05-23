@@ -26,7 +26,6 @@
 
 from PiStorms import PiStorms
 import LegoDevices
-print "running program"
 psm = PiStorms()
 
 m = ["NXTColorSensor-Demo", "Connect NXT Color sensor",

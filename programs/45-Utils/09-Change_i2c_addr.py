@@ -37,7 +37,6 @@ config = ConfigParser.RawConfigParser()
 config.read(cfg_file)
 homefolder = config.get('msdev', 'homefolder')
 
-print "running program"
 psm = PiStorms()
 psm.screen.termPrintln("Connect your I2C device to BAS1")
 psm.screen.termPrintln("and click Explore")

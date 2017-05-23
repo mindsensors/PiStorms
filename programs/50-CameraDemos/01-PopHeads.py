@@ -41,7 +41,6 @@ config.read(cfg_file)
 
 homefolder = config.get('msdev', 'homefolder') 
 
-print "running program"
 psm.screen.termPrintln(" ")
 
 # Create the haar cascade

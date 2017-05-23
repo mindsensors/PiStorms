@@ -25,7 +25,6 @@
 #
 
 from PiStorms import PiStorms
-print "running program"
 psm = PiStorms()
 
 m = ["NXTTouchSensor-Demo", "Connect NXT Touch sensor",

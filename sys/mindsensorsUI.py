@@ -31,16 +31,12 @@
 
 from mindsensors_i2c import mindsensors_i2c
 from PiStormsCom import PiStormsCom
-import time, math ,os
-import Image
-import ImageDraw
-import ImageFont
-#import Adafruit_ILI9341 as TFT
+import time, math , os, sys
+import Image, ImageDraw, ImageFont
+import textwrap
 import MS_ILI9341 as TFT
-
 import Adafruit_GPIO as GPIO
 import Adafruit_GPIO.SPI as SPI
-import sys,os
 from threading import Thread, Lock
 
 # for new touchscreen functionality
@@ -309,12 +305,12 @@ class mindsensorsUI():
         else:
             return 320
     
-    ## Prints the name text on the screen, intended for terminal mode.
+    ## Prints a large title, intended for terminal mode.
     #  @param self The object pointer.
-    #  @param name The display title that will appear at the top of the LCD touchscreen.
+    #  @param name The display title that will appear at the top of the LCD touchscreen in cyan.
     #  @param display Choose to immediately push the drawing to the screen. Optional, defaults to True.
     def drawDisplay(self, name, display = True):
-        self.drawAutoText(name,0,5,fill = (0,255,255), size = 30, display = display, align="center")
+        self.drawAutoText(name, 0, 5, fill = (0,255,255), size = 30, display = display, align="center")
     
     ## Draw forward and back arrows on the screen
     #  @param self The object pointer.
@@ -800,7 +796,7 @@ class mindsensorsUI():
         if not visualOnly: self.terminalBuffer[lineno] = ""
         self.fillRect(10, lineno*20+42, self.screenWidth(), 19, (0,0,0), display = display)
     
-    ## Print to a specific line of the screen. This will not affect the current cursor position.
+    ## Print to a specific line of the screen. This *will* affect the current cursor position.
     #  @param self The object pointer.
     #  @param lineno The line number at which to set the cursor.
     #  @param text The text to print to the screen.
@@ -812,11 +808,9 @@ class mindsensorsUI():
     #  screen.termPrintAt(5, "Printing at line 5")
     #  @endcode
     def termPrintAt(self, lineno, text, display = True):
-        old_lineno = self.terminalCursor
         self.termGotoLine(lineno)
-        self.termClearLine(lineno, display = False)
-        self.termPrint(text, display)
-        self.terminalCursor = old_lineno
+        self.termClearLine(display = False)
+        self.termPrintln(text, display)
     
     ## Print to the current line of the screen
     #  @param self The object pointer.
@@ -1033,6 +1027,10 @@ class mindsensorsUI():
     #  @param options The possible answers to the question.
     #  @param touch Whether to check if the on screen buttons are pressed. Optional, defaults to True.
     #  @param goBtn Whether to check for the GO button to close the question. Optional, defaults to False.
+    #  @param wrapText When True, long lines of text will be wrapped to fit in the popup. Optional, default to False.
+    #  @code
+    #  answer = screen.askQuestion(["Title", "This is a very long line of text which will be wrapped to fit in the dialog box.", "Here's a second line. It will be wrapped, too. What do you think?"], ["No thanks", "Cool!"], wrapText=True)
+    #  @endcode
     #  @note If goBtn is True, pressing GO will close the dialog and return -1
     #  @remark
     #  To use this function in your program:
@@ -1040,8 +1038,30 @@ class mindsensorsUI():
     #  ...
     #  answer = screen.askQuestion(["Color Picker", "Pick a color!"], ["Red", "Green", "Blue"])
     #  @endcode
-    def askQuestion(self, question, options, touch = True, goBtn = False):
-        self.popupText = question
+    def askQuestion(self, question, options, touch=True, goBtn=False, wrapText=False):
+        if wrapText:
+            wrap, maxlines = 48, 5
+            if (self.currentRotation % 2 == 0): # portrait
+                wrap, maxlines = 30, 9
+            maxWidth = self.screenWidth()-60 # see fillBpm of dialogbg.png in refresh()
+            getTextSize = ImageDraw.Draw(self.disp.buffer).textsize
+            font = ImageFont.truetype("/usr/share/fonts/truetype/freefont/FreeSans.ttf", 15)
+            def makeWrappedText():
+                arr = '\n'.join([textwrap.fill(t, width=wrap) for t in question[1:]]).split('\n')
+                self.popupText = [question[0]] + arr[:maxlines]
+                if len(arr) > maxlines:
+                    if self.popupText[maxlines][-1] == ".":
+                        self.popupText[maxlines] += " ..."
+                    else:
+                        self.popupText[maxlines] += "..."
+            def widestLine():
+                return max([getTextSize(str, font=font)[0] for str in self.popupText])
+            makeWrappedText()
+            while (widestLine() > maxWidth):
+                wrap -= 1
+                makeWrappedText()
+        else:
+            self.popupText = question
         self.buttonText = options
         oldMode = self.currentMode
         self.setMode(self.PS_MODE_POPUP)
@@ -1080,30 +1100,38 @@ class mindsensorsUI():
     #  @param question The question that will pop-up on the screen.
     #  @param touch Whether to check if on screen buttons are pressed. Optional, defaults to True.
     #  @param goBtn Whether to check for the GO button to close the question. Optional, defaults to False.
+    #  @param wrapText When True, long lines of text will be wrapped to fit in the popup. Optional, default to False.
+    #  @code
+    #  response = screen.askYesOrNoQuestion(["Title", "This is a very long line of text which will be wrapped to fit in the dialog box.", "Cool?"], wrapText=True)
+    #  @endcode
     #  @note If goBtn is True, pressing GO will close the dialog and return False
     #  @remark
     #  To use this function in your program:
     #  @code
     #  ...
-    #  answer = screen.askYesOrNoQuestion(["Continue?", "Do you want to continue?"])
+    #  response = screen.askYesOrNoQuestion(["Continue?", "Do you want to continue?"])
     #  @endcode
-    def askYesOrNoQuestion(self, question, touch = True, goBtn = False):
-        return self.askQuestion(question, ["Yes","No"], touch = touch, goBtn = goBtn) == 0
+    def askYesOrNoQuestion(self, question, touch=True, goBtn=False, wrapText=False):
+        return self.askQuestion(question, ["Yes","No"], touch=touch, goBtn=goBtn, wrapText=wrapText) == 0
     
     ## Display pop-up of a message on the screen with a single option "OK"
     #  @param self The object pointer.
     #  @param message The message that will pop-up on the screen.
     #  @param touch Whether to check if on screen buttons are pressed. Optional, defaults to True.
     #  @param goBtn Whether to check for the GO button to close the question. Optional, defaults to True.
+    #  @param wrapText When True, long lines of text will be wrapped to fit in the popup. Optional, default to False.
+    #  @code
+    #  screen.showMessage(["Title", "This is a very long line of text which will be wrapped to fit in the dialog box.", "Other lines will be wrapped, too. Press OK to close this popup."], wrapText=True)
+    #  @endcode
     #  @note If goBtn is True, pressing GO will close the dialog and return False
     #  @remark
     #  To use this function in your program:
     #  @code
     #  ...
-    #  answer = screen.showMessage(["Complete", "The process has completed.", "Status: success"])
+    #  screen.showMessage(["Complete", "The process has completed.", "Status: success"])
     #  @endcode
-    def showMessage(self, message, touch = True, goBtn = True):
-        return self.askQuestion(message, ["OK"], touch = touch, goBtn = goBtn) == 0
+    def showMessage(self, message, touch=True, goBtn=True, wrapText=False):
+        return self.askQuestion(message, ["OK"], touch=touch, goBtn=goBtn, wrapText=wrapText) == 0
     
     ## Display pop-up of a message on the screen with no exit options.
     #  This function will return right away. You may need to call `screen.setMode(screen.PS_MODE_TERMINAL)` to stop the popup later.

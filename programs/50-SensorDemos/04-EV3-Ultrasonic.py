@@ -25,7 +25,6 @@
 #
 
 from PiStorms import PiStorms
-print "running program"
 psm = PiStorms()
 
 m = ["Ultrasonic-Demo", "Connect EV3 Ultrasonic sensor",

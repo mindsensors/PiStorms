@@ -29,7 +29,6 @@ import MsDevices
 import os, inspect
 import time
 
-print "running program"
 
 psm = PiStorms()
 # Attaching a SumoEyes sensor to Port BAS1

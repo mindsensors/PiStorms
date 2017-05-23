@@ -26,7 +26,6 @@
 from PiStorms import PiStorms
 from LegoDevices import *
 import time
-print "running program"
 psm = PiStorms()
 
 m = ["EV3InfraredSensor-Demo", "Connect EV3 IR sensor",
