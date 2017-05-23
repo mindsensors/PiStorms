@@ -1027,6 +1027,10 @@ class mindsensorsUI():
     #  @param options The possible answers to the question.
     #  @param touch Whether to check if the on screen buttons are pressed. Optional, defaults to True.
     #  @param goBtn Whether to check for the GO button to close the question. Optional, defaults to False.
+    #  @param wrapText When True, long lines of text will be wrapped to fit in the popup. Optional, default to False.
+    #  @code
+    #  answer = screen.askQuestion(["Title", "This is a very long line of text which will be wrapped to fit in the dialog box.", "Here's a second line. It will be wrapped, too. What do you think?"], ["No thanks", "Cool!"], wrapText=True)
+    #  @endcode
     #  @note If goBtn is True, pressing GO will close the dialog and return -1
     #  @remark
     #  To use this function in your program:
@@ -1096,30 +1100,38 @@ class mindsensorsUI():
     #  @param question The question that will pop-up on the screen.
     #  @param touch Whether to check if on screen buttons are pressed. Optional, defaults to True.
     #  @param goBtn Whether to check for the GO button to close the question. Optional, defaults to False.
+    #  @param wrapText When True, long lines of text will be wrapped to fit in the popup. Optional, default to False.
+    #  @code
+    #  response = screen.askYesOrNoQuestion(["Title", "This is a very long line of text which will be wrapped to fit in the dialog box.", "Cool?"], wrapText=True)
+    #  @endcode
     #  @note If goBtn is True, pressing GO will close the dialog and return False
     #  @remark
     #  To use this function in your program:
     #  @code
     #  ...
-    #  answer = screen.askYesOrNoQuestion(["Continue?", "Do you want to continue?"])
+    #  response = screen.askYesOrNoQuestion(["Continue?", "Do you want to continue?"])
     #  @endcode
-    def askYesOrNoQuestion(self, question, touch = True, goBtn = False):
-        return self.askQuestion(question, ["Yes","No"], touch = touch, goBtn = goBtn) == 0
+    def askYesOrNoQuestion(self, question, touch=True, goBtn=False, wrapText=False):
+        return self.askQuestion(question, ["Yes","No"], touch=touch, goBtn=goBtn, wrapText=wrapText) == 0
     
     ## Display pop-up of a message on the screen with a single option "OK"
     #  @param self The object pointer.
     #  @param message The message that will pop-up on the screen.
     #  @param touch Whether to check if on screen buttons are pressed. Optional, defaults to True.
     #  @param goBtn Whether to check for the GO button to close the question. Optional, defaults to True.
+    #  @param wrapText When True, long lines of text will be wrapped to fit in the popup. Optional, default to False.
+    #  @code
+    #  screen.showMessage(["Title", "This is a very long line of text which will be wrapped to fit in the dialog box.", "Other lines will be wrapped, too. Press OK to close this popup."], wrapText=True)
+    #  @endcode
     #  @note If goBtn is True, pressing GO will close the dialog and return False
     #  @remark
     #  To use this function in your program:
     #  @code
     #  ...
-    #  answer = screen.showMessage(["Complete", "The process has completed.", "Status: success"])
+    #  screen.showMessage(["Complete", "The process has completed.", "Status: success"])
     #  @endcode
-    def showMessage(self, message, touch = True, goBtn = True):
-        return self.askQuestion(message, ["OK"], touch = touch, goBtn = goBtn) == 0
+    def showMessage(self, message, touch=True, goBtn=True, wrapText=False):
+        return self.askQuestion(message, ["OK"], touch=touch, goBtn=goBtn, wrapText=wrapText) == 0
     
     ## Display pop-up of a message on the screen with no exit options.
     #  This function will return right away. You may need to call `screen.setMode(screen.PS_MODE_TERMINAL)` to stop the popup later.
