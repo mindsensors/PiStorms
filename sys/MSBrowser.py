@@ -189,7 +189,7 @@ def drawHostnameTitle():
     size = 30
     maxWidth = 320-50-50-5-5 # screen width is 320, each arrow is 50px wide, 5px margin
     if newMessageExists() or updateNeeded():
-        maxWidth -= 34
+        maxWidth -= 44
     getTextSize = ImageDraw.Draw(scrn.disp.buffer).textsize
     font = ImageFont.truetype("/usr/share/fonts/truetype/freefont/FreeSans.ttf", size)
     width, height = getTextSize(deviceName, font=font)
@@ -198,10 +198,10 @@ def drawHostnameTitle():
         font = ImageFont.truetype("/usr/share/fonts/truetype/freefont/FreeSans.ttf", size)
         width, height = getTextSize(deviceName, font=font)
     scrn.fillRect(55, 0, maxWidth, 50, fill=(0,0,0), display=False)
-    if not (newMessageExists() or updateNeeded()):
-        scrn.drawAutoText(deviceName, 0, (50-height)/2-5, fill=(0,255,255), size=size, display=False, align="center")
+    if (newMessageExists() or updateNeeded()) and width > 135:
+        scrn.drawAutoText(deviceName, 60, (50-height)/2-5, fill=(0,255,255), size=size, display=False)
     else:
-        scrn.drawAutoText(deviceName, 55, (50-height)/2-5, fill=(0,255,255), size=size, display=False)
+        scrn.drawAutoText(deviceName, 0, (50-height)/2-5, fill=(0,255,255), size=size, display=False, align="center")
 def drawItemButton(folder, file, i):
     if os.path.isdir(os.path.join(folder, file)):
         icon = "folder.png"
