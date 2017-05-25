@@ -119,7 +119,9 @@ for f in 'ps_messenger_check.py' 'ps_updater.py'; do sudo ln -f $b/sys/$f /usr/l
 ## Details
 Lets walk through what setup.sh does from start to finish, and what happens at boot time. We will also cover every relevant directory on the system.
 
-`MSDriver.sh`, `MSBrowser.sh`, and `MSWeb.sh` will run at boot time. MSDriver handles shutting down the system 
+`MSDriver.sh`, `MSBrowser.sh`, and `MSWeb.sh` will run at boot time. MSDriver handles shutting down the system when GO is held.
+
+The PiStorms has firmware which controls the motor and sensor ports, and which gets input from the touch part of the touchscreen. The Raspberry Pi sends commands over I2C to the PiStorms to tell it what to do. The screen itself communicates via SPI. This means that the screen might work, but you won't be able to tap anything because you can't get touchscreen values from the PiStorms if I2C is broken. The opposite is, therefore, true, too. The screen will not work if SPI is broken, but you could still move motors, etc. if I2C is still functioning.
 
 ## Design improvement suggestions
 - There are a number of things I would like to better organize or clean up, but most would be difficult due to the requirement of supporting previous systems. Backwards compatibility is the issue.
