@@ -115,3 +115,12 @@ for f in 'ps_messenger_check.py' 'ps_updater.py'; do sudo ln -f $b/sys/$f /usr/l
 
 ### CONTRIBUTING.md
 - An overview of this repository and explanation of the structure of this project
+
+## Details
+Lets walk through what setup.sh does from start to finish, and what happens at boot time. We will also cover every relevant directory on the system.
+
+`MSDriver.sh`, `MSBrowser.sh`, and `MSWeb.sh` will run at boot time. MSDriver handles shutting down the system 
+
+## Design improvement suggestions
+- There are a number of things I would like to better organize or clean up, but most would be difficult due to the requirement of supporting previous systems. Backwards compatibility is the issue.
+- For examples, the images MSBrowser relies on should not be cluttering up the general programs folder. `rmap.py` should be renamed to make its purpose (Scratch) more clear. `MsDevices.py` and `mindsensors.py` should be merged. The log files should have more meaningful names and be put in `/var/log`(?), not `/tmp`.
