@@ -124,3 +124,23 @@ Lets walk through what setup.sh does from start to finish, and what happens at b
 ## Design improvement suggestions
 - There are a number of things I would like to better organize or clean up, but most would be difficult due to the requirement of supporting previous systems. Backwards compatibility is the issue.
 - For examples, the images MSBrowser relies on should not be cluttering up the general programs folder. `rmap.py` should be renamed to make its purpose (Scratch) more clear. `MsDevices.py` and `mindsensors.py` should be merged. The log files should have more meaningful names and be put in `/var/log`(?), not `/tmp`.
+
+## Original version of repository structure notes
+This was found in a file last modified April 5th, 2016, the day before the first commit to this repository. Copied verbatim:
+
+> Folder structure for PiStorms development repo
+> <br>
+> <br>
+> <br>
+> <br>
+> 
+> | ​ | ​ |
+> | --- | --- |
+> | PiStorms | top level folder for everything. |
+> | PiStorms/setup | setup/install/config scripts. (some of these scripts will be run at the time of install, and move other scripts to correct folders – such as /etc/init.d, etc) \n pip:setup.py will go here. \n PiStormsBrowser.sh will go here. |
+> | PiStorms/sys | library files, etc. (which would get relocated to dist-packages) \n PiStormsBrowser.py/PiStormsDriver.py will go here. |
+> | PiStorms/programs | main programs folder. |
+> | PiStorms/programs/utils | factory provided utllity programs |
+> | PiStorms/programs/examples | factory provided samples & demos. |
+> | PiStorms/scratch | the sb files will be here (relocate these to their standard location on Pi). |
+> | ​ | ​ |
