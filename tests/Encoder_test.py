@@ -29,3 +29,23 @@ arr2int = lambda n: struct.unpack('l', ''.join(map(lambda b: struct.pack('B', b)
 import time
 while True: time.sleep(0.2); arr2int(i2c.readArray(SD1_base+4, 4))
 
+# BAM1, BAD1
+i2c.writeArray(SA1_base+D1*22, [_TAC2X, 1])
+i2c.writeArray(SA1_base+8+D1*22, [180, 0, 0, 0])
+i2c.readArray(SD1_base+4, 4)
+
+# BAM1, BAD2
+i2c.writeArray(SA2_base+D1*22, [_TAC2X, 1])
+i2c.writeArray(SA2_base+8+D1*22, [180, 0, 0, 0])
+i2c.readArray(SD2_base+4, 4)
+
+# BAM2, BAD1
+i2c.writeArray(SA1_base+D1*22, [_TAC2X, 2])
+i2c.writeArray(SA1_base+8+D1*22, [180, 0, 0, 0])
+i2c.readArray(SD1_base+4, 4)
+
+# BAM2, BAD2
+i2c.writeArray(SA2_base+D1*22, [_TAC2X, 2])
+i2c.writeArray(SA2_base+8+D1*22, [180, 0, 0, 0])
+i2c.readArray(SD2_base+4, 4)
+
