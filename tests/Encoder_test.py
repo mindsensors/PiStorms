@@ -21,3 +21,11 @@ v = i2c.readArray(SD1_base+4, 4)
 v = sum([b<<(n*8) for n,b in enumerate(v)])
 v = ctypes.c_int(v).value
 
+import struct
+#int2arr = lambda n: [struct.unpack('B', struct.pack('l', n)[i])[0] for i in range(4)]
+int2arr = lambda n: map(lambda b: struct.unpack('B', b)[0], struct.pack('l', n))
+arr2int = lambda n: struct.unpack('l', ''.join(map(lambda b: struct.pack('B', b), n)))[0]
+
+import time
+while True: time.sleep(0.2); arr2int(i2c.readArray(SD1_base+4, 4))
+
