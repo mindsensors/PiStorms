@@ -27,7 +27,8 @@ from mindsensors_i2c import mindsensors_i2c
 from mindsensorsUI import mindsensorsUI
 import time, math
 import sys,os
-import ctypes
+import struct
+from functools import partial
 import random
 import json # for new touchscreen functionality
 
@@ -100,7 +101,7 @@ class GRXCom(object):
         try:
             self.bankA.readByte(self.GRX_BattV)
         except:
-            print "could not connect to pistorms-grx"
+            print "could not connect to PiStorms-GRX"
         else:
             self.bankA.writeByte(self.GRX_Command,self.R)
             self.bankB.writeByte(self.GRX_Command,self.R)
@@ -260,7 +261,6 @@ class GRXCom(object):
 #  and the ground pin should be closer to you, towards the front of the device
 #  with the screen. Of course this leaves the voltage pin in the center.
 #  This class supports both regular servos and continuous rotation servos.
-# TODO: Add encoder support
 class RCServo(GRXCom):
 
     ## Initialize an RC servo object.
@@ -268,20 +268,20 @@ class RCServo(GRXCom):
     #              The first two characters are "BA" or "BB", for "Bank A" or "Bank B".
     #              The third character is 'M' for "Motor". The fourth character
     #              is the pin number. See the RCServo class documentation for details.
-    #  @ param neutralPoint You may specify the neutral point of this servo.
-    #                       The default is 1500, but as a result of the manufacturing
-    #                       process for these servos each has a slightly different
-    #                       neutral point. For example, if your continuous rotation
-    #                       servo continues to spin when you call setNeutral, it likely
-    #                       has the wrong neutral point set. You can update this
-    #                       at any time with setNeutralPoint(self, neutralPoint).
+    #  @param neutralPoint You may specify the neutral point of this servo.
+    #                      The default is 1500, but as a result of the manufacturing
+    #                      process for these servos each has a slightly different
+    #                      neutral point. For example, if your continuous rotation
+    #                      servo continues to spin when you call stop or setNeutral,
+    #                      it likely has the wrong neutral point set. You can update
+    #                      this at any time with setNeutralPoint(self, neutralPoint).
     def __init__(self, port=None, neutralPoint=1500):
         if port == None:
-            raise TypeError('You must specify a port as an argument')
+            raise TypeError("You must specify a port as an argument")
 
         try:
             if not len(port) == 4:
-                raise TypeError()
+                raise TypeError("Incorrect port format")
             if port[:2] == "BA":
                 bank = self.bankA
             elif port[:2] == "BB":
@@ -370,6 +370,46 @@ class RCServo(GRXCom):
     ## Stop sending a signal altogether to this servo.
     def stop(self):
         self.setPulse(0)
+
+
+## This class provides functions for controlling a servo and encoder connected to
+#  the PiStorms-GRX.
+class RCServoEncoder(RCServo):
+    ## Initialize an RC servo object with an associated encoder.
+    #  @param encoder You may associate an encoder with this servo by specifying
+    #                 the digital port it is connected to.
+    def __init__(self, port=None, neutralPoint=1500, encoder=None):
+        RCServo.__init__(self, port, neutralPoint)
+
+        if encoder == None:
+            raise TypeError("You must specify an encoder as an argument. If you do not wish to use an "
+                            "encoder with this servo, please use the RCServo class instead.")
+
+        if len(encoder) != 4 \
+        or encoder[0] != "B" \
+        or encoder[1] not in ["A", "B"] \
+        or encoder[2] != "D" \
+        or encoder[3] not in ["1", "2"]:
+            raise TypeError("Encoder argument is invalid. Please see this class's documentation.")
+
+        if encoder[1] != port[1]:
+            raise ValueError("The encoder must be on the same bank as the servo it is associated with.")
+        if port[3] == "3":
+            raise ValueError("The servo associated with this encoder must be on servo port 1 or 2, not 3.")
+
+        self.encoder = int(encoder[3])
+        self.bank = self.bankA if encoder[1] == "A" else self.bankB
+        self.base = self.GRX_SD1_Base if encoder[3] == "1" else self.GRX_SD2_Base
+
+        self.bank.writeArray(self.GRX_SA1_Base + self.D1*22, [self._TAC2X, 1])
+
+    def setTarget(self, value):
+        data = map(lambda b: struct.unpack('B', b)[0], struct.pack('l', value))
+        self.bank.writeArray(self.base + 8, data)
+
+    def readEncoder(self):
+        data = self.bank.readArray(self.base + 4, 4)
+        return struct.unpack('l', ''.join(map(partial(struct.pack, 'B'), data)))[0]
 
 
 class PiStorms_GRX:
