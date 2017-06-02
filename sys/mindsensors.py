@@ -1546,7 +1546,7 @@ class NXTCAM(mindsensors_i2c):
     #  @param self The object pointer.
     #  @param command Value to write to the command register.
     def command(self, command):
-        self.writeByte(COMMAND, int(cmd)) 
+        self.writeByte(self.COMMAND, int(command)) 
     
     ## Sort the detected objects by size
     #  @param self The object pointer.
