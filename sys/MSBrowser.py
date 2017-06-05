@@ -65,7 +65,7 @@ def getRotation():
     else:
         return config.getint("msdev", "rotation") 
 def initScreen():
-    if (psc.GetFirmwareVersion() < "V2.10"):
+    if (psc.GetFirmwareVersion() < "V3.00"):
         try:
             bootmode = mindsensors_i2c(0xEA>>1) 
             bootmode.readbyte()

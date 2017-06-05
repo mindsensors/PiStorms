@@ -22,7 +22,7 @@
 # History:
 # Date      Author      Comments
 # Apr 2016  Deepak      install from github created environment
-# Jan 2017  Seth        Add files to upgrade firmware if below V2.10
+# Jan 2017  Seth        Add files to upgrade firmware if below V3.00
 
 #setup i2c and spi 
 cp /boot/config.txt /tmp/config.txt

@@ -34,7 +34,7 @@ import json # to write calibration values to cache file
 from mindsensorsUI import mindsensorsUI
 from PiStormsCom import PiStormsCom
 
-if PiStormsCom().GetFirmwareVersion() < 'V2.10':
+if PiStormsCom().GetFirmwareVersion() < 'V3.00':
     os.system("sudo python " + os.path.join(os.path.dirname(os.path.realpath(__file__)), "01-Calibrate_old.py"))
     sys.exit(0)
 

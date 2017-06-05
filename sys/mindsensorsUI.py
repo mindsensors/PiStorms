@@ -154,8 +154,8 @@ class mindsensorsUI():
         self.myname = name
         #self.drawDisplay(name, display = False)
         
-        self.ts_cal = None # signifies firmware version older than V2.10, use old touchscreen methods
-        if self.i2c.readString(0x00, 8) >= 'V2.10':
+        self.ts_cal = None # signifies firmware version older than V3.00, use old touchscreen methods
+        if self.i2c.readString(0x00, 8) >= 'V3.00':
             # read touchscreen calibration values from cache file
             try:
                 self.ts_cal = json.load(open('/tmp/ps_ts_cal', 'r'))
