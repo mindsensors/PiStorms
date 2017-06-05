@@ -115,3 +115,34 @@ for f in 'ps_messenger_check.py' 'ps_updater.py'; do sudo ln -f $b/sys/$f /usr/l
 
 ### CONTRIBUTING.md
 - An overview of this repository and explanation of the structure of this project
+
+## Details
+Lets walk through what setup.sh does from start to finish, and what happens at boot time. We will also cover every relevant directory on the system.
+
+`MSDriver.sh`, `MSBrowser.sh`, and `MSWeb.sh` will run at boot time. MSDriver handles shutting down the system when GO is held.
+
+The PiStorms has firmware which controls the motor and sensor ports, and which gets input from the touch part of the touchscreen. The Raspberry Pi sends commands over I2C to the PiStorms to tell it what to do. The screen itself communicates via SPI. This means that the screen might work, but you won't be able to tap anything because you can't get touchscreen values from the PiStorms if I2C is broken. The opposite is, therefore, true, too. The screen will not work if SPI is broken, but you could still move motors, etc. if I2C is still functioning.
+
+## Design improvement suggestions
+- There are a number of things I would like to better organize or clean up, but most would be difficult due to the requirement of supporting previous systems. Backwards compatibility is the issue.
+- For examples, the images MSBrowser relies on should not be cluttering up the general programs folder. `rmap.py` should be renamed to make its purpose (Scratch) more clear. `MsDevices.py` and `mindsensors.py` should be merged. The log files should have more meaningful names and be put in `/var/log`(?), not `/tmp`.
+
+## Original version of repository structure notes
+This was found in a file last modified April 5th, 2016, the day before the first commit to this repository. Copied verbatim:
+
+> Folder structure for PiStorms development repo
+> <br>
+> <br>
+> <br>
+> <br>
+> 
+> | ​ | ​ |
+> | --- | --- |
+> | PiStorms | top level folder for everything. |
+> | PiStorms/setup | setup/install/config scripts. (some of these scripts will be run at the time of install, and move other scripts to correct folders – such as /etc/init.d, etc) \n pip:setup.py will go here. \n PiStormsBrowser.sh will go here. |
+> | PiStorms/sys | library files, etc. (which would get relocated to dist-packages) \n PiStormsBrowser.py/PiStormsDriver.py will go here. |
+> | PiStorms/programs | main programs folder. |
+> | PiStorms/programs/utils | factory provided utllity programs |
+> | PiStorms/programs/examples | factory provided samples & demos. |
+> | PiStorms/scratch | the sb files will be here (relocate these to their standard location on Pi). |
+> | ​ | ​ |
