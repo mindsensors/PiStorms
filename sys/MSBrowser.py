@@ -33,6 +33,7 @@ from mindsensorsUI import mindsensorsUI
 from PiStormsCom import PiStormsCom
 import Image, ImageDraw, ImageFont
 from datetime import datetime
+from fcntl import flock, LOCK_EX, LOCK_UN, LOCK_NB
 import ConfigParser
 
 def getConfig():
@@ -262,8 +263,18 @@ def getPageOfItems(files, index, filePerPage):
         return range(INDEX, INDEX+FILES_PER_PAGE)
 
 if __name__ == "__main__":
+    logging.basicConfig(stream=sys.stderr, level=logging.INFO)
+    mutex = open("/var/lock/msbrowser", "w+")
     try:
-        logging.basicConfig(stream=sys.stderr, level=logging.INFO)
+        os.chmod("/var/lock/msbrowser", 0666)
+    except OSError: pass
+    try:
+        flock(mutex, LOCK_EX | LOCK_NB)
+    except IOError:
+        logging.error("MSBrowser is already running.")
+        sys.exit(0)
+
+    try:
         messageFile = "/var/tmp/ps_data.json"
         updateStatusFile = "/var/tmp/ps_versions.json"
         configFile = "/usr/local/mindsensors/conf/msdev.cfg"
@@ -336,3 +347,5 @@ if __name__ == "__main__":
         logging.info("Quitting MSBrowser")
         scrn.refresh()
         scrn.termReplaceLastLine("PiStormsBrowser Exited")
+    finally:
+        flock(mutex, LOCK_UN)

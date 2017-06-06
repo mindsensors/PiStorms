@@ -40,7 +40,7 @@ class ILI9341(Adafruit_ILI9341.ILI9341):
         self.x = -1
         self.y = -1
         self.store = False
-        self.mutex = open("/var/lock/drawscreentest", "w+")
+        self.mutex = open("/var/lock/ili9341", "w+")
 
     # PIL.ImageDraw.Draw creates an object that draws in-place, so the mutex is required 
     def draw(self):
