@@ -1,7 +1,7 @@
 <?php
 /*
 # Copyright (c) 2016 mindsensors.com
-# 
+#
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 2 as
 # published by the Free Software Foundation.
@@ -15,13 +15,13 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 #
-#mindsensors.com invests time and resources providing this open source code, 
+#mindsensors.com invests time and resources providing this open source code,
 #please support mindsensors.com  by purchasing products from mindsensors.com!
 #Learn more product option visit us @  http://www.mindsensors.com/
 #
 # History:
 # Date         Author          Comments
-# July 2016    Roman Bohuk     Initial Authoring 
+# July 2016    Roman Bohuk     Initial Authoring
 # May 2017     Seth Tenembaum  Remove login requirement
 */
 
@@ -78,7 +78,7 @@ include "api/config.php";
   ?>
 
   <div class="content-wrapper">
-  
+
     <section class="content">
       <div class="row">
         <div class="col-xs-12">
@@ -99,7 +99,7 @@ include "api/config.php";
           </div>
         </div>
       </div>
-      
+
       <div class="row">
         <div class="col-xs-12">
           <div class="box box-danger">
@@ -115,7 +115,7 @@ include "api/config.php";
             </div>
           </div>
         </div>
-        
+
       </div>
 
     </section>

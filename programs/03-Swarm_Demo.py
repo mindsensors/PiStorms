@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 #
 # Copyright (c) 2016 mindsensors.com
-# 
+#
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 2 as
 # published by the Free Software Foundation.
@@ -15,7 +15,7 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 #
-#mindsensors.com invests time and resources providing this open source code, 
+#mindsensors.com invests time and resources providing this open source code,
 #please support mindsensors.com  by purchasing products from mindsensors.com!
 #Learn more product option visit us @  http://www.mindsensors.com/
 #
@@ -29,11 +29,11 @@ from swarmclient import *
 from PiStorms import PiStorms
 
 #
-# message sender 
+# message sender
 #
 currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
 parentdir = os.path.dirname(currentdir)
-sys.path.insert(0,parentdir) 
+sys.path.insert(0,parentdir)
 psm = PiStorms()
 doExit = False
 bmpw = 60
@@ -70,7 +70,7 @@ if __name__ == '__main__':
 
         sys.stdout.flush()
 
-    psm.screen.drawAutoText("Searching Swarm neighbors ...", 15, 218, fill=(255, 255, 255), size = 18) 
+    psm.screen.drawAutoText("Searching Swarm neighbors ...", 15, 218, fill=(255, 255, 255), size = 18)
     nbrs_list = []
     try:
         nbrs_list = find_swarm_neighbors()
@@ -78,7 +78,7 @@ if __name__ == '__main__':
         m = ["Swarm-Demo", "Network unreachable",
               "Attach Ethernet cable or configure WiFi" ]
         psm.screen.askQuestion(m,["OK"])
-        
+
     if ( len(nbrs_list) == 0 ):
         m = ["Swarm-Demo", "A swarm requires at least two PiStorms", "robots.",
                            "Get another PiStorms robot to add to", "your swarm."]
@@ -87,8 +87,8 @@ if __name__ == '__main__':
     psm.screen.clearScreen()
     psm.screen.fillBmp(old_x, old_y, bmpw, bmpw, path = currentdir+'/'+"smiley.png")
     peers = len(nbrs_list)
-    psm.screen.drawAutoText( str(peers) + " neighbor(s) found", 15, 200, fill=(255, 255, 255), size = 18) 
-    psm.screen.drawAutoText("Press Go to Exit", 15, 218, fill=(255, 255, 255), size = 18) 
+    psm.screen.drawAutoText( str(peers) + " neighbor(s) found", 15, 200, fill=(255, 255, 255), size = 18)
+    psm.screen.drawAutoText("Press Go to Exit", 15, 218, fill=(255, 255, 255), size = 18)
 
     # print neighbor information on screen
     nn = 7
@@ -101,7 +101,7 @@ if __name__ == '__main__':
     # Function parameters:
     # SwarmClient(messageHandler, <optional server>)
     #
-    print "creating SwarmClient " 
+    print "creating SwarmClient "
     sys.stdout.flush()
     try:
         ws = SwarmClient(myHandler)
@@ -148,13 +148,13 @@ if __name__ == '__main__':
                     psm.screen.fillBmp(image_x, image_y, bmpw, bmpw, path = currentdir+'/'+"smiley.png")
                     old_x = image_x
                     old_y = image_y
-                        
+
 
             if(psm.isKeyPressed() == True): # if the GO button is pressed
                 psm.screen.clearScreen()
                 psm.screen.termPrintAt(8, "Exiting to menu")
-                #time.sleep(0.2) 
-                doExit = True 
+                #time.sleep(0.2)
+                doExit = True
             pass
 
     except KeyboardInterrupt:

@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 #
 # Copyright (c) 2016 mindsensors.com
-# 
+#
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 2 as
 # published by the Free Software Foundation.
@@ -15,13 +15,13 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 #
-#mindsensors.com invests time and resources providing this open source code, 
+#mindsensors.com invests time and resources providing this open source code,
 #please support mindsensors.com  by purchasing products from mindsensors.com!
 #Learn more product option visit us @  http://www.mindsensors.com/
 #
 # History:
 # Date         Author          Comments
-# June 2016    Roman Bohuk     Initial Authoring 
+# June 2016    Roman Bohuk     Initial Authoring
 
 import Adafruit_ILI9341
 import os
@@ -42,7 +42,7 @@ class ILI9341(Adafruit_ILI9341.ILI9341):
         self.store = False
         self.mutex = open("/var/lock/ili9341", "w+")
 
-    # PIL.ImageDraw.Draw creates an object that draws in-place, so the mutex is required 
+    # PIL.ImageDraw.Draw creates an object that draws in-place, so the mutex is required
     def draw(self):
         flock(self.mutex, LOCK_EX)
         r = super(ILI9341, self).draw()
@@ -75,43 +75,43 @@ class ILI9341(Adafruit_ILI9341.ILI9341):
     def getPixel(self, x, y):
         """Gets the RGB of a pixel"""
         return self.getBuffer().getpixel((x, y))
-    
+
     def recordFileExists(self):
         return os.path.isfile(self.record_path)
-        
+
     def recordTouchFileExists(self):
         return os.path.isfile(self.touch_record_path)
-    
+
     def startRecording(self, frames="-", includeBg=True):
         with open(self.record_path, "w+") as f: f.write(frames + "\n" + str(int(includeBg)))
-    
+
     def startTouchRecording(self, frames="-"):
         with open(self.touch_record_path, "w+") as f: f.write(frames + "\n1")
-    
+
     def stopRecording(self):
         if self.recordFileExists(): os.remove(self.record_path)
-    
+
     def stopTouchRecording(self):
         if self.recordTouchFileExists(): os.remove(self.touch_record_path)
-    
+
     def readRecordingCount(self):
         if self.recordFileExists():
             with open(self.record_path, "r") as f:
                 return f.read().split("\n")
         else: return ["",""]
-    
+
     def readTouchRecordingCount(self):
         if self.recordTouchFileExists():
             with open(self.touch_record_path, "r") as f:
                 return f.read().split("\n")
         else: return ["",""]
-    
+
     def isTakingFrames(self, fileContents):
         return fileContents == "-" or fileContents.isdigit()
-    
+
     def isStoringWithBg(self, fileContents):
         return str(fileContents) == "1"
-    
+
     def decrementRecordingCount(self, fileContents, includeBgIn):
         toWrite = ""
         if fileContents == "-": toWrite = "-"
@@ -120,7 +120,7 @@ class ILI9341(Adafruit_ILI9341.ILI9341):
             toWrite = str(temp) if temp > 0 else ""
         if toWrite == "": self.stopRecording()
         else: self.startRecording(toWrite, includeBgIn)
-    
+
     def decrementTouchRecordingCount(self, fileContents, includeBgIn):
         toWrite = ""
         if fileContents == "-": toWrite = "-"
@@ -129,7 +129,7 @@ class ILI9341(Adafruit_ILI9341.ILI9341):
             toWrite = str(temp) if temp > 0 else ""
         if toWrite == "": self.stopTouchRecording()
         else: self.startTouchRecording(toWrite, includeBgIn)
-    
+
     def display(self, image=None):
         flock(self.mutex, LOCK_EX)
         content = self.readRecordingCount()
@@ -149,7 +149,7 @@ class ILI9341(Adafruit_ILI9341.ILI9341):
             self.store = False
             self.x, self.y = -1, -1
         flock(self.mutex, LOCK_UN)
-    
+
     def mergeBackground(self):
         bg = Image.open(self.background_path)
         bg.paste(self.getBuffer(), (137, 27))

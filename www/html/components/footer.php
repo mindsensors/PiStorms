@@ -1,7 +1,7 @@
 <?php
 /*
 # Copyright (c) 2016 mindsensors.com
-# 
+#
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 2 as
 # published by the Free Software Foundation.
@@ -15,13 +15,13 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 #
-#mindsensors.com invests time and resources providing this open source code, 
+#mindsensors.com invests time and resources providing this open source code,
 #please support mindsensors.com  by purchasing products from mindsensors.com!
 #Learn more product option visit us @  http://www.mindsensors.com/
 #
 # History:
 # Date         Author          Comments
-# July 2016    Roman Bohuk     Initial Authoring 
+# July 2016    Roman Bohuk     Initial Authoring
 */
 ?>  <footer class="main-footer">
     <!--<div class="pull-right hidden-xs">
@@ -29,7 +29,7 @@
     </div>-->
     <strong>PiStorms by <a href="http://mindsensors.com" target="_blank">mindsensors.com</a></strong>
   </footer>
-  
+
 
 
 <div class="modal fade" id="questionFormModal" tabindex="-1" role="dialog">
@@ -40,7 +40,7 @@
         <h4 class="modal-title">Submit a Bug Report</h4>
       </div>
       <div class="modal-body" id="qbody">
-        
+
         <form action="javascript:question()">
           <h4>Name:</h4>
           <div class="form-group">
@@ -60,7 +60,7 @@
           </div>
           <button type="submit" value="Submit" class="btn btn-flat btn-success">Submit</button>
         </form>
-              
+
       </div>
 
     </div>

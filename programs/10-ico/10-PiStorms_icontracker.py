@@ -21,14 +21,14 @@ class icontracker:
     def __init__(self):
         self.training = self.get_training()
         self.version = '1.00'
-        
+
     def get_training(self):
         path = currentdir
         training = {}
         files = os.listdir(path)
         files_png = [i for i in files if i.endswith('.png')]
         print "files_png: ", files_png
-        #print len(files_png),'images found' 
+        #print len(files_png),'images found'
         for file in files_png  :
             imR = cv2.imread(currentdir+"/"+file)
             #width = imR.shape[0]
@@ -39,15 +39,15 @@ class icontracker:
             #imR = self.preprocess(cv2.resize(imR, (100,100), interpolation =cv2.INTER_AREA))
             imR = self.preprocess(imR)
             training[file] = imR
-           
-        return training   
-    
+
+        return training
+
     # Captures a single image from the camera and returns it in PIL format
     def get_image(self,camera):
         # read is the easiest way to get a full image out of a VideoCapture object.
         retval, im = camera.read()
-        return im    
-     
+        return im
+
     ###############################################################################
     # Image Matching
     ###############################################################################
@@ -56,20 +56,20 @@ class icontracker:
         blur = cv2.GaussianBlur(gray,(5,5),5 )
         thresh = cv2.adaptiveThreshold(blur,255,1,1,11,1)
         return thresh
-  
+
     def imgdiff(self,img1,img2):
-        
+
         img1 = cv2.GaussianBlur(img1,(5,5),5)
-        img2 = cv2.GaussianBlur(img2,(5,5),5)    
-        diff = cv2.absdiff(img1,img2)  
-        diff = cv2.GaussianBlur(diff,(5,5),5)    
-        flag, diff = cv2.threshold(diff, 200, 255, cv2.THRESH_BINARY) 
-        return np.sum(diff)  
+        img2 = cv2.GaussianBlur(img2,(5,5),5)
+        diff = cv2.absdiff(img1,img2)
+        diff = cv2.GaussianBlur(diff,(5,5),5)
+        flag, diff = cv2.threshold(diff, 200, 255, cv2.THRESH_BINARY)
+        return np.sum(diff)
 
     def find_closest_card(self,training,img):
         features = preprocess(img)
-        return sorted(training.values(), key=lambda x:imgdiff(x[1],features))[0][0] 
- 
+        return sorted(training.values(), key=lambda x:imgdiff(x[1],features))[0][0]
+
     def findSquare( self,frame ):
         gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
         blurred = cv2.GaussianBlur(gray, (7, 7), 0)
@@ -85,7 +85,7 @@ class icontracker:
             approx = cv2.approxPolyDP(c, 0.004 * peri, True)
             # if our approximated contour has four points, then
             # we can assume that we have found our squeare
-            
+
             if len(approx) >= 4:
                 screenCnt = approx
                 x,y,w,h = cv2.boundingRect(c)
@@ -100,11 +100,11 @@ class icontracker:
                 cropped = masked[y:y+h,x:x+w]
                 #scale the image so it is fixed size as referance image
                 cropped = cv2.resize(cropped, (200,200), interpolation =cv2.INTER_AREA)
-                
+
                 return cropped
-                
-                
-    def locate_target( self,frame ):        
+
+
+    def locate_target( self,frame ):
         #find the square logo image from our image
         self.target = self.preprocess( self.findSquare(frame))
         #cv2.imshow('target',self.target)
@@ -112,27 +112,27 @@ class icontracker:
         #print 'target', target.shape
         return self.target
 
-    def identify_target( self,frame ):    
+    def identify_target( self,frame ):
         results = {}
-        for file in self.training :  
+        for file in self.training :
             results[file] = self.imgdiff(self.locate_target(frame),self.training[file])
 
-        #x = min(results, key=results.get)   
+        #x = min(results, key=results.get)
         #min(min(e) for e in E if e)
         x = min (((e) for e in results if e), key=results.get)
         return x
 
 
 if __name__ == '__main__':
-  
+
     icon = icontracker()
     print icon.training
-    print icon.version 
+    print icon.version
     #camera_port = 0
     # Now we can initialize the camera capture object with the cv2.VideoCapture class.
     # All it needs is the index to a camera port.
     #camera = cv2.VideoCapture(camera_port)
-    
+
     try:
         camera = PiCamera()
     except:
@@ -148,19 +148,19 @@ if __name__ == '__main__':
     camera.framerate = 30
     #Number of frames to throw away while the camera adjusts to light levels
     #ramp_frames = 30
-    
+
     # Ramp the camera - these frames will be discarded and are only used to allow v4l2
     # to adjust light levels, if necessary
     '''
     for i in xrange(ramp_frames):
         temp = icon.get_image(camera)
-    ''' 
+    '''
     i =0
-    lasttime = time.time() 
+    lasttime = time.time()
     for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=True):
         # grab the raw NumPy array representing the image, then initialize the timestamp
         # and occupied/unoccupied text
-       
+
         i = i+1
         image = frame.array
         gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
@@ -177,7 +177,7 @@ if __name__ == '__main__':
         print 'target', target.shape
 
         results = {}
-        for file in icn.training :  
+        for file in icn.training :
             results[file] = icn.imgdiff(target,icn.training[file])
 
         print min(results, key=results.get)
@@ -196,7 +196,7 @@ if __name__ == '__main__':
                 psm.screen.termPrintAt(9, "Exiting to menu")
                 time.sleep(0.5)
                 quit()
-        
+
         #cv2.waitKey(0)
     # You'll want to release the camera, otherwise you won't be able to create a new
     # capture object until your script exits

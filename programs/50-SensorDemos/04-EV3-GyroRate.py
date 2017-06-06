@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 #
 # Copyright (c) 2016 mindsensors.com
-# 
+#
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 2 as
 # published by the Free Software Foundation.
@@ -15,7 +15,7 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 #
-#mindsensors.com invests time and resources providing this open source code, 
+#mindsensors.com invests time and resources providing this open source code,
 #please support mindsensors.com  by purchasing products from mindsensors.com!
 #Learn more product option visit us @  http://www.mindsensors.com/
 #
@@ -28,7 +28,7 @@ from PiStorms import PiStorms
 psm = PiStorms()
 
 m = ["EV3Gyro-Rate-Demo", "Connect EV3 Gyro to BAS1",
- "and Press OK to continue.", 
+ "and Press OK to continue.",
  "Then move sensor to see readings.",
  "",
  "Press Go to stop program."]
@@ -51,12 +51,12 @@ while(not doExit):
     # print value only if it was changed.
     if (old_rateValue != rateValue):
         psm.screen.clearScreen()
-        psm.screen.drawAutoText(msg, 15, 164, fill=(255, 255, 255), size = 18) 
-    
+        psm.screen.drawAutoText(msg, 15, 164, fill=(255, 255, 255), size = 18)
+
     if(psm.isKeyPressed() == True): # if the GO button is pressed
         psm.screen.clearScreen()
         psm.screen.termPrintln("")
         psm.screen.termPrintln("Exiting to menu")
-        doExit = True 
+        doExit = True
 
 

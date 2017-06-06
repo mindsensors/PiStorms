@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 #
 # Copyright (c) 2016 mindsensors.com
-# 
+#
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 2 as
 # published by the Free Software Foundation.
@@ -15,7 +15,7 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 #
-#mindsensors.com invests time and resources providing this open source code, 
+#mindsensors.com invests time and resources providing this open source code,
 #please support mindsensors.com  by purchasing products from mindsensors.com!
 #Learn more product option visit us @  http://www.mindsensors.com/
 #
@@ -56,9 +56,9 @@ while (not doExit):
         #
         psm.screen.termPrintAt(6,"read error")
 
-    time.sleep(.1)    
+    time.sleep(.1)
     if(psm.isKeyPressed() == True): # if the GO button is pressed
         psm.screen.clearScreen()
         psm.screen.termPrintAt(6, "Exiting to menu")
-        time.sleep(0.2) 
-        doExit = True 
+        time.sleep(0.2)
+        doExit = True

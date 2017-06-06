@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 #
 # Copyright (c) 2015 mindsensors.com
-# 
+#
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 2 as
 # published by the Free Software Foundation.
@@ -15,7 +15,7 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 #
-#mindsensors.com invests time and resources providing this open source code, 
+#mindsensors.com invests time and resources providing this open source code,
 #please support mindsensors.com  by purchasing products from mindsensors.com!
 #Learn more product option visit us @  http://www.mindsensors.com/
 #
@@ -36,7 +36,7 @@ cfg_file = '/usr/local/mindsensors/conf/msdev.cfg'
 config = ConfigParser.RawConfigParser()
 config.read(cfg_file)
 
-message_server = config.get('servers', 'message_server') 
+message_server = config.get('servers', 'message_server')
 home_folder = config.get('msdev', 'homefolder')
 sw_version_file = home_folder+'/.version'
 
@@ -99,7 +99,7 @@ except:
 # and save the json file.
 #
 
-link2 = link+"?serial="+str(serial)+"?rev="+str(rev)+"&sw_ver="+str(sw_version)+"&hw_ver="+str(hw_version) 
+link2 = link+"?serial="+str(serial)+"?rev="+str(rev)+"&sw_ver="+str(sw_version)+"&hw_ver="+str(hw_version)
 try:
     h = urllib.urlopen(link2)
     new_json = json.loads(h.readline())

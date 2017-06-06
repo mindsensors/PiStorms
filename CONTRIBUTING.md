@@ -20,7 +20,7 @@ This document will introduce you to the repository's structure and how the PiSto
 - There is a tab to write and edit programs from your web browser. You can write Python or use the [Blockly](http://www.mindsensors.com/blog/pistorms/visual-programming-for-pistorms-robots) visual programming interface here.
 - Screenshots can be taken at any time. This page lets you start and stop recording screenshots, as well as download individual screenshots or clear them all.
 - A remote control is available, which is particularly useful on a mobile device. There is a joystick to move your robot (using motors B and C). There are also sliders to set the LED colors.
-- Log files are also accessible from the web interface 
+- Log files are also accessible from the web interface
 
 ## Repository files
 
@@ -138,7 +138,7 @@ This was found in a file last modified April 5th, 2016, the day before the first
 > <br>
 > <br>
 > <br>
-> 
+>
 > | ​ | ​ |
 > | --- | --- |
 > | PiStorms | top level folder for everything. |

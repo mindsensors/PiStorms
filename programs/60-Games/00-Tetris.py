@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 #
 # Copyright (c) 2015 mindsensors.com and Kevin Chabowski
-# 
+#
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 2 as
 # published by the Free Software Foundation.
@@ -15,7 +15,7 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 #
-#mindsensors.com invests time and resources providing this open source code, 
+#mindsensors.com invests time and resources providing this open source code,
 #please support mindsensors.com  by purchasing products from mindsensors.com!
 #Learn more product option visit us @  http://www.mindsensors.com/
 #
@@ -59,22 +59,22 @@ colors = [
 # Define the shapes of the single parts
 tetris_shapes = [
     [[1, 1, 1, 1]], # I
-    
+
     [[2, 2, 2], # J
      [0, 0, 2]],
-    
+
     [[3, 3, 3], # L
      [3, 0, 0]],
-    
+
     [[4, 4], # O
      [4, 4]],
-    
+
     [[0, 5, 5], # S
      [5, 5, 0]],
-    
+
     [[6, 6, 6], # T
      [0, 6, 0]],
-    
+
     [[7, 7, 0], # Z
      [0, 7, 7]]
 ]
@@ -113,25 +113,25 @@ def new_board():
     return board
 
 class TetrisApp(object):
-    
+
     class InputDelay(object):
         def __init__(self, maxExecutionsPerSecond = 1, holdEnabled = True):
             self.timeLastExecuted = time.time()
             self.currentState = False
             self.maxRateMs = float(1000) / maxExecutionsPerSecond
             self.canHold = holdEnabled
-        
+
         def canExec(self):
             if self.currentState == self.canHold and time.time() - self.timeLastExecuted > self.maxRateMs:
                 self.timeLastExecuted = time.time()
                 return True
             else:
                 return False
-        
+
         def set(self, state):
             self.currentState = state
-        
-    
+
+
     def __init__(self):
         pygame.init()
         self.screen = psm.screen
@@ -151,16 +151,16 @@ class TetrisApp(object):
         self.inputs['drop'] = TetrisApp.InputDelay(maxExecutionsPerSecond = 30)
         self.inputs['instaDrop'] = TetrisApp.InputDelay(holdEnabled = False)
         self.inputs['pause'] = TetrisApp.InputDelay(holdEnabled = False)
-    
+
     def new_stone(self):
         self.stone = self.nextStone
         self.nextStone = tetris_shapes[rand(len(tetris_shapes))]
         self.stone_x = int(cols / 2 - len(self.stone[0])/2)
         self.stone_y = 0
-        
+
         if check_collision(self.board, self.stone, (self.stone_x, self.stone_y)):
             self.gameover = True
-    
+
     def init_game(self):
         self.board = new_board()
         self.nextStone = [[0]] # avoid AttributeError
@@ -173,7 +173,7 @@ class TetrisApp(object):
         self.nextStoneAt = time.time() + self.newStoneDelay
         self.gameover = False
         self.paused = False
-    
+
     def draw_matrix(self, matrix, offset, refresh = False):
         off_x, off_y  = offset
         for y, row in enumerate(matrix):
@@ -188,7 +188,7 @@ class TetrisApp(object):
         if refresh:
             self.screen.fillRect(0,0,0,0,display=True)
             # `self.screen.refresh()` doesn't work for some reason, maybe fillRect writes to a different buffer?
-    
+
     def add_cl_lines(self, n):
         linescores = [0, 40, 100, 300, 1200]
         self.lines += n
@@ -197,7 +197,7 @@ class TetrisApp(object):
             self.level += 1
             newdelay = 1-0.05*(self.level-1)
             self.newStoneDelay = 0.1 if newdelay < 0.1 else newdelay
-    
+
     def move(self, delta_x):
         if not self.gameover and not self.paused:
             new_x = self.stone_x + delta_x
@@ -207,7 +207,7 @@ class TetrisApp(object):
                 new_x = cols - len(self.stone[0])
             if not check_collision(self.board, self.stone, (new_x, self.stone_y)):
                 self.stone_x = new_x
-    
+
     def drop(self, manual = False):
         if not self.gameover and not self.paused:
             self.score += 1 if manual else 0
@@ -227,38 +227,38 @@ class TetrisApp(object):
                 self.add_cl_lines(cleared_rows)
                 return True
         return False
-    
+
     def insta_drop(self):
         if not self.gameover and not self.paused:
             while(not self.drop(True)):
                 pass
-    
+
     def rotate_stone(self):
         if not self.gameover and not self.paused:
             new_stone = rotate_clockwise(self.stone)
             if not check_collision(self.board, new_stone, (self.stone_x, self.stone_y)):
                 self.stone = new_stone
-    
+
     def toggle_pause(self):
         self.paused = not self.paused
-    
+
     def start_game(self):
         if self.gameover:
             self.init_game()
             self.gameover = False
-    
+
     def quit_game(self):
         psm.led(1, 0, 0, 0)
         psm.led(2, 0, 0, 0)
         sys.exit(0)
-    
+
     def run(self):
         while True:
             tickStart = time.time()
-            
+
             # 320 for both width and height to handle both orientations
             self.screen.fillRect(0, 0, 320, 320, fill = (0,0,0), display = False)
-            
+
             if self.gameover:
                 self.screen.drawAutoText("Game Over!", 15, 15, fill = (255,255,255), size = 35, display = False)
                 self.screen.drawAutoText("Your score: %d" % self.score, 15, 70, fill = (255,255,255), size = 28, display = False)
@@ -274,14 +274,14 @@ class TetrisApp(object):
                 colorIndex = [c for c in self.nextStone[0] if c != 0][0] # get color number of piece (not 0 or empty space)
                 psm.led(1, *(colors[colorIndex]))
                 psm.led(2, *(colors[colorIndex]))
-            
+
             if time.time() >= self.nextStoneAt:
                 self.drop()
                 self.nextStoneAt = self.nextStoneAt + self.newStoneDelay
-            
+
             for event in pygame.event.get():
                 joystick = pygame.joystick.Joystick(0)
-                
+
                 self.inputs['moveLeft'].set(joystick.get_axis(0) < -0.7 or joystick.get_button(0))
                 self.inputs['moveRight'].set(joystick.get_axis(0) > 0.7 or joystick.get_button(2))
                 self.inputs['spin'].set(joystick.get_axis(1) < -0.7 or joystick.get_button(3)) # joystick up or triangle
@@ -296,7 +296,7 @@ class TetrisApp(object):
                     self.quit_game()
                 if joystick.get_button(9): # start
                     self.start_game()
-            
+
             if self.inputs['moveLeft'].canExec():
                 self.move(-1)
             if self.inputs['moveRight'].canExec():
@@ -311,7 +311,7 @@ class TetrisApp(object):
                 self.toggle_pause()
             if psm.isKeyPressed(): # GO button pressed
                 self.quit_game()
-            
+
             elapsed = time.time() - tickStart
             if elapsed < msPerTick: # if we've finished this frame faster than the amount of time this frame should take
                 time.sleep((msPerTick - elapsed) / 1000) # sleep the rest of that time

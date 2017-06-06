@@ -51,7 +51,7 @@ psm.screen.fillRect(20, 80, 320, 240, fill = (0,0,0), display = False)
 psm.screen.fillBmp(110, 110, 100, 100, path = currentdir+'/'+'load.png', display = False)
 psm.screen.fillRect(0, 0, 1, 1, fill = (0,0,0), display = True)
 
-    
+
 test = available()
 psm.screen.fillRect(0, 0, 320, 240, fill = (0,0,0), display = False)
 if test:
@@ -62,7 +62,7 @@ else:
     psm.screen.drawAutoText("You are not connected", 35, 20, fill = (255,0,0), size = 25, display = False)
     psm.screen.drawAutoText("to the internet!", 35, 50, fill = (255,0,0), size = 25, display = False)
     psm.screen.fillBmp(130, 95, 60, 60, path = currentdir+'/'+'x_red.png', display = False)
-    
+
 psm.screen.drawButton(35, 170, width = 250, height = 40, text="Continue", display=False)
 psm.screen.fillRect(0, 0, 1, 1, fill = (0,0,0), display = True)
 exit = False

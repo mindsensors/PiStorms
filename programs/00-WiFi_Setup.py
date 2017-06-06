@@ -352,7 +352,7 @@ while not exit:
     label2 = psm.screen.checkButton(20, 120, 300, 40)
     label3 = psm.screen.checkButton(20, 160, 300, 40)
     label4 = psm.screen.checkButton(20, 200, 300, 40)
-    
+
     # If connected and the leave button is pressed, disconnect
     if leave and current != None:
         # Ask for confirmation
@@ -373,7 +373,7 @@ while not exit:
         ssids = get_available()
     # Redraw connections if changed
     if next or prev or refresh: shown = draw_connections(ssids, page)
-    
+
     # Connect to a chosen network
     if label1 and len(shown) > 0: connect(shown[0][0],shown[0][1],shown[0][2])
     if label2 and len(shown) > 1: connect(shown[1][0],shown[1][1],shown[1][2])
@@ -383,6 +383,6 @@ while not exit:
     if (label1 and len(shown) > 0) or (label2 and len(shown) > 1) or (label3 and len(shown) > 2) or (label4 and len(shown) > 3):
         draw_options()
         shown = draw_connections(ssids, page)
-    
+
     # Exit
     if(psm.isKeyPressed()): exit = True

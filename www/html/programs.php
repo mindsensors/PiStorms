@@ -1,7 +1,7 @@
 <?php
 /*
 # Copyright (c) 2016 mindsensors.com
-# 
+#
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 2 as
 # published by the Free Software Foundation.
@@ -15,14 +15,14 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 #
-#mindsensors.com invests time and resources providing this open source code, 
+#mindsensors.com invests time and resources providing this open source code,
 #please support mindsensors.com  by purchasing products from mindsensors.com!
 #Learn more product option visit us @  http://www.mindsensors.com/
 #
 # History:
 # Date              Author          Comments
 # July 2016         Roman Bohuk     Initial Authoring
-# December 2016     Roman Bohuk     A few bugfixes (ability to rename files, bug reporting function) 
+# December 2016     Roman Bohuk     A few bugfixes (ability to rename files, bug reporting function)
 # May 2017     Seth Tenembaum  Remove login requirement
 */
 
@@ -54,7 +54,7 @@ include "api/config.php";
     }
   </style>
   <style type="text/css" media="screen">
-    #blocklyeditor, #aceeditor { 
+    #blocklyeditor, #aceeditor {
         position: absolute;
         top: 0;
         right: 0;
@@ -65,7 +65,7 @@ include "api/config.php";
     td {
         vertical-align: middle !important;
     }
-    
+
     @media (max-width: 600px) {
         .blocklyeditor-row, .aceeditor-row {
             padding-right:30px;
@@ -101,7 +101,7 @@ include "api/config.php";
   ?>
 
   <div class="content-wrapper">
-  
+
     <section class="content">
       <div class="row">
         <div class="col-md-6 col-lg-4">
@@ -119,7 +119,7 @@ include "api/config.php";
             </div>
           </div>
         </div>
-        
+
         <div class="col-md-6 col-lg-8" id="editorDash">
           <div class="box box-danger" style="margin-bottom:0px !important;padding-bottom:0px !important;">
             <div class="box-body" id="edit_options">
@@ -141,7 +141,7 @@ include "api/config.php";
             </div>
           </div>
         </div>
-        
+
       </div>
 
     </section>
@@ -292,11 +292,11 @@ var editor = ace.edit("aceeditor");
 editor.setTheme("ace/theme/monokai");
 editor.getSession().setMode("ace/mode/python");
 editor.setOptions({
-   autoScrollEditorIntoView: true 
+   autoScrollEditorIntoView: true
 });
 var workspace = null;
 
-      
+
 var edittype = "";
 
 function blocklyedit(filename, location, id, content) {
@@ -364,7 +364,7 @@ function save(location) {
         var blocks = Base64.encode(xml_code);
         var code = Blockly.Python.workspaceToCode(workspace);
         content = '#!/usr/bin/env python\n\n# ATTENTION!\n# Please do not manually edit the contents of this file\n# Only use the web interface for editing\n# Otherwise, the file may no longer be editable using the web interface, or you changes may be lost\n' + copyright + '\n"""\n--BLOCKLY FILE--\n--START BLOCKS--\n' + blocks + '\n' + CryptoJS.SHA256(blocks).toString() + '\n--END BLOCKS--\n"""\n\n\n' + code;
-        
+
     } else if (edittype == "py") {
         content = editor.getValue();
     }
@@ -372,7 +372,7 @@ function save(location) {
         notify("Saved","File successfully saved","success");
         fetchlist();
     });
-    
+
 }
 
 function deleteFile(id) {
@@ -595,7 +595,7 @@ function isInteger(str) {
 function createobject() {
     var typein = $("#filetypeinput").val();
     var namein = $("#filenameinput").val();
-    
+
     var grievances = [];
     for (var i = 0; i < progs.length; i++) {
         if (progs[i][0].toLowerCase() == namein.toLowerCase() || progs[i][0].toLowerCase() == namein.toLowerCase()+".py") {
@@ -620,7 +620,7 @@ function createobject() {
     if (legal.indexOf(namein.charAt(namein.length - 1)) < 0) {
         grievances.push("The filename cannot end with a special character!");
     }
-    
+
     if (grievances.length <= 0) {
         $.post(api+"addobject", {path: currentdir, type:typein, filename:namein}, function(result){
             notify("Success","Object successfully created","success");
@@ -683,7 +683,7 @@ function renameobject() {
     if (legal.indexOf(namein.charAt(namein.length - 1)) < 0) {
         grievances.push("The filename cannot end with a special character!");
     }
-    
+
     if (grievances.length <= 0) {
         console.log({path: currentdir, filename:nameinold, filenamenew:namein + end});
         $.post(api+"renameobject", {path: currentdir, filename:nameinold, filenamenew:namein + end}, function(result){

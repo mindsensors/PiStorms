@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 #
 # Copyright (c) 2016 mindsensors.com
-# 
+#
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 2 as
 # published by the Free Software Foundation.
@@ -15,7 +15,7 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 #
-#mindsensors.com invests time and resources providing this open source code, 
+#mindsensors.com invests time and resources providing this open source code,
 #please support mindsensors.com  by purchasing products from mindsensors.com!
 #Learn more product option visit us @  http://www.mindsensors.com/
 #
@@ -37,11 +37,11 @@ cfg_file = '/usr/local/mindsensors/conf/msdev.cfg'
 config = ConfigParser.RawConfigParser()
 config.read(cfg_file)
 
-download_url = config.get('servers', 'download_url') 
-homefolder = config.get('msdev', 'homefolder') 
+download_url = config.get('servers', 'download_url')
+homefolder = config.get('msdev', 'homefolder')
 
 psm = PiStorms()
-    
+
 def version_json_update_field(field, new_value):
     f = open(version_json_file, 'r')
     json_data = json.loads(f.read())

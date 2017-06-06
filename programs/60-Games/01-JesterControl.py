@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 #
 # Copyright (c) 2015 mindsensors.com
-# 
+#
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 2 as
 # published by the Free Software Foundation.
@@ -15,7 +15,7 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 #
-#mindsensors.com invests time and resources providing this open source code, 
+#mindsensors.com invests time and resources providing this open source code,
 #please support mindsensors.com  by purchasing products from mindsensors.com!
 #Learn more product option visit us @  http://www.mindsensors.com/
 #
@@ -27,7 +27,7 @@
 import os,sys,inspect,time,thread,random
 currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
 parentdir = os.path.dirname(currentdir)
-sys.path.insert(0,parentdir) 
+sys.path.insert(0,parentdir)
 from PiStorms import PiStorms
 
 # starts an instance of PiStorms
@@ -67,25 +67,25 @@ while(not exit):
     if(currFace != 0):
         psm.screen.fillBmp(40, 0, 240, 240, path = currentdir+'/'+"faceClown.png")
         currFace = 0
-        
+
     #right eye
     if(psm.screen.checkButton(106, 68, 44, 53)):
         psm.screen.fillBmp(40,0,240,240, path = currentdir+'/'+"faceClown_eyeRight.png")
         currFace = 1
-        
+
     #left eye
     if(psm.screen.checkButton(175, 68, 44, 53)):
         psm.screen.fillBmp(40,0,240,240, path = currentdir+'/'+"faceClown_eyeLeft.png")
         currFace = 1
-    
+
     #nose
     if(psm.screen.checkButton(130, 122, 70, 60)):
         psm.screen.fillBmp(40,0,240,240, path = currentdir+'/'+"faceClown_nose.png")
         currFace = 1
-    
+
     if(psm.isKeyPressed() == True): # if the GO button is pressed
         psm.screen.clearScreen()
-        psm.screen.termPrintln("") 
+        psm.screen.termPrintln("")
         psm.screen.termPrintln("Exiting to menu")
-        time.sleep(0.5) 
-        exit = True 
+        time.sleep(0.5)
+        exit = True

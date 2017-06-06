@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 #
 # Copyright (c) 2015 mindsensors.com
-# 
+#
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 2 as
 # published by the Free Software Foundation.
@@ -15,7 +15,7 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 #
-#mindsensors.com invests time and resources providing this open source code, 
+#mindsensors.com invests time and resources providing this open source code,
 #please support mindsensors.com  by purchasing products from mindsensors.com!
 #Learn more product option visit us @  http://www.mindsensors.com/
 #
@@ -33,8 +33,8 @@ def get_ip_address(ifname):
         0x8915,  # SIOCGIFADDR
         struct.pack('256s', ifname[:15])
     )[20:24])
-    
-    
+
+
 
 from PiStormsCom import PiStormsCom
 print "running psm-info.py"
@@ -44,13 +44,13 @@ print " Version : "+ str(psm_comm.GetFirmwareVersion() )[:5]
 print " Vendor  : "+ str(psm_comm.GetVendorName() )
 print " Device : "+ str(psm_comm.GetDeviceId() )
 print " HostName :     "   + socket.gethostname()
-   
+
 try:
     print " eth0 :     "   + get_ip_address('eth0')
 except:
     print " eth0 : not present"
-try:    
+try:
     print " wlan0 :    "+ get_ip_address('wlan0')
 except:
     print " wlan0 : not present"
-   
+
