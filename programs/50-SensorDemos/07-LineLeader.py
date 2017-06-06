@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 #
 # Copyright (c) 2016 mindsensors.com
-# 
+#
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 2 as
 # published by the Free Software Foundation.
@@ -15,7 +15,7 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 #
-#mindsensors.com invests time and resources providing this open source code, 
+#mindsensors.com invests time and resources providing this open source code,
 #please support mindsensors.com  by purchasing products from mindsensors.com!
 #Learn more product option visit us @  http://www.mindsensors.com/
 #
@@ -54,14 +54,14 @@ while(not doExit):
     ll_len = len(old_ll_reading)
     for i in range(0,ll_len):
         if (old_ll_reading[i] != None):
-            psm.screen.fillRect(10+(i*35), 10, 30, 
+            psm.screen.fillRect(10+(i*35), 10, 30,
                 old_ll_reading[i], fill = (0,0,0), display = False)
 
     #
     # read from the sensor.
     #
     ll_reading = ll_sensor.ReadRaw_Calibrated()
-    
+
     #
     # Draw new graph
     #
@@ -69,7 +69,7 @@ while(not doExit):
     for i in range(0,ll_len):
         print ll_reading[i]
         if (ll_reading[i] != None):
-            psm.screen.fillRect(10+(i*35), 10, 30, 
+            psm.screen.fillRect(10+(i*35), 10, 30,
                 ll_reading[i], fill = (200,200,0), display = False)
     time.sleep(0.4)
     psm.screen.fillRect(5, 0, 300, 4, fill = (200,0,0), display = True)
@@ -77,6 +77,6 @@ while(not doExit):
     if(psm.isKeyPressed() == True): # if the GO button is pressed
         psm.screen.clearScreen()
         psm.screen.termPrintAt(8, "Exiting to menu")
-        doExit = True 
+        doExit = True
 
 

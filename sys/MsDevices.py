@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 #
 # Copyright (c) 2015 mindsensors.com
-# 
+#
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 2 as
 # published by the Free Software Foundation.
@@ -15,7 +15,7 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
-#mindsensors.com invests time and resources providing this open source code, 
+#mindsensors.com invests time and resources providing this open source code,
 #please support mindsensors.com  by purchasing products from mindsensors.com!
 #Learn more product option visit us @  http://www.mindsensors.com/
 
@@ -26,14 +26,14 @@
 
 from mindsensors_i2c import mindsensors_i2c
 
-## AbsoluteIMU: this class provides PiStorms specific interface for all 
+## AbsoluteIMU: this class provides PiStorms specific interface for all
 # models of the AbsoluteIMU from mindsensors.com
 #  for detailed member functions for this class, please refer to mindsensors.ABSIMU
 class AbsoluteIMU(mindsensors_i2c):
 
-    ## Default ABSIMU I2C Address 
+    ## Default ABSIMU I2C Address
     ABSIMU_ADDRESS = (0x22)
-    ## Command Register 
+    ## Command Register
     COMMAND = 0x41
     ## X-Axis Tilt Register. Will return a signed integer reading
     TILT_X = 0x42
@@ -41,7 +41,7 @@ class AbsoluteIMU(mindsensors_i2c):
     TILT_Y = 0x43
     ## Z-Axis Tilt Register. Will return a signed integer reading
     TILT_Z = 0x44
-    ## X-Axis Accelerometer Register. Will return a signed integer reading (-1050 - 1050) 
+    ## X-Axis Accelerometer Register. Will return a signed integer reading (-1050 - 1050)
     ACCEL_X = 0x45
     ## Y-Axis Accelerometer Register. Will return a signed integer reading (-1050 - 1050)
     ACCEL_Y = 0x47
@@ -49,19 +49,19 @@ class AbsoluteIMU(mindsensors_i2c):
     ACCEL_Z = 0x49
     ## Compass Heading Register. Will return an unsigned integer reading (0 - 360)
     CMPS = 0x4B
-    ## X-Axis Magnetometer Register. Will return a signed integer reading 
+    ## X-Axis Magnetometer Register. Will return a signed integer reading
     MAG_X = 0x4D
-    ## Y-Axis Magnetometer Register. Will return a signed integer reading 
+    ## Y-Axis Magnetometer Register. Will return a signed integer reading
     MAG_Y = 0x4F
-    ## Z-Axis Magnetometer Register. Will return a signed integer reading 
+    ## Z-Axis Magnetometer Register. Will return a signed integer reading
     MAG_Z = 0x51
-    ## X-Axis Gyroscope Register. Will return a signed integer reading 
+    ## X-Axis Gyroscope Register. Will return a signed integer reading
     GYRO_X = 0x53
-    ## Y-Axis Gyroscope Register. Will return a signed integer reading 
+    ## Y-Axis Gyroscope Register. Will return a signed integer reading
     GYRO_Y = 0x55
-    ## Z-Axis Gyroscope Register. Will return a signed integer reading 
+    ## Z-Axis Gyroscope Register. Will return a signed integer reading
     GYRO_Z = 0x57
-    
+
     ## Initialize the class with the i2c address of your AbsoluteIMU
     #  @param self The object pointer.
     #  @param port The PiStorms bank.
@@ -69,14 +69,14 @@ class AbsoluteIMU(mindsensors_i2c):
     #  @remark
     def __init__(self, port, address=ABSIMU_ADDRESS):
         port.activateCustomSensorI2C()
-        mindsensors_i2c.__init__(self, address >> 1)        
+        mindsensors_i2c.__init__(self, address >> 1)
 
     ## Writes a value to the command register
     #  @param self The object pointer.
     #  @param command Value to write to the command register.
     def command(self, command):
-        self.writeByte(COMMAND, int(command)) 
-    
+        self.writeByte(COMMAND, int(command))
+
     ## Reads the tilt value along the x-axis
     #  @param self The object pointer.
     def get_tiltx(self):
@@ -85,7 +85,7 @@ class AbsoluteIMU(mindsensors_i2c):
         except:
             print "Error: Could not read tilt along x-axis"
             return ""
-      
+
     ## Reads the tilt value along the y-axis
     #  @param self The object pointer.
     def get_tilty(self):
@@ -94,7 +94,7 @@ class AbsoluteIMU(mindsensors_i2c):
         except:
             print "Error: Could not read tilt along y-axis"
             return ""
-            
+
     ## Reads the tilt value along the z-axis
     #  @param self The object pointer.
     def get_tiltz(self):
@@ -103,8 +103,8 @@ class AbsoluteIMU(mindsensors_i2c):
         except:
             print "Error: Could not read tilt along z-axis"
             return ""
-            
-    ## Reads the tilt values 
+
+    ## Reads the tilt values
     #  @param self The object pointer.
     def get_tiltall(self):
         try:
@@ -115,7 +115,7 @@ class AbsoluteIMU(mindsensors_i2c):
         except:
             print "Error: Could not read tilt values"
             return ""
-            
+
     ## Reads acceleromter value along the x-axis
     #  @param self The object pointer.
     def get_accelx(self):
@@ -124,7 +124,7 @@ class AbsoluteIMU(mindsensors_i2c):
         except:
             print "Error: Could not read accelerometer value along x-axis"
             return ""
-            
+
     ## Reads acceleromter value along the y-axis
     #  @param self The object pointer.
     def get_accely(self):
@@ -133,7 +133,7 @@ class AbsoluteIMU(mindsensors_i2c):
         except:
             print "Error: Could not read accelerometer value along y-axis"
             return ""
-            
+
     ## Reads acceleromter value along the z-axis
     #  @param self The object pointer.
     def get_accelz(self):
@@ -142,8 +142,8 @@ class AbsoluteIMU(mindsensors_i2c):
         except:
             print "Error: Could not read accelerometer value along z-axis"
             return ""
-            
-    ## Reads the accelerometer values 
+
+    ## Reads the accelerometer values
     #  @param self The object pointer.
     def get_accelall(self):
         try:
@@ -154,7 +154,7 @@ class AbsoluteIMU(mindsensors_i2c):
         except:
             print "Error: Could not read accelerometer values"
             return ""
-            
+
     ## Reads compass heading
     #  @param self The object pointer.
     def get_heading(self):
@@ -166,7 +166,7 @@ class AbsoluteIMU(mindsensors_i2c):
         except:
             print "Error: Could not read compass heading"
             return ""
-    
+
     ## Reads magnetometer value along the x-axis
     #  @param self The object pointer.
     def get_magx(self):
@@ -175,7 +175,7 @@ class AbsoluteIMU(mindsensors_i2c):
         except:
             print "Error: Could not read magnetometer value along x-axis"
             return ""
-            
+
     ## Reads magnetometer value along the y-axis
     #  @param self The object pointer.
     def get_magy(self):
@@ -184,7 +184,7 @@ class AbsoluteIMU(mindsensors_i2c):
         except:
             print "Error: Could not read magnetometer value along y-axis"
             return ""
-            
+
     ## Reads magnetometer value along the z-axis
     #  @param self The object pointer.
     def get_magz(self):
@@ -193,8 +193,8 @@ class AbsoluteIMU(mindsensors_i2c):
         except:
             print "Error: Could not read magnetometer value along z-axis"
             return ""
-            
-    ## Reads the magnetometer values 
+
+    ## Reads the magnetometer values
     #  @param self The object pointer.
     def get_magall(self):
         try:
@@ -205,7 +205,7 @@ class AbsoluteIMU(mindsensors_i2c):
         except:
             print "Error: Could not read magnetometer values"
             return ""
-            
+
     ## Reads gyroscope value along the x-axis
     #  @param self The object pointer.
     def get_gyrox(self):
@@ -214,7 +214,7 @@ class AbsoluteIMU(mindsensors_i2c):
         except:
             print "Error: Could not read gyroscope value along x-axis"
             return ""
-            
+
     ## Reads gyroscope value along the y-axis
     #  @param self The object pointer.
     def get_gyroy(self):
@@ -223,7 +223,7 @@ class AbsoluteIMU(mindsensors_i2c):
         except:
             print "Error: Could not read gyroscope value along y-axis"
             return ""
-            
+
     ## Reads gyroscope value along the z-axis
     #  @param self The object pointer.
     def get_gyroz(self):
@@ -232,8 +232,8 @@ class AbsoluteIMU(mindsensors_i2c):
         except:
             print "Error: Could not read gyroscope value along z-axis"
             return ""
-            
-    ## Reads the tilt values 
+
+    ## Reads the tilt values
     #  @param self The object pointer.
     def get_gyroall(self):
         try:
@@ -244,7 +244,7 @@ class AbsoluteIMU(mindsensors_i2c):
         except:
             print "Error: Could not read gyroscope values"
             return ""
-            
+
     ## Starts the compass calibration process
     #  @param self The object pointer.
     def start_cmpscal(self):
@@ -252,7 +252,7 @@ class AbsoluteIMU(mindsensors_i2c):
             self.command(67)
         except:
             print "Error: Could not start compass calibration process"
-            return ""    
+            return ""
 
     ## Stops the compass calibration process
     #  @param self The object pointer.
@@ -261,8 +261,8 @@ class AbsoluteIMU(mindsensors_i2c):
             self.command(99)
         except:
             print "Error: Could not stop compass calibration process"
-            return ""   
-    
+            return ""
+
     ## Sets accelerometer sensitivity to 2G
     #  @param self The object pointer.
     def accel_2G(self):
@@ -270,7 +270,7 @@ class AbsoluteIMU(mindsensors_i2c):
             self.command(49)
         except:
             print "Error: Could not change accelerometer sensitivity"
-            return ""   
+            return ""
 
     ## Sets accelerometer sensitivity to 4G
     #  @param self The object pointer.
@@ -279,7 +279,7 @@ class AbsoluteIMU(mindsensors_i2c):
             self.command(50)
         except:
             print "Error: Could not change accelerometer sensitivity"
-            return ""   
+            return ""
 
     ## Sets accelerometer sensitivity to 8G
     #  @param self The object pointer.
@@ -288,7 +288,7 @@ class AbsoluteIMU(mindsensors_i2c):
             self.command(51)
         except:
             print "Error: Could not change accelerometer sensitivity"
-            return "" 
+            return ""
 
     ## Sets accelerometer sensitivity to 16G
     #  @param self The object pointer.
@@ -297,14 +297,14 @@ class AbsoluteIMU(mindsensors_i2c):
             self.command(52)
         except:
             print "Error: Could not change accelerometer sensitivity"
-            return ""  
+            return ""
 
 
 ## LineLeader: this class provides PiStorms specific interface for LineLeader-v2
 # and NXTLineLeader
 class LineLeader(mindsensors_i2c):
 
-    ## Default Lineleader I2C Address 
+    ## Default Lineleader I2C Address
     LL_ADDRESS = 0x02
     ## Command Register
     LL_COMMAND = 0x41
@@ -328,7 +328,7 @@ class LineLeader(mindsensors_i2c):
     LL_KIfactor = 0x62
     ## Kd factor Register
     LL_KDfactor = 0x63
-    
+
     LL_CALIBRATED = 0x49
     LL_UNCALIBRATED = 0x74
 
@@ -339,35 +339,35 @@ class LineLeader(mindsensors_i2c):
     #  @remark
     def __init__(self, port, address=LL_ADDRESS):
         port.activateCustomSensorI2C()
-        mindsensors_i2c.__init__(self, address >> 1)        
+        mindsensors_i2c.__init__(self, address >> 1)
 
     ## Writes a value to the command register
     #  @param self The object pointer.
     #  @param command Value to write to the command register.
     def command(self, command):
-        self.writeByte(COMMAND, int(command)) 
-    
+        self.writeByte(COMMAND, int(command))
+
     ## Calibrates the white value for the LineLeader
     #  @param self The object pointer.
     def White_Cal(self):
         self.command(87)
-        
-        
+
+
     ## Calibrates the black value for the LineLeader
     #  @param self The object pointer.
     def Black_Cal(self):
         self.command(66)
-        
+
     ## Wakes up or turns on the LEDs of the LineLeader
     #  @param self The object pointer.
     def Wakeup(self):
         self.command(80)
-        
+
     ## Puts to sleep, or turns off the LEDs of the LineLeader
     #  @param self The object pointer.
     def Sleep(self):
         self.command(68)
-    
+
     ## Reads the eight(8) calibrated light sensor values of the LineLeader
     #  @param self The object pointer.
     def ReadRaw_Calibrated(self):
@@ -376,9 +376,9 @@ class LineLeader(mindsensors_i2c):
         except:
             print "Error: Could not read Lineleader"
             return ""
-    
+
     ## Reads the eight(8) uncalibrated light sensor values of the LineLeader
-    #  @param self The object pointer.    
+    #  @param self The object pointer.
     def ReadRaw_Uncalibrated(self):
         try:
             s1 = self.readInteger(self.LL_UNCALIBRATED)
@@ -394,7 +394,7 @@ class LineLeader(mindsensors_i2c):
         except:
             print "Error: Could not read Lineleader"
             return ""
-     
+
     ## Read the steering value from the Lineleader (add or subtract this value to the motor speed)
     #  @param self The object pointer.
     def steering(self):
@@ -402,8 +402,8 @@ class LineLeader(mindsensors_i2c):
             return self.readByteSigned(self.LL_STEERING)
         except:
             print "Error: Could not read Lineleader"
-            return ""  
-    
+            return ""
+
     ## Read the average weighted value of the current line from position from the Lineleader
     #  @param self The object pointer.
     def average(self):
@@ -411,17 +411,17 @@ class LineLeader(mindsensors_i2c):
             return self.readByte(self.LL_AVERAGE)
         except:
             print "Error: Could not read Lineleader"
-            return ""  
+            return ""
 
-    ## Reads the result of all 8 light sensors form the LineLeader as 1 byte (1 bit for each sensor) 
+    ## Reads the result of all 8 light sensors form the LineLeader as 1 byte (1 bit for each sensor)
     #  @param self The object pointer.
     def result(self):
         try:
             return self.readByte(self.LL_RESULT)
         except:
             print "Error: Could not read Lineleader"
-            return ""       
-            
+            return ""
+
     ## Reads the setpoint register.
     #  @param self The object pointer.
     def getSetPoint(self):
@@ -430,7 +430,7 @@ class LineLeader(mindsensors_i2c):
         except:
             print "Error: Could not read Lineleader"
             return ""
-            
+
     ## Writes the Setpoint register.
     #  @param self The object pointer.
     def setSetPoint(self):
@@ -439,7 +439,7 @@ class LineLeader(mindsensors_i2c):
         except:
             print "Error: Could not write to Lineleader"
             return ""
-            
+
     ## Write the Kp value to the Lineleader
     #  @param self The object pointer.
     def setKP(self):
@@ -448,7 +448,7 @@ class LineLeader(mindsensors_i2c):
         except:
             print "Error: Could not write to Lineleader"
             return ""
-            
+
     ## Write the Ki value to the Lineleader
     #  @param self The object pointer.
     def setKI(self):
@@ -457,7 +457,7 @@ class LineLeader(mindsensors_i2c):
         except:
             print "Error: Could not write to Lineleader"
             return ""
-            
+
     ## Write the Kd value to the Lineleader
     #  @param self The object pointer.
     def setKD(self):
@@ -466,7 +466,7 @@ class LineLeader(mindsensors_i2c):
         except:
             print "Error: Could not write to Lineleader"
             return ""
-            
+
     ## Write the Kp factor value to the Lineleader
     #  @param self The object pointer.
     def setKPfactor(self):
@@ -475,7 +475,7 @@ class LineLeader(mindsensors_i2c):
         except:
             print "Error: Could not write to Lineleader"
             return ""
-            
+
     ## Write the Ki factor value to the Lineleader
     #  @param self The object pointer.
     def setKIfactor(self):
@@ -484,7 +484,7 @@ class LineLeader(mindsensors_i2c):
         except:
             print "Error: Could not write to Lineleader"
             return ""
-            
+
     ## Write the Kd factor value to the Lineleader
     #  @param self The object pointer.
     def setKDfactor(self):
@@ -493,7 +493,7 @@ class LineLeader(mindsensors_i2c):
         except:
             print "Error: Could not write to Lineleader"
             return ""
-    
+
     ## Read the Kp value from the Lineleader
     #  @param self The object pointer.
     def getKP(self):
@@ -502,7 +502,7 @@ class LineLeader(mindsensors_i2c):
         except:
             print "Error: Could not read Lineleader"
             return ""
-            
+
     ## Read the Ki value from the Lineleader
     #  @param self The object pointer.
     def getKI(self):
@@ -511,7 +511,7 @@ class LineLeader(mindsensors_i2c):
         except:
             print "Error: Could not read Lineleader"
             return ""
-            
+
     ## Read the Kd value from the Lineleader
     #  @param self The object pointer.
     def getKD(self):
@@ -520,7 +520,7 @@ class LineLeader(mindsensors_i2c):
         except:
             print "Error: Could not read Lineleader"
             return ""
-            
+
     ## Read the Kp factor value to the Lineleader
     #  @param self The object pointer.
     def getKPfactor(self):
@@ -529,7 +529,7 @@ class LineLeader(mindsensors_i2c):
         except:
             print "Error: Could not read Lineleader"
             return ""
-            
+
     ## Read the Ki factor value to the Lineleader
     #  @param self The object pointer.
     def getKIfactor(self):
@@ -538,7 +538,7 @@ class LineLeader(mindsensors_i2c):
         except:
             print "Error: Could not read Lineleader"
             return ""
-     
+
     ## Read the Kd factor value to the Lineleader
     #  @param self The object pointer.
     def getKDfactor(self):
@@ -546,12 +546,12 @@ class LineLeader(mindsensors_i2c):
             return self.readByte(self.LL_KDfactor)
         except:
             print "Error: Could not read Lineleader"
-            return ""             
+            return ""
 
 ## LightSensorArray: this class provides PiStorms specific interface for LightSensorArray
 #
 class LightSensorArray(mindsensors_i2c):
-    ## Default LightSensorArray I2C Address 
+    ## Default LightSensorArray I2C Address
     LSA_ADDRESS = 0x14
     ## Command Register
     LSA_COMMAND = 0x41
@@ -559,7 +559,7 @@ class LightSensorArray(mindsensors_i2c):
     LSA_CALIBRATED = 0x42
     ## Uncalibrated Register. Will return an 8 byte array
     LSA_UNCALIBRATED = 0x6A
-    
+
     ## Initialize the class with the i2c address of your device
     #  @param self The object pointer.
     #  @param port The PiStorms bank.
@@ -567,34 +567,34 @@ class LightSensorArray(mindsensors_i2c):
     #  @remark
     def __init__(self, port, address=LSA_ADDRESS):
         port.activateCustomSensorI2C()
-        mindsensors_i2c.__init__(self, address >> 1)        
+        mindsensors_i2c.__init__(self, address >> 1)
 
     ## Writes a value to the command register
     #  @param self The object pointer.
     #  @param cmd Value to write to the command register.
     def command(self, cmd):
-        self.writeByte(self.LSA_COMMAND, int(cmd)) 
+        self.writeByte(self.LSA_COMMAND, int(cmd))
 
     ## Calibrates the white value for the LightSensorArray
     #  @param self The object pointer.
     def White_Cal(self):
         self.command(87)
-        
+
     ## Calibrates the black value for the LightSensorArray
     #  @param self The object pointer.
     def Black_Cal(self):
         self.command(66)
-        
+
     ## Wakes up or turns on the LEDs of the LightSensorArray
     #  @param self The object pointer.
     def Wakeup(self):
         self.command(80)
-        
+
     ## Puts to sleep, or turns off the LEDs of the LightSensorArray
     #  @param self The object pointer.
     def Sleep(self):
         self.command(68)
-    
+
     ## Reads the eight(8) calibrated light sensor values of the LightSensorArray
     #  @param self The object pointer.
     def ReadRaw_Calibrated(self):
@@ -603,9 +603,9 @@ class LightSensorArray(mindsensors_i2c):
         except:
             print "Error: Could not read LSArray"
             return ""
-    
+
     ## Reads the eight(8) uncalibrated light sensor values of the LightSensorArray
-    #  @param self The object pointer.    
+    #  @param self The object pointer.
     def ReadRaw_Uncalibrated(self):
         try:
             s1 = self.readInteger(self.LSA_UNCALIBRATED)
@@ -620,10 +620,10 @@ class LightSensorArray(mindsensors_i2c):
             return array
         except:
             print "Error: Could not read LSArray"
-            return "" 
+            return ""
 
 
-## SumoEyes: this class provides PiStorms specific interface for the 
+## SumoEyes: this class provides PiStorms specific interface for the
 #  SumoEyes obstacle detection sensor from mindsensors.com
 class SumoEyes(mindsensors_i2c):
     # Responses for SumoEyes
@@ -633,15 +633,15 @@ class SumoEyes(mindsensors_i2c):
         555: [3, "Right"],
         800: [2, "Left"]
     }
-    
+
     # Sensor
     PS_S1EV_Ready = 0x70
     PS_S2EV_Ready = 0xA4
-    
+
     # Settings for the setRange method
     LONG_RANGE = True
     SHORT_RANGE = False
-    
+
     ## Initialize the class with the PiStorms bank
     #  @param self The object pointer.
     #  @param port The PiStorms bank.
@@ -649,10 +649,10 @@ class SumoEyes(mindsensors_i2c):
     #  Example implementation in your program:
     #  @code
     #  ...
-    #  psm = PiStorms() 
+    #  psm = PiStorms()
     #  se_sensor = MsDevices.SumoEyes(psm.BAS1)
     #  ...
-    #  @endcode    
+    #  @endcode
     def __init__(self, port):
         # Get the instance of the PSSensor class
         self.sensor = port.pssensor
@@ -662,7 +662,7 @@ class SumoEyes(mindsensors_i2c):
         self.setRange()
         # Method used in the original implementation
         self.sensor.setModeEV3(0)
-    
+
     ## Check the zones for an obstacle
     #  @param self The object pointer.
     #  @param verbose Outputs the string value of the direction if set to True
@@ -670,11 +670,11 @@ class SumoEyes(mindsensors_i2c):
     #  Example implementation in your program:
     #  @code
     #  ...
-    #  psm = PiStorms() 
+    #  psm = PiStorms()
     #  se_sensor = MsDevices.SumoEyes(psm.BAS1)
     #  print se_sensor.detectObstactleZone()
     #  ...
-    #  @endcode 
+    #  @endcode
     def detectObstactleZone(self, verbose = False):
         reading = self.readSensorValue()
         for reference in self.SE_Values.keys():
@@ -682,14 +682,14 @@ class SumoEyes(mindsensors_i2c):
                 output = self.SE_Values[reference]
                 return output[1] if verbose else ouput[0]
         return self.SE_None[1] if verbose else self.SE_None[0]
-    
+
     ## Reads the value from the SumoEyes sensor
     #  @param self The object pointer.
     #  @remark
     #  Should not be used in other programs
     def readSensorValue(self):
         return self.readInteger(self.PS_S1EV_Ready if self.sensor.sensornum == 1 else self.PS_S2EV_Ready)
-    
+
     ## Sets the sensor range to LONG_RANGE or SHORT_RANGE setting
     #  @param self The object LONG_RANGE.
     #  @param range The range (long is default)
@@ -697,17 +697,17 @@ class SumoEyes(mindsensors_i2c):
     #  Example implementation in your program:
     #  @code
     #  ...
-    #  psm = PiStorms() 
+    #  psm = PiStorms()
     #  se_sensor = MsDevices.SumoEyes(psm.BAS1)
     #  se_sensor.setRange(se_sensor.SHORT_RANGE)
     #  ...
-    #  @endcode 
+    #  @endcode
     def setRange(self, range = LONG_RANGE):
         if range == self.LONG_RANGE:
             self.sensor.setType(self.sensor.PS_SENSOR_TYPE_LIGHT_INACTIVE)
         elif range == self.SHORT_RANGE:
             self.sensor.setType(self.sensor.PS_SENSOR_TYPE_LIGHT_ACTIVE)
-    
+
     ## Checks if the sensor reading is within a tolerance to find the zone
     #  @param self The object pointer.
     #  @param reference The reference value.
@@ -718,12 +718,12 @@ class SumoEyes(mindsensors_i2c):
     def isNear(self, reference, value, tolerance = 40):
         return (value > (reference - tolerance)) and (value < (reference + tolerance))
 
-## IRThermometer : this class provides PiStorms specific interface for the 
-#  IR Thermometer sensor: 
+## IRThermometer : this class provides PiStorms specific interface for the
+#  IR Thermometer sensor:
 #  http://www.mindsensors.com/products/170-ir-temperature-sensor-for-ev3-or-nxt
 #
 class IRThermometer(mindsensors_i2c):
-    ## Default I2C Address 
+    ## Default I2C Address
     IRT_ADDRESS = 0x2A
     ## Command Register
     IRT_COMMAND = 0x41
@@ -732,7 +732,7 @@ class IRThermometer(mindsensors_i2c):
     IRT_TARGET_CELSIUS = 0x44
     IRT_AMBIENT_FAHR = 0x46
     IRT_TARGET_FAHR = 0x48
-    
+
     ## Initialize the class with the i2c address of your device
     #  @param self The object pointer.
     #  @param port The PiStorms bank.
@@ -740,7 +740,7 @@ class IRThermometer(mindsensors_i2c):
     #  @remark
     def __init__(self, port, address=IRT_ADDRESS):
         port.activateCustomSensorI2C()
-        mindsensors_i2c.__init__(self, address >> 1)        
+        mindsensors_i2c.__init__(self, address >> 1)
 
     def readAmbientCelsius(self):
         return (float(self.readInteger(self.IRT_AMBIENT_CELSIUS))/100)
@@ -753,7 +753,7 @@ class IRThermometer(mindsensors_i2c):
 
     def readTargetFahr(self):
         return (float(self.readInteger(self.IRT_TARGET_FAHR))/100)
-            
+
 """
 AbsoluteIMU -> ABSIMU **
 LineLeader -> LINELEADER **
@@ -770,6 +770,6 @@ PressureSensor -> PPS58
 NXTCam -> NXTCAM
 PSPNx -> needs implementation
 EV3SensorMux -> EV3SensAdapt (3 channels -> change i2c address based on channel).
-EV3SensorAdapter -> EV3SensAdapt 
+EV3SensorAdapter -> EV3SensAdapt
 SumoEyes (is an analog device - needs different implementation).
 """

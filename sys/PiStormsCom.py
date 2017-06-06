@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 #
 # Copyright (c) 2015 mindsensors.com
-# 
+#
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 2 as
 # published by the Free Software Foundation.
@@ -15,13 +15,13 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
-#mindsensors.com invests time and resources providing this open source code, 
+#mindsensors.com invests time and resources providing this open source code,
 #please support mindsensors.com  by purchasing products from mindsensors.com!
 #Learn more product option visit us @  http://www.mindsensors.com/
 
 # History:
 # Date      Author      Comments
-#  July 2015  Henry     Initial Authoring 
+#  July 2015  Henry     Initial Authoring
 
 from mindsensors_i2c import mindsensors_i2c
 import time, math
@@ -49,16 +49,16 @@ class PSSensor():
     PS_SENSOR_TYPE_COLORNONE = 17
     PS_SENSOR_TYPE_EV3_SWITCH = 18
     PS_SENSOR_TYPE_EV3 = 19
-    
-    
+
+
     PS_EV3CACHE_READY = 0
     PS_EV3CACHE_ID = 1
     PS_EV3CACHE_READY = 2
     PS_EV3CACHE_READY = 3
     PS_EV3CACHE_READY = 4
-    
-    
-    
+
+
+
     sensornum = 0
     def __init__(self,bank,num):
         self.bank = bank
@@ -96,7 +96,7 @@ class PSSensor():
         if(self.sensornum == 1):
             return self.bank.readByte(PiStormsCom.PS_S1EV_Data) == 1
         if(self.sensornum == 2):
-            return self.bank.readByte(PiStormsCom.PS_S2EV_Data) == 1     
+            return self.bank.readByte(PiStormsCom.PS_S2EV_Data) == 1
     def numTouchesEV3(self):
         self.setType(self.PS_SENSOR_TYPE_EV3_SWITCH)
         #self.EV3Retrieve()
@@ -135,7 +135,7 @@ class PSSensor():
         if(self.sensornum == 1):
             return self.bank.readByte(PiStormsCom.PS_S1EV_Data)
         if(self.sensornum == 2):
-            return self.bank.readByte(PiStormsCom.PS_S2EV_Data) 
+            return self.bank.readByte(PiStormsCom.PS_S2EV_Data)
     def headingIREV3(self,channel):
         self.setType(self.PS_SENSOR_TYPE_EV3)
         self.setModeEV3(1)
@@ -317,7 +317,7 @@ class PSSensor():
             return self.bank.readInteger(PiStormsCom.PS_S1EV_Ready)
         if(self.sensornum == 2):
             return self.bank.readInteger(PiStormsCom.PS_S2EV_Ready)
-        
+
     def SumoEyes(self, long = True):
         self.SE_None = 0
         self.SE_Front = 1
@@ -326,7 +326,7 @@ class PSSensor():
         if(long):
             self.setType(self.PS_SENSOR_TYPE_LIGHT_INACTIVE)
         else:
-            self.setType(self.PS_SENSOR_TYPE_LIGHT_ACTIVE) 
+            self.setType(self.PS_SENSOR_TYPE_LIGHT_ACTIVE)
         self.setModeEV3(0)
         #self.EV3Retrieve()
         #if  self.SumoEyesisNear(465, 30,(self.EV3Cache[1][0]<<8 ) +self.EV3Cache[0]   ):
@@ -340,7 +340,7 @@ class PSSensor():
             elif(self.SumoEyesisNear(555, 30, (self.bank.readInteger(PiStormsCom.PS_S1EV_Ready)))):
                 return self.SE_Right
             else:
-                return self.SE_None 
+                return self.SE_None
         if(self.sensornum == 2):
             if(self.SumoEyesisNear(465, 30, (self.bank.readInteger(PiStormsCom.PS_S2EV_Ready)))):
                 return self.SE_Front
@@ -351,14 +351,14 @@ class PSSensor():
             elif(self.SumoEyesisNear(555, 30, (self.bank.readInteger(PiStormsCom.PS_S2EV_Ready)))):
                 return self.SE_Right
             else:
-                return self.SE_None                  
-        
+                return self.SE_None
+
     def SumoEyesisNear(self,reference, delta, comet):
         if (comet > (reference - delta)) and (comet < (reference + delta)):
             return True
         else:
-            return False        
-        
+            return False
+
     def colorSensorRawNXT(self, smode = 13):
         self.setType(smode)
         self.setModeEV3(0)
@@ -392,31 +392,31 @@ class PSSensor():
             return self.bank.readByte(PiStormsCom.PS_S2EV_Ready)
     def activateCustomSensorI2C(self):
         self.setType(self.PS_SENSOR_TYPE_CUSTOM)
-        
-    
-    
+
+
+
 class PSMotor():
-    
+
     #bank = 0
     motornum = 0
     def __init__(self, bank, num):
         self.bank = bank
         self.motornum = num
-    
+
     def pos(self):
         if(self.motornum == 1):
             return self.bank.readLongSigned(PiStormsCom.PS_Position_M1)
-            
+
         elif(self.motornum == 2):
             return self.bank.readLongSigned(PiStormsCom.PS_Position_M2)
-            
+
     def resetPos(self):
         if(self.motornum == 1):
             self.bank.writeByte(PiStormsCom.PS_Command, 114)
-            
+
         elif(self.motornum == 2):
             self.bank.writeByte(PiStormsCom.PS_Command, 115)
-         
+
     def setSpeedSync(self, speed):
         ctrl = 0
         ctrl |= PiStormsCom.PS_CONTROL_SPEED
@@ -439,16 +439,16 @@ class PSMotor():
         if(speed == 0):
             self.float()
             return
-        
+
         ctrl = 0
         ctrl |= PiStormsCom.PS_CONTROL_SPEED
-        
+
         #print speed
         speed = int(speed)
-        
-        
+
+
         ctrl |= PiStormsCom.PS_CONTROL_GO
-        if (self.motornum == 1): 
+        if (self.motornum == 1):
             array = [speed, 0, 0, ctrl]
             self.bank.writeArray( PiStormsCom.PS_Speed_M1, array)
         if (self.motornum == 2):
@@ -471,7 +471,7 @@ class PSMotor():
         #ctrl |= PiStormsCom.PS_CONTROL_RELATIVE
         ctrl |= PiStormsCom.PS_CONTROL_TACHO
         ctrl |= PiStormsCom.PS_CONTROL_GO
-        
+
         if(self.motornum == 1):
             self.bank.writeArray(PiStormsCom.PS_SetPoint_M1, [0,0,0,0])
             self.bank.writeByte(PiStormsCom.PS_CMDA_M1, ctrl)
@@ -529,23 +529,23 @@ class PSMotor():
             ctrl |= PiStormsCom.PS_CONTROL_BRK
             ctrl |= PiStormsCom.PS_CONTROL_ON
         ctrl |= PiStormsCom.PS_CONTROL_GO
-        
+
         b4 = (degs/0x1000000)
         b3 = ((degs%0x1000000)/0x10000)
         b2 = (((degs%0x1000000)%0x10000)/0x100)
         b1 = (((degs%0x1000000)%0x10000)%0x100)
-        
+
         # b1 = degs & 0xFF
         # b2 = (degs >>8) & 0xFF
         # b3 = (degs >>16) & 0xFF
         # b4 = (degs >> 24) & 0xFF
-        
+
         if(self.motornum == 1):
             array = [b1, b2, b3, b4, speed, 0, 0, ctrl]
-            self.bank.writeArray(PiStormsCom.PS_SetPoint_M1, array) 
+            self.bank.writeArray(PiStormsCom.PS_SetPoint_M1, array)
         if(self.motornum == 2):
             array = [b1, b2, b3, b4, speed, 0, 0, ctrl]
-            self.bank.writeArray(PiStormsCom.PS_SetPoint_M2, array) 
+            self.bank.writeArray(PiStormsCom.PS_SetPoint_M2, array)
 
     ## Reads the values of the PID control registers
     #  @param self The object pointer.
@@ -564,25 +564,25 @@ class PSMotor():
         except:
             print "Error: Could not read PID values"
             return []
-            
+
     def SetPerformanceParameters(self, Kp_tacho, Ki_tacho, Kd_tacho, Kp_speed, Ki_speed, Kd_speed, passcount, tolerance):#untested
         Kp_t1 = Kp_tacho%0x100
-        Kp_t2 = Kp_tacho/0x100    
+        Kp_t2 = Kp_tacho/0x100
         Ki_t1 = Ki_tacho%0x100
         Ki_t2 = Ki_tacho/0x100
         Kd_t1 = Kd_tacho%0x100
         Kd_t2 = Kd_tacho/0x100
-        Kp_s1 = Kp_speed%0x100      
+        Kp_s1 = Kp_speed%0x100
         Kp_s2 = Kp_speed/0x100
-        Ki_s1 = Ki_speed%0x100 
+        Ki_s1 = Ki_speed%0x100
         Ki_s2 = Ki_speed/0x100
         Kd_s1 = Kd_speed%0x100
         Kd_s2 = Kd_speed/0x100
         passcount = passcount
         tolerance = tolerance
         array = [Kp_t1 , Kp_t2 , Ki_t1, Ki_t2, Kd_t1, Kd_t2, Kp_s1, Kp_s2, Ki_s1, Ki_s2, Kd_s1, Kd_s2, passcount, tolerance]
-        self.bank.writeArray(PiStormsCom.PS_P_Kp, array)       
-    
+        self.bank.writeArray(PiStormsCom.PS_P_Kp, array)
+
 ## PiStormsCom: this class provides communication functions for PiStorms.
 # do not use this class directly in user programs, instead use functions provided by LegoDevices or MsDevices class.
 class PiStormsCom(object):
@@ -628,31 +628,31 @@ class PiStormsCom(object):
 
     PS_A_ADDRESS = 0x34
     PS_B_ADDRESS = 0x36
-    
+
     # Registers
     PS_Command = 0x41
-    
+
     PS_SetPoint_M1 =0x42
     PS_Speed_M1 = 0x46
     PS_Time_M1 = 0x47
     PS_CMDB_M1 = 0x48
     PS_CMDA_M1 = 0x49
-    
+
     PS_SetPoint_M2 =0x4A
     PS_Speed_M2 = 0x4E
     PS_Time_M2 = 0x4F
     PS_CMDB_M2 = 0x50
     PS_CMDA_M2 = 0x51
-    
+
     PS_Position_M1 = 0x52
     PS_Position_M2 = 0x56
-    
+
     PS_Status_M1 = 0x5A
     PS_Status_M2 = 0x5B
-    
+
     PS_Tasks_M1 = 0x5C
     PS_Tasks_M2 = 0x5D
-    
+
     PS_P_Kp = 0x5E
     PS_P_Ki = 0x60
     PS_P_Kd = 0x62
@@ -706,7 +706,7 @@ class PiStormsCom(object):
     PS_S2C_G_raw = 0xAA
     PS_S2C_B_raw = 0xAB
     PS_S2C_N_raw = 0xAC
-    # LED 
+    # LED
     PS_R = 0xD7
     PS_G = 0xD8
     PS_B = 0xD9
@@ -714,7 +714,7 @@ class PiStormsCom(object):
     PS_KeyPress = 0xDA
     PS_Key1Count = 0xDB
     PS_Key2Count = 0xDC
-    
+
     PS_CONTROL_SPEED  = 0x01
     PS_CONTROL_RAMP   = 0x02
     PS_CONTROL_RELATIVE =  0x04
@@ -738,21 +738,21 @@ class PiStormsCom(object):
     T = 0x54
     w = 0x77
     l = 0x6C
-    
-    
+
+
     bankA = mindsensors_i2c(PS_A_ADDRESS >> 1)
     bankB = mindsensors_i2c(PS_B_ADDRESS >> 1)
-    
+
     BAM1 = PSMotor(bankA,1)
     BAM2 = PSMotor(bankA,2)
     BBM1 = PSMotor(bankB,1)
     BBM2 = PSMotor(bankB,2)
-    
+
     BAS1 = PSSensor(bankA,1)
     BAS2 = PSSensor(bankA,2)
     BBS1 = PSSensor(bankB,1)
     BBS2 = PSSensor(bankB,2)
-    
+
     def __init__(self):
         try:
             self.bankA.readByte(self.PS_BattV)
@@ -761,7 +761,7 @@ class PiStormsCom(object):
         else:
             self.bankA.writeByte(self.PS_Command,self.R)
             self.bankB.writeByte(self.PS_Command,self.R)
-        
+
         self.ts_cal = None # signified firmware version older than V3.00, use old touchscreen methods
         if self.GetFirmwareVersion() >= 'V3.00':
             # read touchscreen calibration values from cache file
@@ -769,23 +769,23 @@ class PiStormsCom(object):
                 self.ts_cal = json.load(open('/tmp/ps_ts_cal', 'r'))
             except IOError:
                 print 'Touchscreen Error: Failed to read touchscreen calibration values in PiStormsCom.py'
-        
+
     def Shutdown(self):
         self.bankA.writeByte(self.PS_Command,self.H)
-        
+
     def command(self, cmd, bank):
         if(bank == 1):
             self.bankA.writeByte(self.PS_Command,cmd)
         elif(bank == 2):
             self.bankB.writeByte(self.PS_Command,cmd)
-            
+
     def battVoltage(self):
         try:
             return self.bankA.readByte(self.PS_BattV)*.040
         except:
             return 0
     ##  Read the firmware version of the i2c device
-    
+
     def GetFirmwareVersion(self):
         try:
             ver = self.bankA.readString(0x00, 8)
@@ -805,7 +805,7 @@ class PiStormsCom(object):
     def GetDeviceId(self):
         try:
             device = self.bankA.readString(0x10, 8)
-            return device    
+            return device
         except:
             return "ReadErr"
 
@@ -813,15 +813,15 @@ class PiStormsCom(object):
     def GetDeviceFeatures(self):
         try:
             features = self.bankA.readString(0x18, 8)
-            return features    
+            return features
         except:
             return "ReadErr"
-        
+
     def led(self,lednum,red,green,blue):
-    
+
         try:
             if(lednum == 1):
-            
+
                 array = [red, green, blue]
                 self.bankA.writeArray(self.PS_R, array)
             if(lednum == 2):
@@ -843,7 +843,7 @@ class PiStormsCom(object):
         try:
             if self.ts_cal == None:
                 return (self.bankA.readByte(self.PS_KeyPress))
-            
+
             # if self.ts_cal doesn't exist because it failed to load touchscreen calibration values in __init__, the surrounding try/except block here will handle returning 0 as the default/error value
             x1 = self.ts_cal['x1']
             y1 = self.ts_cal['y1']
@@ -853,7 +853,7 @@ class PiStormsCom(object):
             y3 = self.ts_cal['y3']
             x4 = self.ts_cal['x4']
             y4 = self.ts_cal['y4']
-            
+
             x = self.bankA.readInteger(0xE7) # current x
             # x1 and x2 are the left-most calibration points. We want to take whichever value is furthest right, to give the maximum touch area for the software buttons that make sense. x4 is the right-top calibration point. If x4 > x1 then 0 is towards the left so the the greater value of x1 and x2 will be the rightmost. If not, then high numbers are towards the left so we the lesser value of x1 and x2 will be rightmost.
             # We don't take a calibration point in the left gutter, so we have to assume 200 is the greatest reasonable width of this area. If the current touched x point is right of the border, then it is on the touchscreen so return 0 (because none of the software buttons are being pressed). If the value is between the border and 200 points left of that, continue on as the touch point is in the software button area, If the value is further than 200 points left of the border, it is likely an erroneous error caused by the touchscreen not being touched.
@@ -865,14 +865,14 @@ class PiStormsCom(object):
                 xborder = min(x1, x2)
                 if not xborder-100 < x < xborder+200:
                     return 0
-            
+
             y = self.bankA.readInteger(0xE9) # current y
             # the lower and greater of the two left-most y calibration values
             # TODO: does this assume the screen is not flipped vertically? Be sure to test this
             ymin = min(y1, y2)
             ymax = max(y1, y2)
             yQuarter = (ymax-ymin)/4 # a quarter of the distance between the two y extremes
-            
+
             if y < ymin + 0 * yQuarter:
                 return 0 # too low
             if y < ymin + 1 * yQuarter:
@@ -885,7 +885,7 @@ class PiStormsCom(object):
                 return 40
             if y >= ymin + 4 * yQuarter:
                 return 0 # too high
-            
+
             return 0 # some other weird error occured, execution should not reach this point
         except:
             return 0
@@ -921,25 +921,25 @@ if __name__ == '__main__':
             psc.BAM2.runSecs(1,100,True)
             psc.BBM2.runSecs(1,100,True)
             psc.BAM1.waitUntilNotBusy()
-            
+
             psc.BAM1.runSecs(1,-100,True)
             psc.BBM1.runSecs(1,-100,True)
             psc.BAM2.runSecs(1,-100,True)
             psc.BBM2.runSecs(1,-100,True)
             psc.BAM1.waitUntilNotBusy()
-            
+
             psc.BAM1.hold()
             psc.BAM2.hold()
             psc.BBM1.hold()
             psc.BBM2.hold()
-            
+
             time.sleep(5)
             psc.BAM1.float()
             psc.BAM2.float()
             psc.BBM1.float()
             psc.BBM2.float()
             time.sleep(1)
-            
+
     except KeyboardInterrupt:
         psc.BAM1.float()
         psc.BAM2.float()

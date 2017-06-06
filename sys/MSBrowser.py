@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 #
 # Copyright (c) 2015 mindsensors.com
-# 
+#
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 2 as
 # published by the Free Software Foundation.
@@ -15,7 +15,7 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 #
-#mindsensors.com invests time and resources providing this open source code, 
+#mindsensors.com invests time and resources providing this open source code,
 #please support mindsensors.com  by purchasing products from mindsensors.com!
 #Learn more product option visit us @  http://www.mindsensors.com/
 #
@@ -52,7 +52,7 @@ def getProgramDir():
     # normalize the path that was provided to remove any trailing slash.
     return os.path.normpath(dir)
 def getDeviceType():
-    deviceID = config.get("msdev", "device") 
+    deviceID = config.get("msdev", "device")
     if (deviceID == "PiStorms"):
         return 1
     elif (deviceID == "SensorShield"):
@@ -66,11 +66,11 @@ def getRotation():
     if (os.getenv("PSREVERSE", "0") == "1"):
         return 3
     else:
-        return config.getint("msdev", "rotation") 
+        return config.getint("msdev", "rotation")
 def initScreen():
     if (psc.GetFirmwareVersion() < "V3.00"):
         try:
-            bootmode = mindsensors_i2c(0xEA>>1) 
+            bootmode = mindsensors_i2c(0xEA>>1)
             bootmode.readbyte()
             scrn = mindsensorsUI(deviceName, rotation, device=deviceType)
             scrn.termPrintAt(4, "PiStorms in fw upgrade mode")

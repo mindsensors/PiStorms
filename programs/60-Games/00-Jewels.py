@@ -49,7 +49,7 @@ def triplets(board):
 					adjC[h] = 0
 				horiz += str(board[row][h])
 				h += 1
-				
+
 			if (triplet in vert) or (triplet in horiz):
 				tripletCount += 1
 				replace = str(random.randint(1,4))+str(random.randint(1,4))+str(random.randint(1,4))
@@ -79,14 +79,14 @@ def switch(board, x1, y1, x2, y2):
 	else:
 		print "*****Invalid switch*****"
 		return False
-	
+
 	#make it normal color
 	j = 0
 	for row in board:
 		print board[j]
 		j += 1
 
-	
+
 '''
 board = generate_board()
 triplets(board)
@@ -150,7 +150,7 @@ def printBoard(board):
 			psm.screen.fillBmp((p*48), (r*40), width = 40, height = 48, path = currentdir+'/'+img)
 			p += 1
 		r += 1
-	
+
 board = generate_board()
 board = triplets(board)[0]
 board = triplets(board)[0]
@@ -231,5 +231,5 @@ while (not doExit):
 			psm.screen.clearScreen()
 			psm.screen.termPrintAt(9, "Exiting to menu")
 			time.sleep(0.5)
-			doExit = True 
-	
+			doExit = True
+

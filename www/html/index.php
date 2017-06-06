@@ -1,7 +1,7 @@
 <?php
 /*
 # Copyright (c) 2016 mindsensors.com
-# 
+#
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 2 as
 # published by the Free Software Foundation.
@@ -15,13 +15,13 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 #
-#mindsensors.com invests time and resources providing this open source code, 
+#mindsensors.com invests time and resources providing this open source code,
 #please support mindsensors.com  by purchasing products from mindsensors.com!
 #Learn more product option visit us @  http://www.mindsensors.com/
 #
 # History:
 # Date         Author          Comments
-# July 2016    Roman Bohuk     Initial Authoring 
+# July 2016    Roman Bohuk     Initial Authoring
 # May 2017     Seth Tenembaum  Remove login requirement
 */
 
@@ -45,7 +45,7 @@ include "api/config.php";
     .btn-settings {
         margin:5px;
     }
-    
+
     #needs-update-tooltip {
         cursor: pointer;
     }
@@ -99,8 +99,8 @@ include "api/config.php";
             </div>
           </div>
         </div>
-        
-        
+
+
         <div class="col-md-4 col-sm-6 col-xs-12">
           <div class="info-box bg-green" id="battery-box">
             <span class="info-box-icon"><i class="fa fa-battery-4 fa-rotate-270" id="battery-symbol"></i></span>
@@ -114,7 +114,7 @@ include "api/config.php";
               </span>
             </div>
           </div>
-        </div>  
+        </div>
         <div class="col-md-4 col-sm-6 col-xs-12">
           <div class="box box-danger">
             <div class="box-header with-border">
@@ -133,9 +133,9 @@ include "api/config.php";
               <button type="button" id="calibrate_btn" class="btn btn-primary btn-flat btn-settings"><i class="fa fa-circle-o-notch" aria-hidden="true"></i>&nbsp;&nbsp;Calibrate</button>
             </div>
           </div>
-          
+
         </div>
-        
+
       </div>
 
     </section>
@@ -232,7 +232,7 @@ $("#start_br").click(function(){$.get(api+"startbrowser", function(data){});noti
 $("#calibrate_btn").click(function(){$.get(api+"calibrate", function(data){});notify("Success","Calibration started","success");});
 
 $("#needs-update-tooltip").click(function() {
-    window.open("https://github.com/mindsensors/PiStorms"); 
+    window.open("https://github.com/mindsensors/PiStorms");
 });
 </script>
 

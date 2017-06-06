@@ -2,11 +2,11 @@
 
 import random
 import os,sys,inspect,time,thread
-import socket,fcntl,struct    
+import socket,fcntl,struct
 
 currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
 parentdir = os.path.dirname(currentdir)
-sys.path.insert(0,parentdir) 
+sys.path.insert(0,parentdir)
 from PiStorms import PiStorms
 
 psm = PiStorms()
@@ -24,7 +24,7 @@ def drawLines():
 def drawBoard(board):
     # This function prints out the board that it was passed.
     # "board" is a list of 10 strings representing the board (ignore index 0)
-    
+
     k = { 'X': {
             'x': [76,150,224],
             'y': [28,103,177],
@@ -34,7 +34,7 @@ def drawBoard(board):
             'y': [20,92,167],
             's': 52 }
     }
-    
+
     for y in range(3):
         for x in range(3):
             c = board[x+1+y*3]
@@ -66,7 +66,7 @@ def inputPlayerLetter():
         psm.led(2,255,0,0)
     elif letter == 'O':
         psm.led(1,0,0,255)
-        
+
     time.sleep(1) # missing 'GO' quit check
     psm.led(1,0,0,0)
     psm.led(2,0,0,0)
@@ -202,7 +202,7 @@ while True:
     psm.screen.termPrintAt(9, 'The ' + turn + ' will go first.')
     time.sleep(1)
     gameIsPlaying = True
-    
+
     while gameIsPlaying:
         if (turn == 'player' and playerLetter == 'X') or (turn == 'computer' and computerLetter == 'X'):
             psm.led(2,255,0,0)
@@ -213,7 +213,7 @@ while True:
         else:
             psm.screen.termPrintAt(9, 'Computer\'s turn...')
         drawBoard(theBoard)
-        
+
         if turn == 'player':
             move = getPlayerMove(theBoard)
             makeMove(theBoard, playerLetter, move)
@@ -223,11 +223,11 @@ while True:
             move = getComputerMove(theBoard, computerLetter)
             makeMove(theBoard, computerLetter, move)
             turn = 'player'
-                
+
         psm.led(1,0,0,0)
         psm.led(2,0,0,0)
         drawBoard(theBoard)
-        
+
         if isWinner(theBoard, playerLetter):
             psm.screen.termPrintAt(9, 'Hooray! You have won the game!')
             time.sleep(2)
@@ -236,11 +236,11 @@ while True:
             psm.screen.termPrintAt(9, 'The computer has beaten you!')
             time.sleep(2)
             gameIsPlaying = False
-        
+
         if gameIsPlaying and isBoardFull(theBoard):
             psm.screen.termPrintAt(9, 'The game is a tie!')
             time.sleep(2)
             gameIsPlaying = False
-        
+
     if not playAgain():
         break

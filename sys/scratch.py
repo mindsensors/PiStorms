@@ -4,7 +4,7 @@ import socket
 import struct
 
 class ScratchError(Exception): pass
-class ScratchConnectionError(ScratchError): pass	
+class ScratchConnectionError(ScratchError): pass
 
 class Scratch(object):
 
@@ -26,46 +26,46 @@ class Scratch(object):
 
     def _pack(self, msg):
 	"""
-	Packages msg according to Scratch message specification (encodes and 
-	appends length prefix to msg). Credit to chalkmarrow from the 
+	Packages msg according to Scratch message specification (encodes and
+	appends length prefix to msg). Credit to chalkmarrow from the
 	scratch.mit.edu forums for the prefix encoding code.
 	"""
-	n = len(msg) 
+	n = len(msg)
 	a = array.array('c')
 	a.append(chr((n >> 24) & 0xFF))
 	a.append(chr((n >> 16) & 0xFF))
 	a.append(chr((n >>  8) & 0xFF))
 	a.append(chr(n & 0xFF))
-	return a.tostring() + msg 
+	return a.tostring() + msg
 
     def _extract_len(self, prefix):
 	"""
-	Extracts the length of a Scratch message from the given message prefix. 
+	Extracts the length of a Scratch message from the given message prefix.
 	"""
 	return struct.unpack(">L", prefix)[0]
 
     def _get_type(self, s):
 	"""
 	Converts a string from Scratch to its proper type in Python. Expects a
-	string with its delimiting quotes in place. Returns either a string, 
-	int or float. 
+	string with its delimiting quotes in place. Returns either a string,
+	int or float.
 	"""
 	# TODO: what if the number is bigger than an int or float?
 	if s.startswith('"') and s.endswith('"'):
 	    return s[1:-1]
-	elif s.find('.') != -1: 
-	    return float(s) 
-	else: 
+	elif s.find('.') != -1:
+	    return float(s)
+	else:
 	    return int(s)
 
     def _escape(self, msg):
 	"""
 	Escapes double quotes by adding another double quote as per the Scratch
 	protocol. Expects a string without its delimiting quotes. Returns a new
-	escaped string. 
+	escaped string.
 	"""
-	escaped = ''	
-	for c in msg: 
+	escaped = ''
+	for c in msg:
 	    escaped += c
 	    if c == '"':
 		escaped += '"'
@@ -87,7 +87,7 @@ class Scratch(object):
 	    if msg[i] == '"':
 		i+=1
 	    i+=1
-	return unescaped     
+	return unescaped
 
     def _is_msg(self, msg):
 	"""
@@ -121,7 +121,7 @@ class Scratch(object):
 	    numq += seg.count('"')
 	    curr_seg += seg
 	    # even number of quotes means we've finished parsing a segment
-	    if numq % 2 == 0: 
+	    if numq % 2 == 0:
 		parsed.append(curr_seg)
 		curr_seg = ''
 		numq = 0
@@ -129,15 +129,15 @@ class Scratch(object):
 		curr_seg += ' '
 	unescaped = [self._unescape(self._get_type(x)) for x in parsed]
 	# combine into a dict using iterators (both elements in the list
-	# inputted to izip have a reference to the same iterator). even 
+	# inputted to izip have a reference to the same iterator). even
 	# elements are keys, odd are values
-	return dict(itertools.izip(*[iter(unescaped)]*2)) 
+	return dict(itertools.izip(*[iter(unescaped)]*2))
 
     def _parse(self, msg):
 	"""
 	Parses a Scratch message and returns a tuple with the first element
-	as the message type, and the second element as the message payload. The 
-	payload for a 'broadcast' message is a string, and the payload for a 
+	as the message type, and the second element as the message payload. The
+	payload for a 'broadcast' message is a string, and the payload for a
 	'sensor-update' message is a dict whose keys are variables, and values
 	are updated variable values. Returns None if msg is not a message.
 	"""
@@ -222,20 +222,20 @@ class Scratch(object):
 
     def sensorupdate(self, data):
 	"""
-	Given a dict of sensors and values, updates those sensors with the 
+	Given a dict of sensors and values, updates those sensors with the
 	values in Scratch.
 	"""
 	if not isinstance(data, dict):
 	    raise TypeError('Expected a dict')
 	msg = 'sensor-update '
 	for key in data.keys():
-	    msg += '"%s" "%s" ' % (self._escape(str(key)), 
+	    msg += '"%s" "%s" ' % (self._escape(str(key)),
 				   self._escape(str(data[key])))
 	self._send(msg)
 
     def broadcast(self, msg):
 	"""
-	Broadcasts msg to Scratch. msg can be a single message or an iterable 
+	Broadcasts msg to Scratch. msg can be a single message or an iterable
 	(list, tuple, set, generator, etc.) of messages.
 	"""
 	if getattr(msg, '__iter__', False): # iterable
@@ -247,9 +247,9 @@ class Scratch(object):
     def receive(self):
 	"""
 	Receives broadcasts and sensor updates from Scratch. Returns a tuple
-	with the first element as the message type and the second element 
-	as the message payload. broadcast messages have a string as payload, 
-	and the sensor-update messages have a dict as payload. Returns None if 
+	with the first element as the message type and the second element
+	as the message payload. broadcast messages have a string as payload,
+	and the sensor-update messages have a dict as payload. Returns None if
 	message received could not be parsed. Raises exceptions on connection
 	errors.
 	"""
