@@ -40,14 +40,16 @@ def getConfig():
     config.read(configFile)
     return config
 def getProgramDir():
-    if (len(sys.argv) > 1):
-        # normalize the path that was provided to remove any trailing slash.
-        return os.path.normpath(str(sys.argv[1]))
-    else:
-        logging.error("ERROR: not enough arguments supplied\n"
-              "Usage:\n"
-              "python MSBrowser.py <programs_folder>")
-        sys.exit(1)
+    try:
+        if (len(sys.argv) > 1):
+            dir = str(sys.argv[1])
+        else:
+            home = config.get("msdev", "homefolder")
+            dir = os.path.join(home, "programs")
+    except:
+        dir = "/home/pi/PiStorms/programs"
+    # normalize the path that was provided to remove any trailing slash.
+    return os.path.normpath(dir)
 def getDeviceType():
     deviceID = config.get("msdev", "device") 
     if (deviceID == "PiStorms"):
@@ -262,11 +264,11 @@ def getPageOfItems(files, index, filePerPage):
 if __name__ == "__main__":
     try:
         logging.basicConfig(stream=sys.stderr, level=logging.INFO)
-        PROGRAM_DIRECTORY = getProgramDir()
         messageFile = "/var/tmp/ps_data.json"
         updateStatusFile = "/var/tmp/ps_versions.json"
         configFile = "/usr/local/mindsensors/conf/msdev.cfg"
         config = getConfig()
+        PROGRAM_DIRECTORY = getProgramDir()
         deviceType = getDeviceType()
         deviceName = socket.gethostname()
         rotation = getRotation()
