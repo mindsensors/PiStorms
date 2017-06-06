@@ -40,14 +40,16 @@ def getConfig():
     config.read(configFile)
     return config
 def getProgramDir():
-    if (len(sys.argv) > 1):
-        # normalize the path that was provided to remove any trailing slash.
-        return os.path.normpath(str(sys.argv[1]))
-    else:
-        logging.error("ERROR: not enough arguments supplied\n"
-              "Usage:\n"
-              "python MSBrowser.py <programs_folder>")
-        sys.exit(1)
+    try:
+        if (len(sys.argv) > 1):
+            dir = str(sys.argv[1])
+        else:
+            home = config.get("msdev", "homefolder")
+            dir = os.path.join(home, "programs")
+    except:
+        dir = "/home/pi/PiStorms/programs"
+    # normalize the path that was provided to remove any trailing slash.
+    return os.path.normpath(dir)
 def getDeviceType():
     deviceID = config.get("msdev", "device") 
     if (deviceID == "PiStorms"):
@@ -65,7 +67,7 @@ def getRotation():
     else:
         return config.getint("msdev", "rotation") 
 def initScreen():
-    if (psc.GetFirmwareVersion() < "V2.10"):
+    if (psc.GetFirmwareVersion() < "V3.00"):
         try:
             bootmode = mindsensors_i2c(0xEA>>1) 
             bootmode.readbyte()
@@ -189,7 +191,7 @@ def drawHostnameTitle():
     size = 30
     maxWidth = 320-50-50-5-5 # screen width is 320, each arrow is 50px wide, 5px margin
     if newMessageExists() or updateNeeded():
-        maxWidth -= 34
+        maxWidth -= 44
     getTextSize = ImageDraw.Draw(scrn.disp.buffer).textsize
     font = ImageFont.truetype("/usr/share/fonts/truetype/freefont/FreeSans.ttf", size)
     width, height = getTextSize(deviceName, font=font)
@@ -198,10 +200,10 @@ def drawHostnameTitle():
         font = ImageFont.truetype("/usr/share/fonts/truetype/freefont/FreeSans.ttf", size)
         width, height = getTextSize(deviceName, font=font)
     scrn.fillRect(55, 0, maxWidth, 50, fill=(0,0,0), display=False)
-    if not (newMessageExists() or updateNeeded()):
-        scrn.drawAutoText(deviceName, 0, (50-height)/2-5, fill=(0,255,255), size=size, display=False, align="center")
+    if (newMessageExists() or updateNeeded()) and width > 135:
+        scrn.drawAutoText(deviceName, 60, (50-height)/2-5, fill=(0,255,255), size=size, display=False)
     else:
-        scrn.drawAutoText(deviceName, 55, (50-height)/2-5, fill=(0,255,255), size=size, display=False)
+        scrn.drawAutoText(deviceName, 0, (50-height)/2-5, fill=(0,255,255), size=size, display=False, align="center")
 def drawItemButton(folder, file, i):
     if os.path.isdir(os.path.join(folder, file)):
         icon = "folder.png"
@@ -262,11 +264,11 @@ def getPageOfItems(files, index, filePerPage):
 if __name__ == "__main__":
     try:
         logging.basicConfig(stream=sys.stderr, level=logging.INFO)
-        PROGRAM_DIRECTORY = getProgramDir()
         messageFile = "/var/tmp/ps_data.json"
         updateStatusFile = "/var/tmp/ps_versions.json"
         configFile = "/usr/local/mindsensors/conf/msdev.cfg"
         config = getConfig()
+        PROGRAM_DIRECTORY = getProgramDir()
         deviceType = getDeviceType()
         deviceName = socket.gethostname()
         rotation = getRotation()

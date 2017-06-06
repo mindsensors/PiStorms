@@ -5,3 +5,6 @@ html/* linguist-documentation
 # Ignore the html assets for the purposes of
 # language percentages for Linguist
 www/html/assets/* linguist-vendored
+www/html/fonts/* linguist-vendored
+www/html/nipple.js linguist-vendored
+www/html/slider.css linguist-vendored

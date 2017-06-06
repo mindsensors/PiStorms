@@ -762,8 +762,8 @@ class PiStormsCom(object):
             self.bankA.writeByte(self.PS_Command,self.R)
             self.bankB.writeByte(self.PS_Command,self.R)
         
-        self.ts_cal = None # signified firmware version older than V2.10, use old touchscreen methods
-        if self.GetFirmwareVersion() >= 'V2.10':
+        self.ts_cal = None # signified firmware version older than V3.00, use old touchscreen methods
+        if self.GetFirmwareVersion() >= 'V3.00':
             # read touchscreen calibration values from cache file
             try:
                 self.ts_cal = json.load(open('/tmp/ps_ts_cal', 'r'))

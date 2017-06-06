@@ -88,76 +88,32 @@ include "api/config.php";
               <li data-toggle="tooltip" data-trigger="hover" title="Written to /var/tmp/psmd.out from /usr/local/bin/MSDriver.py"><a href="#tab_2" data-toggle="tab">MSDriver</a></li>
               <li data-toggle="tooltip" data-trigger="hover" title="Written to /var/tmp/sws.out by /usr/local/bin/swarmserver"><a href="#tab_3" data-toggle="tab">Swarm server</a></li>
               <li data-toggle="tooltip" data-trigger="hover" title="Written to /var/tmp/webapi.out from /var/www/web_api/MSWeb.py"><a href="#tab_4" data-toggle="tab">MSWeb</a></li>
-              <li data-toggle="tooltip" data-trigger="hover" data-html="true" title="Only the last 25 lines are displayed.<br><br>Written to /var/log/apache2/error.log by /usr/sbin/apache2"><a href="#tab_5" data-toggle="tab">Apache</a></li>
+              <li data-toggle="tooltip" data-trigger="hover" data-html="true" title="Written to /var/log/apache2/error.log by /usr/sbin/apache2"><a href="#tab_5" data-toggle="tab">Apache</a></li>
               <li><a href="javascript:window.scrollTo(0,document.body.scrollHeight);">Scroll to the Bottom</a></li>
             </ul>
             <div class="tab-content">
+              <?php
+                  function printFile($file) {
+                    if (filesize($file) > 0)
+                        echo file_get_contents($file);
+                    else
+                        echo "[empty]";
+                  }
+              ?>
               <div class="tab-pane active" id="tab_1">
-                <pre><?php
-                    $data = '[empty]';
-                    $nf = false;
-                    $file = fopen("/var/tmp/psmb.out", "r") || $nf = true;
-                    $filesize = filesize("/var/tmp/psmb.out");
-                    if (!$nf && $filesize > 0) {
-                        $data = fread($file, filesize("/var/tmp/psmb.out"));
-                        fclose($file);
-                    }
-                    if (strlen($data) == 0) {
-                        $data = "[empty]";
-                    }
-                    echo $data;
-                ?></pre>
+                <pre><?php printFile("/var/tmp/psmb.out"); ?></pre>
               </div>
               <div class="tab-pane" id="tab_2">
-                <pre><?php
-                    $data = '[empty]';
-                    $nf = false;
-                    $file = fopen("/var/tmp/psmb.out", "r") || $nf = true;
-                    $filesize = filesize("/var/tmp/sws.out");
-                    if (!$nf && $filesize > 0) {
-                        $data = fread($file, filesize("/var/tmp/sws.out"));
-                        fclose($file);
-                    }
-                    if (strlen($data) == 0) {
-                        $data = "[empty]";
-                    }
-                    echo $data;
-                ?></pre>
+                <pre><?php printFile("/var/tmp/psmd.out"); ?></pre>
               </div>
               <div class="tab-pane" id="tab_3">
-                <pre><?php
-                    $data = '[empty]';
-                    $nf = false;
-                    $file = fopen("/var/tmp/psmb.out", "r") || $nf = true;
-                    $filesize = filesize("/var/tmp/sws.out");
-                    if (!$nf && $filesize > 0) {
-                        $data = fread($file, filesize("/var/tmp/sws.out"));
-                        fclose($file);
-                    }
-                    if (strlen($data) == 0) {
-                        $data = "[empty]";
-                    }
-                    echo $data;
-                ?></pre>
+                <pre><?php printFile("/var/tmp/sws.out"); ?></pre>
               </div>
               <div class="tab-pane" id="tab_4">
-                <pre><?php
-                    $data = '[empty]';
-                    $nf = false;
-                    $file = fopen("/var/tmp/webapi.out", "r") || $nf = true;
-                    $filesize = filesize("/var/tmp/sws.out");
-                    if (!$nf && $filesize > 0) {
-                        $data = fread($file, filesize("/var/tmp/sws.out"));
-                        fclose($file);
-                    }
-                    if (strlen($data) == 0) {
-                        $data = "[empty]";
-                    }
-                    echo $data;
-                ?></pre>
+                <pre><?php printFile("/var/tmp/webapi.out"); ?></pre>
               </div>
               <div class="tab-pane" id="tab_5">
-                <pre id="apacheerros">[empty]</pre>
+                <pre id="apacheerrors">[empty]</pre>
               </div>
             </div>
           </div>
@@ -192,10 +148,8 @@ function notify(tt,tx,tp) {
     });
 }
 
-var api = "http://<?=$_SERVER['SERVER_NAME']?>:3141/";
-
-$.get(api+"getapacheerrors", function(data){
-    $("#apacheerros").html(data || "[empty]");
+$.get("http://<?=$_SERVER['SERVER_NAME']?>:3141/getapacheerrors", function(data){
+    $("#apacheerrors").html(data);
 });
 
 </script>

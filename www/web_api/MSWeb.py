@@ -265,7 +265,7 @@ def calibrate():
 @app.route("/getapacheerrors", methods=['GET', 'OPTIONS'])
 @crossdomain(origin='*')
 def getapacheerrors():
-    return os.popen('tail /var/log/apache2/error.log -n 25').read()
+    return os.popen('cat /var/log/apache2/error.log').read()
 
 @app.route("/getmessage", methods=['GET', 'OPTIONS'])
 @crossdomain(origin='*')
