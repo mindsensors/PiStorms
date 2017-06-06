@@ -125,7 +125,10 @@ The PiStorms has firmware which controls the motor and sensor ports, and which g
 
 ## Design improvement suggestions
 - There are a number of things I would like to better organize or clean up, but most would be difficult due to the requirement of supporting previous systems. Backwards compatibility is the issue.
-- For examples, the images MSBrowser relies on should not be cluttering up the general programs folder. `rmap.py` should be renamed to make its purpose (Scratch) more clear. `MsDevices.py` and `mindsensors.py` should be merged. The log files should have more meaningful names and be put in `/var/log`(?), not `/tmp`.
+- For example, the images MSBrowser relies on should not be cluttering up the general programs folder.
+- `rmap.py` should be renamed to make its purpose (Scratch) more clear.
+- `MsDevices.py` and `mindsensors.py` should be merged.
+- The log files should have more meaningful names and be put in `/var/log`, not `/tmp`. Further, `.psm_shutdown.lck` should be in `/var/lock`, not `/tmp`.
 
 ## Original version of repository structure notes
 This was found in a file last modified April 5th, 2016, the day before the first commit to this repository. Copied verbatim:
