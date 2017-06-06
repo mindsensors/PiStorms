@@ -53,6 +53,10 @@ config.read(cfg_file)
 device_name = config.get('msdev', 'device') 
 host_name = socket.gethostname()
 
+i2c = mindsensors_i2c(0x34 >> 1)
+if "GRX" in i2c.readString(0x18, 8).upper() and PROGRAM_DIRECTORY[-3:]!="grx":
+    PROGRAM_DIRECTORY += "_grx"
+
 #rotation = 3 
 rotation = config.getint('msdev', 'rotation') 
 
