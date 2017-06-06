@@ -31,13 +31,13 @@
 
 from mindsensors_i2c import mindsensors_i2c
 from PiStormsCom import PiStormsCom
-import time, math , os, sys
+import time, math, os, sys
 import Image, ImageDraw, ImageFont
 import textwrap
 import MS_ILI9341 as TFT
+from Adafruit_ILI9341 import ILI9341_INVOFF
 import Adafruit_GPIO as GPIO
 import Adafruit_GPIO.SPI as SPI
-from threading import Thread, Lock
 
 # for new touchscreen functionality
 import json
@@ -140,7 +140,7 @@ class mindsensorsUI():
         self.i2c = mindsensors_i2c(self.PS_ADDRESS >> 1)
         self.disp.begin()
         self.clearScreen()
-        self.mutex = Lock()
+        self.disp.command(ILI9341_INVOFF)
         try:
             self.touchIgnoreX = self.TS_X()
             self.touchIgnoreY = self.TS_Y()
@@ -596,45 +596,41 @@ class mindsensorsUI():
     #  screen.screen.fillBmp(30, 0, 240, 240, path = os.path.join(currentdir, "dog.png"))
     #  @endcode
     def fillBmp(self, x, y, width, height, path = "/usr/local/mindsensors/images/Pane1.png", display = True):
-        self.mutex.acquire()
-        try:
-            buff = self.disp.buffer
-            actx = self.screenXFromImageCoords(x,y)
-            acty = self.screenYFromImageCoords(x,y)
-            # if the caller only provided icon name, assume it is in our system repository
-            if ( path[0] != "/" ):
-                path = "/usr/local/mindsensors/images/" + path
-            
-            # if the image is missing, use a default X image.
-            if ( os.path.isfile(path)):
-                image = Image.open(path)
-            else:
-                image = Image.open("/usr/local/mindsensors/images/missing.png")
-            
-            non_transparent = Image.new('RGBA',image.size,(255,255,255,255))
-            #changed by Deepak.
-            non_transparent.paste(image,(0,0))
-            
-            tempimage = image
-            
-            tempimage = tempimage.resize((width,height),Image.ANTIALIAS)
-            tempimage = tempimage.rotate(-90*self.currentRotation)
-            
-            cr = self.currentRotation
-            if(cr == 1):
-                actx -= height
-            if(cr == 2):
-                acty -= height
-                actx -= width
-            if(cr ==3):
-                acty -= width
-            
-            #changed by Deepak.
-            buff.paste(tempimage,(actx,acty))
-            if(display):
-                self.disp.display()
-        finally:
-            self.mutex.release()
+        buff = self.disp.buffer
+        actx = self.screenXFromImageCoords(x,y)
+        acty = self.screenYFromImageCoords(x,y)
+        # if the caller only provided icon name, assume it is in our system repository
+        if ( path[0] != "/" ):
+            path = "/usr/local/mindsensors/images/" + path
+        
+        # if the image is missing, use a default X image.
+        if ( os.path.isfile(path)):
+            image = Image.open(path)
+        else:
+            image = Image.open("/usr/local/mindsensors/images/missing.png")
+        
+        non_transparent = Image.new('RGBA',image.size,(255,255,255,255))
+        #changed by Deepak.
+        non_transparent.paste(image,(0,0))
+        
+        tempimage = image
+        
+        tempimage = tempimage.resize((width,height),Image.ANTIALIAS)
+        tempimage = tempimage.rotate(-90*self.currentRotation)
+        
+        cr = self.currentRotation
+        if(cr == 1):
+            actx -= height
+        if(cr == 2):
+            acty -= height
+            actx -= width
+        if(cr ==3):
+            acty -= width
+        
+        #changed by Deepak.
+        buff.paste(tempimage,(actx,acty))
+        if(display):
+            self.disp.display()
     
     ## Draw a  image on the screen using supplied image data
     #  @param self The object pointer.
@@ -651,35 +647,31 @@ class mindsensorsUI():
     #  screen.screen.fillBmp(40, 0, 240, 240, image)
     #  @endcode
     def fillImgArray(self, x, y, width, height, image, display = True):
-        self.mutex.acquire()
-        try:
-            buff = self.disp.buffer
-            actx = self.screenXFromImageCoords(x,y)
-            acty = self.screenYFromImageCoords(x,y)
-            
-            image = Image.fromarray(image)
-            non_transparent = Image.new('RGBA',image.size,(255,255,255,255))
-            non_transparent.paste(image,(0,0))
-            
-            tempimage = image
-            
-            tempimage = tempimage.resize((width,height),Image.ANTIALIAS)
-            tempimage = tempimage.rotate(-90*self.currentRotation)
-            
-            cr = self.currentRotation
-            if(cr == 1):
-                actx -= height
-            if(cr == 2):
-                acty -= height
-                actx -= width
-            if(cr ==3):
-                acty -= width
-            
-            buff.paste(tempimage,(actx,acty))
-            if(display):
-                self.disp.display()
-        finally:
-            self.mutex.release()
+        buff = self.disp.buffer
+        actx = self.screenXFromImageCoords(x,y)
+        acty = self.screenYFromImageCoords(x,y)
+        
+        image = Image.fromarray(image)
+        non_transparent = Image.new('RGBA',image.size,(255,255,255,255))
+        non_transparent.paste(image,(0,0))
+        
+        tempimage = image
+        
+        tempimage = tempimage.resize((width,height),Image.ANTIALIAS)
+        tempimage = tempimage.rotate(-90*self.currentRotation)
+        
+        cr = self.currentRotation
+        if(cr == 1):
+            actx -= height
+        if(cr == 2):
+            acty -= height
+            actx -= width
+        if(cr ==3):
+            acty -= width
+        
+        buff.paste(tempimage,(actx,acty))
+        if(display):
+            self.disp.display()
     
     ## Rotates the screen orientation 90 degrees to the right (-90 degrees)
     #  @param self The object pointer.

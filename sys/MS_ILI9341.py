@@ -27,6 +27,7 @@ import Adafruit_ILI9341
 import os
 import datetime
 from PIL import Image, ImageDraw
+from fcntl import flock, LOCK_EX, LOCK_UN
 
 class ILI9341(Adafruit_ILI9341.ILI9341):
     def __init__(self, dc, spi, rst=None, gpio=None, width=Adafruit_ILI9341.ILI9341_TFTWIDTH,
@@ -39,11 +40,19 @@ class ILI9341(Adafruit_ILI9341.ILI9341):
         self.x = -1
         self.y = -1
         self.store = False
+        self.mutex = open("/var/lock/drawscreentest", "w+")
+
+    # PIL.ImageDraw.Draw creates an object that draws in-place, so the mutex is required 
+    def draw(self):
+        flock(self.mutex, LOCK_EX)
+        r = super(ILI9341, self).draw()
+        flock(self.mutex, LOCK_UN)
+        return r
 
     def save(self, path=None, img=None, extension="PNG", includeBg=False):
         """Writes the buffer to a file"""
         # If no path is specified, store the file in the current folder with timestamp
-        tstamp = datetime.datetime.now().strftime('%Y-%m-%d_%H%M%S%f')[:-3:]
+        tstamp = datetime.datetime.now().strftime('%Y-%m-%d_%H%M%S%f')[:-3]
         path = "/var/tmp/ps_images/%s.%s" % (tstamp, extension) if path is None else path
         # If no PIL Image specified, store the whole screen
         dat = self.getBuffer() if img is None else img
@@ -122,6 +131,7 @@ class ILI9341(Adafruit_ILI9341.ILI9341):
         else: self.startTouchRecording(toWrite, includeBgIn)
     
     def display(self, image=None):
+        flock(self.mutex, LOCK_EX)
         content = self.readRecordingCount()
         if len(content) == 2 and self.isTakingFrames(content[0]):
             self.decrementRecordingCount(content[0],self.isStoringWithBg(content[1]))
@@ -138,6 +148,7 @@ class ILI9341(Adafruit_ILI9341.ILI9341):
             self.save(img=image)
             self.store = False
             self.x, self.y = -1, -1
+        flock(self.mutex, LOCK_UN)
     
     def mergeBackground(self):
         bg = Image.open(self.background_path)
