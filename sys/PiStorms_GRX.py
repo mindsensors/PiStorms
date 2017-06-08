@@ -20,233 +20,69 @@
 #Learn more product option visit us @  http://www.mindsensors.com/
 
 # History:
-# Date      Author      Comments
-# Mar 2017  Deepak      Initial Authoring
+# Date       Author          Comments
+# June 2017  Seth Tenembaum  Initial Authoring
 
-from mindsensors_i2c import mindsensors_i2c
+from PiStormsCom_GRX import GRXCom
 from mindsensorsUI import mindsensorsUI
-import time, math
-import sys,os
 import struct
 from functools import partial
-import random
-import json # for new touchscreen functionality
 
-## GRXCom: this class provides communication functions for PiStorms-GRX.
-# do not use this class directly in user programs, instead use functions provided by LegoDevices or MsDevices class.
-class GRXCom(object):
 
-    GRX_A_ADDRESS = 0x34
-    GRX_B_ADDRESS = 0x36
-    
-    A1 = 0
-    A2 = 1
-    A3 = 2
-    D1 = 3
-    D2 = 4
-    NONE = 0
-    S1 = 1
-    S2 = 2
-    S3 = 3
-
-    _NONE = 0
-    _ANIN = 1
-    _DO   = 2
-    _DI   = 3
-    _I2C  = 4
-    _TAC2X = 5
-    _SERIAL = 6
-
-    HIGH = 1
-    LOW = 0
-
-    # Registers
-    GRX_BattV = 0x6E
-    GRX_Servo_Base = 0x42
-    GRX_LED_Base  =  0xB6
-    GRX_SA1_Base = 0x48
-    GRX_SA2_Base = 0x5E
-    GRX_SA3_Base = 0x74
-    GRX_SD1_Base = 0x8A
-    GRX_SD2_Base = 0xA0
-    GRX_KEY1_Count = 0xBA
-
-    # ???
-    GRX_KEY_Press = 0xB9
-
-    # Registers
-    GRX_Command = 0x41
-    
-    #Supported I2C commands
-    R = 0x52
-    S = 0x53
-    a = 0x61
-    b = 0x62
-    c = 0x63
-    A = 0x41
-    B = 0x42
-    C = 0x43
-    H = 0x48
-    E = 0x45
-    t = 0x74
-    T = 0x54
-    w = 0x77
-    l = 0x6C
-    
-    
-    bankA = mindsensors_i2c(GRX_A_ADDRESS >> 1)
-    bankB = mindsensors_i2c(GRX_B_ADDRESS >> 1)
-    
-    def __init__(self):
-        try:
-            self.bankA.readByte(self.GRX_BattV)
-        except:
-            print "could not connect to PiStorms-GRX"
+## This class provides functions for digital Grove sensors.
+#  This class has derived classes for each sensor.
+#  @remark There is no need to use this class directly in your program.
+class GroveDigitalPort():
+    def __init__(self, port, initType=GRXCom.TYPE.DIGITAL_INPUT):
+        bank = port[1]
+        if bank == "A":
+            i2c = GRXCom.I2C.A
+        elif bank == "B":
+            i2c = GRXCom.I2C.B
         else:
-            self.bankA.writeByte(self.GRX_Command,self.R)
-            self.bankB.writeByte(self.GRX_Command,self.R)
-        
-        self.ts_cal = None # signified firmware version older than V2.10, use old touchscreen methods
-        if self.GetFirmwareVersion() >= 'V2.10':
-            # read touchscreen calibration values from cache file
-            try:
-                self.ts_cal = json.load(open('/tmp/ps_ts_cal', 'r'))
-            except IOError:
-                print 'Touchscreen Error: Failed to read touchscreen calibration values in PiStormsCom.py'
-        
-    def Shutdown(self):
-        self.bankA.writeByte(self.GRX_Command,self.H)
-        
-    def command(self, cmd, bank):
-        if(bank == 1):
-            self.bankA.writeByte(self.GRX_Command,cmd)
-        elif(bank == 2):
-            self.bankB.writeByte(self.GRX_Command,cmd)
-            
-    def battVoltage(self):
-        try:
-            return self.bankA.readByte(self.GRX_BattV)*.040
-        except:
-            return 0
-    ##  Read the firmware version of the i2c device
-    
-    def GetFirmwareVersion(self):
-        try:
-            ver = self.bankA.readString(0x00, 8)
-            return ver
-        except:
-            return "ReadErr"
+            raise ValueError("Invalid bank (must be A or B).")
 
-    ##  Read the vendor name of the i2c device
-    def GetVendorName(self):
-        try:
-            vendor = self.bankA.readString(0x08, 8)
-            return vendor
-        except:
-            return "ReadErr"
+        if port[2]=="A":
+            addresses = GRXCom.ANALOG
+        elif port[2]=="D":
+            addresses = GRXCom.DIGITAL
+        else:
+            raise ValueError("Invalid port type (must be A for analog or D for digital).")
 
-    ##  Read the i2c device id
-    def GetDeviceId(self):
-        try:
-            device = self.bankA.readString(0x10, 8)
-            return device    
-        except:
-            return "ReadErr"
+        number = int(port[3]) - 1
+        # not catching an IndexError here because -1 should not be valid
+        if number not in range(len(addresses)):
+            raise ValueError("Invalid port number (must be 1, 2, or 3 for analog; or 1 or 2 for digital).")
 
-    ##  Read the features from device
-    def GetDeviceFeatures(self):
-        try:
-            features = self.bankA.readString(0x18, 8)
-            return features    
-        except:
-            return "ReadErr"
-        
-    def led(self,lednum,red,green,blue):
-        try:
-            if(lednum == 1):
-                array = [red, green, blue]
-                self.bankA.writeArray(self.GRX_LED_Base, array)
-            if(lednum == 2):
-                array = [red, green, blue]
-                self.bankB.writeArray(self.GRX_LED_Base, array)
+        address = addresses[number]
+        self.comm = GRXCom(i2c, address)
+        if initType:
+            self.setType(initType)
 
-        except AttributeError:
-            pass
-        time.sleep(.001)
+    def setType(self, newType, mode=0):
+        if newType not in GRXCom.TYPE_SUPPORT.DIGITAL:
+            raise TypeError("This port does not support that type.")
+        self.comm.setType(newType, mode)
 
-    def isKeyPressed(self):
-        x = 0
-        try:
-            x = self.bankA.readByte(self.GRX_KEY_Press)
-            return int(0x01&x)
-        except:
-            return 0
+    def readValue(self):
+        return self.comm.digitalRead()
 
-    def getKeyPressValue(self):
-        try:
-            if self.ts_cal == None:
-                return (self.bankA.readByte(self.GRX_KEY_Press))
-            
-            # if self.ts_cal doesn't exist because it failed to load touchscreen calibration values in __init__, the surrounding try/except block here will handle returning 0 as the default/error value
-            x1 = self.ts_cal['x1']
-            y1 = self.ts_cal['y1']
-            x2 = self.ts_cal['x2']
-            y2 = self.ts_cal['y2']
-            x3 = self.ts_cal['x3']
-            y3 = self.ts_cal['y3']
-            x4 = self.ts_cal['x4']
-            y4 = self.ts_cal['y4']
-            
-            x = self.bankA.readInteger(0xE7) # current x
-            # x1 and x2 are the left-most calibration points. We want to take whichever value is furthest right, to give the maximum touch area for the software buttons that make sense. x4 is the right-top calibration point. If x4 > x1 then 0 is towards the left so the the greater value of x1 and x2 will be the rightmost. If not, then high numbers are towards the left so we the lesser value of x1 and x2 will be rightmost.
-            # We don't take a calibration point in the left gutter, so we have to assume 200 is the greatest reasonable width of this area. If the current touched x point is right of the border, then it is on the touchscreen so return 0 (because none of the software buttons are being pressed). If the value is between the border and 200 points left of that, continue on as the touch point is in the software button area, If the value is further than 200 points left of the border, it is likely an erroneous error caused by the touchscreen not being touched.
-            if x4 > x1: # lower values left
-                xborder = max(x1, x2) # where the touchscreen ends and the software buttons begin
-                if not xborder+100 > x > xborder-200:
-                    return 0
-            else: # greater values left
-                xborder = min(x1, x2)
-                if not xborder-100 < x < xborder+200:
-                    return 0
-            
-            y = self.bankA.readInteger(0xE9) # current y
-            # the lower and greater of the two left-most y calibration values
-            # TODO: does this assume the screen is not flipped vertically? Be sure to test this
-            ymin = min(y1, y2)
-            ymax = max(y1, y2)
-            yQuarter = (ymax-ymin)/4 # a quarter of the distance between the two y extremes
-            
-            if y < ymin + 0 * yQuarter:
-                return 0 # too low
-            if y < ymin + 1 * yQuarter:
-                return 8
-            if y < ymin + 2 * yQuarter:
-                return 16
-            if y < ymin + 3 * yQuarter:
-                return 24
-            if y < ymin + 4 * yQuarter:
-                return 40
-            if y >= ymin + 4 * yQuarter:
-                return 0 # too high
-            
-            return 0 # some other weird error occured, execution should not reach this point
-        except:
-            return 0
 
-    def getKeyPressCount(self):
-        try:
-            return(self.bankA.readByte(self.GRX_KEY1_Count))
-        except:
-            return 0
+## This class provides functions for analog Grove sensors.
+#  This class has derived classes for each sensor.
+#  @remark There is no need to use this class directly in your program.
+class GroveAnalogPort(GroveDigitalPort):
+    def __init__(self, port):
+        GroveDigitalPort.__init__(self, port)
+        self.setType(GRXCom.TYPE.ANALOG_INPUT)
 
-    def resetKeyPressCount(self):
-        try:
-            self.bankA.writeByte(self.GRX_KEY1_Count,0)
-        except:
-            pass
+    def setType(self, newType, mode=0):
+        if newType not in GRXCom.TYPE_SUPPORT.ANALOG:
+            raise TypeError("This port does not support that type.")
+        self.comm.setType(newType, mode)
 
-    def ping(self):
-        self.bankA.readByte(0x00)
+    def readValue(self):
+        return self.comm.analogRead()
 
 
 ## This class provides functions for controlling a servo connected to
@@ -374,42 +210,33 @@ class RCServo(GRXCom):
 
 ## This class provides functions for controlling a servo and encoder connected to
 #  the PiStorms-GRX.
-class RCServoEncoder(RCServo):
+class RCServoEncoder(RCServo, GroveDigitalPort):
     ## Initialize an RC servo object with an associated encoder.
     #  @param encoder You may associate an encoder with this servo by specifying
     #                 the digital port it is connected to.
     def __init__(self, port=None, neutralPoint=1500, encoder=None):
-        RCServo.__init__(self, port, neutralPoint)
-
+        if port == None:
+            raise TypeError("You must specify a port as an argument")
         if encoder == None:
             raise TypeError("You must specify an encoder as an argument. If you do not wish to use an "
                             "encoder with this servo, please use the RCServo class instead.")
 
-        if len(encoder) != 4 \
-        or encoder[0] != "B" \
-        or encoder[1] not in ["A", "B"] \
-        or encoder[2] != "D" \
-        or encoder[3] not in ["1", "2"]:
-            raise TypeError("Encoder argument is invalid. Please see this class's documentation.")
-
         if encoder[1] != port[1]:
             raise ValueError("The encoder must be on the same bank as the servo it is associated with.")
-        if port[3] == "3":
+        if port[3] not in ["1", "2"]:
             raise ValueError("The servo associated with this encoder must be on servo port 1 or 2, not 3.")
+        if port[2] != "D":
+            raise ValueError("The encoder must be on digital port 1 or 2.")
 
-        self.encoder = int(encoder[3])
-        self.bank = self.bankA if encoder[1] == "A" else self.bankB
-        self.base = self.GRX_SD1_Base if encoder[3] == "1" else self.GRX_SD2_Base
-
-        self.bank.writeArray(self.GRX_SA1_Base + self.D1*22, [self._TAC2X, 1])
+        RCServo.__init__(self, port, neutralPoint)
+        GroveDigitalPort.__init__(self, port, initType=None):
+        self.setType(GRXCom.TYPE.ENCODER, mode=int(encoder[3]))
 
     def setTarget(self, value):
-        data = map(lambda b: struct.unpack('B', b)[0], struct.pack('l', value))
-        self.bank.writeArray(self.base + 8, data)
+        self.setEncoderTarget(value)
 
     def readEncoder(self):
-        data = self.bank.readArray(self.base + 4, 4)
-        return struct.unpack('l', ''.join(map(partial(struct.pack, 'B'), data)))[0]
+        return self.readEncoderValue()
 
 
 class PiStorms_GRX:

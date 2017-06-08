@@ -25,158 +25,17 @@
 # Apr 2017  Seth Tenembaum  Implement additional Grove sensors
 
 from mindsensors_i2c import mindsensors_i2c
-from PiStorms_GRX import *
+from PiStorms_GRX import GroveDigitalPort, GroveAnalogPort
 import math
 
 ## This class provides functions for Grove sensors.
 #  This class has derived classes for each sensor.
 #  @remark There is no need to use this class directly in your program.
-class GroveSensor(GRXCom):
-
-    GRX_SENSOR_TYPE_NONE = 0
-    GRX_SENSOR_TYPE_ANALOG = 1
-    GRX_SENSOR_TYPE_DIGITAL = 2
-    GRX_SENSOR_TYPE_I2C = 3
-
-    ## Initialize a Grove sensor object.
-    #  @param port Must be a valid port, one of [BAA1, BAA2, BAA3, BBA1, BBA2, BBA3, BAD1, BAD2, BBD1, BBD2, I2C].
-    #              The first two characters are "BA" or "BB", for "Bank A" or "Bank B". The third character is 'A' for "analog" 
-    #              or 'D' for "digital". The fourth character is the port number of that type. See verifyPort(self) for usage details.
-    #  @note I2C sensors connect to the single I2C port on the side of the device. The I2C protocol supports
-    #        up to 127 different device addresses. Therefore, if multiple I2C sensors are connected to the port
-    #        via a splitter, all instances of an I2C sensor class will specify the port "I2C".
-    def __init__(self, port=None, type=None):
-        if port == None and type == self.GRX_SENSOR_TYPE_I2C:
-            port = "I2C"
-            self.type = self.GRX_SENSOR_TYPE_I2C
-
-        if port == None:
-            raise TypeError('You must specify a port as an argument')
-
-        self.port = port
-        if ( port == "BAA1" ):
-            self.bank = self.bankA
-            self.sensornum = 0
-        elif ( port == "BAA2" ):
-            self.bank = self.bankA
-            self.sensornum = 1
-        elif ( port == "BAA3" ):
-            self.bank = self.bankA
-            self.sensornum = 2
-
-        elif ( port == "BBA1" ):
-            self.bank = self.bankB
-            self.sensornum = 0
-        elif ( port == "BBA2" ):
-            self.bank = self.bankB
-            self.sensornum = 1
-        elif ( port == "BBA3" ):
-            self.bank = self.bankB
-            self.sensornum = 2
-
-        elif ( port == "BAD1" ):
-            self.bank = self.bankA
-            self.sensornum = 3
-        elif ( port == "BAD2" ):
-            self.bank = self.bankA
-            self.sensornum = 4
-
-        elif ( port == "BBD1" ):
-            self.bank = self.bankB
-            self.sensornum = 3
-        elif ( port == "BBD2" ):
-            self.bank = self.bankB
-            self.sensornum = 4
-
-        elif ( port == "I2C" ):
-            pass
-
-        else:
-            self.bank = None
-            self.sensornum = -1
-            self.type = self.GRX_SENSOR_TYPE_NONE
-            raise ValueError('No such port: %s' %(port))
-
-        if type == self.GRX_SENSOR_TYPE_ANALOG or type == self.GRX_SENSOR_TYPE_DIGITAL:
-            self.setType(type)
-            self.verifyPort()
-
-    ## Set the sensor type.
-    #  This function is called by the constructor of each sensor's class. User programs don't need to call this function.
-    def setType(self, type, mode=0):
-        addr = self.GRX_SA1_Base +(self.sensornum*22)
-        self.type = type
-        if ( type == self.GRX_SENSOR_TYPE_DIGITAL):
-            _type = self._DI # defined in GRXCom
-        elif ( type == self.GRX_SENSOR_TYPE_ANALOG):
-            _type = self._ANIN
-
-        self.bank.writeByte(addr, _type)
-        self.bank.writeByte(addr+1, mode)
-
-    ## Verify self.type is valid for self.port
-    #  Ports [BAA1, BAA2, BAA3, BBA1, BBA2, BBA3] allow analog as well as digital sensors, but do not allow tachometers.
-    #  Ports [BAD1, BAD2, BBD1, BBD2] allow digital sensors or tachometer inputs. They do not support analog sensors.
-    def verifyPort(self):
-        if ( self.type == self.GRX_SENSOR_TYPE_ANALOG ):
-            if ( self.port == "BAD1" or self.port == "BAD2" or
-                 self.port == "BBD1" or self.port == "BBD2" ):
-                    raise ValueError( 'Analog sensors are not supported on: %s' % self.port )
-
-    ## Take a reading from this sensor
-    def readValue(self):
-        raise NotImplementedError("A derived Grove sensor class must implement this abstract method.")
-
-## This class provides functions for digital Grove sensors.
-#  This class has derived classes for each sensor.
-#  @remark There is no need to use this class directly in your program.
-class Grove_Digital_Sensor(GroveSensor):
-    ## Initialize a digital Grove sensor.
-    #  Valid ports are [BAA1, BAA2, BAA3, BBA1, BBA2, BBA3, BAD1, BAD2, BBD1, BBD2].
-    #  @see GroveSensor.__init__(self, port)
-    #  @see GroveSensor.verifyPort(self)
-    def __init__(self, port=None):
-        super(Grove_Digital_Sensor, self).__init__(port, self.GRX_SENSOR_TYPE_DIGITAL)
-
-    ## Take a reading from this digital sensor
-    def readValue(self):
-        reg = self.GRX_SA1_Base +(self.sensornum*22)+4
-        return (self.bank.readByte(reg))
-
-## This class provides functions for analog Grove sensors.
-#  This class has derived classes for each sensor.
-#  @remark There is no need to use this class directly in your program.
-class Grove_Analog_Sensor(GroveSensor):
-    ## Initialize an analog Grove sensor.
-    #  Valid ports are [BAA1, BAA2, BAA3, BBA1, BBA2, BBA3].
-    #  @see GroveSensor.__init__(self, port)
-    #  @see GroveSensor.verifyPort(self)
-    def __init__(self, port=None):
-        super(Grove_Analog_Sensor, self).__init__(port, self.GRX_SENSOR_TYPE_ANALOG)
-
-    ## Take a reading from this analog sensor
-    def readValue(self):
-        reg = self.GRX_SA1_Base +(self.sensornum*22)
-        x = self.bank.readByte(reg)
-        if (x == 1):
-            y = self.bank.readByte(reg+4)
-            z = self.bank.readByte(reg+5)
-            return (y + (z*256))
-        else:
-            return 0
 
 ## This class provides functionality for I2C Grove sensors.
 #  This class has derived classes for each sensor.
 #  @remark There is no need to use this class directly in your program.
-class Grove_I2C_Sensor(GroveSensor, mindsensors_i2c):
-    ## Initialize an I2C Grove sensor. An I2C address must be specified.
-    def __init__(self, address):
-        GroveSensor.__init__(self, type=self.GRX_SENSOR_TYPE_I2C)
-        mindsensors_i2c.__init__(self, address)
-
-    ## The type of the I2C port may not be changed.
-    def setType(self, type, mode=0):
-        raise NotImplementedError("The I2C Grove port may not change its type.")
+#class Grove_I2C_Sensor(GroveSensor, mindsensors_i2c):
 
 ## This class supports the Grove Button v1.1
 #
@@ -191,7 +50,10 @@ class Grove_I2C_Sensor(GroveSensor, mindsensors_i2c):
 #  if (button.isPressed()):
 #    print("Pointless button pressed (warning: pointless).")
 #  @endcode
-class Grove_Button(Grove_Digital_Sensor):
+class Grove_Button(GroveDigitalPort):
+    def __init__(self, port):
+        GroveDigitalPort.__init__(self, port)
+        #del self.setType
     ## @ return True if the button is pressed, False if the button is released
     def isPressed(self):
         return self.readValue() == 1
@@ -210,7 +72,7 @@ class Grove_Button(Grove_Digital_Sensor):
 #  if (button.motionDetected()):
 #    print("I see you, hi there!")
 #  @endcode
-class Grove_PIR_Motion_Sensor(Grove_Digital_Sensor):
+class Grove_PIR_Motion_Sensor(GroveDigitalPort):
     ## @ return True if the button is pressed, False if the button is released
     def motionDetected(self):
         return self.readValue() == 1
@@ -229,7 +91,7 @@ class Grove_PIR_Motion_Sensor(Grove_Digital_Sensor):
 #  if (f.fireDetected()):
 #    print("Fire! Fire!!")
 #  @endcode
-class Grove_Flame_Sensor(Grove_Digital_Sensor):
+class Grove_Flame_Sensor(GroveDigitalPort):
     ## @ return True if infrared light is found in a line straight in front of
     #           the sensor (looks like a black LED), False otherwise
     def fireDetected(self):
@@ -248,7 +110,7 @@ class Grove_Flame_Sensor(Grove_Digital_Sensor):
 #  if (lum.luminance() < 20.0):
 #    print("Someone turn on the lights, I can't see anything!")
 #  @endcode
-class Grove_Luminance_Sensor(Grove_Analog_Sensor):
+class Grove_Luminance_Sensor(GroveAnalogPort):
     ## @return A decimal for the detected light intensity in lux
     def luminance(self):
         val = self.readValue() * (3.0 / 4096.0)
@@ -283,7 +145,7 @@ class Grove_Luminance_Sensor(Grove_Analog_Sensor):
 #  if (light.lightLevel() < 1000):
 #    print("It's pretty dark in here.")
 #  @endcode
-class Grove_Light_Sensor(Grove_Analog_Sensor):
+class Grove_Light_Sensor(GroveAnalogPort):
     ## @return A number corresponding with the current detected light level.
     #          Average indoor lighting might be in the 2000's.
     def lightLevel(self):
@@ -304,7 +166,7 @@ class Grove_Light_Sensor(Grove_Analog_Sensor):
 #  if (temp.temperature() > 22.0):
 #    print("You might want a fan, it's getting a bit hot.")
 #  @endcode
-class Grove_Temperature_Sensor(Grove_Analog_Sensor):
+class Grove_Temperature_Sensor(GroveAnalogPort):
     ## @return A decimal corresponding to the detected temperature in Celsius
     def temperature(self):
         B = 4275 # B value of the thermistor
@@ -331,7 +193,7 @@ class Grove_Temperature_Sensor(Grove_Analog_Sensor):
 #  if (uv.UVindex() > 3.0):
 #    print("It might be a good idea to put on some sunscreen!")
 #  @endcode
-class Grove_UV_Sensor(Grove_Analog_Sensor):
+class Grove_UV_Sensor(GroveAnalogPort):
     ## @return Measured illumination intensity in mW/m^2
     def intensity(self):
         val = 0
@@ -359,7 +221,7 @@ class Grove_UV_Sensor(Grove_Analog_Sensor):
 #  if (m.moistureLevel() < 450):
 #    print("Your plant needs water!")
 #  @endcode
-class Grove_Moisture_Sensor(Grove_Analog_Sensor):
+class Grove_Moisture_Sensor(GroveAnalogPort):
     ## @return A number corresponding to the detected moisture level
     def moistureLevel(self):
         return self.readValue()
@@ -377,7 +239,7 @@ class Grove_Moisture_Sensor(Grove_Analog_Sensor):
 #  if (s.soundIntensity() < 3200):
 #    print("I heard a clap!")
 #  @endcode
-class Grove_Sound_Sensor(Grove_Analog_Sensor):
+class Grove_Sound_Sensor(GroveAnalogPort):
     ## @return A number corresponding with the current detected sound intensity.
     def soundIntensity(self):
         return self.readValue()
@@ -396,7 +258,7 @@ class Grove_Sound_Sensor(Grove_Analog_Sensor):
 #  if (s.detectSound() < 500):
 #    print("Hey, stop blowing on the mic!")
 #  @endcode
-class Grove_Loudness_Sensor(Grove_Analog_Sensor):
+class Grove_Loudness_Sensor(GroveAnalogPort):
     ## @return A number corresponding with the sound of the environment.
     def detectSound(self):
         return self.readValue()
@@ -415,7 +277,7 @@ class Grove_Loudness_Sensor(Grove_Analog_Sensor):
 #  if (air.qualitativeMeasurement() != "Fresh air"):
 #    print("There are harmful gases nearby, you might want to open a window.")
 #  @endcode
-class Grove_Air_Quality_Sensor(Grove_Analog_Sensor):
+class Grove_Air_Quality_Sensor(GroveAnalogPort):
     ## @return A number corresponding with the air quality. Higher numbers mean more pollutants are present.
     def airQuality(self):
         return self.readValue()
@@ -429,6 +291,7 @@ class Grove_Air_Quality_Sensor(Grove_Analog_Sensor):
         else:
             return "Fresh air"
 
+'''
 ## This class supports the Grove Sunlight Sensor v1.4
 #
 #  This versatile sensor can read IR, visible, and UV light, all in one convenient package!
@@ -571,3 +434,4 @@ class Grove_Sunlight_Sensor(Grove_I2C_Sensor):
 
     def readUV(self):
         return self.readInteger(self.SI114X_AUX_DATA0_UVINDEX0)
+'''
