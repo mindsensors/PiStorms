@@ -1021,14 +1021,18 @@ class mindsensorsUI():
     #  @param goBtn Whether to check for the GO button to close the question. Optional, defaults to False.
     #  @param wrapText When True, long lines of text will be wrapped to fit in the popup. Optional, default to False.
     #  @code
-    #  answer = screen.askQuestion(["Title", "This is a very long line of text which will be wrapped to fit in the dialog box.", "Here's a second line. It will be wrapped, too. What do you think?"], ["No thanks", "Cool!"], wrapText=True)
+    #  question = ["Title", "This is a very long line of text which will be wrapped to fit in the dialog box.", "Here's a second line. It will be wrapped, too. What do you think?"]
+    #  options = ["No thanks", "Cool!"]
+    #  answer = screen.askQuestion(question, options, wrapText=True)
     #  @endcode
     #  @note If goBtn is True, pressing GO will close the dialog and return -1
     #  @remark
     #  To use this function in your program:
     #  @code
     #  ...
-    #  answer = screen.askQuestion(["Color Picker", "Pick a color!"], ["Red", "Green", "Blue"])
+    #  question = ["Color Picker", "Pick a color!"]
+    #  options = ["Red", "Green", "Blue"]
+    #  answer = screen.askQuestion(question, options)
     #  @endcode
     def askQuestion(self, question, options, touch=True, goBtn=False, wrapText=False):
         if wrapText:
@@ -1094,14 +1098,16 @@ class mindsensorsUI():
     #  @param goBtn Whether to check for the GO button to close the question. Optional, defaults to False.
     #  @param wrapText When True, long lines of text will be wrapped to fit in the popup. Optional, default to False.
     #  @code
-    #  response = screen.askYesOrNoQuestion(["Title", "This is a very long line of text which will be wrapped to fit in the dialog box.", "Cool?"], wrapText=True)
+    #  question = ["Title", "This is a very long line of text which will be wrapped to fit in the dialog box.", "Cool?"]
+    #  response = screen.askYesOrNoQuestion(question, wrapText=True)
     #  @endcode
     #  @note If goBtn is True, pressing GO will close the dialog and return False
     #  @remark
     #  To use this function in your program:
     #  @code
     #  ...
-    #  response = screen.askYesOrNoQuestion(["Continue?", "Do you want to continue?"])
+    #  question = ["Continue?", "Do you want to continue?"]
+    #  response = screen.askYesOrNoQuestion(question)
     #  @endcode
     def askYesOrNoQuestion(self, question, touch=True, goBtn=False, wrapText=False):
         return self.askQuestion(question, ["Yes","No"], touch=touch, goBtn=goBtn, wrapText=wrapText) == 0
@@ -1113,14 +1119,16 @@ class mindsensorsUI():
     #  @param goBtn Whether to check for the GO button to close the question. Optional, defaults to True.
     #  @param wrapText When True, long lines of text will be wrapped to fit in the popup. Optional, default to False.
     #  @code
-    #  screen.showMessage(["Title", "This is a very long line of text which will be wrapped to fit in the dialog box.", "Other lines will be wrapped, too. Press OK to close this popup."], wrapText=True)
+    #  message = ["Title", "This is a very long line of text which will be wrapped to fit in the dialog box.", "Other lines will be wrapped, too. Press OK to close this popup."]
+    #  screen.showMessage(message, wrapText=True)
     #  @endcode
     #  @note If goBtn is True, pressing GO will close the dialog and return False
     #  @remark
     #  To use this function in your program:
     #  @code
     #  ...
-    #  screen.showMessage(["Complete", "The process has completed.", "Status: success"])
+    #  message = ["Complete", "The process has completed.", "Status: success"]
+    #  screen.showMessage(message)
     #  @endcode
     def showMessage(self, message, touch=True, goBtn=True, wrapText=False):
         return self.askQuestion(message, ["OK"], touch=touch, goBtn=goBtn, wrapText=wrapText) == 0
@@ -1133,25 +1141,14 @@ class mindsensorsUI():
     #  To use this function in your program:
     #  @code
     #  ...
-    #  screen.forceMessage(["Processing", "Processing, please wait..."])
+    #  message = ["Processing", "Processing, please wait..."]
+    #  screen.forceMessage(message)
     #  @endcode
     def forceMessage(self, message):
         self.popupText = message
         self.buttonText = []
         oldMode = self.currentMode
         self.setMode(self.PS_MODE_POPUP)
-        '''
-        while(True):
-            try:
-                if(goBtn and self.i2c.readByte(PiStormsCom.PS_KeyPress)&0x01):
-                    while self.i2c.readByte(PiStormsCom.PS_KeyPress)&0x01: pass # wait for user to release GO
-                    break
-            except KeyError: # no touchscreen calibration values
-                break
-        
-        self.setMode(oldMode)
-        return 0
-        '''
     
     ## Draw a line on the screen (rotated to screen)
     #  @param self The object pointer.
