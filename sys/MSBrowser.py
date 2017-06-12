@@ -119,12 +119,10 @@ def initScreen():
             scrn.askQuestion(ts_cal_error, ["Press GO to continue..."], touch=False, goBtn=True)
             return scrn
 def listPrograms(directory):
-    return map(lambda i: i if not i.endswith(".py") else i[:-3], sorted(filter(lambda i: i[:2].isdigit(), os.listdir(directory))))
-
-    # separate lines for readability:
     allFiles = os.listdir(directory)
     beginsWithNum = filter(lambda i: i[:2].isdigit(), allFiles)
-    sortedFiles = sorted(beginsWithNum)
+    onlyPythonFiles = filter(lambda i: os.path.isdir(os.path.join(directory, i)) or i.endswith(".py"), beginsWithNum)
+    sortedFiles = sorted(onlyPythonFiles)
     withoutPy = map(lambda i: i if not i.endswith(".py") else i[:-3], sortedFiles)
     return withoutPy
 def updateNeeded():
