@@ -219,6 +219,8 @@ def drawLeftArrow():
     scrn.drawButton(0, 0, 50, 50, image="leftarrow.png", text="", display=False, imageX=8)
 def drawUpArrow():
     scrn.drawButton(0, 0, 50, 50, image="uparrow.png", text="", display=False, imageX=8)
+def drawRefresh():
+    scrn.drawButton(0, 0, 50, 50, image="refresh.png", text="", display=False, imageX=8)
 def drawExclamation():
     scrn.fillBmp(230, 7, 34, 34, "Exclamation-mark-icon.png", display=False);
 def drawBatteryIndicator(*ignored):
@@ -244,6 +246,8 @@ def leftArrowPressed(index, filesPerPage):
     return (scrn.checkButton(0, 0, 50, 50) and index >= filesPerPage)
 def upArrowPressed(stack):
     return (scrn.checkButton(0, 0, 50, 50) and len(stack) > 1)
+def refreshPressed(stack):
+    return (scrn.checkButton(0, 0, 50, 50) and len(stack) == 1)
 def exclamationPressed():
     return scrn.checkButton(218, 5, 38, 38)
 def itemButtonPressed(folder, files, index, filesPerPage):
@@ -312,6 +316,8 @@ if __name__ == "__main__":
                 drawLeftArrow()
             elif len(stack) > 1:
                 drawUpArrow()
+            else:
+                drawRefresh()
 
             if newMessageExists() or updateNeeded():
                 drawExclamation()
@@ -333,6 +339,9 @@ if __name__ == "__main__":
                     break
                 if upArrowPressed(stack):
                     stack.pop()
+                    break
+                if refreshPressed(stack):
+                    stack[-1][1] = listPrograms(PROGRAM_DIRECTORY)
                     break
 
                 item, isFolder = itemButtonPressed(FOLDER, FILES, INDEX, FILES_PER_PAGE)
