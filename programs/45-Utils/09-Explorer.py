@@ -22,67 +22,43 @@
 # History:
 # Date      Author      Comments
 # Oct 2015  Michael     Initial Authoring
+# Jun 2017  Seth        Simplification
 
-import os,sys,inspect,time,thread
-import socket,fcntl,struct,ms_explorerlib    
+import time
+import ms_explorerlib
 
-currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
-parentdir = os.path.dirname(currentdir)
-sys.path.insert(0,parentdir) 
 from PiStorms import PiStorms
-
 psm = PiStorms()
-psm.screen.termPrintln("Connect your I2C device to BAS1")
-psm.screen.termPrintln("and click Explore")
-psm.screen.drawButton(75, 95, width = 85, height = 40, text="Explore", display=False)
-psm.screen.drawButton(175, 95, width = 60, height = 40, text="Exit", display=True)
 
-exit = False
-lastled = 0
+psm.BAS1.activateCustomSensorI2C()
 
-def explore():
-    time.sleep(3)
-    addr = 0x00     # DO NOT change this address!!!
-    i2c = ms_explorerlib.Explorer(addr)
-    found = i2c.ping(0x00)  
-    # Checks for connection on all I2C addresses until connection is found
-    count = 0 
-    while found == -1:     
-        if (addr < 0xef):
-            addr = addr + 1
-            count = count + 1
-            if (addr != 0x34 and addr != 0x35 and addr != 0x36 and addr != 0x37):
-                i2c = ms_explorerlib.Explorer(addr)
-                found = i2c.ping(0x00)
-            if (count > 2000):
-                found = 5
-        else:
-            addr = 0x00   
-    if (found == 5):
-        psm.screen.termPrintAt(5, "No Device found!")
-        psm.screen.termPrintAt(6, "Click Exit to return to main menu")
-    else:
-        psm.screen.termPrintAt(5, "7 bit address: " + str(hex(addr/2)))      
-        psm.screen.termPrintAt(6, "8 bit address: " + str(hex(addr)))         
-        psm.screen.termPrintAt(7, "FW Version: " + i2c.GetFirmwareVersion()[:5])
-        psm.screen.termPrintAt(8, "Vendor ID: " + i2c.GetVendorName())
-        device = i2c.GetDeviceId()
-        pos = device.find('\0') 
-        psm.screen.termPrintAt(9, "Device ID: " + i2c.GetDeviceId()[:pos])
+class STATE:
+    INIT = 0
+    FOUND = 1
+    SEARCHING = 2
+state = STATE.INIT
 
-while(not exit):
-    explorer = psm.screen.checkButton(75, 95,width=85,height=40)
-    bye = psm.screen.checkButton(175, 95,width=60,height=40)
-    if(explorer == True):
-        psm.screen.termPrintAt(5, "")
-        psm.screen.termPrintAt(6, "")
-        psm.screen.termPrintAt(7, "")
-        psm.screen.termPrintAt(8, "")
-        psm.screen.termPrintAt(9, "")
-        psm.screen.termPrintAt(5, "Searching for i2c device...")        
-        psm.BAS1.activateCustomSensorI2C()
-        explore()
-    if(bye == True):
-        psm.screen.termPrintAt(5, "Exiting to menu")
-        exit = True
-    time.sleep(.1)
+while not psm.isKeyPressed():
+    for addr in range(0x00,0x34) + range(0x38,0xEF):
+        i2c = ms_explorerlib.Explorer(addr)
+        if i2c.ping(0x00) != -1: break
+
+    if i2c.ping(0x00) != -1 and state != STATE.FOUND:
+        psm.screen.dumpTerminal()
+        psm.screen.termPrintln("I2C device found!")
+        psm.screen.termPrintln("")
+        psm.screen.termPrintln("7 bit address: " + str(hex(addr/2)))
+        psm.screen.termPrintln("8 bit address: " + str(hex(addr)))
+        psm.screen.termPrintln("FW Version: " + i2c.GetFirmwareVersion()[:5])
+        psm.screen.termPrintln("Vendor ID: " + i2c.GetVendorName())
+        psm.screen.termPrintln("Device ID: " + i2c.GetDeviceId().rstrip("\0"))
+        psm.screen.termPrintAt(8, "(hold GO for a moment to quit)")
+        state = STATE.FOUND
+    elif i2c.ping(0x00) == -1 and state != STATE.SEARCHING:
+        psm.screen.dumpTerminal()
+        psm.screen.termPrintln("Connect your I2C device to BAS1")
+        psm.screen.drawAutoText("(here) -->", 235, 110)
+        psm.screen.termPrintln("")
+        psm.screen.termPrintln("Searching...")
+        psm.screen.termPrintAt(8, "(hold GO for a moment to quit)")
+        state = STATE.SEARCHING
