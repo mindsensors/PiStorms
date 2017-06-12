@@ -25,12 +25,17 @@
 # Jun 2017  Seth        Simplification
 
 import time
-import ms_explorerlib
+import sys
+
+from mindsensors_i2c import mindsensors_i2c
 
 from PiStorms import PiStorms
-psm = PiStorms()
+psm = PiStorms("Explorer")
 
 psm.BAS1.activateCustomSensorI2C()
+psm.BAS2.activateCustomSensorI2C()
+psm.BBS1.activateCustomSensorI2C()
+psm.BBS2.activateCustomSensorI2C()
 
 class STATE:
     INIT = 0
@@ -38,27 +43,44 @@ class STATE:
     SEARCHING = 2
 state = STATE.INIT
 
-while not psm.isKeyPressed():
-    for addr in range(0x00,0x34) + range(0x38,0xEF):
-        i2c = ms_explorerlib.Explorer(addr)
-        if i2c.ping(0x00) != -1: break
+i2c_all = []
+for addr in range(0x00,0x34,2) + range(0x38,0xEF,2):
+    i2c_all.append(mindsensors_i2c(addr>>1))
 
-    if i2c.ping(0x00) != -1 and state != STATE.FOUND:
+def ping(i2c):
+    return i2c.readByte(0x00) != None
+def println(text="", text2=""):
+    psm.screen.termPrintln("{} {}".format(text, text2.rstrip("\0")), display=False)
+def draw():
+    psm.screen.termPrintAt(8, "Press GO to quit.", display=False)  
+    psm.screen.refresh()
+    #psm.screen.drawDisplay("Explorer")
+
+while not psm.isKeyPressed():
+    found = []
+    for i2c in i2c_all:
+        if ping(i2c):
+            found.append(i2c)
+
+    #if len(found) == 0: continue
+    i2c = None
+    if len(found) > 0: i2c = found[0]
+    if i2c and state != STATE.FOUND:
         psm.screen.dumpTerminal()
-        psm.screen.termPrintln("I2C device found!")
-        psm.screen.termPrintln("")
-        psm.screen.termPrintln("7 bit address: " + str(hex(addr/2)))
-        psm.screen.termPrintln("8 bit address: " + str(hex(addr)))
-        psm.screen.termPrintln("FW Version: " + i2c.GetFirmwareVersion()[:5])
-        psm.screen.termPrintln("Vendor ID: " + i2c.GetVendorName())
-        psm.screen.termPrintln("Device ID: " + i2c.GetDeviceId().rstrip("\0"))
-        psm.screen.termPrintAt(8, "(hold GO for a moment to quit)")
+        println("I2C device found!")
+        println("")
+        println("7 bit address:", hex(i2c.address*2))
+        println("8 bit address:", hex(i2c.address))
+        println("FW Version:",    i2c.GetFirmwareVersion())
+        println("Vendor ID:",     i2c.GetVendorName())
+        println("Device ID:",     i2c.GetDeviceId())
+        draw()
         state = STATE.FOUND
-    elif i2c.ping(0x00) == -1 and state != STATE.SEARCHING:
+    elif not i2c and state != STATE.SEARCHING:
         psm.screen.dumpTerminal()
-        psm.screen.termPrintln("Connect your I2C device to BAS1")
+        println("Connect your I2C device to BAS1")
+        println("")
+        println("Searching...")
+        draw()
         psm.screen.drawAutoText("(here) -->", 235, 110)
-        psm.screen.termPrintln("")
-        psm.screen.termPrintln("Searching...")
-        psm.screen.termPrintAt(8, "(hold GO for a moment to quit)")
         state = STATE.SEARCHING
