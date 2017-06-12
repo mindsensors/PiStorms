@@ -46,6 +46,7 @@ def ping(i2c):
 def println(text="", text2=""):
     psm.screen.termPrintln("{} {}".format(text, text2.rstrip("\0")), display=False)
 
+index = 0
 while not psm.isKeyPressed():
     found = []
     for i2c in i2c_all:
@@ -53,19 +54,24 @@ while not psm.isKeyPressed():
             found.append(i2c)
 
     psm.screen.dumpTerminal(display=False)
+    psm.screen.hideArrows(refresh=False)
     println("Found {} I2C device{}.".format(len(found), "s" if len(found) != 1 else ""))
     println("")
     
     if len(found):
-        println("7 bit address:", hex(found[0].address*2))
-        println("8 bit address:", hex(found[0].address))
-        println("FW Version:",    found[0].GetFirmwareVersion())
-        println("Vendor ID:",     found[0].GetVendorName())
-        println("Device ID:",     found[0].GetDeviceId())
+        println("7 bit address:", hex(found[index].address*2))
+        println("8 bit address:", hex(found[index].address))
+        println("FW Version:",    found[index].GetFirmwareVersion())
+        println("Vendor ID:",     found[index].GetVendorName())
+        println("Device ID:",     found[index].GetDeviceId())
+        if len(found) > 1:
+            psm.screen.showArrows(refresh=False)
+            if psm.screen.checkArrows():
+                index = 1
     else:
         println("Connect an I2C sensor to any")
         println("sensor port.")
         println("")
         println("Searching...")
-    psm.screen.termPrintAt(8, "Press GO to quit.", display=False)  
+    psm.screen.termPrintAt(8, "Press GO to quit.", display=False)
     psm.screen.refresh()
