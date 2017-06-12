@@ -348,7 +348,11 @@ if __name__ == "__main__":
                     break
                 if item and not isFolder:
                     print("Running program " + item)
-                    runProgram(item)
+                    exitStatus = runProgram(item)
+                    if exitStatus != 0:
+                        scrn.showMessage(["Error!", "The program stopped with exit status {}. " \
+                                "You might want to access the Logs tab in the PiStorms Web Interface " \
+                                "to check for a stacktrace.".format(exitStatus)], wrapText=True)
                     break
     except KeyboardInterrupt:
         logging.info("Quitting MSBrowser")
