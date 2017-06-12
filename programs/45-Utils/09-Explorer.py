@@ -22,67 +22,58 @@
 # History:
 # Date      Author      Comments
 # Oct 2015  Michael     Initial Authoring
+# Jun 2017  Seth        Simplification
 
-import os,sys,inspect,time,thread
-import socket,fcntl,struct,ms_explorerlib    
+import time
+import sys
 
-currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
-parentdir = os.path.dirname(currentdir)
-sys.path.insert(0,parentdir) 
+from mindsensors_i2c import mindsensors_i2c
+
 from PiStorms import PiStorms
+psm = PiStorms("Explorer")
 
-psm = PiStorms()
-psm.screen.termPrintln("Connect your I2C device to BAS1")
-psm.screen.termPrintln("and click Explore")
-psm.screen.drawButton(75, 95, width = 85, height = 40, text="Explore", display=False)
-psm.screen.drawButton(175, 95, width = 60, height = 40, text="Exit", display=True)
+psm.BAS1.activateCustomSensorI2C()
+psm.BAS2.activateCustomSensorI2C()
+psm.BBS1.activateCustomSensorI2C()
+psm.BBS2.activateCustomSensorI2C()
 
-exit = False
-lastled = 0
+i2c_all = []
+for addr in range(0x00,0x34,2) + range(0x38,0xEF,2):
+    i2c_all.append(mindsensors_i2c(addr>>1))
 
-def explore():
-    time.sleep(3)
-    addr = 0x00     # DO NOT change this address!!!
-    i2c = ms_explorerlib.Explorer(addr)
-    found = i2c.ping(0x00)  
-    # Checks for connection on all I2C addresses until connection is found
-    count = 0 
-    while found == -1:     
-        if (addr < 0xef):
-            addr = addr + 1
-            count = count + 1
-            if (addr != 0x34 and addr != 0x35 and addr != 0x36 and addr != 0x37):
-                i2c = ms_explorerlib.Explorer(addr)
-                found = i2c.ping(0x00)
-            if (count > 2000):
-                found = 5
-        else:
-            addr = 0x00   
-    if (found == 5):
-        psm.screen.termPrintAt(5, "No Device found!")
-        psm.screen.termPrintAt(6, "Click Exit to return to main menu")
+def ping(i2c):
+    return i2c.readByte(0x00) != None
+def println(text="", text2=None):
+    if text2:
+        psm.screen.termPrintln("{}: {}".format(text, text2.rstrip("\0")), display=False)
     else:
-        psm.screen.termPrintAt(5, "7 bit address: " + str(hex(addr/2)))      
-        psm.screen.termPrintAt(6, "8 bit address: " + str(hex(addr)))         
-        psm.screen.termPrintAt(7, "FW Version: " + i2c.GetFirmwareVersion()[:5])
-        psm.screen.termPrintAt(8, "Vendor ID: " + i2c.GetVendorName())
-        device = i2c.GetDeviceId()
-        pos = device.find('\0') 
-        psm.screen.termPrintAt(9, "Device ID: " + i2c.GetDeviceId()[:pos])
+        psm.screen.termPrintln((text), display=False)
 
-while(not exit):
-    explorer = psm.screen.checkButton(75, 95,width=85,height=40)
-    bye = psm.screen.checkButton(175, 95,width=60,height=40)
-    if(explorer == True):
-        psm.screen.termPrintAt(5, "")
-        psm.screen.termPrintAt(6, "")
-        psm.screen.termPrintAt(7, "")
-        psm.screen.termPrintAt(8, "")
-        psm.screen.termPrintAt(9, "")
-        psm.screen.termPrintAt(5, "Searching for i2c device...")        
-        psm.BAS1.activateCustomSensorI2C()
-        explore()
-    if(bye == True):
-        psm.screen.termPrintAt(5, "Exiting to menu")
-        exit = True
-    time.sleep(.1)
+index = 0
+while not psm.isKeyPressed():
+    found = []
+    for i2c in i2c_all:
+        if ping(i2c):
+            found.append(i2c)
+
+    psm.screen.dumpTerminal(display=False)
+    println("Found {} I2C device{}.".format(len(found), "s" if len(found) != 1 else ""))
+    println("")
+    
+    if len(found) > 1:
+        for dev in found:
+            println(hex(dev.address*2), dev.GetDeviceId())
+    elif len(found) == 1:
+        dev = found[0]
+        println("7 bit address", hex(dev.address*2))
+        println("8 bit address", hex(dev.address))
+        println("FW Version",    dev.GetFirmwareVersion())
+        println("Vendor ID",     dev.GetVendorName())
+        println("Device ID",     dev.GetDeviceId())
+    else:
+        println("Connect an I2C sensor to any")
+        println("sensor port, preferably BAS1.")
+        println("")
+        println("Searching...")
+    psm.screen.termPrintAt(8, "Press GO to quit.", display=False)
+    psm.screen.refresh()
