@@ -43,12 +43,11 @@ for addr in range(0x00,0x34,2) + range(0x38,0xEF,2):
 
 def ping(i2c):
     return i2c.readByte(0x00) != None
-def println(text="", text2=""):
-    psm.screen.termPrintln("{} {}".format(text, text2.rstrip("\0")), display=False)
-def drawRightArrow():
-    psm.screen.drawButton(320-50, 0, 50, 50, image="rightarrow.png", text="", imageX=320-50+8)
-def rightArrowPressed():
-    return psm.screen.checkButton(320-50, 0, 50, 50)
+def println(text="", text2=None):
+    if text2:
+        psm.screen.termPrintln("{}: {}".format(text, text2.rstrip("\0")), display=False)
+    else:
+        psm.screen.termPrintln((text), display=False)
 
 index = 0
 while not psm.isKeyPressed():
@@ -61,20 +60,20 @@ while not psm.isKeyPressed():
     println("Found {} I2C device{}.".format(len(found), "s" if len(found) != 1 else ""))
     println("")
     
-    if len(found):
-        println("7 bit address:", hex(found[index].address*2))
-        println("8 bit address:", hex(found[index].address))
-        println("FW Version:",    found[index].GetFirmwareVersion())
-        println("Vendor ID:",     found[index].GetVendorName())
-        println("Device ID:",     found[index].GetDeviceId())
+    if len(found) > 1:
+        for dev in found:
+            println(hex(dev.address*2), dev.GetDeviceId())
+    elif len(found) == 1:
+        dev = found[0]
+        println("7 bit address", hex(dev.address*2))
+        println("8 bit address", hex(dev.address))
+        println("FW Version",    dev.GetFirmwareVersion())
+        println("Vendor ID",     dev.GetVendorName())
+        println("Device ID",     dev.GetDeviceId())
     else:
         println("Connect an I2C sensor to any")
-        println("sensor port.")
+        println("sensor port, preferably BAS1.")
         println("")
         println("Searching...")
     psm.screen.termPrintAt(8, "Press GO to quit.", display=False)
     psm.screen.refresh()
-    if len(found) > 1:
-        drawRightArrow()
-        if rightArrowPressed():
-            index = 1
