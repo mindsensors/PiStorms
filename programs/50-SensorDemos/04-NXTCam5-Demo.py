@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 
 from PiStorms import PiStorms
-from mindsensors import NXTCAM
 import MsDevices
 import time
 
