@@ -24,6 +24,7 @@
 # June 2017  Seth Tenembaum  Initial Authoring
 
 from mindsensors_i2c import mindsensors_i2c
+from fractions import Fraction
 
 
 ## GRXCom: this class provides communication functions for PiStorms-GRX.
@@ -56,6 +57,32 @@ class GRXCom():
         DATA = 4
         ENCODER_VALUE = 4
         ENCODER_TARGET = 8
+    class REGISTER:
+        FIRMWARE_VERSION = 0x00
+        VENDOR_NAME = 0x08
+        DEVICE_MODEL = 0x10
+        FEATURE = 0x18
+        COMMAND = 0x41
+        LED = 0xB6
+        LED_R = 0xB6
+        LED_G = 0xB7
+        LED_B = 0xB8
+        PID = 0xB9
+        P_NUMERATOR = 0xB9
+        P_DENOMINATOR = 0xBA
+        I_NUMERATOR = 0xBB
+        I_DENOMINATOR = 0xBC
+        D_NUMERATOR = 0xBD
+        D_DENOMINATOR = 0xBE
+        GO_BUTTON_STATE = 0xBF
+        GO_PRESS_COUNT = 0xC0
+        BATTERY_VOLTAGE = 0xC1
+        TOUCHSCREEN_X_RAW = 0xDF
+        TOUCHSCREEN_Y_RAW = 0xE1
+        TOUCHSCREEN_X = 0xE3
+        TOUCHSCREEN_Y = 0xE5
+    class COMMAND:
+        SHUTDOWN = ord('H')
 
     def __init__(self, i2c, address):
         self.i2c = i2c
@@ -75,7 +102,35 @@ class GRXCom():
         return self.i2c.readLongSigned(self.address + self.OFFSET.ENCODER_VALUE)
 
     def setEncoderTarget(self, target):
-        return self.i2c.writeLongSigned(self.address + self.OFFSET.ENCODER_TARGET, target)
+        data = map(lambda b: struct.unpack('B', b)[0], struct.pack('l', target))
+        self.i2c.writeArray(self.address + self.OFFSET.ENCODER_TARGET, data)
+
+    def setPID(self, p, i, d):
+        def floatToByteFraction(n):
+            f = Fraction(n).limit_denominator(255)
+            try:
+                return [ord(chr(f.numerator)), ord(chr(f.denominator))]
+            except ValueError: # fallback
+                if   n > 255: return [255, 1]
+                if 1/n > 255: return [1, 255]
+                if n > 1:
+                    return [n, 1]
+                else:
+                    return [1, int(round(1/n))]
+
+                #if n > 1:
+                #    n = int(round(n))
+                #    if n > 255: n = 255
+                #    return [n, 1]
+                #else:
+                #    d = int(round(1.0/n))
+                #    if d > 255: d = 255
+                #    return [1, d]
+
+                #if n > 255: n = 255
+                #return [int(n), 1]
+        data = sum(map(floatToByteFraction, [p,i,d]), [])
+        self.i2c.writeArray(self.REGISTER.PID, data)
 
 class TYPE_SUPPORT:
     ALL = [GRXCom.TYPE.NONE, GRXCom.TYPE.DIGITAL_OUTPUT, GRXCom.TYPE.DIGITAL_INPUT, GRXCom.TYPE.I2C]
