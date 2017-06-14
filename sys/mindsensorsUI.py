@@ -99,7 +99,7 @@ class mindsensorsUI():
     PS_MODE_DEAD = 2
 
     ## Dictionary of default emnpty terminal buffer
-    terminalBuffer = [""]*10
+    terminalBuffer = [""]*20
     ## Variable of default terminal cursor position
     terminalCursor = 0
     ## Variable of default mode
@@ -164,11 +164,10 @@ class mindsensorsUI():
 
     ## Dumps the screen buffer
     #  @param self The object pointer.
-    #  @param display Choose to immediately push the drawing to the screen. Optional, defaults to True.
-    def dumpTerminal(self, display = True):
-        self.terminalBuffer = [""] * ((self.screenHeight()-40)/20)
+    def dumpTerminal(self):
+        self.terminalBuffer = [""]*20
         self.terminalCursor = 0
-        if(self.getMode() == self.PS_MODE_TERMINAL and display):
+        if(self.getMode() == self.PS_MODE_TERMINAL):
             self.refresh()
 
     ## Sets the mode (Experienced users)
@@ -346,8 +345,7 @@ class mindsensorsUI():
     #  @param ybuff The y-coordinate buffer.
     #  @param buttHeight The height of the button.
     def calculateButton(self, xbuff, ybuff, buttHeight):
-        n = 0
-        while(n < len(self.buttonText)):
+        for n in range(len(self.buttonText)):
             numButts = len(self.buttonText)
             room = self.screenWidth()-(xbuff + ybuff)
             xlb = (room/numButts)*n + xbuff
@@ -372,8 +370,6 @@ class mindsensorsUI():
             tsx, tsy = self.getTouchscreenValues()
             if(tsx<axub and tsx>axlb and tsy>aylb and tsy<ayub):
                 return n
-
-            n += 1
 
         return -1
 
@@ -766,116 +762,72 @@ class mindsensorsUI():
     #  screen.termGotoLine(5)
     #  @endcode
     def termGotoLine(self, lineno):
-        self.termCheckCursorValid(lineno)
         self.terminalCursor = lineno
 
-    ## Check if a cursor position (or the current cursor position) is valid
-    #  @param lineno Which line to check if is is valid. If no argument is provided, check the current cursor position.
-    def termCheckCursorValid(self, lineno = None):
-        if not lineno: lineno = self.terminalCursor
-        try:
-            self.terminalBuffer[lineno]
-        except IndexError:
-            raise IndexError("Invalid terminal line number. lineno must be between 0 and %s, inclusive." % (len(self.terminalBuffer)-1))
-
-    ## Clear a terminal line
-    #  @param lineno The line number at which to clear. Defaults to current cursor line.
-    #  @param visualOnly Choose to clear the space on screen but not modify the terminal buffer. Optional, defaults to False.
-    #  @param display Choose to immediately push the drawing to the screen. Optional, defaults to True.
-    def termClearLine(self, lineno = None, visualOnly = False, display = True):
-        if not lineno: lineno = self.terminalCursor
-        self.termCheckCursorValid(lineno)
-        if not visualOnly: self.terminalBuffer[lineno] = ""
-        self.fillRect(10, lineno*20+42, self.screenWidth(), 19, (0,0,0), display = display)
-
-    ## Print to a specific line of the screen. This *will* affect the current cursor position.
+    ## Print to a specific line of the screen
     #  @param self The object pointer.
     #  @param lineno The line number at which to set the cursor.
     #  @param text The text to print to the screen.
-    #  @param display Choose to immediately push the drawing to the screen. Optional, defaults to True.
     #  @remark
     #  To use this function in your program:
     #  @code
     #  ...
     #  screen.termPrintAt(5, "Printing at line 5")
     #  @endcode
-    def termPrintAt(self, lineno, text, display = True):
-        self.termGotoLine(lineno)
-        self.termClearLine(display = False)
-        self.termPrintln(text, display)
+    def termPrintAt(self, lineno, text):
+        self.terminalCursor = lineno
+        self.fillRect(10, self.terminalCursor*20+42, 320, 19, (0,0,0), display = False)
+        self.terminalBuffer[self.terminalCursor] =  str(text)
+        self.refreshLine(self.terminalCursor)
 
     ## Print to the current line of the screen
     #  @param self The object pointer.
     #  @param text The text to print to the screen.
-    #  @param display Choose to immediately push the drawing to the screen. Optional, defaults to True.
     #  @remark
     #  To use this function in your program:
     #  @code
     #  ...
     #  screen.termPrint("Regular print, no newline")
     #  @endcode
-    def termPrint(self, text, display = True):
-        self.termCheckCursorValid(self.terminalCursor)
+    def termPrint(self, text):
         self.terminalBuffer[self.terminalCursor] += str(text)
-        if display: self.refreshLine(self.terminalCursor)
+        self.refreshLine(self.terminalCursor)
 
     ## Print to the current line and then go to the next line
     #  @param self The object pointer.
     #  @param text The text to print to the screen.
-    #  @param display Choose to immediately push the drawing to the screen. Optional, defaults to True.
     #  @remark
     #  To use this function in your program:
     #  @code
     #  ...
     #  screen.termPrintln("Hello, world!")
     #  @endcode
-    def termPrintln(self, text, display = True):
-        try:
-            self.termCheckCursorValid(self.terminalCursor+1)
-        except IndexError:
-            old_lastLine = self.terminalBuffer[-1]
-            self.dumpTerminal(display = False)
-            for i,_ in enumerate(self.terminalBuffer):
-                self.termClearLine(i, visualOnly = True, display = False)
-            self.termReplaceLastLine(old_lastLine, False)
-            self.refreshLine(len(self.terminalBuffer)-1, not display)
+    def termPrintln(self, text):
+        if(self.terminalCursor>9):
+            self.terminalCursor = 0
+            self.terminalBuffer = [""]*20
+            self.refresh()
+        self.termPrint(text)
+        self.terminalCursor += 1
 
-        self.termPrint(text, display)
-        self.termGotoLine(self.terminalCursor+1)
-
-    ## Print new text in place of the last line you printed to
-    #  @note May cause confusion when used directly after termPrintln. The cursor has moved to the next line,
-    #        so termReplaceLastLine will replace the line beneath what was printed.
+    ## Print new text in place of current line (Low Refresh Rate)
     #  @param self The object pointer.
     #  @param text The text to print to the screen.
-    #  @param display Choose to immediately push the drawing to the screen. Optional, defaults to True.
     #  @remark
     #  To use this function in your program:
     #  @code
     #  ...
     #  screen.termReplaceLastLine("Replaced!")
     #  @endcode
-    def termReplaceLastLine(self, text, display = True):
-        self.termClearLine(display = False)
+    def termReplaceLastLine(self, text):
+        self.terminalBuffer[self.terminalCursor] = ""
+        self.fillRect(10, self.terminalCursor*20+42, 320, 19, (0,0,0), display = False)
         self.termPrint(text)
 
-    ## Replace the line at the bottom of the screen. This will not affect the current cursor position.
+    ## Refresh a screen line 
     #  @param self The object pointer.
-    #  @param text The text to print to the last line.
-    #  @param display Choose to immediately push the drawing to the screen. Optional, defaults to True.
-    #  @remark
-    #  To use this function in your program:
-    #  @code
-    #  ...
-    #  screen.termReplaceLastLine("Status: OK")
-    #  @endcode
-    def termStatusLine(self, text, display = True):
-        self.termPrintAt(len(self.terminalBuffer)-1, text, display)
-
-    ## Draw a terminal text line to the screen
-    #  @param self The object pointer.
-    #  @param lineNum The line number at which to refresh.
-    #  @param display Choose to immediately push the drawing to the screen. Optional, defaults to True.
+    #  @param text The text to print to the screen.
+    #  @param display Choose to immediately push the drawing to the screen.
     #  @remark
     #  To use this function in your program:
     #  @code
@@ -883,12 +835,8 @@ class mindsensorsUI():
     #  screen.refreshLine(1)
     #  @endcode
     def refreshLine(self, lineNum, display = True):
-        self.termCheckCursorValid(lineNum)
         if(self.currentMode == self.PS_MODE_TERMINAL):
-            self.termClearLine(lineNum, visualOnly = True, display = False)
             self.drawAutoText(self.terminalBuffer[lineNum], 10, lineNum*20 + 40, (255,255,255), display = display)
-        else:
-            print("Screen not in terminal mode")
 
     ## Draw a labeled button on the screen (INTERNAL USE ONLY)
     #  @param self The object pointer.
