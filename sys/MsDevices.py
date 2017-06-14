@@ -754,7 +754,187 @@ class IRThermometer(mindsensors_i2c):
     def readTargetFahr(self):
         return (float(self.readInteger(self.IRT_TARGET_FAHR))/100)
 
+
+## BLOB: this class is a subclass of NXTCAM. There is no need to call this class directly.
+class BLOB():
+
+    ## Initialize the class with the parameters passed from getBlobs() in the NXTCAM() class
+    #  @param self The object pointer.
+    #  @param color The color of the specified tracked object.
+    #  @param left The left coordinate of the specified tracked object.
+    #  @param top The top coordinate of the specified tracked object.
+    #  @param right The right coordinate of the specified tracked object.
+    #  @param bottom The bottom coordinate of the specified tracked object.
+    #  @remark
+    def __init__(self, color, left, top, right, bottom):
+        self.color = color
+        self.left = left
+        self.top = top
+        self.right = right
+        self.bottom = bottom
+
+## NXTCam5 : this class provides PiStorms specific interface for NXTCam5
+#  http://www.mindsensors.com/pages/317
+#
+class NXTCam5(mindsensors_i2c):
+    ## Default I2C Address
+    CAM_ADDRESS = 0x02
+    ## Command Register
+    CAM_COMMAND = 0x41
+
+    NumberObjects = 0x42
+    ## First Register Containing Tracked Object Data. This is to be read in an array
+    Color = 0x43
+    ## X-axis Top Register
+    X_Top = 0x44
+    ## Y-axis Top Register
+    Y_Top = 0x45
+    ## X-axis Bottom Register
+    X_Bottom = 0x46
+    ## Y-axis Bottom Register
+    Y_Bottom = 0x47
+
+
+    ## Initialize the class with the i2c address of your device
+    #  @param self The object pointer.
+    #  @param port The PiStorms bank.
+    #  @param address Address of your device
+    #  @remark
+    def __init__(self, port, address=CAM_ADDRESS):
+        port.activateCustomSensorI2C()
+        mindsensors_i2c.__init__(self, address >> 1)
+
+    ## Writes a value to the command register
+    #  @param self The object pointer.
+    #  @param command Value to write to the command register.
+    def command(self, command):
+        self.writeByte(self.CAM_COMMAND, int(command))
+
+    ## Track a line
+    #  @param self The object pointer.
+    def trackLine(self):
+        try:
+            self.command(76)
+        except:
+            print "Error: couldn't write command to Cam."
+            return ""
+
+    ## Track Object (this is default mode of NXTCam5)
+    #  @param self The object pointer.
+    def trackObject(self):
+        try:
+            self.command(79)
+        except:
+            print "Error: couldn't write command to Cam."
+            return ""
+
+    ## Track Face
+    #  @param self The object pointer.
+    def trackFace(self):
+        try:
+            self.command(70)
+        except:
+            print "Error: couldn't write command to Cam."
+            return ""
+
+    ## Track Eye
+    #  @param self The object pointer.
+    def trackEye(self):
+        try:
+            self.command(101)
+        except:
+            print "Error: couldn't write command to Cam."
+            return ""
+
+    ## Capture Image
+    #  @param self The object pointer.
+    #  the resultimg image is stored on the SD card attached to NXTCam5.
+    #  the file forma is JPEG
+    def captureImage(self):
+        try:
+            self.command(80)
+        except:
+            print "Error: couldn't write command to Cam."
+            return ""
+
+    ## Capture Short Video
+    #  @param self The object pointer.
+    #  Capture a short Video (about 10 seconds)
+    #  the resultimg video file is stored on the SD card attached to NXTCam5.
+    #  the file forma is MJPEG
+    #  you can use VLC player by www.videolan.org to view these files
+    def captureShortVideo(self):
+        try:
+            self.command(77)
+        except:
+            print "Error: couldn't write command to Cam."
+            return ""
+
+    ## Capture Continuous Video
+    #  @param self The object pointer.
+    #  Capture a continuous Video,
+    #  the recording is stopped when different command is received.
+    #  the resultimg video file is stored on the SD card attached to NXTCam5.
+    #  the file forma is MJPEG
+    #  you can use VLC player by www.videolan.org to view these files
+    def captureContinuousVideo(self):
+        try:
+            self.command(82)
+        except:
+            print "Error: couldn't write command to Cam."
+            return ""
+
+    ## Read the number of objects detected (0-8)
+    #  @param self The object pointer.
+    def getNumberObjects(self):
+        try:
+            return self.readByte(self.NumberObjects)
+        except:
+            print "Error: Could not read from Cam."
+            return ""
+
+    ## Reads data of the tracked object(s)
+    #  @param self The object pointer.
+    #  @param blobNum The number of the tracked object.
+    #  @remark
+    #  To use this function in your program:
+    #  @code
+    #  from mindsensors  import NXTCAM
+    #  ...
+    #  cam = NXTCAM()
+    #  cam.startTracking()
+    #  cam.trackObject()
+    #  b = cam.getBlobs(1)
+    #  print "Color: " + str(b.color)
+    #  print "Left: " + str(b.left)
+    #  print "Top: " + str(b.top)
+    #  print "Right: " + str(b.right)
+    #  print "Bottom: " + str(b.bottom)
+    #  @endcode
+    def getBlobs(self, blobNum = 1):
+        try:
+
+            data= [0,0,0,0,0]
+            blobs = self.getNumberObjects()
+            i = blobNum - 1
+            if (blobNum > blobs):
+                print "blobNum is greater than amount of blobs tracked."
+                return 0
+            else:
+                #while(i < blobs):
+                data[0] = color = self.readByte(self.Color + (i*5))
+                data[1] = left = self.readByte(self.X_Top + (i*5))
+                data[2] = top = self.readByte(self.Y_Top + (i*5))
+                data[3] = right = self.readByte(self.X_Bottom + (i*5))
+                data[4] = bottom = self.readByte(self.Y_Bottom + (i*5))
+                return BLOB(color,left,top,right,bottom)
+        except:
+            print "Error: Could not read from Cam."
+            return ""
+
+
 """
+new class name -> old class name (if there is one)
 AbsoluteIMU -> ABSIMU **
 LineLeader -> LINELEADER **
 LightSensorArray  -> LSA **
@@ -767,7 +947,7 @@ PFMate -> PFMATE
 CurrentMeter  -> CURRENT
 VoltMeter -> VOLT
 PressureSensor -> PPS58
-NXTCam -> NXTCAM
+NXTCam5 -> new NXTCam5 **
 PSPNx -> needs implementation
 EV3SensorMux -> EV3SensAdapt (3 channels -> change i2c address based on channel).
 EV3SensorAdapter -> EV3SensAdapt
