@@ -24,4 +24,3 @@ while not psm.isKeyPressed():
     psm.BAM1.setSpeed(joystick.get_axis(1) * 100)
     # moves left motor foward and backwards with joystick value
     psm.BAM2.setSpeed(joystick.get_axis(4) * 100)
-1

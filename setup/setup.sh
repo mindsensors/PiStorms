@@ -200,6 +200,7 @@ sudo cp -p ../programs/folder.png /usr/local/mindsensors/images/
 sudo cp -p ../programs/leftarrow.png /usr/local/mindsensors/images/
 sudo cp -p ../programs/rightarrow.png /usr/local/mindsensors/images/
 sudo cp -p ../programs/uparrow.png /usr/local/mindsensors/images/
+sudo cp -p ../programs/refresh.png /usr/local/mindsensors/images/
 sudo cp -p ../programs/missing.png /usr/local/mindsensors/images/
 sudo cp -p ../artwork/* /usr/local/mindsensors/images/
 sudo chmod a+r /usr/local/mindsensors/images/*
