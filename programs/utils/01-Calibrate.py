@@ -34,6 +34,18 @@ import json # to write calibration values to cache file
 from mindsensorsUI import mindsensorsUI
 from PiStormsCom import PiStormsCom
 
+# kill any other programs vying for the /var/lock/ili9341
+# Note that hitting the Calibrate button in the PiStorms Web Interface will stop the browser,
+# but if a program was running it will continue without the browser.
+# This in particular is the case we want to handle gracefully, instead of both programs fighting for the screen.
+import subprocess, signal, os
+p = subprocess.Popen(['ps', '-C', 'python', '-o', 'pid command', '--no-headers'],stdout=subprocess.PIPE)
+out, err = p.communicate()
+for line in out.splitlines():
+    if '/home/pi/PiStorms/programs' in line and not 'Calibrate' in line:
+        print line
+        os.kill(int(line.split()[0]), signal.SIGKILL)
+
 if PiStormsCom().GetFirmwareVersion() < 'V3.00':
     os.system("sudo python " + os.path.join(os.path.dirname(os.path.realpath(__file__)), "01-Calibrate_old.py"))
     sys.exit(0)
@@ -42,8 +54,7 @@ if PiStormsCom().GetFirmwareVersion() < 'V3.00':
 # Setup #
 #########
 
-# the browser needs to be stopped and restarted to read the new touchscreen values when calibration finishes
-os.system("/etc/init.d/MSBrowser.sh stop")
+# the browser needs to be stopped and restarted to read the new touchscreen values when calibration finishes (this has been accomplished above)
 
 # avoid 'Failed to read touchscreen calibration values' popup from mindsensorsUI if the touchscreen calibration values cache file doesn't exist
 if not os.path.isfile('/tmp/ps_ts_cal'):
