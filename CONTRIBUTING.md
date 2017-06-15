@@ -39,6 +39,7 @@ sudo ln -f $b/sys/msdev.cfg /usr/local/mindsensors/conf/msdev.cfg
 for f in 'MSDriver.sh' 'MSBrowser.sh' 'MSWeb.sh' 'SwarmServer.sh'; do sudo ln -f $b/setup/$f /etc/init.d/$f; done
 for f in 'MSDriver.sh' 'MSBrowser.sh' 'MSWeb.sh' 'SwarmServer.sh'; do chmod +x $b/setup/$f; done
 for f in 'ps_messenger_check.py' 'ps_updater.py'; do sudo ln -f $b/sys/$f /usr/local/bin/$f; done
+sudo chmod +x /usr/local/bin/psm_shutdown
 ```
 
 ### sys
