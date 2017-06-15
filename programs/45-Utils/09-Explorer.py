@@ -24,7 +24,6 @@
 # Oct 2015  Michael     Initial Authoring
 # Jun 2017  Seth        Simplification
 
-import time
 import sys
 
 from mindsensors_i2c import mindsensors_i2c
@@ -34,8 +33,6 @@ psm = PiStorms("Explorer")
 
 psm.BAS1.activateCustomSensorI2C()
 psm.BAS2.activateCustomSensorI2C()
-psm.BBS1.activateCustomSensorI2C()
-psm.BBS2.activateCustomSensorI2C()
 
 i2c_all = []
 for addr in range(0x00,0x34,2) + range(0x38,0xEF,2):
@@ -43,37 +40,32 @@ for addr in range(0x00,0x34,2) + range(0x38,0xEF,2):
 
 def ping(i2c):
     return i2c.readByte(0x00) != None
-def println(text="", text2=None):
-    if text2:
-        psm.screen.termPrintln("{}: {}".format(text, text2.rstrip("\0")), display=False)
-    else:
-        psm.screen.termPrintln((text), display=False)
 
-index = 0
 while not psm.isKeyPressed():
-    found = []
-    for i2c in i2c_all:
-        if ping(i2c):
-            found.append(i2c)
+    found = filter(ping, i2c_all)
 
-    psm.screen.dumpTerminal(display=False)
-    println("Found {} I2C device{}.".format(len(found), "s" if len(found) != 1 else ""))
-    println("")
-    
+    psm.screen.terminalBuffer = [""]*20
+    psm.screen.terminalBuffer[0] = "Found {} I2C device{}." \
+            .format(len(found), "s" if len(found) != 1 else "")
+    psm.screen.terminalBuffer[8] = "Press GO to quit"
+
     if len(found) > 1:
-        for dev in found:
-            println(hex(dev.address*2), dev.GetDeviceId())
+        for i,dev in enumerate(found):
+            psm.screen.terminalBuffer[i+2] = "0x{:02X}: {}" \
+                    .format(dev.address*2, dev.GetDeviceId().rstrip("\0"))
+        psm.screen.refresh()
     elif len(found) == 1:
         dev = found[0]
-        println("7 bit address", hex(dev.address*2))
-        println("8 bit address", hex(dev.address))
-        println("FW Version",    dev.GetFirmwareVersion())
-        println("Vendor ID",     dev.GetVendorName())
-        println("Device ID",     dev.GetDeviceId())
+        psm.screen.terminalBuffer[2] = "7 bit address: 0x{:02X}".format(dev.address*2)
+        psm.screen.terminalBuffer[3] = "8 bit address: 0x{:02X}".format(dev.address)
+        psm.screen.terminalBuffer[4] = "FW Version: {}".format(dev.GetFirmwareVersion().rstrip("\0"))
+        psm.screen.terminalBuffer[5] = "Vendor ID: {}".format(dev.GetVendorName().rstrip("\0"))
+        psm.screen.terminalBuffer[6] = "Device ID: {}".format(dev.GetDeviceId().rstrip("\0"))
+        psm.screen.refresh()
     else:
-        println("Connect an I2C sensor to any")
-        println("sensor port, preferably BAS1.")
-        println("")
-        println("Searching...")
-    psm.screen.termPrintAt(8, "Press GO to quit.", display=False)
-    psm.screen.refresh()
+        psm.screen.terminalBuffer[2] = "Connect an I2C sensor to either"
+        psm.screen.terminalBuffer[3] = "sensor port on bank A."
+        psm.screen.terminalBuffer[5] = "Searching..."
+        psm.screen.refresh()
+        psm.screen.drawAutoText("(here) -->", 235, 110, fill=(0,200,0), display=False)
+        psm.screen.drawAutoText("(here) -->", 235,  36, fill=(0,200,0))
