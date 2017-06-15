@@ -267,9 +267,8 @@ def getPageOfItems(files, index, filePerPage):
 if __name__ == "__main__":
     logging.basicConfig(stream=sys.stderr, level=logging.INFO)
     mutex = open("/var/lock/msbrowser", "w+")
-    try:
-        os.chmod("/var/lock/msbrowser", 0666)
-    except OSError: pass
+    # allow lock to be modified without sudo permissions
+    os.chown("/var/lock/msbrowser", 1000, 1000) # pi's UID, GID
     try:
         flock(mutex, LOCK_EX | LOCK_NB)
     except IOError:
