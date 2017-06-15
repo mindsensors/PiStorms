@@ -213,12 +213,14 @@ def drawItemButton(folder, file, i):
     scrn.drawButton(50, 50+(i%FILES_PER_PAGE)*45, width=320-50*2, height=45, text=file, image=icon, display=False)
 def drawRightArrow():
     scrn.drawButton(320-50, 0, 50, 50, image="rightarrow.png", text="", display=False, imageX=320-50+8)
+def drawReturnArrow():
+    scrn.drawButton(320-50, 0, 50, 50, image="returnarrow.png", text="", display=False, imageX=320-50+8)
 def drawLeftArrow():
     scrn.drawButton(0, 0, 50, 50, image="leftarrow.png", text="", display=False, imageX=8)
 def drawUpArrow():
     scrn.drawButton(0, 0, 50, 50, image="uparrow.png", text="", display=False, imageX=8)
-def drawRefresh():
-    scrn.drawButton(0, 0, 50, 50, image="refresh.png", text="", display=False, imageX=8)
+def drawRefreshArrow():
+    scrn.drawButton(0, 0, 50, 50, image="refresharrow.png", text="", display=False, imageX=8)
 def drawExclamation():
     scrn.fillBmp(230, 7, 34, 34, "Exclamation-mark-icon.png", display=False);
 def drawBatteryIndicator(*ignored):
@@ -244,7 +246,7 @@ def leftArrowPressed(index, filesPerPage):
     return (scrn.checkButton(0, 0, 50, 50) and index >= filesPerPage)
 def upArrowPressed(stack):
     return (scrn.checkButton(0, 0, 50, 50) and len(stack) > 1)
-def refreshPressed(stack):
+def refreshArrowPressed(stack):
     return (scrn.checkButton(0, 0, 50, 50) and len(stack) == 1)
 def exclamationPressed():
     return scrn.checkButton(218, 5, 38, 38)
@@ -308,13 +310,18 @@ if __name__ == "__main__":
             for i in getPageOfItems(FILES, INDEX, FILES_PER_PAGE):
                 drawItemButton(FOLDER, FILES[i], i)
 
-            drawRightArrow()
+            if len(FILES) <= FILES_PER_PAGE:
+                pass # don't draw a right arrow if there's only one page
+            elif INDEX >= len(FILES) - FILES_PER_PAGE:
+                drawReturnArrow()
+            else:
+                drawRightArrow()
             if INDEX >= FILES_PER_PAGE:
                 drawLeftArrow()
             elif len(stack) > 1:
                 drawUpArrow()
             else:
-                drawRefresh()
+                drawRefreshArrow()
 
             if newMessageExists() or updateNeeded():
                 drawExclamation()
@@ -337,7 +344,7 @@ if __name__ == "__main__":
                 if upArrowPressed(stack):
                     stack.pop()
                     break
-                if refreshPressed(stack):
+                if refreshArrowPressed(stack):
                     stack[-1][1] = listPrograms(PROGRAM_DIRECTORY)
                     scrn.clearScreen() # some visual feedback that the refresh happened
                     break
