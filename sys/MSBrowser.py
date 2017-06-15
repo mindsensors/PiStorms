@@ -339,6 +339,7 @@ if __name__ == "__main__":
                     break
                 if refreshPressed(stack):
                     stack[-1][1] = listPrograms(PROGRAM_DIRECTORY)
+                    scrn.clearScreen() # some visual feedback that the refresh happened
                     break
 
                 item, isFolder = itemButtonPressed(FOLDER, FILES, INDEX, FILES_PER_PAGE)
