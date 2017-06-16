@@ -26,6 +26,7 @@
 
 import time, sys
 from PiStorms_GRX import PiStorms_GRX
+from PiStormsCom_GRX import GRXCom
 
 psm = PiStorms_GRX()
 
@@ -93,9 +94,9 @@ while (doExit == False):
     if(psm.isKeyPressed() == True): # if the GO button is pressed
         if ( psm.screen.isTouched() ):
             time.sleep(1)
-            psm.psc.bankA.writeByte(psm.psc.GRX_Command, psm.psc.E)
+            psm.command(GRXCom.COMMAND.UNLOCK_TOUCHSCREEN_CALIBRATION)
             time.sleep(0.1)
-            psm.psc.bankA.writeByte(psm.psc.GRX_Command, psm.psc.t)
+            psm.command(GRXCom.COMMAND.SAVE_TOUCHSCREEN_CALIBRATION)
             time.sleep(0.1)
             doExit = True 
         else:
@@ -114,9 +115,9 @@ while (doExit == False):
     if(psm.isKeyPressed() == True): # if the GO button is pressed
         if ( psm.screen.isTouched() ):
             time.sleep(1)
-            psm.psc.bankA.writeByte(psm.psc.GRX_Command, psm.psc.E)
+            psm.command(GRXCom.COMMAND.UNLOCK_TOUCHSCREEN_CALIBRATION)
             time.sleep(0.1)
-            psm.psc.bankA.writeByte(psm.psc.GRX_Command, psm.psc.T)
+            psm.command(GRXCom.COMMAND.SAVE_TOUCHSCREEN_CALIBRATION)
             time.sleep(0.1)
             doExit = True 
         else:

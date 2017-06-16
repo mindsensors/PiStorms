@@ -25,6 +25,7 @@
 
 from mindsensors_i2c import mindsensors_i2c
 from fractions import Fraction
+import struct
 
 
 ## GRXCom: this class provides communication functions for PiStorms-GRX.
@@ -83,6 +84,9 @@ class GRXCom():
         TOUCHSCREEN_Y = 0xE5
     class COMMAND:
         SHUTDOWN = ord('H')
+        RESET_ENCODERS = ord('R')
+        UNLOCK_TOUCHSCREEN_CALIBRATION = ord('E')
+        SAVE_TOUCHSCREEN_CALIBRATION = ord('t')
 
     def __init__(self, i2c, address):
         self.i2c = i2c
@@ -111,24 +115,8 @@ class GRXCom():
             try:
                 return [ord(chr(f.numerator)), ord(chr(f.denominator))]
             except ValueError: # fallback
-                if   n > 255: return [255, 1]
-                if 1/n > 255: return [1, 255]
-                if n > 1:
-                    return [n, 1]
-                else:
-                    return [1, int(round(1/n))]
-
-                #if n > 1:
-                #    n = int(round(n))
-                #    if n > 255: n = 255
-                #    return [n, 1]
-                #else:
-                #    d = int(round(1.0/n))
-                #    if d > 255: d = 255
-                #    return [1, d]
-
-                #if n > 255: n = 255
-                #return [int(n), 1]
+                if n > 255: n = 255
+                return [int(n), 1]
         data = sum(map(floatToByteFraction, [p,i,d]), [])
         self.i2c.writeArray(self.REGISTER.PID, data)
 
