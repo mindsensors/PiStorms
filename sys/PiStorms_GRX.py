@@ -26,43 +26,51 @@
 from PiStormsCom_GRX import GRXCom
 from mindsensorsUI import mindsensorsUI
 import struct
-from functools import partial
 
 
 ## This class provides functions for digital Grove sensors.
 #  This class has derived classes for each sensor.
 #  @remark There is no need to use this class directly in your program.
 class GroveDigitalPort():
-    def __init__(self, port, initType=GRXCom.TYPE.DIGITAL_INPUT):
-        bank = port[1]
-        if bank == "A":
+    def __init__(self, port=None, type=GRXCom.TYPE.DIGITAL_INPUT, mode=0):
+        if port == None:
+            raise TypeError("You must specify a port as an argument." \
+                    " Please do so in the form B?$# where ? is A or B" \
+                    " for the bank letter (which half of the PiStorms)," \
+                    " $ is A or D for the port type (analog or digital)," \
+                    " and # is the port number." \
+                    " For example: BAA2 is Bank A, Analog port 2.")
+
+        bank = port[:2]
+        if bank == "BA":
             i2c = GRXCom.I2C.A
-        elif bank == "B":
+        elif bank == "BB":
             i2c = GRXCom.I2C.B
         else:
             raise ValueError("Invalid bank (must be A or B).")
 
         if port[2]=="A":
             addresses = GRXCom.ANALOG
+            typeSupport = GRXCom.TYPE_SUPPORT.ANALOG
         elif port[2]=="D":
             addresses = GRXCom.DIGITAL
+            typeSupport = GRXCom.TYPE_SUPPORT.DIGITAL
         else:
             raise ValueError("Invalid port type (must be A for analog or D for digital).")
+        if type not in typeSupport:
+            raise TypeError("This port does not support that type.")
 
         number = int(port[3]) - 1
         # not catching an IndexError here because -1 should not be valid
         if number not in range(len(addresses)):
             raise ValueError("Invalid port number (must be 1, 2, or 3 for analog; or 1 or 2 for digital).")
 
+        if mode not in range(256):
+            raise ValueError("Sensor port mode must be an integer between 0 and 255.")
+
         address = addresses[number]
         self.comm = GRXCom(i2c, address)
-        if initType:
-            self.setType(initType)
-
-    def setType(self, newType, mode=0):
-        if newType not in GRXCom.TYPE_SUPPORT.DIGITAL:
-            raise TypeError("This port does not support that type.")
-        self.comm.setType(newType, mode)
+        self.comm.setType(type, mode)
 
     def readValue(self):
         return self.comm.digitalRead()
@@ -72,14 +80,8 @@ class GroveDigitalPort():
 #  This class has derived classes for each sensor.
 #  @remark There is no need to use this class directly in your program.
 class GroveAnalogPort(GroveDigitalPort):
-    def __init__(self, port):
-        GroveDigitalPort.__init__(self, port)
-        self.setType(GRXCom.TYPE.ANALOG_INPUT)
-
-    def setType(self, newType, mode=0):
-        if newType not in GRXCom.TYPE_SUPPORT.ANALOG:
-            raise TypeError("This port does not support that type.")
-        self.comm.setType(newType, mode)
+    def __init__(self, port=None, type=GRXCom.TYPE.ANALOG_INPUT, mode=0):
+        GroveDigitalPort.__init__(self, port, type, mode)
 
     def readValue(self):
         return self.comm.analogRead()
@@ -113,7 +115,11 @@ class RCServo(GRXCom):
     #                      this at any time with setNeutralPoint(self, neutralPoint).
     def __init__(self, port=None, neutralPoint=1500):
         if port == None:
-            raise TypeError("You must specify a port as an argument")
+            raise TypeError("You must specify a port as an argument." \
+                    " Please do so in the form B?M# where ? is A or B" \
+                    " for the bank letter (which half of the PiStorms)," \
+                    " and # is the servo number: 1, 2 or 3." \
+                    " For example: BBM3 is Bank B, Motor 3.")
 
         try:
             if not len(port) == 4:
@@ -223,18 +229,18 @@ class RCServoEncoder(RCServo, GroveDigitalPort):
 
         if encoder[1] != port[1]:
             raise ValueError("The encoder must be on the same bank as the servo it is associated with.")
-        if port[3] not in ["1", "2"]:
-            raise ValueError("The servo associated with this encoder must be on servo port 1 or 2, not 3.")
+        #if port[3] not in ["1", "2"]:
+        #    raise ValueError("The servo associated with this encoder must be on servo port 1 or 2, not 3.")
         if encoder[2] != "D":
             raise ValueError("The encoder must be on digital port 1 or 2.")
 
         RCServo.__init__(self, port, neutralPoint)
-        GroveDigitalPort.__init__(self, encoder, initType=None)
-        GroveDigitalPort.setType(self, GRXCom.TYPE.ENCODER, mode=int(encoder[3]))
+        GroveDigitalPort.__init__(self, encoder, type=GRXCom.TYPE.ENCODER, mode=int(encoder[3]))
 
     def setTarget(self, value):
+        if value.bit_length() > 64:
+            raise ValueError("Encoder target must fit in a signed long data type.")
         self.comm.setEncoderTarget(value)
-        #self.comm.i2c.readLongSigned(self.comm.address + GRXCom.OFFSET.ENCODER_TARGET)
 
     def readEncoder(self):
         return self.comm.readEncoderValue()
@@ -245,7 +251,9 @@ class PiStorms_GRX:
     def __init__(self, name="PiStorms_GRX", rotation=3):
         self.screen = mindsensorsUI(name, rotation)
 
-    def command (self, cmd):
+    def command(self, cmd):
+        if cmd not in range(256):
+            raise ValueError("Command must be an integer between 0 and 255 (hint: try using a constant from GRXCom.COMMAND).")
         GRXCom.I2C.A.writeByte(GRXCom.REGISTER.COMMAND, cmd)
 
     def shutdown(self):
@@ -267,6 +275,9 @@ class PiStorms_GRX:
         return GRXCom.I2C.A.readString(GRXCom.REGISTER.FEATURE, 8)
 
     def led(self, lednum, red, green, blue):
+        for color in [red, green, blue]:
+            if color not in range(256):
+                raise ValueError("LED color intensities must be an integer between 0 and 255.")
         if lednum == 1:
             comm = GRXCom.I2C.A
         elif lednum == 2:

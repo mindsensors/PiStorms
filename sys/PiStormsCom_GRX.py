@@ -42,11 +42,8 @@ class GRXCom():
         I2C = 4
         ENCODER = 5
         SERIAL = 6
-#    class TYPE_SUPPORT:
-#        ALL = [GRXCom.TYPE.NONE, GRXCom.TYPE.DIGITAL_OUTPUT, GRXCom.TYPE.DIGITAL_INPUT, GRXCom.TYPE.I2C]
-#        ANALOG = ALL + [GRXCom.TYPE.ANALOG_INPUT]
-#        DIGITAL = ALL + [GRXCom.TYPE.ENCODER]
-#        # note: SERIAL is only supported on A1 and A2
+    #class TYPE_SUPPORT must be defined after the entirity of GRXCom is defined
+    # because it relies on value which must first be initialized in this class.
     SERVO   = [0x42+i*0x02 for i in range(3)]
     ANALOG  = [0x48+i*0x16 for i in range(3)]
     DIGITAL = [0x8A+i*0x16 for i in range(2)]

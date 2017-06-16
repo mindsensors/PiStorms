@@ -51,9 +51,6 @@ import math
 #    print("Pointless button pressed (warning: pointless).")
 #  @endcode
 class Grove_Button(GroveDigitalPort):
-    def __init__(self, port):
-        GroveDigitalPort.__init__(self, port)
-        #del self.setType
     ## @ return True if the button is pressed, False if the button is released
     def isPressed(self):
         return self.readValue() == 1
@@ -73,7 +70,7 @@ class Grove_Button(GroveDigitalPort):
 #    print("I see you, hi there!")
 #  @endcode
 class Grove_PIR_Motion_Sensor(GroveDigitalPort):
-    ## @ return True if the button is pressed, False if the button is released
+    ## @ return True if motion is detected, False otherwise
     def motionDetected(self):
         return self.readValue() == 1
 
