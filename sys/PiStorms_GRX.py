@@ -119,9 +119,9 @@ class RCServo(GRXCom):
             if not len(port) == 4:
                 raise TypeError("Incorrect port format")
             if port[:2] == "BA":
-                bank = self.bankA
+                bank = GRXCom.I2C.A
             elif port[:2] == "BB":
-                bank = self.bankB
+                bank = GRXCom.I2C.B
             else:
                 raise ValueError("Invalid bank letter")
         except TypeError:
@@ -134,7 +134,7 @@ class RCServo(GRXCom):
         if not 1 <= pinNum <= 3:
             raise ValueError("Servo number must be 1, 2, or 3")
 
-        self.sendDataArray = lambda dataArray: bank.writeArray(self.GRX_Servo_Base+(pinNum-1)*2, dataArray)
+        self.sendDataArray = lambda dataArray: bank.writeArray(GRXCom.SERVO[pinNum-1], dataArray)
         self.setNeutralPoint(neutralPoint)
         self.setNeutral()
         # useful properties for user access, not necessary for this class's functions
@@ -225,53 +225,62 @@ class RCServoEncoder(RCServo, GroveDigitalPort):
             raise ValueError("The encoder must be on the same bank as the servo it is associated with.")
         if port[3] not in ["1", "2"]:
             raise ValueError("The servo associated with this encoder must be on servo port 1 or 2, not 3.")
-        if port[2] != "D":
+        if encoder[2] != "D":
             raise ValueError("The encoder must be on digital port 1 or 2.")
 
         RCServo.__init__(self, port, neutralPoint)
-        GroveDigitalPort.__init__(self, port, initType=None):
-        self.setType(GRXCom.TYPE.ENCODER, mode=int(encoder[3]))
+        GroveDigitalPort.__init__(self, encoder, initType=None)
+        GroveDigitalPort.setType(self, GRXCom.TYPE.ENCODER, mode=int(encoder[3]))
 
     def setTarget(self, value):
-        self.setEncoderTarget(value)
+        self.comm.setEncoderTarget(value)
+        #self.comm.i2c.readLongSigned(self.comm.address + GRXCom.OFFSET.ENCODER_TARGET)
 
     def readEncoder(self):
-        return self.readEncoderValue()
+        return self.comm.readEncoderValue()
 
 
 class PiStorms_GRX:
 
-    def __init__(self, name = "PiStorms_GRX", rotation = 3 ):
+    def __init__(self, name="PiStorms_GRX", rotation=3):
         self.screen = mindsensorsUI(name, rotation)
-        self.psc = GRXCom()
 
-    def command (self, cmd, bank):
-        self.psc.command(cmd, bank)
+    def command (self, cmd):
+        GRXCom.I2C.A.writeByte(GRXCom.REGISTER.COMMAND, cmd)
 
-    def Shutdown(self):
-        self.psc.Shutdown()
+    def shutdown(self):
+        self.command(GRXCom.COMMAND.SHUTDOWN)
 
-    def battVoltage(self):
-        return self.psc.battVoltage()
+    def batteryVoltage(self):
+        return GRXCom.I2C.A.readByte(GRXCom.REGISTER.BATTERY_VOLTAGE) * 0.04
 
-    def GetFirmwareVersion(self):
-        return self.psc.GetFirmwareVersion()
+    def getFirmwareVersion(self):
+        return GRXCom.I2C.A.readString(GRXCom.REGISTER.FIRMWARE_VERSION, 8)
 
-    def GetVendorName(self):
-        return self.psc.GetVendorName()
+    def getVendorName(self):
+        return GRXCom.I2C.A.readString(GRXCom.REGISTER.VENDOR_NAME, 8)
 
-    def GetDeviceId(self):
-        return self.psc.GetDeviceId()
+    def getDeviceModel(self):
+        return GRXCom.I2C.A.readString(GRXCom.REGISTER.DEVICE_MODEL, 8)
 
-    def led(self,lednum,red,green,blue):
-        return self.psc.led(lednum,red,green,blue)
+    def getDeviceFeatures(self):
+        return GRXCom.I2C.A.readString(GRXCom.REGISTER.FEATURE, 8)
+
+    def led(self, lednum, red, green, blue):
+        if lednum == 1:
+            comm = GRXCom.I2C.A
+        elif lednum == 2:
+            comm = GRXCom.I2C.B
+        else:
+            raise ValueError("Invalid LED number (must be 1 or 2 for bank A or B).")
+        comm.writeArray(GRXCom.REGISTER.LED, [red, green, blue])
 
     def isKeyPressed(self):
-        return self.psc.isKeyPressed()
+        return GRXCom.I2C.A.readByte(GRXCom.REGISTER.GO_BUTTON_STATE) % 2 == 1
 
-    def getKeyPressValue(self):
-        return self.psc.getKeyPressValue()
-
+    #def getKeyPressValue(self): # F1-4
+    #    return self.psc.getKeyPressValue()
+    '''
     def isF1Pressed(self):
         return (self.psc.getKeyPressValue() == 8)
 
@@ -283,12 +292,12 @@ class PiStorms_GRX:
 
     def isF4Pressed(self):
         return (self.psc.getKeyPressValue() == 40)
-    
+    '''
     def getKeyPressCount(self):
-        return self.psc.getKeyPressCount()
+        return GRXCom.I2C.A.readByte(GRXCom.REGISTER.GO_PRESS_COUNT)
     
     def resetKeyPressCount(self):
-        self.psc.resetKeyPressCount()
+        GRXCom.I2C.A.writeByte(GRXCom.REGISTER.GO_PRESS_COUNT, 0)
     
-    def ping(self):
-        self.psc.ping()
+    #def ping(self):
+    #    self.psc.ping()
