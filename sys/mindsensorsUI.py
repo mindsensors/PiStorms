@@ -40,7 +40,7 @@ import Adafruit_GPIO as GPIO
 import Adafruit_GPIO.SPI as SPI
 
 # for new touchscreen functionality
-import json
+import json, numpy
 
 ## @package mindsensorsUI
 #  This module contains classes and functions necessary for use of LCD touchscreen on mindsensors.com products
@@ -384,7 +384,11 @@ class mindsensorsUI():
     def getTouchscreenValues(self):
 
         if self.ts_cal == None:
-            return (self.TS_X(), self.TS_Y())
+            #return (self.TS_X(), self.TS_Y())
+            if self.isTouched():
+                return (self.disp.x, self.disp.y)
+            else:
+                return (0,0)
 
         def getReading():
             try:
@@ -498,14 +502,63 @@ class mindsensorsUI():
     #  ...
     #  touch = screen.isTouched()
     #  @endcode
+
+
     def isTouched(self):
+        #
+        # number of readings to take
+        #
+        sampleSize = 3
+        #
+        # acceptable tolerance in standard deviation of readings.
+        #
+        tolr = 3
+
+        if self.ts_cal != None:
+            return self.getTouchscreenValues() != (0, 0)
+
+        tx = [0] * sampleSize
+        ty = [0] * sampleSize
+        for i in range(0, sampleSize):
+            tx[i] = self.TS_X()
+            ty[i] = self.TS_Y()
+        #
+        # if they all are zero, there was no touch
+        #
+        mx = numpy.mean(tx)
+        my = numpy.mean(ty)
+        if ( mx == 0 and my == 0):
+            return False
+
+        sdx = numpy.std(tx)
+        sdy = numpy.std(ty)
+        #print "tx:", tx, "ty:", ty, "sdx:", sdx, "sdy:", sdy
+        #
+        # if they all are within tolerance, use their mean as a touch point
+        #
+        if ( sdx < tolr and sdy < tolr):
+            #print "touched at: ", mx, my
+            self.disp.x = mx
+            self.disp.y = my
+            self.disp.store = True
+            return True
+        else:
+            return False
+
+
+    def isTouched00(self):
         if self.ts_cal != None:
             return self.getTouchscreenValues() != (0, 0)
 
         time.sleep(0.001)
-        firstTry = self.touchIgnoreX == self.TS_X() and self.touchIgnoreY == self.TS_Y()
-        secondTry = self.touchIgnoreX == self.TS_X() and self.touchIgnoreY == self.TS_Y()
-        thirdTry = self.touchIgnoreX == self.TS_X() and self.touchIgnoreY == self.TS_Y()
+        tolr = 5
+        print ("touchIgnore X: ", self.touchIgnoreX, " Y: ", self.touchIgnoreY)
+        firstTry = ((abs(self.touchIgnoreX - self.TS_X()) < tolr) and (abs(self.touchIgnoreY - self.TS_Y()) < 5))
+        secondTry = ((abs(self.touchIgnoreX - self.TS_X()) < tolr) and (abs(self.touchIgnoreY - self.TS_Y()) < 5))
+        thirdTry = ((abs(self.touchIgnoreX - self.TS_X()) < tolr) and (abs(self.touchIgnoreY - self.TS_Y()) < 5))
+        #firstTry = self.touchIgnoreX == self.TS_X() and self.touchIgnoreY == self.TS_Y()
+        #secondTry = self.touchIgnoreX == self.TS_X() and self.touchIgnoreY == self.TS_Y()
+        #thirdTry = self.touchIgnoreX == self.TS_X() and self.touchIgnoreY == self.TS_Y()
         # return (not firstTry) and (not secondTry) and (not thirdTry)
         # Modified
         x = self.TS_X() # before everything else for speed
@@ -517,6 +570,7 @@ class mindsensorsUI():
             self.disp.y = y
             self.disp.store = True
         return touch
+
 
     ## Clears the LCD screen to defualt black
     #  @param self The object pointer.
