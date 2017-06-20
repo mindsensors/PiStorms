@@ -842,7 +842,17 @@ class PiStormsCom(object):
     def getKeyPressValue(self):
         try:
             if self.ts_cal == None:
-                return (self.bankA.readByte(self.PS_KeyPress))
+                f1 = self.bankA.readByte(self.PS_KeyPress)
+                if ( f1 > 0):
+                    time.sleep(.001)
+                    f2 = self.bankA.readByte(self.PS_KeyPress)
+                    time.sleep(.001)
+                    f3 = self.bankA.readByte(self.PS_KeyPress)
+                    if ( f1 == f2 and f2 == f3 ):
+                        #print "Function Key value:", f1
+                        return (f1)
+                    else:
+                        return 0
 
             # if self.ts_cal doesn't exist because it failed to load touchscreen calibration values in __init__, the surrounding try/except block here will handle returning 0 as the default/error value
             x1 = self.ts_cal['x1']
