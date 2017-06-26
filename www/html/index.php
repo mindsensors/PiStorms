@@ -130,7 +130,6 @@ include "api/config.php";
               <br>
               <button type="button" id="stop_br" class="btn btn-warning btn-flat btn-settings"><i class="fa fa-desktop" aria-hidden="true"></i>&nbsp;&nbsp;Stop Browser</button> <button type="button" id="start_br" class="btn btn-primary btn-flat btn-success"><i class="fa fa-desktop" aria-hidden="true"></i>&nbsp;&nbsp;Start Browser</button>
               <br>
-              <button type="button" id="calibrate_btn" class="btn btn-primary btn-flat btn-settings"><i class="fa fa-circle-o-notch" aria-hidden="true"></i>&nbsp;&nbsp;Calibrate</button>
             </div>
           </div>
 
@@ -229,7 +228,6 @@ $("#rebt_btn").click(function(){
 });
 $("#stop_br").click(function(){$.get(api+"stopbrowser", function(data){});notify("Success","Signal to stop browser sent","success");});
 $("#start_br").click(function(){$.get(api+"startbrowser", function(data){});notify("Success","Signal to start browser sent","success");});
-$("#calibrate_btn").click(function(){$.get(api+"calibrate", function(data){});notify("Success","Calibration started","success");});
 
 $("#needs-update-tooltip").click(function() {
     window.open("https://github.com/mindsensors/PiStorms");
