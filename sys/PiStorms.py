@@ -77,7 +77,6 @@ import time,sys,os,ctypes,math,random
 ## @package PiStorms
 #  This module contains classes and functions necessary for the use of PiStorms from mindsensors.com
 
-Dev_PiStorms = 1
 
 ## PiStormsSensor: This class provides functions for configuration, reading, and writing of sensors for use with PiStorms.
 #  @remark

@@ -29,9 +29,8 @@
 # 10/7/16    Seth      Battery indicator, line methods
 # 1/25/17    Seth      Additional dialog options
 
-from mindsensors_i2c import mindsensors_i2c
 from PiStormsCom import PiStormsCom
-import time, os, sys, math, numpy
+import time, os, sys, math
 import Image, ImageDraw, ImageFont
 import textwrap
 import MS_ILI9341 as TFT
@@ -42,21 +41,10 @@ import Adafruit_GPIO.SPI as SPI
 ## @package mindsensorsUI
 #  This module contains classes and functions necessary for use of LCD touchscreen on mindsensors.com products
 
-Dev_PiStorms = 1
-Dev_SensorShield = 2
-
 
 ## mindsensorsUI: this class provides functions for touchscreen LCD on mindsensors.com products for read and write operations.
-#  There is no need to initialize this class unless using the LCD screen alone. Normal initialization will be performed automatically with initialization of the Device on which the screen is used.
+#  There is no need to initialize this class unless using the LCD screen alone. Normal initialization will be performed automatically when instantiating a PiStorms object.
 class mindsensorsUI():
-
-    ## Default Device I2C Address
-    PS_ADDRESS = 0x34
-    ## Touchscreen X-axis Register. Will return an unsigned integer reading (0-340)
-    PS_TSX = 0xE3
-    ## Touchscreen Y-axis Register. Will return an unsigned integer reading (0-440)
-    PS_TSY = 0xE5
-
     ## Constant to specify black color
     PS_BLACK = (0,0,0)
     ## Constant to specify blue color
@@ -121,12 +109,8 @@ class mindsensorsUI():
     #  ...
     #  screen = mindsensorsUI()
     #  @endcode
-    def __init__(self, name = "PiStorms", rotation = 3, device = Dev_PiStorms):
-        if device == Dev_SensorShield:
-            self.PS_ADDRESS = 0x16
-            self.PS_TSX = 0x56
-            self.PS_TSY = 0x58
-        self.i2c = mindsensors_i2c(self.PS_ADDRESS >> 1)
+    def __init__(self, name = "PiStorms", rotation = 3):
+        self.comm = PiStormsCom()
         self.disp.begin()
         self.clearScreen()
         self.disp.command(ILI9341_INVOFF)
@@ -343,37 +327,12 @@ class mindsensorsUI():
     #      print "Touched at {},{}".format(screen.x, screen.y)
     #  @endcode
     def isTouched(self):
-        # number of readings to take
-        sampleSize = 3
-        # acceptable tolerance in standard deviation of readings.
-        tolerance = 3
-
-        touch_x = [0] * sampleSize
-        touch_y = [0] * sampleSize
-        for i in range(sampleSize):
-            try:
-                touch_x[i] = self.i2c.readInteger(self.PS_TSX)
-                touch_y[i] = self.i2c.readInteger(self.PS_TSY)
-            except:
-                print "Failed to read touchscreen"
-                touch_x[i] = 0
-                touch_y[i] = 0
-
-        # if they all are zero, there was no touch
-        mean_x = numpy.mean(touch_x)
-        mean_y = numpy.mean(touch_y)
-        if (mean_x == 0 and mean_y == 0):
+        x, y = self.comm.getTouchscreenCoordinates()
+        if x == 0 and y == 0:
             return False
-
-        standardDeviation_x = numpy.std(touch_x)
-        standardDeviation_y = numpy.std(touch_y)
-        # if they all are within tolerance, use their mean as a touch point
-        if (standardDeviation_x < tolerance and standardDeviation_y < tolerance):
-            self.x = mean_x
-            self.y = mean_y
-            return True
-        else:
-            return False
+        self.x = x
+        self.y = y
+        return True
 
     ## Clears the LCD screen to defualt black
     #  @param self The object pointer.
@@ -864,10 +823,10 @@ class mindsensorsUI():
         if(len(options)<=0 and not goBtn):
             print "warning!, no options will leave this pop-up stuck"
         if goBtn:
-            keyPressCount = self.i2c.readByte(PiStormsCom.PS_Key1Count)
+            keyPressCount = self.comm.getKeyPressCount()
         while(True):
             try:
-                if(goBtn and keyPressCount < self.i2c.readByte(PiStormsCom.PS_Key1Count)):
+                if(goBtn and keyPressCount < self.comm.getKeyPressCount()):
                     self.setMode(oldMode)
                     return -1
                 if(touch and self.isTouched()):
