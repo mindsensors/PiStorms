@@ -200,24 +200,15 @@ def drawBatteryIndicator(*ignored):
 
 def rightArrowPressed():
     return scrn.checkButton(320-50, 0, 50, 50)
-def leftArrowPressed(index, filesPerPage):
-    return (scrn.checkButton(0, 0, 50, 50) and index >= filesPerPage)
-def upArrowPressed(stack):
-    return (scrn.checkButton(0, 0, 50, 50) and len(stack) > 1)
-def refreshArrowPressed(stack):
-    return (scrn.checkButton(0, 0, 50, 50) and len(stack) == 1)
+def leftArrowPressed():
+    return scrn.checkButton(0, 0, 50, 50)
 def exclamationPressed():
     return scrn.checkButton(218, 5, 38, 38)
 def itemButtonPressed(folder, files, index, filesPerPage):
     for i in getPageOfItems(files, index, filesPerPage):
         if scrn.checkButton(50, 50+(i%filesPerPage)*45, 320-50*2, 45):
-            item = os.path.join(folder, files[i])
-            isFolder = os.path.isdir(item)
-            if not isFolder:
-                return (item+".py", False)
-            else:
-                return (item, True)
-    return (False, None)
+            return os.path.join(folder, files[i])
+    return False
 def getPageOfItems(files, index, filePerPage):
     if (index+filePerPage-1 > len(files)-1):
         return range(INDEX, len(files))
@@ -274,6 +265,7 @@ if __name__ == "__main__":
                 drawReturnArrow()
             else:
                 drawRightArrow()
+
             if INDEX >= FILES_PER_PAGE:
                 drawLeftArrow()
             elif len(stack) > 1:
@@ -281,43 +273,42 @@ if __name__ == "__main__":
             else:
                 drawRefreshArrow()
 
-            if newMessageExists() or updateNeeded():
+            exclamation = newMessageExists() or updateNeeded()
+            if exclamation:
                 drawExclamation()
 
             drawBatteryIndicator()
 
             while True:
-                if exclamationPressed():
+                if exclamation and exclamationPressed():
                     promptUpdate()
                     break
-                if rightArrowPressed():
+                if len(FILES) > FILES_PER_PAGE and rightArrowPressed():
                     newIndex = INDEX + FILES_PER_PAGE
                     if newIndex > len(FILES)-1:
                         newIndex = 0
                     stack[-1][2] = newIndex
                     break
-                if leftArrowPressed(INDEX, FILES_PER_PAGE):
-                    stack[-1][2] = INDEX-4 if INDEX >= 4 else 0
+                if leftArrowPressed():
+                    if INDEX >= FILES_PER_PAGE: # left arrow
+                        stack[-1][2] = INDEX-4 if INDEX >= 4 else 0
+                    elif len(stack) > 1: # up arrow
+                        stack.pop()
+                    else: # refresh arrow
+                        stack[-1][1] = listPrograms(PROGRAM_DIRECTORY)
+                        scrn.clearScreen() # some visual feedback that the refresh happened
                     break
-                if upArrowPressed(stack):
-                    stack.pop()
-                    break
-                if refreshArrowPressed(stack):
-                    stack[-1][1] = listPrograms(PROGRAM_DIRECTORY)
-                    scrn.clearScreen() # some visual feedback that the refresh happened
-                    break
-
-                item, isFolder = itemButtonPressed(FOLDER, FILES, INDEX, FILES_PER_PAGE)
-                if item and isFolder:
-                    stack.append([item, listPrograms(item), 0])
-                    break
-                if item and not isFolder:
-                    print("Running program " + item)
-                    exitStatus = runProgram(item)
-                    if exitStatus != 0:
-                        scrn.showMessage(["Error!", "The program stopped with exit status {}. " \
-                                "You might want to access the Logs tab in the PiStorms Web Interface " \
-                                "to check for a stacktrace.".format(exitStatus)], wrapText=True)
+                item = itemButtonPressed(FOLDER, FILES, INDEX, FILES_PER_PAGE)
+                if item:
+                    if os.path.isdir(item): # folder
+                        stack.append([item, listPrograms(item), 0])
+                    else: # python program
+                        print("Running program {}.py".format(item))
+                        exitStatus = runProgram(item+".py")
+                        if exitStatus != 0:
+                            scrn.showMessage(["Error!", "The program stopped with exit status {}. " \
+                                    "You might want to access the Logs tab in the PiStorms Web Interface " \
+                                    "to check for a stacktrace.".format(exitStatus)], wrapText=True)
                     break
     except KeyboardInterrupt:
         logging.info("Quitting MSBrowser")
