@@ -776,31 +776,19 @@ class mindsensorsUI():
     #  @param self The object pointer.
     #  @param x The upper left x-coordinate of the button.
     #  @param y The upper left y-coordinate of the button.
-    #  @param width The width of the button. Optional, defaults to 150.
-    #  @param height The height of the button. Optional, defaults to 50.
+    #  @param width The width of the button.
+    #  @param height The height of the button.
     #  @remark
     #  To use this function in your program:
     #  @code
     #  ...
-    #  button = screen.checkButton(0,0,50,50)
+    #  button = screen.checkButton(0, 0, 50, 50)
     #  @endcode
-    def checkButton(self, x, y, width = 150, height = 50):
-        if(self.isTouched()):
-            axlb = self.screenXFromImageCoords(x, y)
-            aylb = self.screenYFromImageCoords(x, y)
-            axub = self.screenXFromImageCoords(x + width, y + height)
-            ayub = self.screenYFromImageCoords(x + width, y + height)
-
-            if(axub<axlb):
-                tempx = axub
-                axub = axlb
-                axlb = tempx
-            if(ayub<aylb):
-                tempy = ayub
-                ayub = aylb
-                aylb = tempy
-
-            if (self.x<axub and self.x>axlb and self.y>aylb and self.y<ayub):
+    def checkButton(self, x, y, width, height):
+        if self.isTouched():
+            tsx = self.TS_To_ImageCoords_X(self.x, self.y)
+            tsy = self.TS_To_ImageCoords_Y(self.x, self.y)
+            if tsx in range(x, x+width) and tsy in range(y, y+height):
                 return True
         return False
 
