@@ -31,7 +31,7 @@
 
 from mindsensors_i2c import mindsensors_i2c
 from PiStormsCom import PiStormsCom
-import time, os, sys, math, numpy
+import time, os, sys, math
 import Image, ImageDraw, ImageFont
 import textwrap
 import MS_ILI9341 as TFT
@@ -46,13 +46,8 @@ import Adafruit_GPIO.SPI as SPI
 ## mindsensorsUI: this class provides functions for touchscreen LCD on mindsensors.com products for read and write operations.
 #  There is no need to initialize this class unless using the LCD screen alone. Normal initialization will be performed automatically when instantiating a PiStorms object.
 class mindsensorsUI():
-
     ## Default Device I2C Address
     PS_ADDRESS = 0x34
-    ## Touchscreen X-axis Register. Will return an unsigned integer reading (0-340)
-    PS_TSX = 0xE3
-    ## Touchscreen Y-axis Register. Will return an unsigned integer reading (0-440)
-    PS_TSY = 0xE5
 
     ## Constant to specify black color
     PS_BLACK = (0,0,0)
@@ -336,37 +331,12 @@ class mindsensorsUI():
     #      print "Touched at {},{}".format(screen.x, screen.y)
     #  @endcode
     def isTouched(self):
-        # number of readings to take
-        sampleSize = 3
-        # acceptable tolerance in standard deviation of readings.
-        tolerance = 3
-
-        touch_x = [0] * sampleSize
-        touch_y = [0] * sampleSize
-        for i in range(sampleSize):
-            try:
-                touch_x[i] = self.i2c.readInteger(self.PS_TSX)
-                touch_y[i] = self.i2c.readInteger(self.PS_TSY)
-            except:
-                print "Failed to read touchscreen"
-                touch_x[i] = 0
-                touch_y[i] = 0
-
-        # if they all are zero, there was no touch
-        mean_x = numpy.mean(touch_x)
-        mean_y = numpy.mean(touch_y)
-        if (mean_x == 0 and mean_y == 0):
+        x, y = self.i2c.getTouchscreenCoordinates()
+        if x == 0 and y == 0:
             return False
-
-        standardDeviation_x = numpy.std(touch_x)
-        standardDeviation_y = numpy.std(touch_y)
-        # if they all are within tolerance, use their mean as a touch point
-        if (standardDeviation_x < tolerance and standardDeviation_y < tolerance):
-            self.x = mean_x
-            self.y = mean_y
-            return True
-        else:
-            return False
+        self.x = x
+        self.y = y
+        return True
 
     ## Clears the LCD screen to defualt black
     #  @param self The object pointer.

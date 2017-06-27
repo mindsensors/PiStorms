@@ -24,7 +24,7 @@
 #  July 2015  Henry     Initial Authoring
 
 from mindsensors_i2c import mindsensors_i2c
-import time
+import time, numpy
 
 class PSSensor():
     PS_SENSOR_TYPE_NONE = 0
@@ -573,6 +573,10 @@ class PiStormsCom(object):
     PS_S2C_B_raw = 0xAB
     PS_S2C_N_raw = 0xAC
 
+    ## Touchscreen x- and y-axis registers
+    PS_TSX = 0xE3
+    PS_TSY = 0xE5
+
     # Touchscreen Calibration
     PS_TS_CALIBRATION_DATA_READY = 0x70
     PS_TS_CALIBRATION_DATA = 0x71
@@ -708,6 +712,31 @@ class PiStormsCom(object):
 
     def ping(self):
         self.bankA.readByte(0x00)
+
+    def getTouchscreenCoordinates(self):
+        # number of readings to take
+        sampleSize = 3
+        # acceptable tolerance in standard deviation of readings.
+        tolerance = 3
+        touch_x = [0] * sampleSize
+        touch_y = [0] * sampleSize
+        for i in range(sampleSize):
+            try:
+                touch_x[i] = self.i2c.readInteger(self.PS_TSX)
+                touch_y[i] = self.i2c.readInteger(self.PS_TSY)
+            except:
+                print "Failed to read touchscreen"
+                touch_x[i] = 0
+                touch_y[i] = 0
+        mean_x = numpy.mean(touch_x)
+        mean_y = numpy.mean(touch_y)
+        standardDeviation_x = numpy.std(touch_x)
+        standardDeviation_y = numpy.std(touch_y)
+        # if they all are within tolerance, use their mean as a touch point
+        if (standardDeviation_x < tolerance and standardDeviation_y < tolerance):
+            return (x, y)
+        else:
+            return (0, 0)
 
 if __name__ == '__main__':
     psc = PiStormsCom()
