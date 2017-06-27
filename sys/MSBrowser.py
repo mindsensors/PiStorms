@@ -51,17 +51,6 @@ def getProgramDir():
         dir = "/home/pi/PiStorms/programs"
     # normalize the path that was provided to remove any trailing slash.
     return os.path.normpath(dir)
-def getDeviceType():
-    deviceID = config.get("msdev", "device")
-    if (deviceID == "PiStorms"):
-        return 1
-    elif (deviceID == "SensorShield"):
-        return 2
-    elif (deviceID == "SRVController"):
-        return 3
-    else:
-        logging.error("Unknown device in configuration file, exiting...")
-        sys.exit(1)
 def getRotation():
     if (os.getenv("PSREVERSE", "0") == "1"):
         return 3
@@ -71,11 +60,11 @@ def initScreen():
     try:
         bootmode = mindsensors_i2c(0xEA>>1)
         bootmode.readbyte()
-        scrn = mindsensorsUI(deviceName, rotation, device=deviceType)
+        scrn = mindsensorsUI(deviceName, rotation)
         scrn.termPrintAt(4, "PiStorms in fw upgrade mode")
         return scrn
     except:
-        return mindsensorsUI(deviceName, rotation, device=deviceType)
+        return mindsensorsUI(deviceName, rotation)
 def listPrograms(directory):
     allFiles = os.listdir(directory)
     beginsWithNum = filter(lambda i: i[:2].isdigit(), allFiles)
@@ -232,7 +221,6 @@ if __name__ == "__main__":
         configFile = "/usr/local/mindsensors/conf/msdev.cfg"
         config = getConfig()
         PROGRAM_DIRECTORY = getProgramDir()
-        deviceType = getDeviceType()
         deviceName = socket.gethostname()
         rotation = getRotation()
         psc = PiStormsCom()

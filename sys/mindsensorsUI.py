@@ -42,12 +42,9 @@ import Adafruit_GPIO.SPI as SPI
 ## @package mindsensorsUI
 #  This module contains classes and functions necessary for use of LCD touchscreen on mindsensors.com products
 
-Dev_PiStorms = 1
-Dev_SensorShield = 2
-
 
 ## mindsensorsUI: this class provides functions for touchscreen LCD on mindsensors.com products for read and write operations.
-#  There is no need to initialize this class unless using the LCD screen alone. Normal initialization will be performed automatically with initialization of the Device on which the screen is used.
+#  There is no need to initialize this class unless using the LCD screen alone. Normal initialization will be performed automatically when instantiating a PiStorms object.
 class mindsensorsUI():
 
     ## Default Device I2C Address
@@ -121,11 +118,7 @@ class mindsensorsUI():
     #  ...
     #  screen = mindsensorsUI()
     #  @endcode
-    def __init__(self, name = "PiStorms", rotation = 3, device = Dev_PiStorms):
-        if device == Dev_SensorShield:
-            self.PS_ADDRESS = 0x16
-            self.PS_TSX = 0x56
-            self.PS_TSY = 0x58
+    def __init__(self, name = "PiStorms", rotation = 3):
         self.i2c = mindsensors_i2c(self.PS_ADDRESS >> 1)
         self.disp.begin()
         self.clearScreen()
