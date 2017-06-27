@@ -504,7 +504,7 @@ class PSMotor():
         return self.statusBit(0) == 1 or self.statusBit(1) == 1 or self.statusBit(3) == 1 or self.statusBit(6) == 1
     def waitUntilNotBusy(self, timeout=-1):
         while(self.isBusy()):
-            time.sleep(.01)
+            time.sleep(0.01)
             timeout -= 1
             if(timeout == 0):
                 return 1
@@ -829,7 +829,7 @@ class PiStormsCom(object):
                 self.bankB.writeArray(self.PS_R, array)
         except AttributeError:
             self.led(lednum,red,green,blue)
-        time.sleep(.001)
+        time.sleep(0.001)
 
     def isKeyPressed(self):
         x = 0
@@ -841,52 +841,16 @@ class PiStormsCom(object):
 
     def getKeyPressValue(self):
         try:
-            if self.ts_cal == None:
-                return (self.bankA.readByte(self.PS_KeyPress))
-
-            # if self.ts_cal doesn't exist because it failed to load touchscreen calibration values in __init__, the surrounding try/except block here will handle returning 0 as the default/error value
-            x1 = self.ts_cal['x1']
-            y1 = self.ts_cal['y1']
-            x2 = self.ts_cal['x2']
-            y2 = self.ts_cal['y2']
-            x3 = self.ts_cal['x3']
-            y3 = self.ts_cal['y3']
-            x4 = self.ts_cal['x4']
-            y4 = self.ts_cal['y4']
-
-            x = self.bankA.readInteger(0xE7) # current x
-            # x1 and x2 are the left-most calibration points. We want to take whichever value is furthest right, to give the maximum touch area for the software buttons that make sense. x4 is the right-top calibration point. If x4 > x1 then 0 is towards the left so the the greater value of x1 and x2 will be the rightmost. If not, then high numbers are towards the left so we the lesser value of x1 and x2 will be rightmost.
-            # We don't take a calibration point in the left gutter, so we have to assume 200 is the greatest reasonable width of this area. If the current touched x point is right of the border, then it is on the touchscreen so return 0 (because none of the software buttons are being pressed). If the value is between the border and 200 points left of that, continue on as the touch point is in the software button area, If the value is further than 200 points left of the border, it is likely an erroneous error caused by the touchscreen not being touched.
-            if x4 > x1: # lower values left
-                xborder = max(x1, x2) # where the touchscreen ends and the software buttons begin
-                if not xborder+100 > x > xborder-200:
+            reading1 = self.bankA.readByte(self.PS_KeyPress)
+            if reading1 > 0:
+                time.sleep(0.001)
+                reading2 = self.bankA.readByte(self.PS_KeyPress)
+                time.sleep(0.001)
+                reading3 = self.bankA.readByte(self.PS_KeyPress)
+                if reading1 == reading2 and reading2 == reading3:
+                    return reading1
+                else:
                     return 0
-            else: # greater values left
-                xborder = min(x1, x2)
-                if not xborder-100 < x < xborder+200:
-                    return 0
-
-            y = self.bankA.readInteger(0xE9) # current y
-            # the lower and greater of the two left-most y calibration values
-            # TODO: does this assume the screen is not flipped vertically? Be sure to test this
-            ymin = min(y1, y2)
-            ymax = max(y1, y2)
-            yQuarter = (ymax-ymin)/4 # a quarter of the distance between the two y extremes
-
-            if y < ymin + 0 * yQuarter:
-                return 0 # too low
-            if y < ymin + 1 * yQuarter:
-                return 8
-            if y < ymin + 2 * yQuarter:
-                return 16
-            if y < ymin + 3 * yQuarter:
-                return 24
-            if y < ymin + 4 * yQuarter:
-                return 40
-            if y >= ymin + 4 * yQuarter:
-                return 0 # too high
-
-            return 0 # some other weird error occured, execution should not reach this point
         except:
             return 0
 

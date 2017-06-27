@@ -53,7 +53,7 @@ while(not exit):
         psm.led(1,255,0,0)
         psm.led(2,255,0,0)
         lastled = 3
-    if(psm.screen.checkButton(0,0,320,320)):
+    if(psm.screen.isTouched()):
         psm.screen.termPrintln("")
         psm.screen.termPrintln("Exiting to menu")
         psm.led(1,0,0,0)

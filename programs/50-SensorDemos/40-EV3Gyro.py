@@ -69,7 +69,7 @@ while(not doExit):
         psm.screen.termPrintln("Exiting to menu")
         doExit = True
     change = 0
-    if(psm.screen.checkButton(0,0,320,320)): #Change mode if screen is tapped
+    if(psm.screen.isTouched()): #Change mode if screen is tapped
         count = count + 1
         if ( count > 1):
             count = 0

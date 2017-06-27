@@ -76,7 +76,7 @@ while(not exit):
     except:
         psm.screen.termPrintAt(7," wlan0 :     not present")
 
-    if( psm.isKeyPressed() == True or psm.screen.checkButton(0,0,320,320)):
+    if( psm.isKeyPressed() == True or psm.screen.isTouched()):
         psm.screen.termPrintln("")
         psm.screen.termPrintln("Exiting to menu")
         exit = True

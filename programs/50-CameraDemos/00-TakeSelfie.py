@@ -53,7 +53,7 @@ while not exitNow:
 		time.sleep(1)
 		psm.screen.termPrintAt(9, "Touch the screen to exit")
 
-	if (psm.screen.checkButton(0,0,320,320)):
+	if (psm.screen.isTouched()):
 			psm.screen.clearScreen()
 			psm.screen.termPrintAt(9,"Exiting to menu")
 			time.sleep(0.5)
