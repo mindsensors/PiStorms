@@ -694,7 +694,11 @@ class PiStormsCom(object):
 
     def getKeyPressValue(self):
         try:
-            return(self.bankA.readByte(self.PS_KeyPress))
+            x, y = self.getTouchscreenCoordinates()
+            if x > 300 and y > 0:
+                return [8, 16, 24, 40][(y-1)/(240/4)]
+            else:
+                return 0
         except:
             return 0
 
@@ -714,27 +718,19 @@ class PiStormsCom(object):
         self.bankA.readByte(0x00)
 
     def getTouchscreenCoordinates(self):
-        # number of readings to take
         sampleSize = 3
-        # acceptable tolerance in standard deviation of readings.
         tolerance = 3
-        touch_x = [0] * sampleSize
-        touch_y = [0] * sampleSize
-        for i in range(sampleSize):
-            try:
-                touch_x[i] = self.i2c.readInteger(self.PS_TSX)
-                touch_y[i] = self.i2c.readInteger(self.PS_TSY)
-            except:
-                print "Failed to read touchscreen"
-                touch_x[i] = 0
-                touch_y[i] = 0
-        mean_x = numpy.mean(touch_x)
-        mean_y = numpy.mean(touch_y)
-        standardDeviation_x = numpy.std(touch_x)
-        standardDeviation_y = numpy.std(touch_y)
-        # if they all are within tolerance, use their mean as a touch point
-        if (standardDeviation_x < tolerance and standardDeviation_y < tolerance):
-            return (x, y)
+        x = [0]*sampleSize
+        y = [0]*sampleSize
+        try:
+            for i in range(sampleSize):
+                x[i] = self.bankA.readInteger(self.PS_TSX)
+                y[i] = self.bankA.readInteger(self.PS_TSY)
+        except:
+            print "Failed to read touchscreen"
+            return (0, 0)
+        if (numpy.std(x) < tolerance and numpy.std(y) < tolerance):
+            return (int(numpy.mean(x)), int(numpy.mean(y)))
         else:
             return (0, 0)
 
