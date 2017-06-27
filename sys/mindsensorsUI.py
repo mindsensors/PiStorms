@@ -178,11 +178,10 @@ class mindsensorsUI():
         self.fillCircle(x + width - radius,y + height - radius, radius, fill = fill, display = display)
 
     ## Calculates the x-coordinate of the screen upon rotation (INTERNAL USE ONLY)
-    #  Input: x and y values in the current rotation's coordinate system
-    #  Output: x value for the corresponding point in the display's coordinate system (for writing to TFT)
     #  @param self The object pointer.
-    #  @param x The x-coordinate.
-    #  @param y The y-coordinate.
+    #  @param x x value in the current rotation's coordinate system
+    #  @param y y value in the current rotation's coordinate system
+    #  @return x value for the corresponding point in the display's coordinate system (for writing to TFT)
     def screenXFromImageCoords(self, x, y):
         cr = self.currentRotation
         if(cr == 0):
@@ -195,11 +194,10 @@ class mindsensorsUI():
             return y
 
     ## Calculates the y-coordinate of the screen upon rotation (INTERNAL USE ONLY)
-    #  Input: x and y values in the current rotation's coordinate system
-    #  Output: y value for the corresponding point in the display's coordinate system (for writing to TFT)
     #  @param self The object pointer.
-    #  @param x The x-coordinate.
-    #  @param y The y-coordinate.
+    #  @param x x value in the current rotation's coordinate system
+    #  @param y y value in the current rotation's coordinate system
+    #  @return y value for the corresponding point in the display's coordinate system (for writing to TFT)
     def screenYFromImageCoords(self, x, y):
         cr = self.currentRotation
         if(cr == 0):
@@ -212,11 +210,10 @@ class mindsensorsUI():
             return self.PS_SCREENHEIGHT-x
 
     ## Calculates display x-coordinate from touchscreen values, adjusted for rotation (INTERNAL USE ONLY)
-    #  Input: x and y values in the touchscreen's coordinate system (read from registers)
-    #  Output: x value for the corresponding point in the current rotation's coordinate system
     #  @param self The object pointer.
-    #  @param x The x-coordinate.
-    #  @param y The y-coordinate.
+    #  @param x x value in the touchscreen's coordinate system (read from registers)
+    #  @param y y value in the touchscreen's coordinate system (read from registers)
+    #  @return x value for the corresponding point in the current rotation's coordinate system
     def TS_To_ImageCoords_X(self, x, y):
         cr = self.currentRotation
         if(cr == 0):
@@ -229,11 +226,10 @@ class mindsensorsUI():
             return self.PS_SCREENHEIGHT-x
 
     ## Calculates display y-coordinate from touchscreen values, adjusted for rotation (INTERNAL USE ONLY)
-    #  Input: x and y values in the touchscreen's coordinate system (read from registers)
-    #  Output: y value for the corresponding point in the current rotation's coordinate system
     #  @param self The object pointer.
-    #  @param x The x-coordinate.
-    #  @param y The y-coordinate.
+    #  @param x x value in the touchscreen's coordinate system (read from registers)
+    #  @param y y value in the touchscreen's coordinate system (read from registers)
+    #  @return y value for the corresponding point in the current rotation's coordinate system
     def TS_To_ImageCoords_Y(self, x, y):
         cr = self.currentRotation
         if(cr == 0):
