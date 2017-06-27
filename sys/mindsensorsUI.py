@@ -29,7 +29,6 @@
 # 10/7/16    Seth      Battery indicator, line methods
 # 1/25/17    Seth      Additional dialog options
 
-from mindsensors_i2c import mindsensors_i2c
 from PiStormsCom import PiStormsCom
 import time, os, sys, math
 import Image, ImageDraw, ImageFont
@@ -46,9 +45,6 @@ import Adafruit_GPIO.SPI as SPI
 ## mindsensorsUI: this class provides functions for touchscreen LCD on mindsensors.com products for read and write operations.
 #  There is no need to initialize this class unless using the LCD screen alone. Normal initialization will be performed automatically when instantiating a PiStorms object.
 class mindsensorsUI():
-    ## Default Device I2C Address
-    PS_ADDRESS = 0x34
-
     ## Constant to specify black color
     PS_BLACK = (0,0,0)
     ## Constant to specify blue color
@@ -114,7 +110,7 @@ class mindsensorsUI():
     #  screen = mindsensorsUI()
     #  @endcode
     def __init__(self, name = "PiStorms", rotation = 3):
-        self.i2c = mindsensors_i2c(self.PS_ADDRESS >> 1)
+        self.comm = PiStormsCom()
         self.disp.begin()
         self.clearScreen()
         self.disp.command(ILI9341_INVOFF)
@@ -331,7 +327,7 @@ class mindsensorsUI():
     #      print "Touched at {},{}".format(screen.x, screen.y)
     #  @endcode
     def isTouched(self):
-        x, y = self.i2c.getTouchscreenCoordinates()
+        x, y = self.comm.getTouchscreenCoordinates()
         if x == 0 and y == 0:
             return False
         self.x = x
@@ -827,10 +823,10 @@ class mindsensorsUI():
         if(len(options)<=0 and not goBtn):
             print "warning!, no options will leave this pop-up stuck"
         if goBtn:
-            keyPressCount = self.i2c.readByte(PiStormsCom.PS_Key1Count)
+            keyPressCount = self.comm.getKeyPressCount()
         while(True):
             try:
-                if(goBtn and keyPressCount < self.i2c.readByte(PiStormsCom.PS_Key1Count)):
+                if(goBtn and keyPressCount < self.comm.getKeyPressCount()):
                     self.setMode(oldMode)
                     return -1
                 if(touch and self.isTouched()):
