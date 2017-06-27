@@ -254,14 +254,6 @@ def startbrowser():
     print "Started Browser"
     return "1"
 
-@app.route("/calibrate", methods=['GET', 'OPTIONS'])
-@crossdomain(origin='*')
-def calibrate():
-    stopbrowser()
-    os.system("python " + os.path.join(home_folder, "programs", "utils", "01-Calibrate.py"))
-    startbrowser()
-    return "1"
-
 @app.route("/getapacheerrors", methods=['GET', 'OPTIONS'])
 @crossdomain(origin='*')
 def getapacheerrors():

@@ -60,13 +60,15 @@ case "$1" in
 	;;
   restart|reload|force-reload)
 	sudo kill -9 `ps -ef | grep MSBrowser.py |grep -v grep| cut -c11-16`
-    rm /var/lock/msbrowser
+    rm -f /var/lock/msbrowser
+    rm -f /var/lock/ili9341
     do_start
 	exit 3
 	;;
   stop)
 	sudo kill -9 `ps -ef | grep MSBrowser.py |grep -v grep| cut -c11-16`
-    rm /var/lock/msbrowser
+    rm -f /var/lock/msbrowser
+    rm -f /var/lock/ili9341
 	;;
   status)
 	do_status

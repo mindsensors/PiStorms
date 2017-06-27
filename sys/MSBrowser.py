@@ -51,73 +51,20 @@ def getProgramDir():
         dir = "/home/pi/PiStorms/programs"
     # normalize the path that was provided to remove any trailing slash.
     return os.path.normpath(dir)
-def getDeviceType():
-    deviceID = config.get("msdev", "device")
-    if (deviceID == "PiStorms"):
-        return 1
-    elif (deviceID == "SensorShield"):
-        return 2
-    elif (deviceID == "SRVController"):
-        return 3
-    else:
-        logging.error("Unknown device in configuration file, exiting...")
-        sys.exit(1)
 def getRotation():
     if (os.getenv("PSREVERSE", "0") == "1"):
         return 3
     else:
         return config.getint("msdev", "rotation")
 def initScreen():
-    if (psc.GetFirmwareVersion() < "V3.00"):
-        try:
-            bootmode = mindsensors_i2c(0xEA>>1)
-            bootmode.readbyte()
-            scrn = mindsensorsUI(deviceName, rotation, device=deviceType)
-            scrn.termPrintAt(4, "PiStorms in fw upgrade mode")
-            return scrn
-        except:
-            return mindsensorsUI(deviceName, rotation, device=deviceType)
-    else:
-        # load touchscreen calibration values from PiStorms and write to cache file
-        ts_cal = None
-        ts_cal_error = None
-        ts_null = {u"x1": 0, u"y1": 0, u"x2": 0, u"x3": 0, u"y3": 0, u"y2": 0, u"y4": 0, u"x4": 0}
-        try:
-            oldBAS1type = psc.BAS1.getType()
-            psc.BAS1.setType(psc.BAS1.PS_SENSOR_TYPE_NONE)
-            psc.bankA.writeByte(psc.PS_Command, psc.l) # copy from permanent memory to temporary memory
-            timeout = time.time() + 1 # wait for up to a second
-            while (psc.bankA.readByte(psc.PS_TS_CALIBRATION_DATA_READY) != 1): # wait for ready byte
-                time.sleep(0.01)
-                if (time.time() > timeout):
-                    raise TypeError() # same as failure from readInteger
-            ts_cal = { "x1": psc.bankA.readInteger(psc.PS_TS_CALIBRATION_DATA + 0x00),
-                       "y1": psc.bankA.readInteger(psc.PS_TS_CALIBRATION_DATA + 0x02),
-                       "x2": psc.bankA.readInteger(psc.PS_TS_CALIBRATION_DATA + 0x04),
-                       "y2": psc.bankA.readInteger(psc.PS_TS_CALIBRATION_DATA + 0x06),
-                       "x3": psc.bankA.readInteger(psc.PS_TS_CALIBRATION_DATA + 0x08),
-                       "y3": psc.bankA.readInteger(psc.PS_TS_CALIBRATION_DATA + 0x0A),
-                       "x4": psc.bankA.readInteger(psc.PS_TS_CALIBRATION_DATA + 0x0C),
-                       "y4": psc.bankA.readInteger(psc.PS_TS_CALIBRATION_DATA + 0x0E) }
-            psc.BAS1.setType(oldBAS1type)
-        except TypeError: # failed readInteger
-            ts_cal_error = ["Touchscreen Error", "Failed to load", "touchscreen calibration values"]
-        except IOError: # failed open in json.dump
-            ts_cal_error = ["Touchscreen Error", "Failed to write", "touchscreen calibration values"]
-        except:
-            ts_cal_error = ["Touchscreen Error", "An unknown error occurred", "while attempting to load", "touchscreen calibration values"]
-        json.dump(ts_cal or ts_null, open("/tmp/ps_ts_cal", "w"))
-
-        scrn = mindsensorsUI(deviceName, rotation, device=deviceType)
-        if ts_cal == ts_null:
-            scrn.askQuestion(["Screen not calibrated.", "No touchscreen calibration values",
-              "were found. Press GO to calibrate."], ["Press GO to continue..."], touch=False, goBtn=True)
-            os.system("sudo python {}.py force".format(os.path.join(PROGRAM_DIRECTORY, "utils", "01-Calibrate")))
-            return mindsensorsUI(deviceName, rotation, device=deviceType) # recreate with new calibration values
-        if ts_cal_error is not None:
-            logging.error('\n'.join(ts_cal_error))
-            scrn.askQuestion(ts_cal_error, ["Press GO to continue..."], touch=False, goBtn=True)
-            return scrn
+    try:
+        bootmode = mindsensors_i2c(0xEA>>1)
+        bootmode.readbyte()
+        scrn = mindsensorsUI(deviceName, rotation)
+        scrn.termPrintAt(4, "PiStorms in fw upgrade mode")
+        return scrn
+    except:
+        return mindsensorsUI(deviceName, rotation)
 def listPrograms(directory):
     allFiles = os.listdir(directory)
     beginsWithNum = filter(lambda i: i[:2].isdigit(), allFiles)
@@ -213,12 +160,14 @@ def drawItemButton(folder, file, i):
     scrn.drawButton(50, 50+(i%FILES_PER_PAGE)*45, width=320-50*2, height=45, text=file, image=icon, display=False)
 def drawRightArrow():
     scrn.drawButton(320-50, 0, 50, 50, image="rightarrow.png", text="", display=False, imageX=320-50+8)
+def drawReturnArrow():
+    scrn.drawButton(320-50, 0, 50, 50, image="returnarrow.png", text="", display=False, imageX=320-50+8)
 def drawLeftArrow():
     scrn.drawButton(0, 0, 50, 50, image="leftarrow.png", text="", display=False, imageX=8)
 def drawUpArrow():
     scrn.drawButton(0, 0, 50, 50, image="uparrow.png", text="", display=False, imageX=8)
-def drawRefresh():
-    scrn.drawButton(0, 0, 50, 50, image="refresh.png", text="", display=False, imageX=8)
+def drawRefreshArrow():
+    scrn.drawButton(0, 0, 50, 50, image="refresharrow.png", text="", display=False, imageX=8)
 def drawExclamation():
     scrn.fillBmp(230, 7, 34, 34, "Exclamation-mark-icon.png", display=False);
 def drawBatteryIndicator(*ignored):
@@ -240,24 +189,15 @@ def drawBatteryIndicator(*ignored):
 
 def rightArrowPressed():
     return scrn.checkButton(320-50, 0, 50, 50)
-def leftArrowPressed(index, filesPerPage):
-    return (scrn.checkButton(0, 0, 50, 50) and index >= filesPerPage)
-def upArrowPressed(stack):
-    return (scrn.checkButton(0, 0, 50, 50) and len(stack) > 1)
-def refreshPressed(stack):
-    return (scrn.checkButton(0, 0, 50, 50) and len(stack) == 1)
+def leftArrowPressed():
+    return scrn.checkButton(0, 0, 50, 50)
 def exclamationPressed():
     return scrn.checkButton(218, 5, 38, 38)
 def itemButtonPressed(folder, files, index, filesPerPage):
     for i in getPageOfItems(files, index, filesPerPage):
         if scrn.checkButton(50, 50+(i%filesPerPage)*45, 320-50*2, 45):
-            item = os.path.join(folder, files[i])
-            isFolder = os.path.isdir(item)
-            if not isFolder:
-                return (item+".py", False)
-            else:
-                return (item, True)
-    return (False, None)
+            return os.path.join(folder, files[i])
+    return False
 def getPageOfItems(files, index, filePerPage):
     if (index+filePerPage-1 > len(files)-1):
         return range(INDEX, len(files))
@@ -267,9 +207,8 @@ def getPageOfItems(files, index, filePerPage):
 if __name__ == "__main__":
     logging.basicConfig(stream=sys.stderr, level=logging.INFO)
     mutex = open("/var/lock/msbrowser", "w+")
-    try:
-        os.chmod("/var/lock/msbrowser", 0666)
-    except OSError: pass
+    # allow lock to be modified without sudo permissions
+    os.chown("/var/lock/msbrowser", 1000, 1000) # pi's UID, GID
     try:
         flock(mutex, LOCK_EX | LOCK_NB)
     except IOError:
@@ -282,7 +221,6 @@ if __name__ == "__main__":
         configFile = "/usr/local/mindsensors/conf/msdev.cfg"
         config = getConfig()
         PROGRAM_DIRECTORY = getProgramDir()
-        deviceType = getDeviceType()
         deviceName = socket.gethostname()
         rotation = getRotation()
         psc = PiStormsCom()
@@ -309,50 +247,56 @@ if __name__ == "__main__":
             for i in getPageOfItems(FILES, INDEX, FILES_PER_PAGE):
                 drawItemButton(FOLDER, FILES[i], i)
 
-            drawRightArrow()
+            if len(FILES) <= FILES_PER_PAGE:
+                pass # don't draw a right arrow if there's only one page
+            elif INDEX >= len(FILES) - FILES_PER_PAGE:
+                drawReturnArrow()
+            else:
+                drawRightArrow()
+
             if INDEX >= FILES_PER_PAGE:
                 drawLeftArrow()
             elif len(stack) > 1:
                 drawUpArrow()
             else:
-                drawRefresh()
+                drawRefreshArrow()
 
-            if newMessageExists() or updateNeeded():
+            exclamation = newMessageExists() or updateNeeded()
+            if exclamation:
                 drawExclamation()
 
             drawBatteryIndicator()
 
             while True:
-                if exclamationPressed():
+                if exclamation and exclamationPressed():
                     promptUpdate()
                     break
-                if rightArrowPressed():
+                if len(FILES) > FILES_PER_PAGE and rightArrowPressed():
                     newIndex = INDEX + FILES_PER_PAGE
                     if newIndex > len(FILES)-1:
                         newIndex = 0
                     stack[-1][2] = newIndex
                     break
-                if leftArrowPressed(INDEX, FILES_PER_PAGE):
-                    stack[-1][2] = INDEX-4 if INDEX >= 4 else 0
+                if leftArrowPressed():
+                    if INDEX >= FILES_PER_PAGE: # left arrow
+                        stack[-1][2] = INDEX-4 if INDEX >= 4 else 0
+                    elif len(stack) > 1: # up arrow
+                        stack.pop()
+                    else: # refresh arrow
+                        stack[-1][1] = listPrograms(PROGRAM_DIRECTORY)
+                        scrn.clearScreen() # some visual feedback that the refresh happened
                     break
-                if upArrowPressed(stack):
-                    stack.pop()
-                    break
-                if refreshPressed(stack):
-                    stack[-1][1] = listPrograms(PROGRAM_DIRECTORY)
-                    break
-
-                item, isFolder = itemButtonPressed(FOLDER, FILES, INDEX, FILES_PER_PAGE)
-                if item and isFolder:
-                    stack.append([item, listPrograms(item), 0])
-                    break
-                if item and not isFolder:
-                    print("Running program " + item)
-                    exitStatus = runProgram(item)
-                    if exitStatus != 0:
-                        scrn.showMessage(["Error!", "The program stopped with exit status {}. " \
-                                "You might want to access the Logs tab in the PiStorms Web Interface " \
-                                "to check for a stacktrace.".format(exitStatus)], wrapText=True)
+                item = itemButtonPressed(FOLDER, FILES, INDEX, FILES_PER_PAGE)
+                if item:
+                    if os.path.isdir(item): # folder
+                        stack.append([item, listPrograms(item), 0])
+                    else: # python program
+                        print("Running program {}.py".format(item))
+                        exitStatus = runProgram(item+".py")
+                        if exitStatus != 0:
+                            scrn.showMessage(["Error!", "The program stopped with exit status {}. " \
+                                    "You might want to access the Logs tab in the PiStorms Web Interface " \
+                                    "to check for a stacktrace.".format(exitStatus)], wrapText=True)
                     break
     except KeyboardInterrupt:
         logging.info("Quitting MSBrowser")

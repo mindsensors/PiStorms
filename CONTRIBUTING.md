@@ -22,11 +22,51 @@ This document will introduce you to the repository's structure and how the PiSto
 - A remote control is available, which is particularly useful on a mobile device. There is a joystick to move your robot (using motors B and C). There are also sliders to set the LED colors.
 - Log files are also accessible from the web interface
 
+
+## Coordinate systems
+
+| ​ | ​ | ​ |
+| --- | :---: | --- |
+| x=320 <br> y=0 |  | x=0 <br> y=0 |
+| | TS <br> (readings from touchscreen X/Y registers) | |
+| x=320 <br> y=240 |  | x=0 <br> y=240 |
+
+| ​ | ​ | ​ |
+| --- | :---: | --- |
+| x=0 <br> y=320 |  | x=0 <br> y=0 |
+| | Screen <br> (drawing to TFT) | |
+| x=240 <br> y=320 |  | x=240 <br> y=0 |
+
+| ​ | ​ | ​ |
+| --- | :---: | --- |
+| x=0 <br> y=0 |  | x=320 <br> y=0 |
+| | Rotation 3 <br> (right-side-up) | |
+| x=0 <br> y=240 |  | x=320 <br> y=240 |
+
+| ​ | ​ | ​ |
+| --- | :---: | --- |
+| x=320 <br> y=240 |  | x=0 <br> y=240 |
+| | Rotation 1 <br> (up-side-down) | |
+| x=320 <br> y=0 |  | x=0 <br> y=0 |
+
+| ​ | ​ | ​ |
+| --- | :---: | --- |
+| x=0 <br> y=320 |  | x=0 <br> y=0 |
+| | Rotation 0 <br> (Bank A up) | |
+| x=240 <br> y=320 |  | x=240 <br> y=0 |
+
+| ​ | ​ | ​ |
+| --- | :---: | --- |
+| x=240 <br> y=0 |  | x=240 <br> y=320 |
+| | Rotation 2 <br> (Bank B up) | |
+| x=0 <br> y=0 |  | x=0 <br> y=320 |
+
+
 ## Repository files
 
 ### setup
 #### Suggestions
-- When developing, hard link the source files from `/home/pi/PiStorms/...` to their destinations from `setup.sh` ([script](https://gist.github.com/seth10/e41a091ef56d0044474e82f3541755e4))
+- When developing, hard link the source files from `/home/pi/PiStorms/...` to their destinations from `setup.sh`. You can wget this [script](https://gist.githubusercontent.com/seth10/e41a091ef56d0044474e82f3541755e4/raw/PiStorms_Development.sh) to `/home/pi/PiStorms/.git/hooks/post-checkout`.
 ```bash
 b=`grep homefolder /usr/local/mindsensors/conf/msdev.cfg | cut -d"=" -f2 | cut -c 2-`
 for f in 'MSDriver.py' 'MSBrowser.py' 'psm_shutdown' 'swarmserver' 'pistorms-diag.sh'; do sudo ln -f $b/sys/$f /usr/local/bin/$f; done

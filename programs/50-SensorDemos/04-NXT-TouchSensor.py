@@ -73,7 +73,7 @@ while(not doExit):
     #
     # check if screen touched.
     #
-    if(psm.screen.checkButton(0,0,320,320)):
+    if(psm.screen.isTouched()):
         # if scren was touched,
         # reset BAS1 touch count
         psm.BAS1.resetTouchesNXT()
