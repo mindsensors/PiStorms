@@ -73,7 +73,7 @@ while(not doExit):
         psm.screen.termPrintAt(4, msg2)
 
 
-    elif(psm.screen.checkButton(0,0,320,320)):
+    elif(psm.screen.isTouched()):
         #
         # check if screen touched.
         #

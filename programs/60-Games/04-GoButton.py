@@ -45,7 +45,7 @@ while(not exit):
 
     psm.screen.termPrintAt(5, "GO Button is = " +str(psm.isKeyPressed()))
     psm.screen.termPrintAt(6, "Press Count = " +str(psm.getKeyPressCount()))
-    if (psm.screen.checkButton(0,0,320,320)):
+    if (psm.screen.isTouched()):
         psm.screen.termPrintln(" ")
         psm.screen.termPrintln("Exiting .....")
         exit = True

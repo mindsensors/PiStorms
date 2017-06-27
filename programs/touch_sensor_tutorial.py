@@ -48,7 +48,7 @@ while(not doExit):
     numTouch = psm.BBS1.numTouchesEV3()
     psm.screen.termReplaceLastLine(str(touch) + "  " + str(numTouch))
 
-    if(psm.screen.checkButton(0,0,320,320)):
+    if(psm.screen.isTouched()):
         psm.screen.termPrintln("")
         psm.screen.termPrintln("Exiting to menu")
         doExit = True
