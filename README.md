@@ -15,9 +15,7 @@ If you would might rather add the PiStorms code and libraries to your existing R
 6. Run the following commands to download and configure this repository
 ```
 $ git clone https://github.com/mindsensors/PiStorms.git
-$ cd PiStorms/setup
-$ chmod +x setup.sh
-$ ./setup.sh
+$ PiStorms/setup/setup.sh
 ```
 
 The `setup.sh` script will take several minutes to download files and configure your system.
