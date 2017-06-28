@@ -66,21 +66,7 @@ This document will introduce you to the repository's structure and how the PiSto
 
 ### setup
 #### Suggestions
-- When developing, hard link the source files from `/home/pi/PiStorms/...` to their destinations from `setup.sh`. You can wget this [script](https://gist.githubusercontent.com/seth10/e41a091ef56d0044474e82f3541755e4/raw/PiStorms_Development.sh) to `/home/pi/PiStorms/.git/hooks/post-checkout`.
-```bash
-b=`grep homefolder /usr/local/mindsensors/conf/msdev.cfg | cut -d"=" -f2 | cut -c 2-`
-for f in 'MSDriver.py' 'MSBrowser.py' 'psm_shutdown' 'swarmserver' 'pistorms-diag.sh'; do sudo ln -f $b/sys/$f /usr/local/bin/$f; done
-chmod +x $b/sys/swarmserver $b/sys/pistorms-diag.sh $b/programs/addresschange
-for f in 'rmap.py'  'rmapcfg.py' 'scratch.py' 'PiStorms.py' 'PiStormsCom.py' 'TouchScreenInput.py' 'mindsensorsUI.py' 'MS_ILI9341.py' 'mindsensors.py' 'MsDevices.py' 'LegoDevices.py' 'swarmclient.py'; do sudo ln -f $b/sys/$f /usr/local/lib/python2.7/dist-packages/$f; done
-sudo rm -rf /var/www
-sudo ln -s $b/www /var/www
-sudo ln -f $b/sys/msdev.cfg /usr/local/mindsensors/conf/msdev.cfg
-# skipping images, art, scratch, changing ownerships... programs are still only in /home/pi/PiStorms
-for f in 'MSDriver.sh' 'MSBrowser.sh' 'MSWeb.sh' 'SwarmServer.sh'; do sudo ln -f $b/setup/$f /etc/init.d/$f; done
-for f in 'MSDriver.sh' 'MSBrowser.sh' 'MSWeb.sh' 'SwarmServer.sh'; do chmod +x $b/setup/$f; done
-for f in 'ps_messenger_check.py' 'ps_updater.py'; do sudo ln -f $b/sys/$f /usr/local/bin/$f; done
-sudo chmod +x /usr/local/bin/psm_shutdown
-```
+- When developing, run setup/enableHardlinks.sh to hard link the source files from `/home/pi/PiStorms/...` to their intended locations in the file system (where `setup.h` copies them). This will avoid, for instance, modifying `sys/MSBrowser.sh`, but forgetting to copy it to `/usr/local/bin/MSBrowser.sh` and wondering why your edits don't seem to be changing anything (still, don't forget to run `sudo /etc/init.d/MSBrowser.sh restart`!).
 
 ### sys
 - **LegoDevices.py**: Basic NXT and EV3 sensors

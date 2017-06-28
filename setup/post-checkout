@@ -1,0 +1,32 @@
+# link files from this git repository to their intended locations in the file system
+
+for f in 'MSDriver.py' 'MSBrowser.py' 'psm_shutdown' 'pistorms-diag.sh' 'swarmserver'
+do
+    sudo ln -f sys/$f /usr/local/bin/$f
+done
+
+for f in 'rmap.py'  'rmapcfg.py' 'scratch.py' 'PiStorms.py' 'PiStormsCom.py' 'TouchScreenInput.py' 'mindsensorsUI.py' 'MS_ILI9341.py' 'mindsensors.py' 'MsDevices.py' 'LegoDevices.py' 'swarmclient.py'
+do
+    sudo ln -f sys/$f /usr/local/lib/python2.7/dist-packages/$f
+done
+
+sudo rm -rf /var/www
+sudo ln -s $(pwd)/www /var/www
+
+sudo ln -f sys/msdev.cfg /usr/local/mindsensors/conf/msdev.cfg
+
+sudo cp programs/*.png artwork/* /usr/local/mindsensors/images/
+sudo cp artwork/* /usr/share/raspberrypi-artwork
+sudo cp scratch/* /home/pi/Documents/Scratch\ Projects/PiStorms/
+
+for f in 'MSDriver.sh' 'MSBrowser.sh' 'MSWeb.sh' 'SwarmServer.sh'
+do
+    sudo ln -f setup/$f /etc/init.d/$f
+done
+
+for f in 'ps_messenger_check.py' 'ps_updater.py'
+do
+    sudo ln -f sys/$f /usr/local/bin/$f
+done
+
+echo 'Linking done!'
