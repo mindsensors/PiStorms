@@ -96,7 +96,7 @@ This document will introduce you to the repository's structure and how the PiSto
 - **00-Scratch_PiStorms.py**: Used to connect with [Scratch](https://github.com/mindsensors/PiStorms/blob/master/CONTRIBUTING.md#scratch) and execute instructions from it.
 - **00-TestInternetConnection.py**: Pings Google's domain name server to determine if the device is connected to the internet.
 - **00-WiFi_Setup.py**: Used to connect to the internet directly from the PiStorms. It displays a list of scanned WiFi networks and will let you enter a passphrase using an on-screen keyboard.
-- **03-Swarm_Demo.py**: ?
+- **03-Swarm_Demo.py**: Displays a smiley face on screen. You can drag it with the stylus and it will move on the screen of all swarm neighbors as well.
 - **09-refresh.py**: If anything changes in the programs folder, they will not be reflected in the browser until it is refreshed. Another way to achieve this is to enter and exit any folder. A program might have been created or renamed from the web interface (or an SSH session).
 - **09-shutdown.py**: Let's you shutdown the PiStorms from the device itself. It will display a confirmation before shutting down. Note there is also a shutdown (and restart) button on the PiStorms Web Interface dashboard. Also note holding the GO button for five seconds will restart the PiStorms.
 - **10-ico**: These are files from the image recognition robot [blog post](http://www.mindsensors.com/blog/pistorms/image-recognition-robot-with-pistorms-and-pi-camera)
