@@ -101,7 +101,6 @@ class mindsensorsUI():
     #  @param self The object pointer.
     #  @param name The display title that will appear at the top of the LCD touchscreen. Optional, defaults to "PiStorms" (unused).
     #  @param rotation The rotation of the LCD touchscreen. Optional, defaults to 3 (standard rotation).
-    #  @param device The device on which the LCD touchscreen is used. Optional, defaults to PiStorms.
     #  @remark
     #  There is no need to use this function directly. To initialize the mindsensorsUI class in your program:
     #  @code
@@ -642,7 +641,7 @@ class mindsensorsUI():
 
     ## Refresh a screen line 
     #  @param self The object pointer.
-    #  @param text The text to print to the screen.
+    #  @param lineNum The line number to refresh.
     #  @param display Choose to immediately push the drawing to the screen.
     #  @remark
     #  To use this function in your program:
