@@ -1,8 +1,6 @@
 var searchData=
 [
   ['raw',['RAW',['../classmindsensors_1_1_a_n_g_l_e.html#a3f501e9fd2f689e968e3cb5c705d6050',1,'mindsensors.ANGLE.RAW()'],['../classmindsensors_1_1_p_p_s58.html#ad2aed64d81ce57b6315bc1fe69fb2139',1,'mindsensors.PPS58.RAW()']]],
-  ['raw_5fx',['RAW_X',['../classmindsensors_u_i_1_1mindsensors_u_i.html#a05a249d201438478712369267252cea8',1,'mindsensorsUI::mindsensorsUI']]],
-  ['raw_5fy',['RAW_Y',['../classmindsensors_u_i_1_1mindsensors_u_i.html#ac8feb363ec9b4d003f2df643fc0241ab',1,'mindsensorsUI::mindsensorsUI']]],
   ['rawvalue',['rawValue',['../class_lego_devices_1_1_n_x_t_color_sensor.html#ad3759cf7a7988e2074d106ec5b697f76',1,'LegoDevices::NXTColorSensor']]],
   ['readimageregisters',['readImageRegisters',['../classmindsensors_1_1_n_x_t_c_a_m.html#a388d8adbe7ae009eb8ce5c291847948e',1,'mindsensors::NXTCAM']]],
   ['readperformanceparameters',['ReadPerformanceParameters',['../classmindsensors_1_1_m_m_x.html#a8d2a573f048d9736aa54e8f5de90fbeb',1,'mindsensors.MMX.ReadPerformanceParameters()'],['../class_pi_storms_com_1_1_p_s_motor.html#ad8d2df8353482bf1412c4bef88cf7e28',1,'PiStormsCom.PSMotor.ReadPerformanceParameters()']]],

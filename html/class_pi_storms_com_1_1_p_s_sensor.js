@@ -37,13 +37,8 @@ var class_pi_storms_com_1_1_p_s_sensor =
     [ "setModeEV3", "class_pi_storms_com_1_1_p_s_sensor.html#a7da31bbd91111a51ad40c9d21c991c3e", null ],
     [ "setType", "class_pi_storms_com_1_1_p_s_sensor.html#a00b70f8edc215d8a200b6dc923fda599", null ],
     [ "SumoEyes", "class_pi_storms_com_1_1_p_s_sensor.html#acda4ba5b033f317783ffdb125d708940", null ],
-    [ "SumoEyesisNear", "class_pi_storms_com_1_1_p_s_sensor.html#afbee2a4906af92bf7706e14fe37791d4", null ],
     [ "bank", "class_pi_storms_com_1_1_p_s_sensor.html#a02611ecaca056ccc5bd659e8048b8b58", null ],
     [ "EV3Cache", "class_pi_storms_com_1_1_p_s_sensor.html#a463e4b5df16c1f5aef8d00879c697242", null ],
-    [ "SE_Front", "class_pi_storms_com_1_1_p_s_sensor.html#af9c77c751b75b8ea314c4a9769d6efd6", null ],
-    [ "SE_Left", "class_pi_storms_com_1_1_p_s_sensor.html#aa4817c4bf82fdea1902621a37eb18500", null ],
-    [ "SE_None", "class_pi_storms_com_1_1_p_s_sensor.html#a1ad36cf0c0ae0325592d144daf0b1098", null ],
-    [ "SE_Right", "class_pi_storms_com_1_1_p_s_sensor.html#a2c6525c559836b6f20fb24618b7f07a8", null ],
     [ "sensornum", "class_pi_storms_com_1_1_p_s_sensor.html#a210b13742e480d62f06f23019165d7fc", null ],
     [ "type", "class_pi_storms_com_1_1_p_s_sensor.html#ab1fb213602881901d571d28f29d79028", null ]
 ];

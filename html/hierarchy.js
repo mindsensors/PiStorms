@@ -1,6 +1,7 @@
 var hierarchy =
 [
     [ "mindsensors.BLOB", "classmindsensors_1_1_b_l_o_b.html", null ],
+    [ "MsDevices.BLOB", "class_ms_devices_1_1_b_l_o_b.html", null ],
     [ "Exception", null, [
       [ "scratch.ScratchError", "classscratch_1_1_scratch_error.html", [
         [ "scratch.ScratchConnectionError", "classscratch_1_1_scratch_connection_error.html", null ]
@@ -52,6 +53,7 @@ var hierarchy =
       [ "MsDevices.IRThermometer", "class_ms_devices_1_1_i_r_thermometer.html", null ],
       [ "MsDevices.LightSensorArray", "class_ms_devices_1_1_light_sensor_array.html", null ],
       [ "MsDevices.LineLeader", "class_ms_devices_1_1_line_leader.html", null ],
+      [ "MsDevices.NXTCam5", "class_ms_devices_1_1_n_x_t_cam5.html", null ],
       [ "MsDevices.SumoEyes", "class_ms_devices_1_1_sumo_eyes.html", null ]
     ] ],
     [ "WebSocketClient", null, [
