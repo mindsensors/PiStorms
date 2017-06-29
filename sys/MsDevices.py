@@ -75,7 +75,7 @@ class AbsoluteIMU(mindsensors_i2c):
     #  @param self The object pointer.
     #  @param command Value to write to the command register.
     def command(self, command):
-        self.writeByte(COMMAND, int(command))
+        self.writeByte(self.COMMAND, int(command))
 
     ## Reads the tilt value along the x-axis
     #  @param self The object pointer.
@@ -345,7 +345,7 @@ class LineLeader(mindsensors_i2c):
     #  @param self The object pointer.
     #  @param command Value to write to the command register.
     def command(self, command):
-        self.writeByte(COMMAND, int(command))
+        self.writeByte(self.LL_COMMAND, int(command))
 
     ## Calibrates the white value for the LineLeader
     #  @param self The object pointer.
