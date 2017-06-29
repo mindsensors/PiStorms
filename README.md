@@ -23,4 +23,4 @@ When it configures the VNC server, it might ask for a password. If so please ent
 
 Now you can browse the examples in the PiStorms/programs folder.
 
-To write your own Python programs, start with this [tutorial](http://www.mindsensors.com/blog/how-to/pistorms-python-programming-tutorial). Then refer to the [API reference](http://www.mindsensors.com/reference/PiStorms/html/).
+To write your own Python programs, start with this [tutorial](http://www.mindsensors.com/blog/how-to/pistorms-python-programming-tutorial), then refer to the [API reference](http://www.mindsensors.com/reference/PiStorms/html/).
