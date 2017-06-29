@@ -66,13 +66,16 @@ fi
 sudo cp /tmp/config.txt /boot/config.txt
 
 
-echo "Installing and updating packages. Depending on your internet connection, this may take several minutes..."
-# update package lists and install packages; install required pip packages
+echo "Depending on your internet connection, the following few steps may take several minutes."
+echo "Updating package lists..."
 sudo apt-get -qq -y update
+echo "Downloading and installing 15 required packages..."
 sudo apt-get -qq -y install build-essential git nmap mpg123 apache2 php5 libapache2-mod-php5 \
                             python-numpy python-matplotlib python-scipy python-opencv \
                             python-dev python-smbus python-pip python-imaging &> /dev/null
+echo "Updating pip..."
 sudo pip -qq install --upgrade pip
+echo "Downloading and installing 7 required Python packages..."
 sudo pip -qq install --upgrade mindsensors-i2c
 sudo pip -qq install RPi.GPIO wireless wifi ws4py flask imutils
 
