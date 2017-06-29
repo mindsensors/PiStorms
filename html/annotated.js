@@ -18,9 +18,11 @@ var annotated =
     ] ],
     [ "MsDevices", null, [
       [ "AbsoluteIMU", "class_ms_devices_1_1_absolute_i_m_u.html", "class_ms_devices_1_1_absolute_i_m_u" ],
+      [ "BLOB", "class_ms_devices_1_1_b_l_o_b.html", "class_ms_devices_1_1_b_l_o_b" ],
       [ "IRThermometer", "class_ms_devices_1_1_i_r_thermometer.html", "class_ms_devices_1_1_i_r_thermometer" ],
       [ "LightSensorArray", "class_ms_devices_1_1_light_sensor_array.html", "class_ms_devices_1_1_light_sensor_array" ],
       [ "LineLeader", "class_ms_devices_1_1_line_leader.html", "class_ms_devices_1_1_line_leader" ],
+      [ "NXTCam5", "class_ms_devices_1_1_n_x_t_cam5.html", "class_ms_devices_1_1_n_x_t_cam5" ],
       [ "SumoEyes", "class_ms_devices_1_1_sumo_eyes.html", "class_ms_devices_1_1_sumo_eyes" ]
     ] ],
     [ "PiStorms", "namespace_pi_storms.html", "namespace_pi_storms" ],
