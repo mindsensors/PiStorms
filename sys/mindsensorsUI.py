@@ -825,17 +825,14 @@ class mindsensorsUI():
         if goBtn:
             keyPressCount = self.comm.getKeyPressCount()
         while(True):
-            try:
-                if(goBtn and keyPressCount < self.comm.getKeyPressCount()):
-                    self.setMode(oldMode)
-                    return -1
-                if(touch and self.isTouched()):
-                    n = self.checkDialogButtons(len(options))
-                    if(n != -1):
-                        return n
-            except KeyError: # no touchscreen calibration values
+            if(goBtn and keyPressCount < self.comm.getKeyPressCount()):
                 self.setMode(oldMode)
-                return 0
+                return -1
+            if(touch and self.isTouched()):
+                n = self.checkDialogButtons(len(options))
+                if(n != -1):
+                    self.setMode(oldMode)
+                    return n
 
     ## Display Pop-up of 'Yes' or 'No' question on the screen, returning True or False
     #  @param self The object pointer.
