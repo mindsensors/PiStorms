@@ -22,6 +22,7 @@
 # History:
 # Date      Author      Comments
 # 01/04/17   Deepak     Initial development.
+# 06/29/17   Seth       Simplify using `enumerate`
 #
 
 from PiStorms import PiStorms
@@ -29,48 +30,36 @@ import MsDevices
 import time
 psm = PiStorms()
 
-m = ["LineLeader-Demo", "Connect LineLeader-v2 sensor",
- "to BAS1, and Press OK to continue"]
-psm.screen.askQuestion(m,["OK"])
+m = ["LineLeader-Demo",
+     "Connect LineLeader-v2 sensor",
+     "to BAS1, and Press OK to continue"]
+psm.screen.showMessage(m)
 
-#
-# we are attaching a LineLeader to Port BAS1
-# Initialize the variable for the sensor
-#
-ll_sensor = MsDevices.LineLeader(psm.BAS1)
+# we are attaching a LineLeader to Port BAS1,
+# initialize the variable for the sensor
+sensor = MsDevices.LineLeader(psm.BAS1)
 
 doExit = False
-ll_reading = []
-old_ll_reading = []
+readings = []
 
 psm.screen.termPrintAt(7, "LineLeader readings")
 psm.screen.termPrintAt(8, "Press GO to stop program")
-#main loop
+
+# main loop
 while(not doExit):
-    #
-    #wipe the old graph.
-    #
-    old_ll_reading = ll_reading
-    ll_len = len(old_ll_reading)
-    for i in range(0,ll_len):
-        if (old_ll_reading[i] != None):
-            psm.screen.fillRect(10+(i*35), 10, 30,
-                old_ll_reading[i], fill = (0,0,0), display = False)
+    # wipe the old graph
+    for i, reading in enumerate(readings):
+        psm.screen.fillRect(10+(i*35), 10, 30, reading, fill = (0,0,0), display = False)
 
-    #
-    # read from the sensor.
-    #
-    ll_reading = ll_sensor.ReadRaw_Calibrated()
+    # read from the sensor
+    readings = sensor.ReadRaw_Calibrated()
+    readings = [reading for reading in readings if reading is not None]
 
-    #
-    # Draw new graph
-    #
-    ll_len = len(ll_reading)
-    for i in range(0,ll_len):
-        print ll_reading[i]
-        if (ll_reading[i] != None):
-            psm.screen.fillRect(10+(i*35), 10, 30,
-                ll_reading[i], fill = (200,200,0), display = False)
+    # draw new graph
+    for i, reading in enumerate(readings):
+        print reading
+        psm.screen.fillRect(10+(i*35), 10, 30, reading, fill = (200,200,0), display = False)
+
     time.sleep(0.4)
     psm.screen.fillRect(5, 0, 300, 4, fill = (200,0,0), display = True)
 
@@ -78,5 +67,3 @@ while(not doExit):
         psm.screen.clearScreen()
         psm.screen.termPrintAt(8, "Exiting to menu")
         doExit = True
-
-
