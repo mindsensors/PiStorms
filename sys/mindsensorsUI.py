@@ -792,6 +792,8 @@ class mindsensorsUI():
     #  answer = screen.askQuestion(question, options)
     #  @endcode
     def askQuestion(self, question, options, touch=True, goBtn=False, wrapText=False):
+        for i, line in enumerate(question):
+            question[i] = str(line)
         if wrapText:
             wrap, maxlines = 48, 5
             if (self.currentRotation % 2 == 0): # portrait
