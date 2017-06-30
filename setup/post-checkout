@@ -5,7 +5,7 @@ do
     sudo ln -f sys/$f /usr/local/bin/$f
 done
 
-for f in 'rmap.py'  'rmapcfg.py' 'scratch.py' 'PiStorms.py' 'PiStormsCom.py' 'TouchScreenInput.py' 'mindsensorsUI.py' 'MS_ILI9341.py' 'mindsensors.py' 'MsDevices.py' 'LegoDevices.py' 'swarmclient.py'
+for f in 'rmap.py'  'rmapcfg.py' 'scratch.py' 'PiStorms.py' 'PiStorms_GRX.py' 'PiStormsCom.py' 'PiStormsCom_GRX.py' 'TouchScreenInput.py' 'mindsensorsUI.py' 'MS_ILI9341.py' 'mindsensors.py' 'MsDevices.py' 'LegoDevices.py' 'GroveDevices.py' 'swarmclient.py'
 do
     sudo ln -f sys/$f /usr/local/lib/python2.7/dist-packages/$f
 done
