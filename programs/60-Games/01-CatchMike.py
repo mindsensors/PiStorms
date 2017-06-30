@@ -1,4 +1,4 @@
-# 
+#
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 2 as
 # published by the Free Software Foundation.
@@ -12,7 +12,7 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
-#mindsensors.com invests time and resources providing this open source code, 
+#mindsensors.com invests time and resources providing this open source code,
 #please support mindsensors.com  by purchasing products from mindsensors.com!
 #Learn more product option visit us @  http://www.mindsensors.com/
 
@@ -79,7 +79,7 @@ def ledFlash(num):
 ### main running loop ###
 # moves "Mike" (the smiley face) around the screen to random locations
 # tracks the players score
-miliseconds = int(round(time.time()*1000)) 
+miliseconds = int(round(time.time()*1000))
 psm.resetKeyPressCount
 
 while(not exit):
@@ -87,38 +87,38 @@ while(not exit):
                                     # max of 245 so he will not appear off the screen (screen x value is 320, so 320 - Mike's width (75) = 245)
     randY = random.randint(0, 115)  # selects a random y coordinate for Mike
                                     # max of 115 so he will not appear off the screen (screen y value is 240, but the score display starts at yvalue of 190, so 190 - Mike's height (75) = 115)
-                                    
+
     psm.screen.fillBmp(randX, randY, 95-score, 95-score, path = currentdir+'/'+"faceAwesome.png") # display Mike at the random coordinates
-    miliseconds = int(round(time.time()*1000)) 
+    miliseconds = int(round(time.time()*1000))
     while (int(round(time.time()*1000)) - miliseconds)< (150+1000/score):
         if(psm.screen.checkButton(randX - (score), randY - (score), 95-score, 95-score)): # if an invisible box drawn around Mike's position is tapped, then:
             psm.screen.fillRect(0,0,320,320) # white screen
             psm.screen.drawAutoText("You got me!", 15, 140, fill=(0, 0, 0), size = 45) # draw text
             score += 1 # increment player's score
-            if score < 5 : 
+            if score < 5 :
                 ledFlash(score) # run the ledFlash function using the players current score as the input
             psm.screen.fillRect(0,0,320,320) # back to white screen
     psm.screen.fillRect(randX, randY, 95-score, 95-score) # cover up Mike after each drawing of him
-    
+
     if(dispScore != score): # if the displayed score does not equal the player's current score, then redraw the score count
         if score > 50 :
-            exit = True 
-            psm.screen.drawAutoText("Congratulations You Win:", 15, 190, fill=(0, 0, 0), size = 35) # draw "score:"    
+            exit = True
+            psm.screen.drawAutoText("Congratulations You Win:", 15, 190, fill=(0, 0, 0), size = 35) # draw "score:"
         else :
             psm.screen.drawAutoText("score:", 15, 190, fill=(0, 0, 0), size = 25) # draw "score:"
             psm.screen.drawAutoText(str(score-1), 100, 190, fill=(0, 0, 0), size = 25) # draw the player's score
             dispScore = score # log the change of score to the variable "dispScore"
-        
+
     #print psm.isKeyPressed()
     #if(psm.isKeyPressed() == True): # if the GO button is pressed
-    if(psm.isKeyPressed() == 1): # if the GO button is pressed    
+    if(psm.isKeyPressed() == 1): # if the GO button is pressed
         time.sleep(0.5)
         exit = True # escape loop
     if(psm.isKeyPressed() == True): # if the GO button is pressed
         psm.screen.clearScreen()
-        psm.screen.termPrintln("") 
+        psm.screen.termPrintln("")
         psm.screen.termPrintln("Exiting to menu")
-        time.sleep(0.5) 
-        exit = True 
+        time.sleep(0.5)
+        exit = True
     else:
         pass

@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 #
 # Copyright (c) 2016 mindsensors.com
-# 
+#
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 2 as
 # published by the Free Software Foundation.
@@ -15,23 +15,23 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 #
-#mindsensors.com invests time and resources providing this open source code, 
+#mindsensors.com invests time and resources providing this open source code,
 #please support mindsensors.com  by purchasing products from mindsensors.com!
 #Learn more product option visit us @  http://www.mindsensors.com/
 #
 # History:
 # Date              Author          Comments
-# July 2016         Roman Bohuk     Initial Authoring 
-# December 2016     Roman Bohuk     Added functionality to rename files 
+# July 2016         Roman Bohuk     Initial Authoring
+# December 2016     Roman Bohuk     Added functionality to rename files
 
 from datetime import timedelta, date
-from flask import Flask, make_response, request, current_app  
+from flask import Flask, make_response, request, current_app
 from functools import update_wrapper
 import os
 import shutil
 
 # http://flask.pocoo.org/snippets/56/
-def crossdomain(origin=None, methods=None, headers=None, max_age=21600, attach_to_all=True, automatic_options=True):  
+def crossdomain(origin=None, methods=None, headers=None, max_age=21600, attach_to_all=True, automatic_options=True):
     if methods is not None:
         methods = ', '.join(sorted(x.upper() for x in methods))
     if headers is not None and not isinstance(headers, basestring):
@@ -76,8 +76,8 @@ def dirTraversal(file_name, current_directory):
     requested_path = os.path.abspath(requested_path)
     common_prefix = os.path.commonprefix([requested_path, current_directory])
     return common_prefix != current_directory
-    
-    
+
+
 app = Flask(__name__)
 
 from PiStormsCom import PiStormsCom
@@ -85,7 +85,7 @@ psc = PiStormsCom()
 
 import MS_ILI9341
 import Adafruit_GPIO.SPI as SPI
-disp = MS_ILI9341.ILI9341(24, rst=25, spi=SPI.SpiDev(0,0,max_speed_hz=64000000)) 
+disp = MS_ILI9341.ILI9341(24, rst=25, spi=SPI.SpiDev(0,0,max_speed_hz=64000000))
 
 import socket,fcntl,struct
 def get_ip_address(ifname):
@@ -100,7 +100,7 @@ def get_ip_address(ifname):
         return "not present"
 
 
-import json        
+import json
 import ConfigParser
 
 config = ConfigParser.ConfigParser()
@@ -185,7 +185,7 @@ def led():
 def starttouchrecording():
     disp.startTouchRecording("-")
     return "1"
-    
+
 @app.route("/startrecording", methods=['GET', 'OPTIONS'])
 @crossdomain(origin='*')
 def startrecording():
@@ -197,13 +197,13 @@ def startrecording():
 def startrecordingwithBg():
     disp.startRecording("-",includeBg=True)
     return "1"
-    
+
 @app.route("/stoprecording", methods=['GET', 'OPTIONS'])
 @crossdomain(origin='*')
 def stoprecording():
     disp.stopRecording()
     return "1"
-    
+
 @app.route("/stoptouchrecording", methods=['GET', 'OPTIONS'])
 @crossdomain(origin='*')
 def stoptouchrecording():
@@ -219,7 +219,7 @@ def readrecording():
 @crossdomain(origin='*')
 def readrecordingtouch():
     return str(int(disp.isTakingFrames(disp.readTouchRecordingCount()[0])))
-    
+
 @app.route("/clearimages", methods=['GET', 'OPTIONS'])
 @crossdomain(origin='*')
 def clearimages():
@@ -243,7 +243,7 @@ def browserrunning():
         if "MSBrowser.py" in i:
             return "1"
     return "0"
-    
+
 @app.route("/startbrowser", methods=['GET', 'OPTIONS'])
 @crossdomain(origin='*')
 def startbrowser():
@@ -254,18 +254,10 @@ def startbrowser():
     print "Started Browser"
     return "1"
 
-@app.route("/calibrate", methods=['GET', 'OPTIONS'])
-@crossdomain(origin='*')
-def calibrate():
-    stopbrowser()
-    os.system("python " + os.path.join(home_folder, "programs", "utils", "01-Calibrate.py"))
-    startbrowser()
-    return "1"
-    
 @app.route("/getapacheerrors", methods=['GET', 'OPTIONS'])
 @crossdomain(origin='*')
 def getapacheerrors():
-    return os.popen('tail /var/log/apache2/error.log -n 25').read()
+    return os.popen('cat /var/log/apache2/error.log').read()
 
 @app.route("/getmessage", methods=['GET', 'OPTIONS'])
 @crossdomain(origin='*')
@@ -287,14 +279,14 @@ def markmessageread():
 @crossdomain(origin='*')
 def getmessagejson():
     return message_text
-    
+
 @app.route("/getprograms", methods=['POST', 'OPTIONS'])
 @crossdomain(origin='*')
 def getprograms():
     files = os.listdir(os.path.join(home_folder, "programs", request.form["path"]))
-    
+
     if not request.form["path"].startswith(os.path.abspath(os.path.join(home_folder, "programs"))+'/'): return "0"
-    
+
     out = []
     for i in files:
         dir = os.path.join(home_folder, "programs", request.form["path"], i)
@@ -318,7 +310,7 @@ def fetchscript():
         with open(request.form["path"],"r") as f:
             return f.read()
     except: return "0"
-    
+
 @app.route("/removefile", methods=['POST', 'OPTIONS'])
 @crossdomain(origin='*')
 def removefile():
@@ -340,7 +332,7 @@ def removedir():
 
 copyright = """
 # Copyright (c) %i mindsensors.com
-# 
+#
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 2 as
 # published by the Free Software Foundation.
@@ -354,7 +346,7 @@ copyright = """
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 #
-#mindsensors.com invests time and resources providing this open source code, 
+#mindsensors.com invests time and resources providing this open source code,
 #please support mindsensors.com  by purchasing products from mindsensors.com!
 #Learn more product option visit us @  http://www.mindsensors.com/
 """ % date.today().year
@@ -396,7 +388,7 @@ def renameobject():
         return "1"
     except Exception as e:
         return "0"
-        
+
 @app.route("/savescript", methods=['POST', 'OPTIONS'])
 @crossdomain(origin='*')
 def savescript():
@@ -405,7 +397,7 @@ def savescript():
             f.write(request.form["contents"])
             return "1"
     finally: return "0"
-    
+
 @app.route("/setmotorspeed", methods=['POST', 'OPTIONS'])
 @crossdomain(origin='*')
 def setmotorspeed():
@@ -415,14 +407,14 @@ def setmotorspeed():
     except Exception as e:
         pass
     return "1"
-    
+
 @app.route("/floatmotors", methods=['GET', 'OPTIONS'])
 @crossdomain(origin='*')
 def floatmotors():
     psc.BAM1.float()
     psc.BAM2.float()
     return "1"
-    
+
 @app.route("/brakemotors", methods=['GET', 'OPTIONS'])
 @crossdomain(origin='*')
 def brakemotors():
@@ -434,6 +426,6 @@ def brakemotors():
 @crossdomain(origin='*')
 def getprogramsdir():
     return os.path.abspath(os.path.join(home_folder, "programs"))+'/'
-    
+
 if __name__ == "__main__":
     app.run("0.0.0.0", 3141, threaded=True)

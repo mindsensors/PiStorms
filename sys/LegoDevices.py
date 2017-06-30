@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 #
 # Copyright (c) 2016 mindsensors.com
-# 
+#
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 2 as
 # published by the Free Software Foundation.
@@ -15,7 +15,7 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
-#mindsensors.com invests time and resources providing this open source code, 
+#mindsensors.com invests time and resources providing this open source code,
 #please support mindsensors.com  by purchasing products from mindsensors.com!
 #Learn more product option visit us @  http://www.mindsensors.com/
 
@@ -60,8 +60,8 @@ PS_SENSOR_TYPE_COLORNONE = 17
 #
 
 class LegoSensor(PiStormsCom):
-    
-    
+
+
     def __init__(self, port):
         if ( port == "BAS1" ):
             self.bank = self.bankA
@@ -78,7 +78,7 @@ class LegoSensor(PiStormsCom):
         else:
             print "no such port???"
         self.type = self.PS_SENSOR_TYPE_NONE
-        self.EV3Cache = [0,[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],0,0,[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]]
+        self.EV3Cache = [ 0, [0]*16, 0, 0, [0]*32 ] # ready, ID[16], mode, length, data[32]
 
     ##
     #  Set the sensor type
@@ -122,8 +122,8 @@ class LegoSensor(PiStormsCom):
             self.EV3Cache[2] = self.bank.readByte(PiStormsCom.PS_S2EV_Mode)
             self.EV3Cache[3] = self.bank.readByte(PiStormsCom.PS_S2EV_Length)
             self.EV3Cache[4] = self.bank.readArray(PiStormsCom.PS_S2EV_Data,32)
-    
-    def readNXT(self): 
+
+    def readNXT(self):
         if(self.sensornum == 1):
             return self.bank.readInt(PiStormsCom.PS_S1AN_Read)
         if(self.sensornum == 2):
@@ -138,14 +138,14 @@ class LegoSensor(PiStormsCom):
 # touch = touchSensor.isPressed()
 #  if(touch == True ):
 #      # do some task
-# @endcode    
+# @endcode
 class NXTTouchSensor(LegoSensor):
 
     def __init__(self, port):
         super(self.__class__,self).__init__(port)
         self.setType(self.PS_SENSOR_TYPE_SWITCH)
 
-    ## check if the sensor is touched, 
+    ## check if the sensor is touched,
     # @returns
     # True if it is touched.
     # @code
@@ -162,7 +162,7 @@ class NXTTouchSensor(LegoSensor):
         if(self.sensornum == 1):
             return self.bank.readByte(PiStormsCom.PS_S1EV_Data) == 1
         if(self.sensornum == 2):
-            return self.bank.readByte(PiStormsCom.PS_S2EV_Data) == 1     
+            return self.bank.readByte(PiStormsCom.PS_S2EV_Data) == 1
 
     ## With PiStorms it is possible to count how many times the sensor was touched.
     # This count is maintained since the PiStorms was powered on.
@@ -176,7 +176,7 @@ class NXTTouchSensor(LegoSensor):
     #
     # # read the number of touches.
     # n = touchSensor.getBumpCount()
-    # 
+    #
     # if ( n > max_allowed):
     #     # do something
     #
@@ -202,7 +202,7 @@ class EV3TouchSensor(LegoSensor):
         super(self.__class__,self).__init__(port)
         self.setType(self.PS_SENSOR_TYPE_EV3_SWITCH)
 
-    ## check if the sensor is touched, 
+    ## check if the sensor is touched,
     # @returns
     # True if it is touched.
     # @code
@@ -219,7 +219,7 @@ class EV3TouchSensor(LegoSensor):
         if(self.sensornum == 1):
             return self.bank.readByte(PiStormsCom.PS_S1EV_Data) == 1
         if(self.sensornum == 2):
-            return self.bank.readByte(PiStormsCom.PS_S2EV_Data) == 1     
+            return self.bank.readByte(PiStormsCom.PS_S2EV_Data) == 1
 
     ## With PiStorms it is possible to count how many times the sensor was touched.
     # This count is maintained since the PiStorms was powered on.
@@ -233,7 +233,7 @@ class EV3TouchSensor(LegoSensor):
     #
     # # read the number of touches.
     # n = touchSensor.getBumpCount()
-    # 
+    #
     # if ( n > max_allowed):
     #     # do something
     #
@@ -254,7 +254,7 @@ class EV3TouchSensor(LegoSensor):
             self.bank.writeByte(PiStormsCom.PS_S2EV_Data+1,0)
 
 
-class NXTLightSensor(LegoSensor): 
+class NXTLightSensor(LegoSensor):
     def __init__(self, port, mode = PS_SENSOR_MODE_NXT_LIGHT_REFLECTED): #mode can be PS_SENSOR_MODE_NXT_LIGHT_[AMBIENT, REFLECTED]
         super(self.__class__,self).__init__(port)
         if mode==PS_SENSOR_MODE_NXT_LIGHT_AMBIENT:
@@ -326,7 +326,7 @@ class EV3GyroSensor(LegoSensor):
             return self.bank.readIntegerSigned(PiStormsCom.PS_S1EV_Data)
         if(self.sensornum == 2):
             return self.bank.readIntegerSigned(PiStormsCom.PS_S2EV_Data)
-	
+
 class EV3UltrasonicSensor(LegoSensor):
     def __init__(self, port, mode=PS_SENSOR_MODE_EV3_ULTRASONIC_DIST_CM): #mode can be PS_SENSOR_MODE_EV3_ULTRASONIC_[DETECT, DIST_CM, DIST_IN]
         super(self.__class__,self).__init__(port)
@@ -359,7 +359,7 @@ class EV3InfraredSensor(LegoSensor):
         if(self.sensornum == 1):
             return self.bank.readByte(PiStormsCom.PS_S1EV_Data)
         if(self.sensornum == 2):
-            return self.bank.readByte(PiStormsCom.PS_S2EV_Data) 
+            return self.bank.readByte(PiStormsCom.PS_S2EV_Data)
     def readChannelHeading(self,channel):
         if(self.sensornum == 1):
             return self.bank.readByteSigned(PiStormsCom.PS_S1EV_Data + ((channel-1)*2))
@@ -391,5 +391,5 @@ class EV3InfraredSensor(LegoSensor):
         if(remote == 4 or remote == 6 or remote == 8):
             R=-1
         return (L, R)
-            
+
 

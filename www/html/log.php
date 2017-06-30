@@ -1,7 +1,7 @@
 <?php
 /*
 # Copyright (c) 2016 mindsensors.com
-# 
+#
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 2 as
 # published by the Free Software Foundation.
@@ -15,21 +15,17 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 #
-#mindsensors.com invests time and resources providing this open source code, 
+#mindsensors.com invests time and resources providing this open source code,
 #please support mindsensors.com  by purchasing products from mindsensors.com!
 #Learn more product option visit us @  http://www.mindsensors.com/
 #
 # History:
 # Date         Author          Comments
-# July 2016    Roman Bohuk     Initial Authoring 
+# July 2016    Roman Bohuk     Initial Authoring
+# May 2017     Seth Tenembaum  Remove login requirement
 */
 
 include "api/config.php";
-
-if (!isset($_SESSION['logged_in']) || !$_SESSION['logged_in']) {
-    header('Location: ./login.php');
-    exit();
-}
 
 ?><!DOCTYPE html>
 <html>
@@ -73,14 +69,6 @@ if (!isset($_SESSION['logged_in']) || !$_SESSION['logged_in']) {
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </a>
-
-      <div class="navbar-custom-menu">
-        <ul class="nav navbar-nav">
-          <li>
-            <a href="./logout.php">Logout&nbsp;&nbsp;<i class="fa fa-sign-out"></i></a>
-          </li>
-        </ul>
-      </div>
     </nav>
   </header>
 
@@ -89,88 +77,50 @@ if (!isset($_SESSION['logged_in']) || !$_SESSION['logged_in']) {
   ?>
 
   <div class="content-wrapper">
-  
+
     <section class="content">
       <h2 class="page-header"><i class="fa fa-file-text-o"></i>&nbsp;&nbsp;PiStorms Logs</h2>
       <div class="row">
         <div class="col-md-12">
           <div class="nav-tabs-custom">
             <ul class="nav nav-tabs">
-              <li class="active"><a href="#tab_1" data-toggle="tab">psmb.out</a></li>
-              <li><a href="#tab_2" data-toggle="tab">psmd.out</a></li>
-              <li><a href="#tab_3" data-toggle="tab">sws.out</a></li>
-              <li><a href="#tab_4" data-toggle="tab">webapi.out</a></li>
-              <li><a href="#tab_5" data-toggle="tab">Apache error.log</a></li>
+              <li class="active" data-toggle="tooltip" data-trigger="hover" data-html="true" title="Your general program output (print statements) will also appear here.<br><br>Written to /var/tmp/psmb.out from /usr/local/bin/MSBrowser.py"><a href="#tab_1" data-toggle="tab">Mindsensors Browser</a></li>
+              <li data-toggle="tooltip" data-trigger="hover" title="Written to /var/tmp/psmd.out from /usr/local/bin/MSDriver.py"><a href="#tab_2" data-toggle="tab">MSDriver</a></li>
+              <li data-toggle="tooltip" data-trigger="hover" title="Written to /var/tmp/sws.out by /usr/local/bin/swarmserver"><a href="#tab_3" data-toggle="tab">Swarm server</a></li>
+              <li data-toggle="tooltip" data-trigger="hover" title="Written to /var/tmp/webapi.out from /var/www/web_api/MSWeb.py"><a href="#tab_4" data-toggle="tab">MSWeb</a></li>
+              <li data-toggle="tooltip" data-trigger="hover" data-html="true" title="Written to /var/log/apache2/error.log by /usr/sbin/apache2"><a href="#tab_5" data-toggle="tab">Apache</a></li>
               <li><a href="javascript:window.scrollTo(0,document.body.scrollHeight);">Scroll to the Bottom</a></li>
             </ul>
             <div class="tab-content">
+              <?php
+                  function printFile($file) {
+                    if (filesize($file) > 0)
+                        echo file_get_contents($file);
+                    else
+                        echo "[empty]";
+                  }
+              ?>
               <div class="tab-pane active" id="tab_1">
-                <pre><?php
-                    $data = 'empty';
-                    $nf = false;
-                    $file = fopen("/var/tmp/psmb.out", "r") or $nf = true;
-                    if (!$nf) {
-                        $data = fread($file,filesize("/var/tmp/psmb.out"));
-                        fclose($file);
-                    }
-                    echo $data;
-                ?></pre>
+                <pre><?php printFile("/var/tmp/psmb.out"); ?></pre>
               </div>
               <div class="tab-pane" id="tab_2">
-                <pre><?php
-                    $data = 'empty';
-                    $nf = false;
-                    $file = fopen("/var/tmp/psmb.out", "r") or $nf = true;
-                    if (!$nf) {
-                        $data = fread($file,filesize("/var/tmp/psmd.out"));
-                        fclose($file);
-                    }
-                    if (strlen($data) == 0) {
-                        $data = "empty";
-                    }
-                    echo $data;
-                ?></pre>
+                <pre><?php printFile("/var/tmp/psmd.out"); ?></pre>
               </div>
               <div class="tab-pane" id="tab_3">
-                <pre><?php
-                    $data = 'empty';
-                    $nf = false;
-                    $file = fopen("/var/tmp/psmb.out", "r") or $nf = true;
-                    if (!$nf) {
-                        $data = fread($file,filesize("/var/tmp/sws.out"));
-                        fclose($file);
-                    }
-                    if (strlen($data) == 0) {
-                        $data = "empty";
-                    }
-                    echo $data;
-                ?></pre>
+                <pre><?php printFile("/var/tmp/sws.out"); ?></pre>
               </div>
               <div class="tab-pane" id="tab_4">
-                <pre><?php
-                    $data = 'empty';
-                    $nf = false;
-                    $file = fopen("/var/tmp/webapi.out", "r") or $nf = true;
-                    if (!$nf) {
-                        $data = fread($file,filesize("/var/tmp/sws.out"));
-                        fclose($file);
-                    }
-                    if (strlen($data) == 0) {
-                        $data = "empty";
-                    }
-                    echo $data;
-                ?></pre>
+                <pre><?php printFile("/var/tmp/webapi.out"); ?></pre>
               </div>
               <div class="tab-pane" id="tab_5">
-                <h4>Only the last 25 lines are displayed</h4>
-                <pre id="apacheerros"></pre>
+                <pre id="apacheerrors">[empty]</pre>
               </div>
             </div>
           </div>
         </div>
 
       </div>
-      
+
 
 
     </section>
@@ -198,14 +148,8 @@ function notify(tt,tx,tp) {
     });
 }
 
-var api = "http://<?=$_SERVER['SERVER_NAME']?>:3141/";
-
-$.get(api+"firmware", function(data){
-    $(".firmware_version").html(data);
-});
-
-$.get(api+"getapacheerrors", function(data){
-    $("#apacheerros").html(data);
+$.get("http://<?=$_SERVER['SERVER_NAME']?>:3141/getapacheerrors", function(data){
+    $("#apacheerrors").html(data);
 });
 
 </script>

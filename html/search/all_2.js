@@ -1,0 +1,20 @@
+var searchData=
+[
+  ['bam1',['BAM1',['../class_pi_storms_1_1_pi_storms.html#a88a51296c290b9c107082d557b33c500',1,'PiStorms::PiStorms']]],
+  ['bam2',['BAM2',['../class_pi_storms_1_1_pi_storms.html#a117d708a1c8b309c5c0abf79be0ae268',1,'PiStorms::PiStorms']]],
+  ['bas1',['BAS1',['../class_pi_storms_1_1_pi_storms.html#a0d9219a6011de41aebbe468db4443798',1,'PiStorms::PiStorms']]],
+  ['bas2',['BAS2',['../class_pi_storms_1_1_pi_storms.html#a0803e3e86afdf243abea0960d2774f73',1,'PiStorms::PiStorms']]],
+  ['battvoltage',['battVoltage',['../classmindsensors_1_1_m_m_x.html#a0a8e77271e3096299a7c4d2ea589f5d6',1,'mindsensors.MMX.battVoltage()'],['../classmindsensors_1_1_n_x_t_s_e_r_v_o.html#aca10a8a7ffc9c298623b96c717814dc1',1,'mindsensors.NXTSERVO.battVoltage()'],['../class_pi_storms_1_1_pi_storms.html#a512312b769903f6444924ccd4158fee9',1,'PiStorms.PiStorms.battVoltage()']]],
+  ['bbm1',['BBM1',['../class_pi_storms_1_1_pi_storms.html#a9540727dd69e159a952f22ec44253923',1,'PiStorms::PiStorms']]],
+  ['bbm2',['BBM2',['../class_pi_storms_1_1_pi_storms.html#a2b480ae0719bac7fb22a1eda01457593',1,'PiStorms::PiStorms']]],
+  ['bbs1',['BBS1',['../class_pi_storms_1_1_pi_storms.html#abdba0e167d8733524a3b730518880647',1,'PiStorms::PiStorms']]],
+  ['bbs2',['BBS2',['../class_pi_storms_1_1_pi_storms.html#aa362263aaaca6896d820a4dc6a90116b',1,'PiStorms::PiStorms']]],
+  ['bind_5fled_5foff_5ffunc',['bind_led_off_func',['../class_touch_screen_input_1_1_touch_screen_input.html#aba86a2e84fe2ba6078da4cb56f4df86d',1,'TouchScreenInput::TouchScreenInput']]],
+  ['bind_5fled_5fon_5ffunc',['bind_led_on_func',['../class_touch_screen_input_1_1_touch_screen_input.html#aa127d1f194b9cf53ea47026df56ad2b1',1,'TouchScreenInput::TouchScreenInput']]],
+  ['black_5fcal',['Black_Cal',['../classmindsensors_1_1_l_i_n_e_l_e_a_d_e_r.html#ae073aa06298e8a5069d1049bfd25fc53',1,'mindsensors.LINELEADER.Black_Cal()'],['../classmindsensors_1_1_l_s_a.html#a3cad5e147faa90090c805b504ac4a95f',1,'mindsensors.LSA.Black_Cal()'],['../class_ms_devices_1_1_line_leader.html#a1833005a988d2a11f8970c4d4e8032d2',1,'MsDevices.LineLeader.Black_Cal()'],['../class_ms_devices_1_1_light_sensor_array.html#a042fa040da6189524548b0abb47cf6ea',1,'MsDevices.LightSensorArray.Black_Cal()']]],
+  ['blob',['BLOB',['../class_ms_devices_1_1_b_l_o_b.html',1,'MsDevices']]],
+  ['blob',['BLOB',['../classmindsensors_1_1_b_l_o_b.html',1,'mindsensors']]],
+  ['brake',['brake',['../classmindsensors_1_1_m_m_x.html#a50494fc688f626655cd77cf392bd3308',1,'mindsensors.MMX.brake()'],['../class_pi_storms_1_1_pi_storms_motor.html#af7832088f66a7c023428b081f794145b',1,'PiStorms.PiStormsMotor.brake()']]],
+  ['brakesync',['brakeSync',['../class_pi_storms_1_1_pi_storms_motor.html#ae9f544bbb820a901784d123c493bca27',1,'PiStorms::PiStormsMotor']]],
+  ['broadcast',['broadcast',['../classscratch_1_1_scratch.html#a5ca7d8b9ef5c1c8b3ccb43c68656e472',1,'scratch::Scratch']]]
+];

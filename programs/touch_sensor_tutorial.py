@@ -14,7 +14,7 @@ import os,sys,inspect,time
 #
 currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
 parentdir = os.path.dirname(currentdir)
-sys.path.insert(0,parentdir) 
+sys.path.insert(0,parentdir)
 
 #
 # PiStorms library import.
@@ -48,7 +48,7 @@ while(not doExit):
     numTouch = psm.BBS1.numTouchesEV3()
     psm.screen.termReplaceLastLine(str(touch) + "  " + str(numTouch))
 
-    if(psm.screen.checkButton(0,0,320,320)):
+    if(psm.screen.isTouched()):
         psm.screen.termPrintln("")
         psm.screen.termPrintln("Exiting to menu")
         doExit = True

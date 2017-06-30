@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 #
 # Copyright (c) 2015 mindsensors.com
-# 
+#
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 2 as
 # published by the Free Software Foundation.
@@ -15,7 +15,7 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 #
-#mindsensors.com invests time and resources providing this open source code, 
+#mindsensors.com invests time and resources providing this open source code,
 #please support mindsensors.com  by purchasing products from mindsensors.com!
 #Learn more product option visit us @  http://www.mindsensors.com/
 #
@@ -27,9 +27,8 @@ import os,sys,inspect,time,thread
 
 currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
 parentdir = os.path.dirname(currentdir)
-sys.path.insert(0,parentdir) 
+sys.path.insert(0,parentdir)
 from PiStorms import PiStorms
-print "running program"
 psm = PiStorms()
 version = float(psm.GetFirmwareVersion()[1:5])
 
@@ -43,13 +42,13 @@ if(version < 2.05):
     exit = True
 else:
     exit = False
-    psm.screen.termPrintAt(8, "Press Go button to exit")  
+    psm.screen.termPrintAt(8, "Press Go button to exit")
 
 d1 = 0.2
 d2 = 0.2
 oldKeyPressCount = psm.getKeyPressCount()
 while(not exit):
-    
+
     psm.led(2,0,255,0)
     time.sleep(d1)
     psm.led(1,0,255,0)
@@ -72,4 +71,4 @@ while(not exit):
         psm.led(2,0,0,0)
         time.sleep(1)
         exit = True
-        
+

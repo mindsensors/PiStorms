@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 #
 # Copyright (c) 2016 mindsensors.com
-# 
+#
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 2 as
 # published by the Free Software Foundation.
@@ -15,7 +15,7 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 #
-#mindsensors.com invests time and resources providing this open source code, 
+#mindsensors.com invests time and resources providing this open source code,
 #please support mindsensors.com  by purchasing products from mindsensors.com!
 #Learn more product option visit us @  http://www.mindsensors.com/
 #
@@ -26,7 +26,6 @@
 from PiStorms import PiStorms
 from LegoDevices import *
 import time
-print "running program"
 psm = PiStorms()
 
 m = ["EV3GyroSensor-Demo", "Connect EV3 Gyro sensor",
@@ -59,22 +58,22 @@ while(not doExit):
     else:
         value = gyro.readValue()
         msg = mode+":  " + str(value)
-        
+
 
     if (oldValue != value):
-        psm.screen.termPrintAt(4, msg)     
+        psm.screen.termPrintAt(4, msg)
     if(psm.isKeyPressed() == True):
         psm.screen.clearScreen()
         gyro = EV3GyroSensor("BAS1", 9) #Turn off detecting
         psm.screen.termPrintln("")
         psm.screen.termPrintln("Exiting to menu")
-        doExit = True 
+        doExit = True
     change = 0
-    if(psm.screen.checkButton(0,0,320,320)): #Change mode if screen is tapped
+    if(psm.screen.isTouched()): #Change mode if screen is tapped
         count = count + 1
         if ( count > 1):
             count = 0
-        psm.screen.termPrintAt(4, "Switching...") 
+        psm.screen.termPrintAt(4, "Switching...")
         change = 1
         time.sleep(.5)
 

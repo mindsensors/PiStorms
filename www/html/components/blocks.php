@@ -1,7 +1,7 @@
 <?php
 /*
 # Copyright (c) 2016 mindsensors.com
-# 
+#
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 2 as
 # published by the Free Software Foundation.
@@ -15,14 +15,14 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 #
-#mindsensors.com invests time and resources providing this open source code, 
+#mindsensors.com invests time and resources providing this open source code,
 #please support mindsensors.com  by purchasing products from mindsensors.com!
 #Learn more product option visit us @  http://www.mindsensors.com/
 #
 # History:
 # Date           Author          Comments
-# August 2016    Roman Bohuk     Initial Authoring 
-# October 2016   Seth Tenembaum  Add showMessage 
+# August 2016    Roman Bohuk     Initial Authoring
+# October 2016   Seth Tenembaum  Add showMessage
 # January 2017   Roman Bohuk     Add support for SumoEyes, LineLeader, LightSensorArray
 
 */
@@ -327,11 +327,11 @@
       </block>
     </category>
     <sep></sep>
-    
+
     <category name="Custom Vars" colour="330" custom="VARIABLE"></category>
     <category name="Functions" colour="290" custom="PROCEDURE"></category>
     <sep></sep>
-    
+
     <category name="Motors" colour="240">
       <block type="motors_setspeed">
         <value name="SPEED">
@@ -790,17 +790,17 @@
         </value>
       </block>
     </category>
-    
+
     <category name="LED" colour="140">
       <block type="led_control"></block>
     </category>
-    
+
     <category name="Buttons" colour="200">
       <block type="system_keypressed"></block>
       <block type="system_getkeypresscount"></block>
       <block type="system_resetkeypresscount"></block>
     </category>
-        
+
     <category name="System" colour="5">
       <block type="system_print">
         <value name="TEXT">

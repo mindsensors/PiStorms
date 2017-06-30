@@ -1,7 +1,7 @@
 <?php
 /*
 # Copyright (c) 2016 mindsensors.com
-# 
+#
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 2 as
 # published by the Free Software Foundation.
@@ -15,21 +15,17 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 #
-#mindsensors.com invests time and resources providing this open source code, 
+#mindsensors.com invests time and resources providing this open source code,
 #please support mindsensors.com  by purchasing products from mindsensors.com!
 #Learn more product option visit us @  http://www.mindsensors.com/
 #
 # History:
 # Date         Author          Comments
-# July 2016    Roman Bohuk     Initial Authoring 
+# July 2016    Roman Bohuk     Initial Authoring
+# May 2017     Seth Tenembaum  Remove login requirement
 */
 
 include "api/config.php";
-
-if (!isset($_SESSION['logged_in']) || !$_SESSION['logged_in']) {
-    header('Location: ./login.php');
-    exit();
-}
 
 ?><!DOCTYPE html>
 <html>
@@ -97,14 +93,6 @@ if (!isset($_SESSION['logged_in']) || !$_SESSION['logged_in']) {
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </a>
-
-      <div class="navbar-custom-menu">
-        <ul class="nav navbar-nav">
-          <li>
-            <a href="./logout.php">Logout&nbsp;&nbsp;<i class="fa fa-sign-out"></i></a>
-          </li>
-        </ul>
-      </div>
     </nav>
   </header>
 
@@ -116,7 +104,7 @@ if (!isset($_SESSION['logged_in']) || !$_SESSION['logged_in']) {
     <section class="content">
 
       <div class="row">
-        
+
         <div class="col-md-4 col-sm-6 col-xs-12">
           <div class="box box-danger">
             <div class="box-header">
@@ -159,7 +147,7 @@ if (!isset($_SESSION['logged_in']) || !$_SESSION['logged_in']) {
                   <input id="green_c1" type="text" value="" class="slider form-control" data-slider-min="0" data-slider-max="255" data-slider-step="1" data-slider-value="127" data-slider-orientation="horizontal" data-slider-selection="before" data-slider-tooltip="show" data-slider-id="green">
 
                   <input id="blue_c1" type="text" value="" class="slider form-control" data-slider-min="0" data-slider-max="255" data-slider-step="1" data-slider-value="127" data-slider-orientation="horizontal" data-slider-selection="before" data-slider-tooltip="show" data-slider-id="blue">
-                  
+
                   <div class="form-group">
                     <input type="text" id="color1" class="form-control demo" value="#7F7F7F">
                   </div>
@@ -167,7 +155,7 @@ if (!isset($_SESSION['logged_in']) || !$_SESSION['logged_in']) {
             </div>
           </div>
         </div>
-        
+
         <div class="col-md-4 col-sm-6 col-xs-12">
           <div class="box box-danger">
             <div class="box-header">
@@ -179,16 +167,16 @@ if (!isset($_SESSION['logged_in']) || !$_SESSION['logged_in']) {
                   <input id="green_c2" type="text" value="" class="slider form-control" data-slider-min="0" data-slider-max="255" data-slider-step="1" data-slider-value="127" data-slider-orientation="horizontal" data-slider-selection="before" data-slider-tooltip="show" data-slider-id="green">
 
                   <input id="blue_c2" type="text" value="" class="slider form-control" data-slider-min="0" data-slider-max="255" data-slider-step="1" data-slider-value="127" data-slider-orientation="horizontal" data-slider-selection="before" data-slider-tooltip="show" data-slider-id="blue">
-                  
+
                   <div class="form-group">
                     <input type="text" id="color2" class="form-control demo" value="#7F7F7F">
                   </div>
-                  
+
                   <div class="text-center"><button class="btn btn-flat btn-danger" style="margin-top:5px" onclick="led(2)">Go!</button></div>
             </div>
           </div>
         </div>
-        
+
       </div>
 
     </section>
@@ -236,12 +224,12 @@ $('#blue_c2').slider({});
 $('#green_c2').slider({});
 
 function update_slider_1() {
-    var hex = rgbToHex($('#red_c1').slider('getValue'), $('#green_c1').slider('getValue'), $('#blue_c1').slider('getValue'));    
+    var hex = rgbToHex($('#red_c1').slider('getValue'), $('#green_c1').slider('getValue'), $('#blue_c1').slider('getValue'));
     $('#color1').minicolors('value', hex);
 }
 
 function update_slider_2() {
-    var hex = rgbToHex($('#red_c2').slider('getValue'), $('#green_c2').slider('getValue'), $('#blue_c2').slider('getValue'));    
+    var hex = rgbToHex($('#red_c2').slider('getValue'), $('#green_c2').slider('getValue'), $('#blue_c2').slider('getValue'));
     $('#color2').minicolors('value', hex);
 }
 
@@ -303,11 +291,11 @@ $('#color2').minicolors({
 
 <script src="./assets/nipple.js"></script>
 <script>
-    
+
     function n(minObserver,maxObserved,minNeeded,maxNeeded,value) {
         return (maxNeeded-minNeeded)/(maxObserved)*(value-maxObserved)+maxNeeded;
     }
-    
+
     var manager = nipplejs.create({
         zone: document.getElementById('static'),
         mode: 'static',
@@ -316,9 +304,9 @@ $('#color2').minicolors({
         size: 128,
         catchDistance: 10
     });
-    
+
     var movecnt = 0;
-    
+
     var lt = 0;
     manager.on('move dir start end', function (evt, data) {
       var r = 0;

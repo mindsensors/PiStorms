@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 #
 # Copyright (c) 2015 mindsensors.com
-# 
+#
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 2 as
 # published by the Free Software Foundation.
@@ -15,7 +15,7 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 #
-#mindsensors.com invests time and resources providing this open source code, 
+#mindsensors.com invests time and resources providing this open source code,
 #please support mindsensors.com  by purchasing products from mindsensors.com!
 #Learn more product option visit us @  http://www.mindsensors.com/
 #
@@ -34,14 +34,13 @@ def get_ip_address(ifname):
         0x8915,  # SIOCGIFADDR
         struct.pack('256s', ifname[:15])
     )[20:24])
-    
-    
+
+
 
 currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
 parentdir = os.path.dirname(currentdir)
-sys.path.insert(0,parentdir) 
+sys.path.insert(0,parentdir)
 from PiStorms import PiStorms
-print "running program"
 psm = PiStorms()
 
 psm.screen.termPrintln("                     About Me")
@@ -67,17 +66,17 @@ psm.screen.termPrintAt(4," Hostname :     "   + socket.gethostname() )
 voltVal = psm.battVoltage()
 psm.screen.termPrintAt(5," Battery :     "   + str(voltVal)+"V" )
 while(not exit):
-   
+
     try:
         psm.screen.termPrintAt(6," eth0 :     "   + get_ip_address('eth0'))
     except:
         psm.screen.termPrintAt(6," eth0 :     not present")
-    try:    
+    try:
         psm.screen.termPrintAt(7," wlan0 :    "+ get_ip_address('wlan0'))
     except:
         psm.screen.termPrintAt(7," wlan0 :     not present")
-   
-    if( psm.isKeyPressed() == True or psm.screen.checkButton(0,0,320,320)):
+
+    if( psm.isKeyPressed() == True or psm.screen.isTouched()):
         psm.screen.termPrintln("")
         psm.screen.termPrintln("Exiting to menu")
         exit = True

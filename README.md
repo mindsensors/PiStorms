@@ -1,28 +1,26 @@
 # PiStorms
 
-To install and run this repo on your Pi,<br>
+The [PiStorms](http://www.mindsensors.com/content/78-pistorms-lego-interface) is a robotics platform. It enables you to create robots using LEGO Mindstorms parts, and control it on a Raspberry Pi with Python. Besides its 4 motor ports, 4 sensor ports, and all the benefits of the Raspberry Pi, the PiStorms lets you do even more. It has a touchscreen for easy visual feedback and touch input. It has a convenient web interface to program and control the device, even accessible on mobile devices.
 
-1) Install latest Raspbian image on a SD Card (use SD Card with 8 GB or more).<br>
-2) Insert this SD card in your Raspberry Pi, affix Raspberry Pi on PiStorms frame and attach PiStorms to Raspberry Pi <br>
-   for details of assembly instructions, visit: http://www.mindsensors.com/content/72-getting-started-with-pistorms<br>
-3) Start your Raspberry Pi and login to your Pi as user 'pi'.<br>
-4) Run raspi-config and 'expand the file system'<br>
-5) Configure your Pi to connect to Internet (using wired ethernet or wifi)<br>
-   to learn how to do this, visit: http://www.mindsensors.com/blog/how-to/connecting-raspberry-pi-to-wifi<br>
-6) Download and configure this repo on your Pi with following commands<br>
-<br>
-<pre>
-   $ git clone https://github.com/mindsensors/PiStorms.git
-   $ cd PiStorms/setup
-   $ chmod +x setup.sh
-   $ ./setup.sh
-</pre>
+We have many [blog posts](http://www.mindsensors.com/blog/PiStorms) on our website about the PiStorms. These include tutorials and project ideas. There is also a handy [getting started guide](http://www.mindsensors.com/content/72-getting-started-with-pistorms).
 
-setup.sh will take several minutes to download files, and configure<br>
-When it configures VNC server, it would ask for password, please provide a password that you will remember (e.g. raspberry).<br>Later, you would use this password to login to your Pi from a VNC client.
-<br>
-<br>
-As a next step, follow the examples from PiStorms/programs folder. 
+A [prepared SD card image](http://www.mindsensors.com/largefiles/pistorms.zip) is available. It's based on Raspbian and has everything you need to use your PiStorms.
 
-To write your own programs, start with a tutorial here: http://www.mindsensors.com/blog/how-to/pistorms-python-programming-tutorial<br>
-and then refer to online API reference here: http://www.mindsensors.com/reference/PiStorms/html/
+If you would might rather add the PiStorms code and libraries to your existing Raspberry Pi, please follow these steps:
+1. Install latest Raspbian image on a microSD card (use an 8 GB or larger microSD card). Insert this microSD card in your Raspberry Pi 3.
+2. Assembly the frame around your Raspberry Pi and then attach the PiStorms. For details, see this [blog post](http://www.mindsensors.com/blog/how-to/pistorms-frame-assembly).
+3. Start your Raspberry Pi and log in with the username `pi` and the password `raspberry` (Raspbian defaults).
+4. Run [`sudo raspi-config`](https://www.raspberrypi.org/documentation/configuration/raspi-config.md) and expand the file system.
+5. Configure your Raspberry Pi to connect to Internet via WiFi or Ethernet. For details, see this [blog post](http://www.mindsensors.com/blog/how-to/connecting-raspberry-pi-to-wifi).
+6. Run the following commands to download and configure this repository
+```
+$ git clone https://github.com/mindsensors/PiStorms.git
+$ PiStorms/setup/setup.sh
+```
+
+The `setup.sh` script will take several minutes to download files and configure your system.
+When it configures the VNC server, it might ask for a password. If so please enter a password you will remember, such as `raspberry`. You will need this later to login to your Raspberry Pi from a VNC client.
+
+Now you can browse the examples in the PiStorms/programs folder.
+
+To write your own Python programs, start with this [tutorial](http://www.mindsensors.com/blog/how-to/pistorms-python-programming-tutorial), then refer to the [API reference](http://www.mindsensors.com/reference/PiStorms/html/).

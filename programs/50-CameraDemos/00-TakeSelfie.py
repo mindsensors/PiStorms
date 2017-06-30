@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 #
 # Copyright (c) 2015 mindsensors.com
-# 
+#
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 2 as
 # published by the Free Software Foundation.
@@ -15,13 +15,13 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 #
-#mindsensors.com invests time and resources providing this open source code, 
+#mindsensors.com invests time and resources providing this open source code,
 #please support mindsensors.com  by purchasing products from mindsensors.com!
 #Learn more product option visit us @  http://www.mindsensors.com/
 #
 # History:
 # Date            Author      Comments
-# July 7, 2016    Yug Rao     Initial Authoring 
+# July 7, 2016    Yug Rao     Initial Authoring
 
 
 from picamera.array import PiRGBArray
@@ -32,7 +32,7 @@ import cv2
 import imutils
 currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
 parentdir = os.path.dirname(currentdir)
-sys.path.insert(0,parentdir) 
+sys.path.insert(0,parentdir)
 from PiStorms import PiStorms
 psm = PiStorms()
 
@@ -53,10 +53,10 @@ while not exitNow:
 		time.sleep(1)
 		psm.screen.termPrintAt(9, "Touch the screen to exit")
 
-	if (psm.screen.checkButton(0,0,320,320)):
+	if (psm.screen.isTouched()):
 			psm.screen.clearScreen()
 			psm.screen.termPrintAt(9,"Exiting to menu")
-			time.sleep(0.5) 
-			exitNow = True 
+			time.sleep(0.5)
+			exitNow = True
 
 

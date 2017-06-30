@@ -22,68 +22,50 @@
 # History:
 # Date      Author      Comments
 # Oct 2015  Michael     Initial Authoring
+# Jun 2017  Seth        Simplification
 
-import os,sys,inspect,time,thread
-import socket,fcntl,struct,ms_explorerlib    
+import sys
 
-currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
-parentdir = os.path.dirname(currentdir)
-sys.path.insert(0,parentdir) 
+from mindsensors_i2c import mindsensors_i2c
+
 from PiStorms import PiStorms
+psm = PiStorms("Explorer")
 
-print "running program"
-psm = PiStorms()
-psm.screen.termPrintln("Connect your I2C device to BAS1")
-psm.screen.termPrintln("and click Explore")
-psm.screen.drawButton(75, 95, width = 85, height = 40, text="Explore", display=False)
-psm.screen.drawButton(175, 95, width = 60, height = 40, text="Exit", display=True)
+psm.BAS1.activateCustomSensorI2C()
+psm.BAS2.activateCustomSensorI2C()
 
-exit = False
-lastled = 0
+i2c_all = []
+for addr in range(0x00,0x34,2) + range(0x38,0xEF,2):
+    i2c_all.append(mindsensors_i2c(addr>>1))
 
-def explore():
-    time.sleep(3)
-    addr = 0x00     # DO NOT change this address!!!
-    i2c = ms_explorerlib.Explorer(addr)
-    found = i2c.ping(0x00)  
-    # Checks for connection on all I2C addresses until connection is found
-    count = 0 
-    while found == -1:     
-        if (addr < 0xef):
-            addr = addr + 1
-            count = count + 1
-            if (addr != 0x34 and addr != 0x35 and addr != 0x36 and addr != 0x37):
-                i2c = ms_explorerlib.Explorer(addr)
-                found = i2c.ping(0x00)
-            if (count > 2000):
-                found = 5
-        else:
-            addr = 0x00   
-    if (found == 5):
-        psm.screen.termPrintAt(5, "No Device found!")
-        psm.screen.termPrintAt(6, "Click Exit to return to main menu")
+def ping(i2c):
+    return i2c.readByte(0x00) != None
+
+while not psm.isKeyPressed():
+    found = filter(ping, i2c_all)
+
+    psm.screen.terminalBuffer = [""]*20
+    psm.screen.terminalBuffer[0] = "Found {} I2C device{}." \
+            .format(len(found), "s" if len(found) != 1 else "")
+    psm.screen.terminalBuffer[8] = "Press GO to quit"
+
+    if len(found) > 1:
+        for i,dev in enumerate(found):
+            psm.screen.terminalBuffer[i+2] = "0x{:02X}: {}" \
+                    .format(dev.address*2, dev.GetDeviceId().rstrip("\0"))
+        psm.screen.refresh()
+    elif len(found) == 1:
+        dev = found[0]
+        psm.screen.terminalBuffer[2] = "7 bit address: 0x{:02X}".format(dev.address*2)
+        psm.screen.terminalBuffer[3] = "8 bit address: 0x{:02X}".format(dev.address)
+        psm.screen.terminalBuffer[4] = "FW Version: {}".format(dev.GetFirmwareVersion().rstrip("\0"))
+        psm.screen.terminalBuffer[5] = "Vendor ID: {}".format(dev.GetVendorName().rstrip("\0"))
+        psm.screen.terminalBuffer[6] = "Device ID: {}".format(dev.GetDeviceId().rstrip("\0"))
+        psm.screen.refresh()
     else:
-        psm.screen.termPrintAt(5, "7 bit address: " + str(hex(addr/2)))      
-        psm.screen.termPrintAt(6, "8 bit address: " + str(hex(addr)))         
-        psm.screen.termPrintAt(7, "FW Version: " + i2c.GetFirmwareVersion()[:5])
-        psm.screen.termPrintAt(8, "Vendor ID: " + i2c.GetVendorName())
-        device = i2c.GetDeviceId()
-        pos = device.find('\0') 
-        psm.screen.termPrintAt(9, "Device ID: " + i2c.GetDeviceId()[:pos])
-
-while(not exit):
-    explorer = psm.screen.checkButton(75, 95,width=85,height=40)
-    bye = psm.screen.checkButton(175, 95,width=60,height=40)
-    if(explorer == True):
-        psm.screen.termPrintAt(5, "")
-        psm.screen.termPrintAt(6, "")
-        psm.screen.termPrintAt(7, "")
-        psm.screen.termPrintAt(8, "")
-        psm.screen.termPrintAt(9, "")
-        psm.screen.termPrintAt(5, "Searching for i2c device...")        
-        psm.BAS1.activateCustomSensorI2C()
-        explore()
-    if(bye == True):
-        psm.screen.termPrintAt(5, "Exiting to menu")
-        exit = True
-    time.sleep(.1)
+        psm.screen.terminalBuffer[2] = "Connect an I2C sensor to either"
+        psm.screen.terminalBuffer[3] = "sensor port on bank A."
+        psm.screen.terminalBuffer[5] = "Searching..."
+        psm.screen.refresh()
+        psm.screen.drawAutoText("(here) -->", 235, 110, fill=(0,200,0), display=False)
+        psm.screen.drawAutoText("(here) -->", 235,  36, fill=(0,200,0))

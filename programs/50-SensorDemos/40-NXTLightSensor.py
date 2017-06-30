@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 #
 # Copyright (c) 2016 mindsensors.com
-# 
+#
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 2 as
 # published by the Free Software Foundation.
@@ -15,7 +15,7 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 #
-#mindsensors.com invests time and resources providing this open source code, 
+#mindsensors.com invests time and resources providing this open source code,
 #please support mindsensors.com  by purchasing products from mindsensors.com!
 #Learn more product option visit us @  http://www.mindsensors.com/
 #
@@ -26,11 +26,10 @@
 import time
 from LegoDevices import *
 from PiStorms import PiStorms
-print "running program"
 psm = PiStorms()
 
 m = ["NXTLightSensor-Demo", "Connect NXT Light sensor to BAS1",
- "and Press OK to continue.", 
+ "and Press OK to continue.",
  "Then move colored objects in front",
  "of Color sensor"]
 psm.screen.askQuestion(m,["OK"])
@@ -59,26 +58,26 @@ while(not doExit):
         elif (count == 1):
             colorSensor.setType(LegoSensor.PS_SENSOR_TYPE_LIGHT_AMBIENT)
             unit = "(ambient)"
-        
+
         time.sleep(.2)
     else:
         value = colorSensor.getValue()
         msg = mode+":  " + str(value)+" "+unit
-        
+
 
     if (oldValue != value):
-        psm.screen.termPrintAt(4, msg)     
+        psm.screen.termPrintAt(4, msg)
     if(psm.isKeyPressed() == True):
         psm.screen.clearScreen()
         colorSensor = NXTLightSensor("BAS1", 9) #Turn off detecting
         psm.screen.termPrintln("")
         psm.screen.termPrintln("Exiting to menu")
-        doExit = True 
+        doExit = True
     change = 0
-    if(psm.screen.checkButton(0,0,320,320)): #Change mode if screen is tapped
+    if(psm.screen.isTouched()): #Change mode if screen is tapped
         count = count + 1
         if ( count > 1):
             count = 0
-        psm.screen.termPrintAt(4, "Switching...") 
+        psm.screen.termPrintAt(4, "Switching...")
         change = 1
         time.sleep(.5)

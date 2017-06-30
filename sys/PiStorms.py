@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 #
 # Copyright (c) 2015 mindsensors.com
-# 
+#
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 2 as
 # published by the Free Software Foundation.
@@ -15,23 +15,23 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 #
-#mindsensors.com invests time and resources providing this open source code, 
+#mindsensors.com invests time and resources providing this open source code,
 #please support mindsensors.com  by purchasing products from mindsensors.com!
 #Learn more product option visit us @  http://www.mindsensors.com/
 #
 # History:
 # Date      Author      Comments
-# July 2015  Henry     Initial Authoring 
+# July 2015  Henry     Initial Authoring
 # Oct. 2015  Nitin     Editing and improved functionality
 # Oct. 2015  Michael   Comments and documentation
 
 ## @file PiStorms.py
 #  PiStorms.py defines the main interfaces used in the PiStorms library.
-#  @mainpage PiStorms Library Reference
+#  @mainpage %PiStorms Library Reference
 #  @section intro_sec  Introduction
-#  PiStorms library provides interfaces to use PiStorms by mindsensors.com on Raspberry Pi.
+#  %PiStorms library provides interfaces to use %PiStorms by mindsensors.com on Raspberry Pi.
 #
-#  At the time of this writing, PiStorms and this library can be used with the following boards:
+#  At the time of this writing, %PiStorms and this library can be used with the following boards:
 #
 #    <b>Supported Raspberry Pi boards:</b>\n
 #    - Raspberry Pi 1 Model A+
@@ -39,15 +39,23 @@
 #    - Raspberry Pi 2 model B
 #    - Raspberry Pi 3 model B
 #
+#  @section shortcuts  Quick Links
+#  Here are some shortcuts to common documentation you might be looking for:
+#    - The main %PiStorms class: PiStorms.PiStorms
+#    - Sensors PiStorms.PiStormsSensor and motors PiStorms.PiStormsMotor
+#    - Drawing on the screen: mindsensorsUI.mindsensorsUI
+#
 #  @section more_info  More Information
-#  More information about PiStorms is available at: http://www.mindsensors.com/stem-education/13-pistorms-base-kit
+#  More information about %PiStorms is available at: http://www.mindsensors.com/stem-education/13-pistorms-base-kit
+#
+#  Many blog posts with instructions and example projects can be found at: http://www.mindsensors.com/blog/PiStorms
 #
 #  Online documentation of this Library Reference is available at:
 #  http://www.mindsensors.com/reference/PiStorms/html/
 #  (Note however, the online version may not match exactly with the library files you have installed on your computer).
 #
 #  @section install_sec Installation Instructions
-#  To download PiStorms libary and features to your Raspberry Pi:\n
+#  To download %PiStorms libary and features to your Raspberry Pi:\n
 #  follow instructions from following post:
 #  http://www.mindsensors.com/blog/news/upgrade-your-pistorms-software-tutorial
 #
@@ -56,8 +64,8 @@
 #  <b>Fork from GitHub:</b> https://github.com/mindsensors/PiStorms<br>
 #  <br>
 #  To include your changes in main distribution:<br>
-#     - fork the above mentioned repo, 
-#     - commit your changes to your fork and 
+#     - fork the above mentioned repo,
+#     - commit your changes to your fork and
 #     - create a merge request.
 #
 #
@@ -69,13 +77,12 @@ import time,sys,os,ctypes,math,random
 ## @package PiStorms
 #  This module contains classes and functions necessary for the use of PiStorms from mindsensors.com
 
-Dev_PiStorms = 1
 
 ## PiStormsSensor: This class provides functions for configuration, reading, and writing of sensors for use with PiStorms.
 #  @remark
 #  There is no need to initialize this class directly. This is done automatically during the PiStorms init.
 class PiStormsSensor:
-    
+
     ## Constant to specify no color
     PS_SENSOR_COLOR_NONE = 0
     ## Constant to specify black color
@@ -92,433 +99,433 @@ class PiStormsSensor:
     PS_SENSOR_COLOR_WHITE = 6
     ## Constant to specify brown color
     PS_SENSOR_COLOR_BROWN = 7
-    
-    ### @cond 
+
+    ### @cond Doxygen_ignore_this
     ## Initialize the PiStorms sensor port
     #  @param self The object pointer.
     #  @param sensor The sensor port to use.
     def __init__(self,sensor):
         self.pssensor = sensor
     ### @endcond
-    
+
     ## Returns the EV3 Touch Sensor touch value
     #  @param self The object pointer.
     #  @remark
     #  To use this function in your program:
     #  @code
-    #  from PiStorms import PiStorms 
+    #  from PiStorms import PiStorms
     #  ...
     #  psm = PiStorms()
     #  touch = psm.BAS1.isTouchedEV3()
     #  if(touch == True ):
     #      # do some task
-    #  @endcode      
+    #  @endcode
     def isTouchedEV3(self):
         return self.pssensor.isTouchedEV3()
-        
+
     ## Returns the EV3 Touch Sensor touch count
     #  @param self The object pointer.
     #  @remark
     #  To use this function in your program:
     #  @code
-    #  from PiStorms import PiStorms 
+    #  from PiStorms import PiStorms
     #  ...
     #  psm = PiStorms()
     #  touchCount = psm.BAS1.numTouchesEV3()
     #  if(touchCount == 5):
     #      #do some task
-    #  @endcode 
+    #  @endcode
     def numTouchesEV3(self):
         return self.pssensor.numTouchesEV3()
-    
+
     ## Resets the EV3 Touch Sensor touch count to zero
     #  @param self The object pointer.
     #  @remark
     #  To use this function in your program:
     #  @code
-    #  from PiStorms import PiStorms 
+    #  from PiStorms import PiStorms
     #  ...
     #  psm = PiStorms()
     #  psm.BAS1.resetTouchesEV3()
-    #  @endcode 
+    #  @endcode
     def resetTouchesEV3(self):
         self.pssensor.resetTouchesEV3()
-    
+
     ## Returns the EV3 Infrared Sensor distance value
     #  @param self The object pointer.
     #  @remark
     #  To use this function in your program:
     #  @code
-    #  from PiStorms import PiStorms 
+    #  from PiStorms import PiStorms
     #  ...
     #  psm = PiStorms()
     #  dist = psm.BAS1.distanceIREV3()
     #  if(dist < 30 ):
     #      # do some task
-    #  @endcode 
+    #  @endcode
     def distanceIREV3(self):
         return self.pssensor.distanceIREV3()
-    
+
     ## Returns the EV3 Infrared Sensor heading value
     #  @param self The object pointer.
     #  @param channel The channel of your remote control or other IR device.
     #  @remark
     #  To use this function in your program:
     #  @code
-    #  from PiStorms import PiStorms 
+    #  from PiStorms import PiStorms
     #  ...
     #  psm = PiStorms()
     #  heading = psm.BAS1.headingIREV3(1)
     #  if(heading > 10 ):
     #      # do some task
-    #  @endcode 
+    #  @endcode
     def headingIREV3(self,channel):
         return self.pssensor.headingIREV3(channel)
-    
+
     ## Returns the LEGO IR remote distance value
     #  @param self The object pointer.
     #  @param channel The channel of your remote control or other IR device.
     #  @remark
     #  To use this function in your program:
     #  @code
-    #  from PiStorms import PiStorms 
+    #  from PiStorms import PiStorms
     #  ...
     #  psm = PiStorms()
     #  remDist = psm.BAS1.distanceRemoteIREV3(1)
     #  if(remDist < 50 ):
     #      # do some task
-    #  @endcode 
+    #  @endcode
     def distanceRemoteIREV3(self,channel):
         return self.pssensor.distanceRemoteIREV3(channel)
-    
+
     ## Returns the left button status of the LEGO IR remote (1 = Forward, 0 = Not pressed, -1 = Backwards)
     #  @param self The object pointer.
-    #  @param channel The channel of your remote control or other IR device. 
+    #  @param channel The channel of your remote control or other IR device.
     #  @remark
     #  To use this function in your program:
     #  @code
-    #  from PiStorms import PiStorms 
+    #  from PiStorms import PiStorms
     #  ...
     #  psm = PiStorms()
     #  remLeftButton = psm.BAS1.remoteLeft(1)
     #  if(remLeftButton == 1 ):
     #      # do some task
-    #  @endcode 
+    #  @endcode
     def remoteLeft(self,channel):
         return self.pssensor.remoteLeft(channel)
-    
+
     ## Returns the right button status of the LEGO IR remote (1 = Forward, 0 = Not pressed, -1 = Backwards)
     #  @param self The object pointer.
     #  @param channel The channel of your remote control or other IR device.
     #  @remark
     #  To use this function in your program:
     #  @code
-    #  from PiStorms import PiStorms 
+    #  from PiStorms import PiStorms
     #  ...
     #  psm = PiStorms()
     #  remRightButton = psm.BAS1.remoteRight(1)
     #  if(remRightButton == 1 ):
     #      # do some task
-    #  @endcode 
+    #  @endcode
     def remoteRight(self,channel):
         return self.pssensor.remoteRight(channel)
-    
+
     ## Returns the EV3 Ultrasonic Sensor distance value in millimeters
     #  @param self The object pointer.
     #  @remark
     #  To use this function in your program:
     #  @code
-    #  from PiStorms import PiStorms 
+    #  from PiStorms import PiStorms
     #  ...
     #  psm = PiStorms()
     #  dist = psm.BAS1.distanceUSEV3()
     #  if(dist < 60 ):
     #      # do some task
-    #  @endcode 
+    #  @endcode
     def distanceUSEV3(self):
         return self.pssensor.distanceUSEV3cm()
-    
+
     ## Returns the EV3 Ultrasonic Sensor distance value in 'inches times 10'
     # i.e. for an obstacle at 3 inches, you will get a reading of 30
     #  @param self The object pointer.
     #  @remark
     #  To use this function in your program:
     #  @code
-    #  from PiStorms import PiStorms 
+    #  from PiStorms import PiStorms
     #  ...
     #  psm = PiStorms()
     #  dist = psm.BAS1.distanceUSEV3in()
     #  if(dist < 100 ):
     #      # do some task
-    #  @endcode 
+    #  @endcode
     def distanceUSEV3in(self):
         return self.pssensor.distanceUSEV3in()
-        
+
     ## Returns the EV3 Ultrasonic Sensor presence boolean value
     #  @param self The object pointer.
     #  @remark
     #  To use this function in your program:
     #  @code
-    #  from PiStorms import PiStorms 
+    #  from PiStorms import PiStorms
     #  ...
     #  psm = PiStorms()
     #  here = psm.BAS1.presenceUSEV3()
     #  if(here == True ):
     #      # do some task
-    #  @endcode 
+    #  @endcode
     def presenceUSEV3(self):
         return self.pssensor.presenceUSEV3()
-    
+
     ## Returns the EV3 Gyro Sensor angle value
     #  @param self The object pointer.
     #  @remark
     #  To use this function in your program:
     #  @code
-    #  from PiStorms import PiStorms 
+    #  from PiStorms import PiStorms
     #  ...
     #  psm = PiStorms()
     #  angle = psm.BAS1.gyroAngleEV3()
     #  if(angle > 90 ):
     #      # do some task
-    #  @endcode 
+    #  @endcode
     def gyroAngleEV3(self):
         return self.pssensor.gyroAngleEV3()
-    
+
     ## Returns the EV3 Gyro Sensor rate value
     #  @param self The object pointer.
     #  @remark
     #  To use this function in your program:
     #  @code
-    #  from PiStorms import PiStorms 
+    #  from PiStorms import PiStorms
     #  ...
     #  psm = PiStorms()
     #  rate = psm.BAS1.gyroRateEV3()
     #  if(rate > 20 ):
     #      # do some task
-    #  @endcode 
+    #  @endcode
     def gyroRateEV3(self):
         return self.pssensor.gyroRateEV3()
-    
+
     ## Returns the EV3 Color Sensor reflected light value
     #  @param self The object pointer.
     #  @remark
     #  To use this function in your program:
     #  @code
-    #  from PiStorms import PiStorms 
+    #  from PiStorms import PiStorms
     #  ...
     #  psm = PiStorms()
     #  refLight = psm.BAS1.reflectedLightSensorEV3()
     #  if(refLight > 20 ):
     #      # do some task
-    #  @endcode 
+    #  @endcode
     def reflectedLightSensorEV3(self):
         return self.pssensor.reflectedLightSensorEV3()
-    
+
     ## Returns the EV3 Color Sensor ambient light value
     #  @param self The object pointer.
     #  @remark
     #  To use this function in your program:
     #  @code
-    #  from PiStorms import PiStorms 
+    #  from PiStorms import PiStorms
     #  ...
     #  psm = PiStorms()
     #  ambLight = psm.BAS1.ambientLightSensorEV3()
     #  if(ambLight > 20 ):
     #      # do some task
-    #  @endcode 
+    #  @endcode
     def ambientLightSensorEV3(self):
         return self.pssensor.ambientLightSensorEV3()
-    
+
     ## Returns the EV3 Color Sensor color value
     #  @param self The object pointer.
     #  @remark
     #  To use this function in your program:
     #  @code
-    #  from PiStorms import PiStorms 
+    #  from PiStorms import PiStorms
     #  ...
     #  psm = PiStorms()
     #  color = psm.BAS1.colorSensorEV3()
     #  if(color == 5 ):
     #      # do some task
-    #  @endcode 
+    #  @endcode
     def colorSensorEV3(self):
         return self.pssensor.colorSensorEV3()
-    
+
     ## Returns the NXT Touch Sensor touch value
     #  @param self The object pointer.
     #  @remark
     #  To use this function in your program:
     #  @code
-    #  from PiStorms import PiStorms 
+    #  from PiStorms import PiStorms
     #  ...
     #  psm = PiStorms()
     #  touch = psm.BAS1.isTouchedNXT()
     #  if(touch == True):
     #      # do some task
-    #  @endcode 
+    #  @endcode
     def isTouchedNXT(self):
         return self.pssensor.isTouchedNXT()
-    
+
     ## Returns the NXT Touch Sensor touch count
     #  @param self The object pointer.
     #  @remark
     #  To use this function in your program:
     #  @code
-    #  from PiStorms import PiStorms 
+    #  from PiStorms import PiStorms
     #  ...
     #  psm = PiStorms()
     #  touchCount = psm.BAS1.numTouchesNXT()
     #  if(touchCount == 5 ):
     #      # do some task
-    #  @endcode 
+    #  @endcode
     def numTouchesNXT(self):
         return self.pssensor.numTouchesNXT()
-    
+
     ## Resets the NXT Touch Sensor touch count to zero
     #  @param self The object pointer.
     #  @remark
     #  To use this function in your program:
     #  @code
-    #  from PiStorms import PiStorms 
+    #  from PiStorms import PiStorms
     #  ...
     #  psm = PiStorms()
     #  psm.BAS1.resetTouchesNXT()
-    #  @endcode 
+    #  @endcode
     def resetTouchesNXT(self):
         self.pssensor.resetTouchesNXT()
-    
+
     ## Returns the mindsensors.com's SumoEyes value (0 = None, 1 = Front, 2 = Left, 3 = Right)
     #  @param self The object pointer.
     #  @param long The mode of the SumoEyes sensor. (True = long range | False = short range)
     #  @remark
     #  To use this function in your program:
     #  @code
-    #  from PiStorms import PiStorms 
+    #  from PiStorms import PiStorms
     #  ...
     #  psm = PiStorms()
     #  sumo = psm.BAS1.SumoEyes(True)
     #  if(sumo == 2 ):
     #      # do some task
-    #  @endcode 
+    #  @endcode
     def SumoEyes(self, long=True):
         return self.pssensor.SumoEyes(long)
-    
+
     ## Returns the NXT light sensor value
     #  @param self The object pointer.
     #  @param active The mode of the nxt light sensor. (True = active/reflected | False = nonactive/ambient)
     #  @remark
     #  To use this function in your program:
     #  @code
-    #  from PiStorms import PiStorms 
+    #  from PiStorms import PiStorms
     #  ...
     #  psm = PiStorms()
     #  light = psm.BAS1.lightSensorNXT(True)
     #  if(light < 450 ):
     #      # do some task
-    #  @endcode 
+    #  @endcode
     def lightSensorNXT(self, active=True):
         return self.pssensor.lightSensorNXT(active)
-    
+
     ## Returns the NXT color sensor color value
     #  @param self The object pointer.
     #  @remark
     #  To use this function in your program:
     #  @code
-    #  from PiStorms import PiStorms 
+    #  from PiStorms import PiStorms
     #  ...
     #  psm = PiStorms()
     #  color = psm.BAS1.colorSensorNXT()
     #  if(color == 5):
     #      # do some task
-    #  @endcode 
+    #  @endcode
     def colorSensorNXT(self):
         return self.pssensor.colorSensorNXT()
-    
+
     ## Returns the NXT color sensor ambient light value
-    #  @param self The object pointer. 
+    #  @param self The object pointer.
     #  @remark
     #  To use this function in your program:
     #  @code
-    #  from PiStorms import PiStorms 
+    #  from PiStorms import PiStorms
     #  ...
     #  psm = PiStorms()
     #  ambLight = psm.BAS1.colorSensorNoneNXT()
     #  if(ambLight > 20 ):
     #      # do some task
-    #  @endcode 
+    #  @endcode
     def colorSensorNoneNXT(self):
         return self.pssensor.colorSensorNoneNXT()
-    
+
     ## Returns the NXT color sensor reflected red light value
     #  @param self The object pointer.
     #  @remark
     #  To use this function in your program:
     #  @code
-    #  from PiStorms import PiStorms 
+    #  from PiStorms import PiStorms
     #  ...
     #  psm = PiStorms()
     #  redRefLight = psm.BAS1.colorSensorRedNXT()
     #  if(redRefLight > 20 ):
     #      # do some task
-    #  @endcode 
+    #  @endcode
     def colorSensorRedNXT(self):
         return self.pssensor.colorSensorRedNXT()
-    
+
     ## Returns the NXT color sensor reflected green light value
-    #  @param self The object pointer. 
+    #  @param self The object pointer.
     #  @remark
     #  To use this function in your program:
     #  @code
-    #  from PiStorms import PiStorms 
+    #  from PiStorms import PiStorms
     #  ...
     #  psm = PiStorms()
     #  greenRefLight = psm.BAS1.colorSensorGreenNXT()
     #  if(greenRefLight > 20 ):
     #      # do some task
-    #  @endcode     
+    #  @endcode
     def colorSensorGreenNXT(self):
         return self.pssensor.colorSensorGreenNXT()
-    
+
     ## Returns the NXT color sensor reflected blue light value
-    #  @param self The object pointer. 
+    #  @param self The object pointer.
     #  @remark
     #  To use this function in your program:
     #  @code
-    #  from PiStorms import PiStorms 
+    #  from PiStorms import PiStorms
     #  ...
     #  psm = PiStorms()
     #  blueRefLight = psm.BAS1.colorSensorBlueNXT()
     #  if(blueRefLight > 20 ):
     #      # do some task
-    #  @endcode     
+    #  @endcode
     def colorSensorBlueNXT(self):
         return self.pssensor.colorSensorBlueNXT()
-    
+
     ## Returns an analog sensor value 0-1024
     #  @param self The object pointer.
     #  @remark
     #  To use this function in your program:
     #  @code
-    #  from PiStorms import PiStorms 
+    #  from PiStorms import PiStorms
     #  ...
     #  psm = PiStorms()
     #  analog = psm.BAS1.analogSensor()
     #  if(analog < 600):
     #      # do some task
-    #  @endcode 
+    #  @endcode
     def analogSensor(self):
         return self.pssensor.analogSensor()
-    
+
     ## Configures the sensor port for a custom I2C sensor
     #  @param self The object pointer.
     #  @remark
     #  To use this function in your program:
     #  @code
-    #  from PiStorms import PiStorms 
+    #  from PiStorms import PiStorms
     #  ...
     #  psm = PiStorms()
     #  psm.BAS1.activateCustomSensorI2C()
-    #  @endcode 
+    #  @endcode
     def activateCustomSensorI2C(self):
         self.pssensor.activateCustomSensorI2C()
 
@@ -526,7 +533,7 @@ class PiStormsSensor:
 #  @remark
 #  There is no need to initialize this class directly. This is done automatically during the PiStorms init.
 class PiStormsMotor():
-    
+
     ### @cond
     # Initialize the PiStorms motor port
     #  @param self The object pointer.
@@ -534,13 +541,13 @@ class PiStormsMotor():
     def __init__(self, motor):
         self.psmotor = motor
     ### @endcond
-    
+
     ## Returns the current encoder position of the motor
-    #  @param self The object pointer.  
+    #  @param self The object pointer.
     #  @remark
     #  To use this function in your program:
     #  @code
-    #  from PiStorms import PiStorms 
+    #  from PiStorms import PiStorms
     #  ...
     #  psm = PiStorms()
     #  position = psm.BAM1.pos()
@@ -549,31 +556,31 @@ class PiStormsMotor():
     #  @endcode
     def pos(self):
         return self.psmotor.pos()
-        
+
     ## Resets the encoder position of the specified motor
-    #  @param self The object pointer.  
+    #  @param self The object pointer.
     #  @remark
     #  To use this function in your program:
     #  @code
-    #  from PiStorms import PiStorms 
+    #  from PiStorms import PiStorms
     #  ...
     #  psm = PiStorms()
     #  psm.BAM1.resetPos()
     #  @endcode
     def resetPos(self):
         self.psmotor.resetPos()
-    
+
     ## Run the motor at a set speed for an unlimited duration
     #  @param self The object pointer.
     #  @param speed The speed at which to turn the motor.
     #  @remark
     #  To use this function in your program:
     #  @code
-    #  from PiStorms import PiStorms 
+    #  from PiStorms import PiStorms
     #  ...
     #  psm = PiStorms()
     #  psm.BAM1.setSpeed(100)
-    #  @endcode   
+    #  @endcode
     def setSpeed(self,speed):
         self.psmotor.setSpeed(speed)
 
@@ -586,15 +593,15 @@ class PiStormsMotor():
     #  @remark
     #  To use this function in your program:
     #  @code
-    #  from PiStorms import PiStorms 
+    #  from PiStorms import PiStorms
     #  ...
     #  psm = PiStorms()
     #  #run both motors of BankA in sync:
     #  psm.BAM1.setSpeedSync(100)
-    #  @endcode   
+    #  @endcode
     def setSpeedSync(self, speed):
         self.psmotor.setSpeedSync(speed)
-    
+
     ## Stop both the motors of said bank at the same time.
     #  motors are stopped smoothly with float
     #  You can call this function on any motor of that bank
@@ -603,16 +610,16 @@ class PiStormsMotor():
     #  @remark
     #  To use this function in your program:
     #  @code
-    #  from PiStorms import PiStorms 
+    #  from PiStorms import PiStorms
     #  ...
     #  psm = PiStorms()
     #  #stop both motors of BankA synchronized.
     #  psm.BAM1.floatSync()
-    #  @endcode   
+    #  @endcode
     def floatSync(self):
         self.psmotor.floatSync()
 
-    
+
     ## Stop both the motors of said bank at the same time.
     #  motors are stopped with a  brake.
     #  You can call this function on any motor of that bank
@@ -621,12 +628,12 @@ class PiStormsMotor():
     #  @remark
     #  To use this function in your program:
     #  @code
-    #  from PiStorms import PiStorms 
+    #  from PiStorms import PiStorms
     #  ...
     #  psm = PiStorms()
     #  #stop both motors of BankA synchronized.
     #  psm.BAM1.brakeSync()
-    #  @endcode   
+    #  @endcode
     def brakeSync(self):
         self.psmotor.brakeSync()
 
@@ -635,40 +642,40 @@ class PiStormsMotor():
     #  @remark
     #  To use this function in your program:
     #  @code
-    #  from PiStorms import PiStorms 
+    #  from PiStorms import PiStorms
     #  ...
     #  psm = PiStorms()
     #  psm.BAM1.brake()
-    #  @endcode   
+    #  @endcode
     def brake(self):
         self.psmotor.brake()
-    
+
     ## Stop the motor smoothly with float
     #  @param self The object pointer.
     #  @remark
     #  To use this function in your program:
     #  @code
-    #  from PiStorms import PiStorms 
+    #  from PiStorms import PiStorms
     #  ...
     #  psm = PiStorms()
     #  psm.BAM1.float()
-    #  @endcode   
+    #  @endcode
     def float(self):
         self.psmotor.float()
-    
+
     ## Stop the motor abruptly and hold the current position
     #  @param self The object pointer.
     #  @remark
     #  To use this function in your program:
     #  @code
-    #  from PiStorms import PiStorms 
+    #  from PiStorms import PiStorms
     #  ...
     #  psm = PiStorms()
     #  psm.BAM1.hold()
-    #  @endcode   
+    #  @endcode
     def hold(self):
         self.psmotor.hold()
-    
+
     ## Run the motor for a specific time in seconds
     #  @param self The object pointer.
     #  @param secs The number of seconds to run the motor.
@@ -677,75 +684,75 @@ class PiStormsMotor():
     #  @remark
     #  To use this function in your program:
     #  @code
-    #  from PiStorms import PiStorms 
+    #  from PiStorms import PiStorms
     #  ...
     #  psm = PiStorms()
     #  psm.BAM1.runSecs(5,100,True)
-    #  @endcode   
+    #  @endcode
     def runSecs(self,secs,speed,brakeOnCompletion = False):
         self.psmotor.runSecs(secs,speed,brakeOnCompletion)
-    
+
     ## Check if the motor is running
     #  @param self The object pointer.
     #  @remark
     #  To use this function in your program:
     #  @code
-    #  from PiStorms import PiStorms 
+    #  from PiStorms import PiStorms
     #  ...
     #  psm = PiStorms()
     #  motorState = psm.BAM1.isBusy()
     #  if(motorState == False):
     #      # do some task
-    #  @endcode   
+    #  @endcode
     def isBusy(self):
         return self.psmotor.isBusy()
-    
+
     ## Wait until the motor is no longer running
     #  @param self The object pointer.
     #  @param timeout The timeout value as a factor of 10ms.
     #  @remark
     #  To use this function in your program:
     #  @code
-    #  from PiStorms import PiStorms 
+    #  from PiStorms import PiStorms
     #  ...
     #  psm = PiStorms()
     #  boolMotorState = psm.BAM1.waitUntilNotBusy()
     #  if(overloadState == True):
     #      # do some task
-    #  @endcode   
+    #  @endcode
     def waitUntilNotBusy(self,timeout=-1):
         return self.psmotor.waitUntilNotBusy(timeout)
-    
+
     ## Check if the motor is stalled
     #  @param self The object pointer.
     #  @remark
     #  To use this function in your program:
     #  @code
-    #  from PiStorms import PiStorms 
+    #  from PiStorms import PiStorms
     #  ...
     #  psm = PiStorms()
     #  stallState = psm.BAM1.isStalled()
     #  if(stallState == True):
     #      # do some task
-    #  @endcode   
+    #  @endcode
     def isStalled(self):
         return self.psmotor.isStalled()
-    
+
     ## Check if the motor is overloaded
     #  @param self The object pointer.
     #  @remark
     #  To use this function in your program:
     #  @code
-    #  from PiStorms import PiStorms 
+    #  from PiStorms import PiStorms
     #  ...
     #  psm = PiStorms()
     #  overloadState = psm.BAM1.isOverloaded()
     #  if(overloadState == True):
     #      # do some task
-    #  @endcode   
+    #  @endcode
     def isOverloaded(self):
         return self.psmotor.isOverloaded()
-    
+
     ## Run the motor for a specific amount of degrees
     #  @param self The object pointer.
     #  @param degs The number of degrees to run the motor.
@@ -755,14 +762,14 @@ class PiStormsMotor():
     #  @remark
     #  To use this function in your program:
     #  @code
-    #  from PiStorms import PiStorms 
+    #  from PiStorms import PiStorms
     #  ...
     #  psm = PiStorms()
     #  psm.BAM1.runDegs(720,100,True,False)
-    #  @endcode   
+    #  @endcode
     def runDegs(self,degs,speed = 100,brakeOnCompletion = False, holdOnCompletion = False):
         self.psmotor.runDegs(degs,speed,brakeOnCompletion,holdOnCompletion)
-    
+
     ## Set the motor PID parameters (PiStorms PID parameters are default for NXT/EV3 motors). Only one set of PID parameters can be set per bank and will reset to default upon new power cycle
     #  @param self The object pointer.
     #  @param Kp_tacho Proportional-gain of the encoder position of the motor.
@@ -776,24 +783,24 @@ class PiStormsMotor():
     #  @remark
     #  To use this function in your program:
     #  @code
-    #  from PiStorms import PiStorms 
+    #  from PiStorms import PiStorms
     #  ...
     #  psm = PiStorms()
     #  psm.BAM1.SetPerformanceParameters(6,0,0,1,0,0,10,5)
-    #  @endcode   
+    #  @endcode
     def SetPerformanceParameters(self, Kp_tacho, Ki_tacho, Kd_tacho, Kp_speed, Ki_speed, Kd_speed, passcount, tolerance):
         self.psmotor.SetPerformanceParameters(Kp_tacho, Ki_tacho, Kd_tacho, Kp_speed, Ki_speed, Kd_speed, passcount, tolerance)
 
     def ReadPerformanceParameters(self):
         return self.psmotor.ReadPerformanceParameters()
-    
 
-    
+
+
 
 ## PiStorms: This class provides functions for PiStorms.
 #  PiStormsSensor, PiStormsMotor, and mindsensorsUI are subclasses of PiStorms and are automatically initialized with initialization of PiStorms class.
 class PiStorms:
-    
+
     ## Initialize the PiStorms motor and sensor ports
     #  @param self The object pointer.
     #  @param name The display title that will appear at the top of the LCD touchscreen.
@@ -801,97 +808,109 @@ class PiStorms:
     #  @remark
     #  There is no need to use this function directly. To initialize the PiStorms class in your program:
     #  @code
-    #  from PiStorms import PiStorms 
+    #  from PiStorms import PiStorms
     #  ...
     #  psm = PiStorms()
-    #  @endcode    
+    #  @endcode
     def __init__(self, name = "PiStorms", rotation = 3 ):
-        
+
+        ## An instance of mindsensorsUI.mindsensorsUI representing the PiStorms's touchscreen.
         self.screen = mindsensorsUI(name, rotation)
+        ## An instance of PiStormsCom.PiStormsCom.
         self.psc = PiStormsCom()
+        ## An instance of PiStormsSensor representing Bank A sensor 1.
         self.BAS1 = PiStormsSensor(self.psc.BAS1)
+        ## An instance of PiStormsSensor representing Bank A sensor 2.
         self.BAS2 = PiStormsSensor(self.psc.BAS2)
+        ## An instance of PiStormsSensor representing Bank B sensor 1.
         self.BBS1 = PiStormsSensor(self.psc.BBS1)
+        ## An instance of PiStormsSensor representing Bank B sensor 2.
         self.BBS2 = PiStormsSensor(self.psc.BBS2)
-            
+
+        ## An instance of PiStormsMotor representing Bank A motor 1.
         self.BAM1 = PiStormsMotor(self.psc.BAM1)
+        ## An instance of PiStormsMotor representing Bank A motor 2.
         self.BAM2 = PiStormsMotor(self.psc.BAM2)
+        ## An instance of PiStormsMotor representing Bank B motor 1.
         self.BBM1 = PiStormsMotor(self.psc.BBM1)
+        ## An instance of PiStormsMotor representing Bank B motor 2.
         self.BBM2 = PiStormsMotor(self.psc.BBM2)
-        
+
+        self.psc.resetKeyPressCount()
+
     def command (self, cmd, bank):
         self.psc.command(cmd, bank)
-        
+
     ## Shutdown the Raspberry Pi
     #  @param self The object pointer.
     #  @remark
     #  To use this function in your program:
     #  @code
-    #  from PiStorms import PiStorms 
+    #  from PiStorms import PiStorms
     #  ...
     #  psm = PiStorms()
     #  psm.Shutdown()
-    #  @endcode    
+    #  @endcode
     def Shutdown(self):
         self.psc.Shutdown()
-        
+
     ## Returns the input battery voltage
     #  @param self The object pointer.
     #  @remark
     #  To use this function in your program:
     #  @code
-    #  from PiStorms import PiStorms 
+    #  from PiStorms import PiStorms
     #  ...
     #  psm = PiStorms()
     #  volts = psm.battVoltage()
     #  if(volts > 6):
     #      # do some task
-    #  @endcode    
+    #  @endcode
     def battVoltage(self):
         return self.psc.battVoltage()
-    
+
     ## Returns the PiStorms firmware version
     #  @param self The object pointer.
     #  @remark
     #  To use this function in your program:
     #  @code
-    #  from PiStorms import PiStorms 
+    #  from PiStorms import PiStorms
     #  ...
     #  psm = PiStorms()
     #  fwVersion = psm.GetFirmwareVersion()
     #  print str(devID)
-    #  @endcode    
+    #  @endcode
     def GetFirmwareVersion(self):
         return self.psc.GetFirmwareVersion()
-    
+
     ## Returns the PiStorms vendor name
     #  @param self The object pointer.
     #  @remark
     #  To use this function in your program:
     #  @code
-    #  from PiStorms import PiStorms 
+    #  from PiStorms import PiStorms
     #  ...
     #  psm = PiStorms()
     #  venName = psm.GetVendorName()
     #  print str(devID)
-    #  @endcode    
+    #  @endcode
     def GetVendorName(self):
         return self.psc.GetVendorName()
-    
+
     ## Returns the PiStorms device ID
     #  @param self The object pointer.
     #  @remark
     #  To use this function in your program:
     #  @code
-    #  from PiStorms import PiStorms 
+    #  from PiStorms import PiStorms
     #  ...
     #  psm = PiStorms()
     #  devID = psm.GetDeviceId()
     #  print str(devID)
-    #  @endcode    
+    #  @endcode
     def GetDeviceId(self):
         return self.psc.GetDeviceId()
-    
+
     ## Writes to the specified RGB LED
     #  @param self The object pointer.
     #  @param lednum The number to specify the LED (1 for BankA, 2 for BankB).
@@ -901,26 +920,26 @@ class PiStorms:
     #  @remark
     #  To use this function in your program:
     #  @code
-    #  from PiStorms import PiStorms 
+    #  from PiStorms import PiStorms
     #  ...
     #  psm = PiStorms()
     #  psm.led(1,255,0,0)
-    #  @endcode    
+    #  @endcode
     def led(self,lednum,red,green,blue):
         return self.psc.led(lednum,red,green,blue)
-    
+
     ## Check if the GO button is pressed
     #  @param self The object pointer.
     #  @remark
     #  To use this function in your program:
     #  @code
-    #  from PiStorms import PiStorms 
+    #  from PiStorms import PiStorms
     #  ...
     #  psm = PiStorms()
     #  key = psm.isKeyPressed()
     #  if(key == True):
     #      # do some task
-    #  @endcode    
+    #  @endcode
     def isKeyPressed(self):
         return self.psc.isKeyPressed()
 
@@ -929,13 +948,13 @@ class PiStorms:
     #  @remark
     #  To use this function in your program:
     #  @code
-    #  from PiStorms import PiStorms 
+    #  from PiStorms import PiStorms
     #  ...
     #  psm = PiStorms()
     #  key = psm.getKeyValue()
     #  if(key == 40):
     #      # (40 is F4), do some task
-    #  @endcode    
+    #  @endcode
     def getKeyPressValue(self):
         return self.psc.getKeyPressValue()
 
@@ -944,13 +963,13 @@ class PiStorms:
     #  @remark
     #  To use this function in your program:
     #  @code
-    #  from PiStorms import PiStorms 
+    #  from PiStorms import PiStorms
     #  ...
     #  psm = PiStorms()
     #  key = psm.isF1Pressed()
     #  if(key == True):
     #      # F1 is pressed, do some task
-    #  @endcode    
+    #  @endcode
     def isF1Pressed(self):
         return (self.psc.getKeyPressValue() == 8)
 
@@ -959,13 +978,13 @@ class PiStorms:
     #  @remark
     #  To use this function in your program:
     #  @code
-    #  from PiStorms import PiStorms 
+    #  from PiStorms import PiStorms
     #  ...
     #  psm = PiStorms()
     #  key = psm.isF2Pressed()
     #  if(key == True):
     #      # F2 is pressed, do some task
-    #  @endcode    
+    #  @endcode
     def isF2Pressed(self):
         return (self.psc.getKeyPressValue() == 16)
 
@@ -974,13 +993,13 @@ class PiStorms:
     #  @remark
     #  To use this function in your program:
     #  @code
-    #  from PiStorms import PiStorms 
+    #  from PiStorms import PiStorms
     #  ...
     #  psm = PiStorms()
     #  key = psm.isF3Pressed()
     #  if(key == True):
     #      # F3 is pressed, do some task
-    #  @endcode    
+    #  @endcode
     def isF3Pressed(self):
         return (self.psc.getKeyPressValue() == 24)
 
@@ -989,52 +1008,53 @@ class PiStorms:
     #  @remark
     #  To use this function in your program:
     #  @code
-    #  from PiStorms import PiStorms 
+    #  from PiStorms import PiStorms
     #  ...
     #  psm = PiStorms()
     #  key = psm.isF4Pressed()
     #  if(key == True):
     #      # F4 is pressed, do some task
-    #  @endcode    
+    #  @endcode
     def isF4Pressed(self):
         return (self.psc.getKeyPressValue() == 40)
-    
+
     ## Returns the GO button press count
     #  @param self The object pointer.
     #  @remark
     #  To use this function in your program:
     #  @code
-    #  from PiStorms import PiStorms 
+    #  from PiStorms import PiStorms
     #  ...
     #  psm = PiStorms()
     #  keyCount = psm.getKeyPressCount()
     #  if(keyCount == 5):
     #      # do some task
-    #  @endcode   
+    #  @endcode
     def getKeyPressCount(self):
         return self.psc.getKeyPressCount()
-    
+
     ## Resets the GO button press count
     #  @param self The object pointer.
     #  @remark
     #  To use this function in your program:
     #  @code
-    #  from PiStorms import PiStorms 
+    #  from PiStorms import PiStorms
     #  ...
     #  psm = PiStorms()
     #  resetKeyPressCount()
-    #  @endcode   
+    #  @endcode
     def resetKeyPressCount(self):
         self.psc.resetKeyPressCount()
-    
+
     ### @cond
     ## Pings the PiStorms for reliable I2C communication
     #  @param self The object pointer.
     def ping(self):
         self.psc.ping()
     ### @endcond
-    
 
+
+### @cond Doxygen_ignore_this
 if __name__ == '__main__':
     psm = PiStorms("PiStorms",rotation =3)
     buttonCount = 0
@@ -1043,15 +1063,13 @@ if __name__ == '__main__':
     print "Vendor = "+ str(psm.GetVendorName())
     print "Device = "+ str(psm.GetDeviceId())
     psm.screen.termPrintAt(3," Version is  "+ str(psm.GetFirmwareVersion() )[:5])
-    psm.screen.termPrintAt(4," Version is  "+ str(psm.GetVendorName() ))
-    psm.screen.termPrintAt(5," Version is  "+ str(psm.GetDeviceId() ))
-   
+    psm.screen.termPrintAt(4," Vendor is  "+ str(psm.GetVendorName() ))
+    psm.screen.termPrintAt(5," Device is  "+ str(psm.GetDeviceId() ))
+
     while(True):
         time.sleep(.300)
         print ' Touched at ( '+str(psm.screen.TS_X())+' , '+str(psm.screen.TS_Y())+')'
         psm.screen.termPrintAt(6,' Touched at  ('+str(psm.screen.TS_X())+' , '+str(psm.screen.TS_Y())+')')
         print " Voltage = "+str( psm.battVoltage())
         psm.screen.termPrintAt(7," Voltage = "+str( psm.battVoltage()))
-        
-        
-
+### @endcond
