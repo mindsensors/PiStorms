@@ -99,7 +99,7 @@ class GroveAnalogPort(GroveDigitalPort):
 #  and the ground pin should be closer to you, towards the front of the device
 #  with the screen. Of course this leaves the voltage pin in the center.
 #  This class supports both regular servos and continuous rotation servos.
-class RCServo(GRXCom):
+class RCServo():
 
     ## Initialize an RC servo object.
     #  @param port Must be a valid port, one of [BAM1, BAM2, BAM3, BBM1, BBM2, BBM3].
@@ -289,26 +289,26 @@ class PiStorms_GRX:
     def isKeyPressed(self):
         return GRXCom.I2C.A.readByte(GRXCom.REGISTER.GO_BUTTON_STATE) % 2 == 1
 
-    #def getKeyPressValue(self): # F1-4
-    #    return self.psc.getKeyPressValue()
-    '''
+    def getKeyPressValue(self): # F1-4
+        return {8: 1, 16: 2, 24: 3, 40: 4}[GRXCom.getKeyPressValue()]
+
     def isF1Pressed(self):
-        return (self.psc.getKeyPressValue() == 8)
+        return (GRXCom.getKeyPressValue() == 8)
 
     def isF2Pressed(self):
-        return (self.psc.getKeyPressValue() == 16)
+        return (GRXCom.getKeyPressValue() == 16)
 
     def isF3Pressed(self):
-        return (self.psc.getKeyPressValue() == 24)
+        return (GRXCom.getKeyPressValue() == 24)
 
     def isF4Pressed(self):
-        return (self.psc.getKeyPressValue() == 40)
-    '''
+        return (GRXCom.getKeyPressValue() == 40)
+
     def getKeyPressCount(self):
         return GRXCom.I2C.A.readByte(GRXCom.REGISTER.GO_PRESS_COUNT)
-    
+
     def resetKeyPressCount(self):
         GRXCom.I2C.A.writeByte(GRXCom.REGISTER.GO_PRESS_COUNT, 0)
-    
+
     #def ping(self):
     #    self.psc.ping()
