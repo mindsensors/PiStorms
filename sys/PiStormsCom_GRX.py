@@ -25,7 +25,7 @@
 
 from mindsensors_i2c import mindsensors_i2c
 from fractions import Fraction
-import struct
+import struct, numpy
 
 
 ## GRXCom: this class provides communication functions for PiStorms-GRX.
@@ -75,8 +75,6 @@ class GRXCom():
         GO_BUTTON_STATE = 0xBF
         GO_PRESS_COUNT = 0xC0
         BATTERY_VOLTAGE = 0xC1
-        TOUCHSCREEN_X_RAW = 0xDF
-        TOUCHSCREEN_Y_RAW = 0xE1
         TOUCHSCREEN_X = 0xE3
         TOUCHSCREEN_Y = 0xE5
     class COMMAND:
@@ -116,6 +114,37 @@ class GRXCom():
                 return [int(n), 1]
         data = sum(map(floatToByteFraction, [p,i,d]), [])
         self.i2c.writeArray(self.REGISTER.PID, data)
+
+    # only needed/used in mindsensorsUI, otherwise use the method in PiStorms_GRX will suffice
+    @classmethod
+    def getKeyPressCount(self):
+        return self.I2C.A.readByte(self.REGISTER.GO_PRESS_COUNT)
+
+    @classmethod
+    def getKeyPressValue(self):
+        x, y = self.getTouchscreenCoordinates()
+        if x > 300 and y > 0:
+            return [8, 16, 24, 40][(y-1)/(240/4)]
+        else:
+            return 0
+
+    @classmethod
+    def getTouchscreenCoordinates(self):
+        sampleSize = 3
+        tolerance = 3
+        x = [0]*sampleSize
+        y = [0]*sampleSize
+        try:
+            for i in range(sampleSize):
+                x[i] = self.I2C.A.readInteger(self.REGISTER.TOUCHSCREEN_X)
+                y[i] = self.I2C.A.readInteger(self.REGISTER.TOUCHSCREEN_Y)
+        except:
+            print "Failed to read touchscreen"
+            return (0, 0)
+        if (numpy.std(x) < tolerance and numpy.std(y) < tolerance):
+            return (int(numpy.mean(x)), int(numpy.mean(y)))
+        else:
+            return (0, 0)
 
 class TYPE_SUPPORT:
     ALL = [GRXCom.TYPE.NONE, GRXCom.TYPE.DIGITAL_OUTPUT, GRXCom.TYPE.DIGITAL_INPUT, GRXCom.TYPE.I2C]
