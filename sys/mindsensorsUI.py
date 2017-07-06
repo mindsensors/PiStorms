@@ -875,6 +875,8 @@ class mindsensorsUI():
     #  screen.showMessage(message)
     #  @endcode
     def showMessage(self, message, touch=True, goBtn=True, wrapText=False):
+        if type(message) is not list:
+            message = ["Message", message]
         return self.askQuestion(message, ["OK"], touch=touch, goBtn=goBtn, wrapText=wrapText) == 0
 
     ## Display pop-up of a message on the screen with no exit options.
