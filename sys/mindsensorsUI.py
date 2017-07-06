@@ -30,6 +30,7 @@
 # 1/25/17    Seth      Additional dialog options
 
 from PiStormsCom import PiStormsCom
+from PiStormsCom_GRX import GRXCom
 import time, os, sys, math
 import Image, ImageDraw, ImageFont
 import textwrap
@@ -109,7 +110,10 @@ class mindsensorsUI():
     #  screen = mindsensorsUI()
     #  @endcode
     def __init__(self, name = "PiStorms", rotation = 3):
-        self.comm = PiStormsCom()
+        if "GRX" in PiStormsCom.bankA.readString(0x18, 8).upper():
+            self.comm = GRXCom
+        else:
+            self.comm = PiStormsCom()
         self.disp.begin()
         self.clearScreen()
         self.disp.command(ILI9341_INVOFF)
