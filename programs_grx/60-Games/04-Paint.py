@@ -9,7 +9,7 @@ color = (255, 255, 255)
 
 while True:
     if psm.isKeyPressed():
-        break;
+        break
     
     if psm.isF1Pressed():
         color = (255, 0, 0)
