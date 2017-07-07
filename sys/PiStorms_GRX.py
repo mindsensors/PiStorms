@@ -28,10 +28,10 @@ from mindsensorsUI import mindsensorsUI
 import struct
 
 
-## This class provides functions for digital Grove sensors.
+## This class provides functions for Grove sensors.
 #  This class has derived classes for each sensor.
 #  @remark There is no need to use this class directly in your program.
-class GroveDigitalPort():
+class GrovePort():
     def __init__(self, port=None, type=GRXCom.TYPE.DIGITAL_INPUT, mode=0):
         if port == None:
             raise TypeError("You must specify a port as an argument." \
@@ -72,19 +72,12 @@ class GroveDigitalPort():
         self.comm = GRXCom(i2c, address)
         self.comm.setType(type, mode)
 
-    def readValue(self):
-        return self.comm.digitalRead()
-
-
-## This class provides functions for analog Grove sensors.
-#  This class has derived classes for each sensor.
-#  @remark There is no need to use this class directly in your program.
-class GroveAnalogPort(GroveDigitalPort):
-    def __init__(self, port=None, type=GRXCom.TYPE.ANALOG_INPUT, mode=0):
-        GroveDigitalPort.__init__(self, port, type, mode)
-
-    def readValue(self):
-        return self.comm.analogRead()
+        if type == GRXCom.TYPE.DIGITAL_INPUT:
+            self.readValue = self.comm.digitalRead
+        elif type == GRXCom.TYPE.ANALOG_INPUT:
+            self.readValue = self.comm.analogRead
+        elif type == GRXCom.TYPE.DIGITAL_OUTPUT:
+            self.writeValue = self.comm.digitalWrite
 
 
 ## This class provides functions for controlling a servo connected to
@@ -216,7 +209,7 @@ class RCServo():
 
 ## This class provides functions for controlling a servo and encoder connected to
 #  the PiStorms-GRX.
-class RCServoEncoder(RCServo, GroveDigitalPort):
+class RCServoEncoder(RCServo, GrovePort):
     ## Initialize an RC servo object with an associated encoder.
     #  @param encoder You may associate an encoder with this servo by specifying
     #                 the digital port it is connected to.

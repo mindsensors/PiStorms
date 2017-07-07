@@ -97,6 +97,9 @@ class GRXCom():
     def analogRead(self):
         return self.i2c.readInteger(self.address + self.OFFSET.DATA)
 
+    def digitalWrite(self, data):
+        self.i2c.writeByte(self.address + self.OFFSET.DATA, data)
+
     def readEncoderValue(self):
         return self.i2c.readLongSigned(self.address + self.OFFSET.ENCODER_VALUE)
 
