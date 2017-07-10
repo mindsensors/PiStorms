@@ -32,7 +32,7 @@ import struct
 #  This class has derived classes for each sensor.
 #  @remark There is no need to use this class directly in your program.
 class GrovePort():
-    def __init__(self, port=None, type=GRXCom.TYPE.DIGITAL_INPUT, mode=0):
+    def __init__(self, port=None, type=GRXCom.TYPE.ANALOG_INPUT, mode=0):
         if port == None:
             raise TypeError("You must specify a port as an argument." \
                     " Please do so in the form B?$# where ? is A or B" \

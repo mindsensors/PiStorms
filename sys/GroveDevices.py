@@ -25,7 +25,8 @@
 # Apr 2017  Seth Tenembaum  Implement additional Grove sensors
 
 from mindsensors_i2c import mindsensors_i2c
-from PiStorms_GRX import GroveDigitalPort, GroveAnalogPort
+from PiStormsCom_GRX import GRXCom
+from PiStorms_GRX import GrovePort
 import math
 
 ## This class provides functions for Grove sensors.
@@ -50,7 +51,9 @@ import math
 #  if (button.isPressed()):
 #    print("Pointless button pressed (warning: pointless).")
 #  @endcode
-class Grove_Button(GroveDigitalPort):
+class Grove_Button(GrovePort):
+    def __init__(self, port):
+        GrovePort.__init__(self, port, type=GRXCom.TYPE.DIGITAL_INPUT)
     ## @ return True if the button is pressed, False if the button is released
     def isPressed(self):
         return self.readValue() == 1
@@ -69,7 +72,9 @@ class Grove_Button(GroveDigitalPort):
 #  if (button.motionDetected()):
 #    print("I see you, hi there!")
 #  @endcode
-class Grove_PIR_Motion_Sensor(GroveDigitalPort):
+class Grove_PIR_Motion_Sensor(GrovePort):
+    def __init__(self, port):
+        GrovePort.__init__(self, port, type=GRXCom.TYPE.DIGITAL_INPUT)
     ## @ return True if motion is detected, False otherwise
     def motionDetected(self):
         return self.readValue() == 1
@@ -88,7 +93,9 @@ class Grove_PIR_Motion_Sensor(GroveDigitalPort):
 #  if (f.fireDetected()):
 #    print("Fire! Fire!!")
 #  @endcode
-class Grove_Flame_Sensor(GroveDigitalPort):
+class Grove_Flame_Sensor(GrovePort):
+    def __init__(self, port):
+        GrovePort.__init__(self, port, type=GRXCom.TYPE.DIGITAL_INPUT)
     ## @ return True if infrared light is found in a line straight in front of
     #           the sensor (looks like a black LED), False otherwise
     def fireDetected(self):
@@ -107,7 +114,10 @@ class Grove_Flame_Sensor(GroveDigitalPort):
 #  if (lum.luminance() < 20.0):
 #    print("Someone turn on the lights, I can't see anything!")
 #  @endcode
-class Grove_Luminance_Sensor(GroveAnalogPort):
+class Grove_Luminance_Sensor(GrovePort):
+    def __init__(self, port):
+        GrovePort.__init__(self, port, type=GRXCom.TYPE.ANALOG_INPUT)
+
     ## @return A decimal for the detected light intensity in lux
     def luminance(self):
         val = self.readValue() * (3.0 / 4096.0)
@@ -142,7 +152,9 @@ class Grove_Luminance_Sensor(GroveAnalogPort):
 #  if (light.lightLevel() < 1000):
 #    print("It's pretty dark in here.")
 #  @endcode
-class Grove_Light_Sensor(GroveAnalogPort):
+class Grove_Light_Sensor(GrovePort):
+    def __init__(self, port):
+        GrovePort.__init__(self, port, type=GRXCom.TYPE.ANALOG_INPUT)
     ## @return A number corresponding with the current detected light level.
     #          Average indoor lighting might be in the 2000's.
     def lightLevel(self):
@@ -163,7 +175,10 @@ class Grove_Light_Sensor(GroveAnalogPort):
 #  if (temp.temperature() > 22.0):
 #    print("You might want a fan, it's getting a bit hot.")
 #  @endcode
-class Grove_Temperature_Sensor(GroveAnalogPort):
+class Grove_Temperature_Sensor(GrovePort):
+    def __init__(self, port):
+        GrovePort.__init__(self, port, type=GRXCom.TYPE.ANALOG_INPUT)
+
     ## @return A decimal corresponding to the detected temperature in Celsius
     def temperature(self):
         B = 4275 # B value of the thermistor
@@ -190,7 +205,10 @@ class Grove_Temperature_Sensor(GroveAnalogPort):
 #  if (uv.UVindex() > 3.0):
 #    print("It might be a good idea to put on some sunscreen!")
 #  @endcode
-class Grove_UV_Sensor(GroveAnalogPort):
+class Grove_UV_Sensor(GrovePort):
+    def __init__(self, port):
+        GrovePort.__init__(self, port, type=GRXCom.TYPE.ANALOG_INPUT)
+
     ## @return Measured illumination intensity in mW/m^2
     def intensity(self):
         val = 0
@@ -218,7 +236,9 @@ class Grove_UV_Sensor(GroveAnalogPort):
 #  if (m.moistureLevel() < 450):
 #    print("Your plant needs water!")
 #  @endcode
-class Grove_Moisture_Sensor(GroveAnalogPort):
+class Grove_Moisture_Sensor(GrovePort):
+    def __init__(self, port):
+        GrovePort.__init__(self, port, type=GRXCom.TYPE.ANALOG_INPUT)
     ## @return A number corresponding to the detected moisture level
     def moistureLevel(self):
         return self.readValue()
@@ -236,7 +256,9 @@ class Grove_Moisture_Sensor(GroveAnalogPort):
 #  if (s.soundIntensity() < 3200):
 #    print("I heard a clap!")
 #  @endcode
-class Grove_Sound_Sensor(GroveAnalogPort):
+class Grove_Sound_Sensor(GrovePort):
+    def __init__(self, port):
+        GrovePort.__init__(self, port, type=GRXCom.TYPE.ANALOG_INPUT)
     ## @return A number corresponding with the current detected sound intensity.
     def soundIntensity(self):
         return self.readValue()
@@ -255,7 +277,9 @@ class Grove_Sound_Sensor(GroveAnalogPort):
 #  if (s.detectSound() < 500):
 #    print("Hey, stop blowing on the mic!")
 #  @endcode
-class Grove_Loudness_Sensor(GroveAnalogPort):
+class Grove_Loudness_Sensor(GrovePort):
+    def __init__(self, port):
+        GrovePort.__init__(self, port, type=GRXCom.TYPE.ANALOG_INPUT)
     ## @return A number corresponding with the sound of the environment.
     def detectSound(self):
         return self.readValue()
@@ -274,7 +298,10 @@ class Grove_Loudness_Sensor(GroveAnalogPort):
 #  if (air.qualitativeMeasurement() != "Fresh air"):
 #    print("There are harmful gases nearby, you might want to open a window.")
 #  @endcode
-class Grove_Air_Quality_Sensor(GroveAnalogPort):
+class Grove_Air_Quality_Sensor(GrovePort):
+    def __init__(self, port):
+        GrovePort.__init__(self, port, type=GRXCom.TYPE.ANALOG_INPUT)
+
     ## @return A number corresponding with the air quality. Higher numbers mean more pollutants are present.
     def airQuality(self):
         return self.readValue()
