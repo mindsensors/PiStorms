@@ -1,5 +1,5 @@
 import time
-from PiStorms_GRX import PiStorms_GRX, RCServo, GroveDigitalPort
+from PiStorms_GRX import PiStorms_GRX, RCServo, GrovePort
 from PiStormsCom_GRX import GRXCom
 
 psm = PiStorms_GRX()
@@ -7,10 +7,11 @@ psm = PiStorms_GRX()
 leftServo = RCServo("BAM1", 1690)
 rightServo = RCServo("BBM1", 1300)
 
-leftEncoder = GroveDigitalPort("BBD2", GRXCom.TYPE.ENCODER) # no mode, not associated with any servo
-rightEncoder = GroveDigitalPort("BAD1", GRXCom.TYPE.ENCODER)
+leftEncoder = GrovePort("BBD1", type=GRXCom.TYPE.ENCODER) # no mode, not associated with any servo
+rightEncoder = GrovePort("BAD1", type=GRXCom.TYPE.ENCODER)
 
-for bank in [GRXCom.I2C.A, GRXCom.I2C.B]: bank.writeByte(GRXCom.REGISTER.COMMAND, GRXCom.COMMAND.RESET_ENCODERS)
+GRXCom.I2C.A.writeByte(GRXCom.REGISTER.COMMAND, GRXCom.COMMAND.RESET_ENCODERS)
+GRXCom.I2C.B.writeByte(GRXCom.REGISTER.COMMAND, GRXCom.COMMAND.RESET_ENCODERS)
 
 for i in range(200):
     try:
