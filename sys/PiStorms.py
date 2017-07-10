@@ -943,6 +943,22 @@ class PiStorms:
     def isKeyPressed(self):
         return self.psc.isKeyPressed()
 
+    ## Wait until the GO button is pressed
+    #  @param self The object pointer.
+    #  @remark
+    #  To use this function in your program:
+    #  @code
+    #  from PiStorms import PiStorms
+    #  ...
+    #  psm = PiStorms()
+    #  psm.screen.termPrintln("Press GO to continue...")
+    #  psm.waitForKeyPress()
+    #  @endcode
+    def waitForKeyPress(self):
+        initialKeyPressCount = self.getKeyPressCount()
+        while self.getKeyPressCount() == initialKeyPressCount:
+            time.sleep(0.01)
+
     ## Check if any Function button is pressed
     #  @param self The object pointer.
     #  @remark
