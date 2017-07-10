@@ -131,6 +131,11 @@ class GRXCom():
         else:
             return 0
 
+    # only needed/used in MSBrowser for compatibility
+    @classmethod
+    def battVoltage(self):
+        return self.I2C.A.readByte(self.REGISTER.BATTERY_VOLTAGE) * 0.04
+
     @classmethod
     def getTouchscreenCoordinates(self):
         sampleSize = 3
