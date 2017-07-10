@@ -82,5 +82,4 @@ plt.savefig("/home/pi/Documents/impact.png")
 np.savetxt("/home/pi/Documents/impact.csv", np.column_stack([datax,datay,dataz]), delimiter=",", fmt="%i")
 
 psm.screen.drawAutoText("Press GO to exit.", 2, 219, psm.screen.PS_BLACK)
-psm.resetKeyPressCount()
-while psm.getKeyPressCount() < 1: time.sleep(0.1) # leave image on screen until you press GO
+psm.waitForKeyPress()
