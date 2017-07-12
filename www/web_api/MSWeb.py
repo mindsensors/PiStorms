@@ -81,7 +81,12 @@ def dirTraversal(file_name, current_directory):
 app = Flask(__name__)
 
 from PiStormsCom import PiStormsCom
-psc = PiStormsCom()
+from PiStormsCom_GRX import GRXCom
+
+if "GRX" in PiStormsCom.bankA.readString(0x18, 8).upper():
+    psc = GRXCom
+else:
+    psc = PiStormsCom()
 
 import MS_ILI9341
 import Adafruit_GPIO.SPI as SPI
@@ -173,7 +178,7 @@ def led():
         red = request.form['red']
         blue = request.form['blue']
         green = request.form['green']
-        if led in ['1','2'] and red.isdigit() and blue.isdigit() and green.isdigit():
+        if led in ['1','2'] and all(c.isdigit() for c in [red, blue, green]):
             red = int(red) % 256
             blue = int(blue) % 256
             green = int(green) % 256
@@ -402,8 +407,8 @@ def savescript():
 @crossdomain(origin='*')
 def setmotorspeed():
     try:
-        psc.BAM1.setSpeed(-int(request.form["right"]))
-        psc.BAM2.setSpeed(-int(request.form["left"]))
+        psc.BAM1.setSpeed(int(request.form["right"]))
+        psc.BAM2.setSpeed(int(request.form["left"]))
     except Exception as e:
         pass
     return "1"

@@ -26,6 +26,7 @@
 from mindsensors_i2c import mindsensors_i2c
 from fractions import Fraction
 import struct, numpy
+import time
 
 
 ## GRXCom: this class provides communication functions for PiStorms-GRX.
@@ -118,24 +119,6 @@ class GRXCom():
         data = sum(map(floatToByteFraction, [p,i,d]), [])
         self.i2c.writeArray(self.REGISTER.PID, data)
 
-    # only needed/used in mindsensorsUI, otherwise use the method in PiStorms_GRX will suffice
-    @classmethod
-    def getKeyPressCount(self):
-        return self.I2C.A.readByte(self.REGISTER.GO_PRESS_COUNT)
-
-    @classmethod
-    def getKeyPressValue(self):
-        x, y = self.getTouchscreenCoordinates()
-        if x > 300 and y > 0:
-            return [8, 16, 24, 40][(y-1)/(240/4)]
-        else:
-            return 0
-
-    # only needed/used in MSBrowser for compatibility
-    @classmethod
-    def battVoltage(self):
-        return self.I2C.A.readByte(self.REGISTER.BATTERY_VOLTAGE) * 0.04
-
     @classmethod
     def getTouchscreenCoordinates(self):
         sampleSize = 3
@@ -153,6 +136,63 @@ class GRXCom():
             return (int(numpy.mean(x)), int(numpy.mean(y)))
         else:
             return (0, 0)
+
+    @classmethod
+    def getKeyPressValue(self):
+        x, y = self.getTouchscreenCoordinates()
+        if x > 300 and y > 0:
+            return [8, 16, 24, 40][(y-1)/(240/4)]
+        else:
+            return 0
+
+    # Compatibility functions (please use their equivalents in PiStorms_GRX if possible)
+    @classmethod
+    def getKeyPressCount(self):
+        return self.I2C.A.readByte(self.REGISTER.GO_PRESS_COUNT)
+    @classmethod
+    def battVoltage(self):
+        return self.I2C.A.readByte(self.REGISTER.BATTERY_VOLTAGE) * 0.04
+    @classmethod
+    def GetFirmwareVersion(self):
+        return self.I2C.A.readString(0x00, 8)
+    @classmethod
+    def GetDeviceId(self):
+        return self.I2C.A.readString(0x10, 8)
+    @classmethod
+    def led(self, lednum, red, green, blue):
+        if lednum == 1:
+            self.I2C.A.writeArray(self.REGISTER.LED, [red, green, blue])
+        if lednum == 2:
+            self.I2C.B.writeArray(self.REGISTER.LED, [red, green, blue])
+        time.sleep(0.001)
+    class BAM1:
+        @classmethod
+        def setSpeed(self, speed):
+            # convert speed from -100,100 to 500,2500
+            speed = int(speed*10 + 1500)
+            GRXCom.I2C.A.writeArray(GRXCom.SERVO[0], [speed%256, speed/256])
+        @classmethod
+        def brake(self):
+            GRXCom.I2C.A.writeArray(GRXCom.SERVO[0], [0, 0])
+        @classmethod
+        def float(self):
+            self.brake()
+    class BAM2:
+        @classmethod
+        def setSpeed(self, speed):
+            time.sleep(0.01)
+            # convert speed from -100,100 to 500,2500
+            speed = int(speed*10 + 1500)
+            GRXCom.I2C.B.writeArray(GRXCom.SERVO[0], [speed%256, speed/256])
+        @classmethod
+        def brake(self):
+            time.sleep(0.01)
+            GRXCom.I2C.B.writeArray(GRXCom.SERVO[0], [0, 0])
+        @classmethod
+        def float(self):
+            time.sleep(0.01)
+            self.brake()
+
 
 class TYPE_SUPPORT:
     ALL = [GRXCom.TYPE.NONE, GRXCom.TYPE.DIGITAL_OUTPUT, GRXCom.TYPE.DIGITAL_INPUT, GRXCom.TYPE.I2C]
