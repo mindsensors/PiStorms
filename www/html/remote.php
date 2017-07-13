@@ -112,13 +112,13 @@ include "api/config.php";
         <div class="col-md-4 col-sm-6 col-xs-12">
           <div class="box box-danger">
             <div class="box-header">
-              <h3 class="box-title">Control Motors <i class="fa fa-question-circle" style="margin-left: 5px;" data-toggle="tooltip" data-placement="bottom" data-html="true" title="On a PiStorms, please connect the right motor to BAM1 and the left motor to BAM2 socket.<br><br>On a PiStorms-GRX, connect the right servo BAS1 and the left servo to BBS1." aria-hidden="true"></i></h3>
+              <h3 class="box-title">Control Motors <i class="fa fa-question-circle" style="margin-left: 5px;" data-toggle="tooltip" data-placement="bottom" title="Please connect the right motor to BAM1 and the left motor to BAM2." aria-hidden="true" id="motor_tooltip"></i></h3>
             </div>
             <div class="box-body">
                 <div id="static"></div>
             </div>
-            <div class="box-footer text-center">
-                <span style="margin-right: 16px;" data-toggle="tooltip" title="Only applicable on the PiStorms, not the PiStorms-GRX">Stopping Action:</span><input type="checkbox" checked data-toggle="toggle" data-size="small" data-onstyle="primary" data-offstyle="danger" data-width="70" data-on="Float" data-off="Brake" id="stopcheck">
+            <div class="box-footer text-center" id="stopping_action">
+                <span style="margin-right: 16px;">Stopping Action:</span><input type="checkbox" checked data-toggle="toggle" data-size="small" data-onstyle="primary" data-offstyle="danger" data-width="70" data-on="Float" data-off="Brake" id="stopcheck">
             </div>
           </div>
         </div>
@@ -177,6 +177,16 @@ include "api/config.php";
 <script type="text/javascript" src="assets/bootstrap-slider.min.js"></script>
 <script type="text/javascript" src="assets/jquery.minicolors.min.js"></script>
 <script src="assets/bootstrap-toggle.min.js"></script>
+
+<script>
+var api = "http://<?=$_SERVER['SERVER_NAME']?>:3141/";
+$.get(api+'isgrx', function(data) {
+    if (data=='1') {
+        $('#motor_tooltip').attr('title', 'Please connect the right servo BAS1 and the left servo to BBS1.');
+        $('#stopping_action').hide();
+    }
+});
+</script>
 
 <script>
 PNotify.prototype.options.styling = "bootstrap3";

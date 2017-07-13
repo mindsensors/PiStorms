@@ -169,7 +169,7 @@ class GRXCom():
         @classmethod
         def setSpeed(self, speed):
             # convert speed from -100,100 to 500,2500
-            speed = int(speed*10 + 1500)
+            speed = int(-speed*10 + 1500)
             GRXCom.I2C.A.writeArray(GRXCom.SERVO[0], [speed%256, speed/256])
         @classmethod
         def brake(self):
@@ -182,7 +182,7 @@ class GRXCom():
         def setSpeed(self, speed):
             time.sleep(0.01)
             # convert speed from -100,100 to 500,2500
-            speed = int(speed*10 + 1500)
+            speed = int(-speed*10 + 1500)
             GRXCom.I2C.B.writeArray(GRXCom.SERVO[0], [speed%256, speed/256])
         @classmethod
         def brake(self):

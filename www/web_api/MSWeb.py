@@ -407,8 +407,8 @@ def savescript():
 @crossdomain(origin='*')
 def setmotorspeed():
     try:
-        psc.BAM1.setSpeed(int(request.form["right"]))
-        psc.BAM2.setSpeed(int(request.form["left"]))
+        psc.BAM1.setSpeed(-int(request.form["right"]))
+        psc.BAM2.setSpeed(-int(request.form["left"]))
     except Exception as e:
         pass
     return "1"
@@ -431,6 +431,11 @@ def brakemotors():
 @crossdomain(origin='*')
 def getprogramsdir():
     return os.path.abspath(os.path.join(home_folder, "programs"))+'/'
+
+@app.route("/isgrx", methods=['GET', 'OPTIONS'])
+@crossdomain(origin='*')
+def isgrx():
+    return "1" if psc == GRXCom else "0"
 
 if __name__ == "__main__":
     app.run("0.0.0.0", 3141, threaded=True)
