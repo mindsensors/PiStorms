@@ -80,7 +80,7 @@ def ledFlash(num):
 # moves "Mike" (the smiley face) around the screen to random locations
 # tracks the players score
 miliseconds = int(round(time.time()*1000))
-psm.resetKeyPressCount
+psm.resetKeyPressCount()
 
 while(not exit):
     randX = random.randint(0, 245)  # selects a random x coordinate for Mike
