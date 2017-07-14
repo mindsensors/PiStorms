@@ -40,8 +40,9 @@ def get_ip_address(ifname):
 currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
 parentdir = os.path.dirname(currentdir)
 sys.path.insert(0,parentdir)
-from PiStorms import PiStorms
-psm = PiStorms()
+from PiStormsCom_GRX import GRXCom
+from PiStorms_GRX import PiStorms_GRX
+psm = PiStorms_GRX()
 
 psm.screen.termPrintln("                     About Me")
 psm.screen.termPrintln(" ")
@@ -59,11 +60,11 @@ else:
 exit = False
 lastled = 0
 #psm.screen.termPrintAt(1," Vendor  : "+ str(psm.GetVendorName() ))
-psm.screen.termPrintAt(1," Device : "+ str(psm.GetDeviceId() ))
-psm.screen.termPrintAt(2," f/w version : "+ str(psm.GetFirmwareVersion() )[:5])
+psm.screen.termPrintAt(1," Device : "+ str(GRXCom.GetDeviceId() ))
+psm.screen.termPrintAt(2," f/w version : "+ str(GRXCom.GetFirmwareVersion() )[:5])
 psm.screen.termPrintAt(3," s/w version : "+ version_no)
 psm.screen.termPrintAt(4," Hostname :     "   + socket.gethostname() )
-voltVal = psm.battVoltage()
+voltVal = GRXCom.battVoltage()
 psm.screen.termPrintAt(5," Battery :     "   + str(voltVal)+"V" )
 while(not exit):
 
