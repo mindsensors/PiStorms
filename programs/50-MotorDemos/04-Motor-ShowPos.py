@@ -33,14 +33,13 @@ m = ["Motor-Demo", "Connect NXT motor to Bank A M1.",
  "the encoder values on screen.",
  "Press Go to stop program",
   "Click OK to continue"]
-psm.screen.askQuestion(m,["OK"])
+psm.screen.showMessage(m)
 
-
-doExit = False
 old_pos = 0
 encoder_pos = -1
 counter = 0
-while (doExit == False):
+
+def mainLoop():
     counter = counter + 1
     old_pos = encoder_pos
     encoder_pos = psm.BAM1.pos()
@@ -52,12 +51,6 @@ while (doExit == False):
         psm.screen.drawAutoText(msg, 15, 200, fill=(255, 255, 255), size = 18)
         psm.screen.drawAutoText("Touch screen to reset counter", 15, 218, fill=(255, 255, 255), size = 18)
 
-    if(psm.isKeyPressed() == True): # if the GO button is pressed
-        psm.screen.clearScreen()
-        psm.screen.termPrintln("")
-        psm.screen.termPrintln("Exiting to menu")
-        doExit = True
-
     #
     # check if screen touched.
     #
@@ -66,3 +59,8 @@ while (doExit == False):
         psm.BAM1.resetPos()
         time.sleep(.001)
 
+psm.untilKeyPress(mainLoop)
+
+psm.screen.clearScreen()
+psm.screen.termPrintln("")
+psm.screen.termPrintln("Exiting to menu")

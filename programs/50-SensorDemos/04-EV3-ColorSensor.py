@@ -34,15 +34,13 @@ m = ["EV3ColorSensor-Demo", "Connect EV3 Color sensor to BAS1",
  "and Press OK to continue.",
  "Then move colored objects in front",
  "of Color sensor"]
-psm.screen.askQuestion(m,["OK"])
+psm.screen.showMessage(m)
 
-doExit = False
 old_colorValue = True
 colorValue = True
 count = 0
 
-#main loop
-while(not doExit):
+def mainLoop():
     #save the previous value
     old_colorValue = colorValue
     #
@@ -66,12 +64,6 @@ while(not doExit):
         psm.screen.drawAutoText("between reflected/ambient/color", 15, 200, fill=(255, 255, 255), size = 18)
         psm.screen.drawAutoText("Press Go to stop program", 15, 218, fill=(255, 255, 255), size = 18)
 
-    if(psm.isKeyPressed() == True): # if the GO button is pressed
-        psm.screen.clearScreen()
-        psm.screen.termPrintln("")
-        psm.screen.termPrintln("Exiting to menu")
-        doExit = True
-
     #
     # check if screen touched.
     #
@@ -82,3 +74,9 @@ while(not doExit):
         if ( count > 2):
             count = 0
         time.sleep(.5)
+
+psm.untilKeyPress(mainLoop)
+
+psm.screen.clearScreen()
+psm.screen.termPrintln("")
+psm.screen.termPrintln("Exiting to menu")

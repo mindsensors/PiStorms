@@ -29,9 +29,8 @@ psm = PiStorms()
 
 m = ["EV3Ultrasonic-Demo", "Connect EV3 Ultrasonic sensor",
  "to BAS1, and Press OK to continue"]
-psm.screen.askQuestion(m,["OK"])
+psm.screen.showMessage(m)
 
-doExit = False
 oldValue = True
 value = True
 count = 0
@@ -44,7 +43,7 @@ psm.screen.termPrintAt(8, "between Dist IN/ Dist CM/ Detect")
 psm.screen.termPrintAt(9, "Press Go to stop program")
 change = 1
 
-while(not doExit):
+def mainLoop():
     oldValue = value
     if change == 1: #setMode only if the screen mode changed
         mode = "Distance"
@@ -72,12 +71,6 @@ while(not doExit):
 
     if (oldValue != value):
         psm.screen.termPrintAt(4, msg)
-    if(psm.isKeyPressed() == True):
-        psm.screen.clearScreen()
-        ultrasonic = EV3UltrasonicSensor("BAS1", 9) #Turn off detecting
-        psm.screen.termPrintln("")
-        psm.screen.termPrintln("Exiting to menu")
-        doExit = True
     change = 0
     if(psm.screen.isTouched()): #Change mode if screen is tapped
         count = count + 1
@@ -86,3 +79,10 @@ while(not doExit):
         psm.screen.termPrintAt(4, "Switching...")
         change = 1
         time.sleep(.5)
+
+psm.untilKeyPress(mainLoop)
+
+psm.screen.clearScreen()
+ultrasonic = EV3UltrasonicSensor("BAS1", 9) #Turn off detecting
+psm.screen.termPrintln("")
+psm.screen.termPrintln("Exiting to menu")

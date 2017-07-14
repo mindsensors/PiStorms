@@ -39,14 +39,12 @@ psm.screen.showMessage(m)
 # initialize the variable for the sensor
 sensor = MsDevices.LineLeader(psm.BAS1)
 
-doExit = False
 readings = []
 
 psm.screen.termPrintAt(7, "LineLeader readings")
 psm.screen.termPrintAt(8, "Press GO to stop program")
 
-# main loop
-while(not doExit):
+def mainLoop():
     # wipe the old graph
     for i, reading in enumerate(readings):
         psm.screen.fillRect(10+(i*35), 10, 30, reading, fill = (0,0,0), display = False)
@@ -63,7 +61,7 @@ while(not doExit):
     time.sleep(0.4)
     psm.screen.fillRect(5, 0, 300, 4, fill = (200,0,0), display = True)
 
-    if(psm.isKeyPressed() == True): # if the GO button is pressed
-        psm.screen.clearScreen()
-        psm.screen.termPrintAt(8, "Exiting to menu")
-        doExit = True
+psm.untilKeyPress(mainLoop)
+
+psm.screen.clearScreen()
+psm.screen.termPrintAt(8, "Exiting to menu")

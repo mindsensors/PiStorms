@@ -64,7 +64,7 @@ isConnected = available()
 if (isConnected == False):
     m = ["Software Updater", "You are not connected to Internet.",
       "Internet connection required"]
-    psm.screen.askQuestion(m,["OK"])
+    psm.screen.showMessage(m)
     sys.exit(-1)
 
 print "running software_update.py"
@@ -92,7 +92,7 @@ status = subprocess.call(cmd, shell=True)
 if ( status != 0 ):
     m = ["Software Updater", "Error while downloading update:",
       sw_file_name]
-    psm.screen.askQuestion(m,["OK"])
+    psm.screen.showMessage(m)
     psm.screen.clearScreen()
     sys.exit(-1)
 else:
@@ -107,7 +107,7 @@ newHtml = renameFolder("/var/www/html", 0)
 if (os.path.isdir("/var/www/html")):
     # if the folder is still there, don't install
     m = ["Software Updater", "Error while renaming html folder" ]
-    psm.screen.askQuestion(m,["OK"])
+    psm.screen.showMessage(m)
     psm.screen.clearScreen()
     sys.exit(-1)
 
@@ -115,7 +115,7 @@ newWebapi = renameFolder("/var/www/web_api", 0)
 if (os.path.isdir("/var/www/web_api")):
     # if the folder is still there, don't install
     m = ["Software Updater", "Error while renaming web_api folder" ]
-    psm.screen.askQuestion(m,["OK"])
+    psm.screen.showMessage(m)
     psm.screen.clearScreen()
     sys.exit(-1)
 
@@ -124,7 +124,7 @@ newName = renameFolder("/home/pi/PiStorms", 0)
 if (os.path.isdir("/home/pi/PiStorms")):
     # if the folder is still there, don't install
     m = ["Software Updater", "Error while renaming PiStorms folder" ]
-    psm.screen.askQuestion(m,["OK"])
+    psm.screen.showMessage(m)
     psm.screen.clearScreen()
     sys.exit(-1)
 else:
@@ -136,7 +136,7 @@ cmd = "cd /home/pi; tar -zxvf /var/tmp/upd/" + sw_file_name
 status = subprocess.call(cmd, shell=True)
 if ( status != 0 ):
     m = ["Software Updater", "Error while unzipping PiStorms folder" ]
-    psm.screen.askQuestion(m,["OK"])
+    psm.screen.showMessage(m)
     psm.screen.clearScreen()
     sys.exit(-1)
 else:
@@ -164,6 +164,6 @@ m = ["Software Update Complete.",
   newHtml,
   newWebapi,
   "Please restart your Pi"]
-psm.screen.askQuestion(m,["OK"])
+psm.screen.showMessage(m)
 
 sys.exit(0)

@@ -137,7 +137,7 @@ if __name__ == '__main__':
         camera = PiCamera()
     except:
          m = ["Icon Tracker", "Camera not enabled.", "Run raspi-config and enable camera"]
-         psm.screen.askQuestion(m,["OK"])
+         psm.screen.showMessage(m)
          exit()
     #camera.resolution = (640, 480)
     #rawCapture = PiRGBArray(camera, size=(640, 480))

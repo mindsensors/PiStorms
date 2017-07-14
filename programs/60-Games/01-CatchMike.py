@@ -80,9 +80,8 @@ def ledFlash(num):
 # moves "Mike" (the smiley face) around the screen to random locations
 # tracks the players score
 miliseconds = int(round(time.time()*1000))
-psm.resetKeyPressCount()
 
-while(not exit):
+def mainLoop():
     randX = random.randint(0, 245)  # selects a random x coordinate for Mike
                                     # max of 245 so he will not appear off the screen (screen x value is 320, so 320 - Mike's width (75) = 245)
     randY = random.randint(0, 115)  # selects a random y coordinate for Mike
@@ -109,16 +108,9 @@ while(not exit):
             psm.screen.drawAutoText(str(score-1), 100, 190, fill=(0, 0, 0), size = 25) # draw the player's score
             dispScore = score # log the change of score to the variable "dispScore"
 
-    #print psm.isKeyPressed()
-    #if(psm.isKeyPressed() == True): # if the GO button is pressed
-    if(psm.isKeyPressed() == 1): # if the GO button is pressed
-        time.sleep(0.5)
-        exit = True # escape loop
-    if(psm.isKeyPressed() == True): # if the GO button is pressed
-        psm.screen.clearScreen()
-        psm.screen.termPrintln("")
-        psm.screen.termPrintln("Exiting to menu")
-        time.sleep(0.5)
-        exit = True
-    else:
-        pass
+psm.untilKeyPress(mainLoop)
+
+psm.screen.clearScreen()
+psm.screen.termPrintln("")
+psm.screen.termPrintln("Exiting to menu")
+time.sleep(0.5)
