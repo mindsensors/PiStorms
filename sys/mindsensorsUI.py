@@ -371,7 +371,7 @@ class mindsensorsUI():
         if(display):
             self.disp.display()
 
-    ## Draw a circle on the screen (rotated to screen)
+    ## Draw a filled circle on the screen (rotated to screen)
     #  @param self The object pointer.
     #  @param x The center x coordinate of the circle.
     #  @param y The center y coordinate of the circle.
@@ -389,6 +389,29 @@ class mindsensorsUI():
         actx = self.screenXFromImageCoords(x,y)
         acty = self.screenYFromImageCoords(x,y)
         draw.ellipse((actx-radius,acty-radius,actx+radius,acty+radius), fill = fill)
+        if(display):
+            self.disp.display()
+
+    ## Draw a circle on the screen (rotated to screen)
+    #  @param self The object pointer.
+    #  @param x The center x coordinate of the circle.
+    #  @param y The center y coordinate of the circle.
+    #  @param radius The radius of the circle.
+    #  @param fill The color of the inside of the circle. Optional, defaults to None
+    #  @param outline The color of the outer edge of the circle. Optional, defaults to Black
+    #  @param display Choose to immediately push the drawing to the screen. Optional, defaults to True.
+    #  @remark
+    #  To use this function in your program:
+    #  @code
+    #  ...
+    #  red circle with blue outline:
+    #  screen.drawCircle(100, 100, 15, fill = (255,0,0), outline=(0,0,255))
+    #  @endcode
+    def drawCircle(self, x, y, radius, fill = None, outline = (0,0,0), display = True):
+        draw = self.disp.draw()
+        actx = self.screenXFromImageCoords(x,y)
+        acty = self.screenYFromImageCoords(x,y)
+        draw.ellipse((actx-radius,acty-radius,actx+radius,acty+radius), fill=fill, outline=outline)
         if(display):
             self.disp.display()
 
