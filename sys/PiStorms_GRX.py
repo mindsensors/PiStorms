@@ -78,6 +78,8 @@ class GrovePort():
             self.readValue = self.comm.analogRead
         elif type == GRXCom.TYPE.DIGITAL_OUTPUT:
             self.writeValue = self.comm.digitalWrite
+        elif type == GRXCom.TYPE.ENCODER:
+            self.readValue = self.comm.readEncoderValue
 
 
 ## This class provides functions for controlling a servo connected to
