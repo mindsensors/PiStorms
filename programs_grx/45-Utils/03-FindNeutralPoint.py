@@ -1,3 +1,5 @@
+import time
+
 from PiStorms_GRX import PiStorms_GRX, RCServo, RCServoEncoder
 psm = PiStorms_GRX()
 
@@ -23,4 +25,27 @@ if psm.screen.askYesOrNoQuestion(["Encoder", "Do you have an encoder attached to
     servo.readEncoder()
 else:
     servo = RCServo(servo)
+    psm.screen.termPrintln("Please adjust this number")
+    psm.screen.termPrintln("until the servo stops spinning.")
+    psm.screen.termPrintln("(press GO to save and quit)")
+    psm.screen.drawButton( 20, 140, 55, 40, text="-100", display=False)
+    psm.screen.drawButton(100, 140, 45, 40, text="-10",  display=False)
+    psm.screen.drawButton(170, 140, 47, 40, text="+10",  display=False)
+    psm.screen.drawButton(240, 140, 55, 40, text="+100", display=False)
+    pulse = 1500
+    initialKeyPressCount = psm.getKeyPressCount()
+    while psm.getKeyPressCount() == initialKeyPressCount:
+        if psm.screen.checkButton( 20, 140, 55, 40):
+            pulse -= 100
+        if psm.screen.checkButton(100, 140, 45, 40):
+            pulse -= 10
+        if psm.screen.checkButton(170, 140, 47, 40):
+            pulse += 10
+        if psm.screen.checkButton(240, 140, 55, 40):
+            pulse += 100
+        psm.screen.fillRect(0, 5, 320, 32, fill=(0,0,0), display=False)
+        psm.screen.drawDisplay(pulse)
+        servo.setPulse(pulse)
+        time.sleep(0.3)
+    #TODO: save value
 
