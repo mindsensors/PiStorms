@@ -111,6 +111,11 @@ import ConfigParser
 config = ConfigParser.ConfigParser()
 config.read("/usr/local/mindsensors/conf/msdev.cfg")
 home_folder = config.get("msdev","homefolder")
+if psc == GRXCom:
+    programs_folder = os.path.join(home_folder, "programs_grx")
+else:
+    programs_folder = os.path.join(home_folder, "programs")
+programs_folder_abspath = os.path.abspath(programs_folder)+'/'
 
 message_file = '/var/tmp/ps_data.json'
 messages = {"date": "", "status": "None", "message": "none"}
@@ -288,13 +293,13 @@ def getmessagejson():
 @app.route("/getprograms", methods=['POST', 'OPTIONS'])
 @crossdomain(origin='*')
 def getprograms():
-    files = os.listdir(os.path.join(home_folder, "programs", request.form["path"]))
+    files = os.listdir(os.path.join(programs_folder, request.form["path"]))
 
-    if not request.form["path"].startswith(os.path.abspath(os.path.join(home_folder, "programs"))+'/'): return "0"
+    if not request.form["path"].startswith(programs_folder_abspath): return "0"
 
     out = []
     for i in files:
-        dir = os.path.join(home_folder, "programs", request.form["path"], i)
+        dir = os.path.join(programs_folder, request.form["path"], i)
         typ = ""
         if os.path.isdir(dir): typ = "folder"
         elif os.path.isfile(dir): typ = os.path.splitext(dir)[1][1::].lower()
@@ -320,7 +325,7 @@ def fetchscript():
 @crossdomain(origin='*')
 def removefile():
     try:
-        if os.path.isfile(request.form["path"]) and request.form["path"].startswith(os.path.abspath(os.path.join(home_folder, "programs"))+'/'):
+        if os.path.isfile(request.form["path"]) and request.form["path"].startswith(programs_folder_abspath):
             os.remove(request.form["path"])
         return "1"
     except: return "0"
@@ -329,7 +334,7 @@ def removefile():
 @crossdomain(origin='*')
 def removedir():
     try:
-        if os.path.isdir(request.form["path"]) and request.form["path"].startswith(os.path.abspath(os.path.join(home_folder, "programs"))+'/') and os.path.normpath(request.form["path"]) != os.path.normpath(os.path.abspath(os.path.join(home_folder, "programs"))):
+        if os.path.isdir(request.form["path"]) and request.form["path"].startswith(programs_folder_abspath) and os.path.normpath(request.form["path"]) != os.path.normpath(os.path.abspath(programs_folder)):
             shutil.rmtree(request.form["path"])
         return "1"
     except Exception as e:
@@ -360,8 +365,8 @@ copyright = """
 @crossdomain(origin='*')
 def addobject():
     try:
-        if not (os.path.isdir(request.form["path"]) and request.form["type"] in ["folder","py","bl"] and request.form["path"] and request.form["path"].startswith(os.path.abspath(os.path.join(home_folder, "programs"))+'/')):
-            return "0";
+        if not (os.path.isdir(request.form["path"]) and request.form["type"] in ["folder","py","bl"] and request.form["path"] and request.form["path"].startswith(programs_folder_abspath)):
+            return "0"
         filename = os.path.basename(request.form["filename"].rstrip(os.sep))
         folderpath = os.path.join(request.form["path"], filename)
         if request.form["type"] == "folder":
@@ -382,8 +387,8 @@ def addobject():
 @crossdomain(origin='*')
 def renameobject():
     try:
-        if not (os.path.isdir(request.form["path"]) and request.form["path"] and request.form["path"].startswith(os.path.abspath(os.path.join(home_folder, "programs"))+'/')):
-            return "0";
+        if not (os.path.isdir(request.form["path"]) and request.form["path"] and request.form["path"].startswith(programs_folder_abspath)):
+            return "0"
         filename = os.path.basename(request.form["filename"].rstrip(os.sep))
         folderpath = os.path.join(request.form["path"], filename)
         filenamenew = os.path.basename(request.form["filenamenew"].rstrip(os.sep))
@@ -430,7 +435,7 @@ def brakemotors():
 @app.route("/getprogramsdir", methods=['GET', 'OPTIONS'])
 @crossdomain(origin='*')
 def getprogramsdir():
-    return os.path.abspath(os.path.join(home_folder, "programs"))+'/'
+    return programs_folder_abspath
 
 @app.route("/isgrx", methods=['GET', 'OPTIONS'])
 @crossdomain(origin='*')
