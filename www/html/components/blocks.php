@@ -426,6 +426,15 @@
       </block>
     </category>
 
+    <category name="Servos" colour="240">
+      <block type="servo_setpulse">
+        <value name="PULSE">
+          <shadow type="math_number">
+          <field name="NUM">1500</field>
+        </shadow>
+      </block>
+    </category>
+
     <category name="Sensors" colour="60">
       <block type="sensors_nxttouch"></block>
       <sep gap="5"></sep>

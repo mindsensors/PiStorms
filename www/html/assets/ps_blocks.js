@@ -2323,3 +2323,31 @@ Blockly.Python['screen_checkbutton'] = function(block) {
 // set performace parameters https://blockly-demo.appspot.com/static/demos/blockfactory/index.html#duebh9
 
 // nxt touch at https://blockly-demo.appspot.com/static/demos/blockfactory/index.html#5xqcdm
+
+
+/* GRX */
+Blockly.Blocks['servo_setpulse'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField("set pulse of servo")
+        .appendField(new Blockly.FieldDropdown([["BAS1","BAS1"], ["BAS2","BAS2"], ["BAS3","BAS3"], ["BBS1","BBS1"], ["BBS2","BBS2"], ["BBS3","BBS3"]]), "servo_selector");
+    this.appendValueInput("PULSE")
+        .setCheck("Number")
+        .appendField("to");
+    this.setInputsInline(true);
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(240);
+    this.setTooltip('');
+    this.setHelpUrl('https://www.mindsensors.com/forum');
+  }
+};
+Blockly.Python['servo_setpulse'] = function(block) {
+  var dropdown_servo_selector = block.getFieldValue('servo_selector');
+  var value_pulse = Blockly.Python.valueToCode(block, 'PULSE', Blockly.Python.ORDER_ATOMIC);
+  //Blockly.Python.definitions_.from_PiStorms_import_PiStorms = "from PiStorms import PiStorms";
+  //Blockly.Python.definitions_.psm_PiStorms = "psm = PiStorms()";
+  var code = 'psm.'+ dropdown_servo_selector + '.setSpeed(' + value_pulse + ')\n';
+  return code;
+};
+
