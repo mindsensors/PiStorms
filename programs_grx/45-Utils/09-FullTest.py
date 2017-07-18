@@ -22,8 +22,8 @@ def testGObutton():
         sys.exit(0)
     psm.screen.forceMessage(["Test GO Button", "Verify the GO button is working", "by pressing it continue."])
     while not psm.isKeyPressed(): time.sleep(0.01)
+    while psm.isKeyPressed(): time.sleep(0.01) # wait for release
     psm.screen.forceMessage(["Test resetKeyPressCount", "Press GO to verify the GO button", "count can be reset."])
-    while psm.isKeyPressed(): time.sleep(0.01) # wait for release of previous GO button press
     psm.resetKeyPressCount()
     while psm.getKeyPressCount() == 0: time.sleep(0.01)
 
@@ -33,14 +33,14 @@ def testLEDs():
                              "press GO to continue."])
     hueToRGB = lambda hue: [int(val*255) for val in colorsys.hsv_to_rgb(hue/360.0, 1, 1)]
     hue = 0
-    while not psm.isKeyPressed():
+    initialKeyPressCount = psm.getKeyPressCount()
+    while psm.getKeyPressCount() == initialKeyPressCount:
         psm.led(1, *hueToRGB(hue))
         psm.led(2, *hueToRGB(hue+120))
         hue += 10
         time.sleep(0.05)
     psm.led(1, 0,0,0)
     psm.led(2, 0,0,0)
-    while psm.isKeyPressed(): time.sleep(0.01) # wait for release
 
 def testTouchscreen():
     psm.screen.showMessage(["Touchscreen Test", "Use the paint program to check for touchscreen accuracy in all 4 corners. Also check the software function keys. When you are done press GO to continue."], wrapText=True)
@@ -58,7 +58,8 @@ def testServos():
 def testDigitalInput():
     psm.screen.showMessage(["Digital Input", "Connect the Grove Button sensor to each port and verify its reading. Press GO to proceed."], wrapText=True, goBtn=True)
     ports = [PiStorms_GRX.GrovePort(port, GRXCom.TYPE.DIGITAL_INPUT) for port in ALL]
-    while not psm.isKeyPressed():
+    initialKeyPressCount = psm.getKeyPressCount()
+    while psm.getKeyPressCount() == initialKeyPressCount:
         psm.screen.clearScreen(display=False)
         psm.screen.drawAutoText(ports[0].readValue(), 20, 150, display=False)
         psm.screen.drawAutoText(ports[1].readValue(), 20, 120, display=False)
@@ -73,13 +74,13 @@ def testDigitalInput():
         psm.screen.drawAutoText(ports[7].readValue(), 290,  90, display=False)
         psm.screen.drawAutoText(ports[8].readValue(), 290, 120, display=False)
         psm.screen.drawAutoText(ports[9].readValue(), 290, 150)
-    while psm.isKeyPressed(): time.sleep(0.01) # wait for release
     psm.screen.clearScreen(display=False)
 
 def testAnalogInput():
     psm.screen.showMessage(["Analog Input", "Connect the Grove Light sensor to each port and verify its reading. Press GO to proceed."], wrapText=True, goBtn=True)
     ports = [PiStorms_GRX.GrovePort(port, GRXCom.TYPE.ANALOG_INPUT) for port in ANALOG]
-    while not psm.isKeyPressed():
+    initialKeyPressCount = psm.getKeyPressCount()
+    while psm.getKeyPressCount() == initialKeyPressCount:
         psm.screen.clearScreen(display=False)
         psm.screen.drawAutoText(ports[0].readValue(), 20, 150, display=False)
         psm.screen.drawAutoText(ports[1].readValue(), 20, 120, display=False)
@@ -88,7 +89,6 @@ def testAnalogInput():
         psm.screen.drawAutoText(ports[3].readValue(), 260,  90, display=False)
         psm.screen.drawAutoText(ports[4].readValue(), 260, 120, display=False)
         psm.screen.drawAutoText(ports[5].readValue(), 260, 150)
-    while psm.isKeyPressed(): time.sleep(0.01) # wait for release
     psm.screen.clearScreen(display=False)
 
 def testDigitalOutput():
