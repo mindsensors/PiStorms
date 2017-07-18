@@ -81,6 +81,8 @@ class GRXCom():
     class COMMAND:
         SHUTDOWN = ord('H')
         RESET_ENCODERS = ord('R')
+        RESET_ENCODER_1 = ord('r')
+        RESET_ENCODER_2 = ord('s')
         UNLOCK_TOUCHSCREEN_CALIBRATION = ord('E')
         SAVE_TOUCHSCREEN_CALIBRATION = ord('t')
 
@@ -89,8 +91,7 @@ class GRXCom():
         self.address = address
 
     def setType(self, newType, mode=0):
-        self.i2c.writeByte(self.address, newType)
-        self.i2c.writeByte(self.address+1, mode)
+        self.i2c.writeArray(self.address, [newType, mode])
 
     def digitalRead(self):
         return self.i2c.readByte(self.address + self.OFFSET.DATA)
