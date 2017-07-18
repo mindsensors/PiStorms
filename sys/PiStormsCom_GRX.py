@@ -146,6 +146,10 @@ class GRXCom():
         else:
             return 0
 
+    @classmethod
+    def ping(self):
+        self.I2C.A.readByte(0x00)
+
     # Compatibility functions (please use their equivalents in PiStorms_GRX if possible)
     @classmethod
     def getKeyPressCount(self):

@@ -305,5 +305,5 @@ class PiStorms_GRX:
     def resetKeyPressCount(self):
         GRXCom.I2C.A.writeByte(GRXCom.REGISTER.GO_PRESS_COUNT, 0)
 
-    #def ping(self):
-    #    self.psc.ping()
+    def ping(self):
+        GRXCom.ping()
