@@ -221,8 +221,27 @@ include "api/config.php";
     <?php include "blockly/led.php"; ?>
     <?php include "blockly/buttons.php"; ?>
     <?php include "blockly/system.php"; ?>
-?>
 </xml>
+
+<script>
+var api = "http://<?=$_SERVER['SERVER_NAME']?>:3141/";
+$.get(api+'isgrx', function(data) {
+    if (data=='1')
+        $('#toolbox category[name=Motors]').remove()
+    else
+        $('#toolbox category[name=Servos]').remove()
+});
+</script>
+
+<script>
+var api = "http://<?=$_SERVER['SERVER_NAME']?>:3141/";
+$.get(api+'isgrx', function(data) {
+    if (data=='1')
+        $('#toolbox category[name=Motors]').remove()
+    else
+        $('#toolbox category[name=Servos]').remove()
+});
+</script>
 
 <script src="assets/ace/ace.js"></script>
 
