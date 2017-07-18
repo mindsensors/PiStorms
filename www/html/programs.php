@@ -224,22 +224,14 @@ include "api/config.php";
 </xml>
 
 <script>
-var api = "http://<?=$_SERVER['SERVER_NAME']?>:3141/";
-$.get(api+'isgrx', function(data) {
-    if (data=='1')
-        $('#toolbox category[name=Motors]').remove()
-    else
-        $('#toolbox category[name=Servos]').remove()
-});
-</script>
+setTimeout(()=>$("body").addClass("sidebar-collapse"), 10);
 
-<script>
 var api = "http://<?=$_SERVER['SERVER_NAME']?>:3141/";
 $.get(api+'isgrx', function(data) {
     if (data=='1')
-        $('#toolbox category[name=Motors]').remove()
+        $('#toolbox category[name=Motors]').remove();
     else
-        $('#toolbox category[name=Servos]').remove()
+        $('#toolbox category[name=Servos]').remove();
 });
 </script>
 
