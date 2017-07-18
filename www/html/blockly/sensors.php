@@ -36,30 +36,35 @@
   <sep gap="5"></sep>
   <block type="sensors_resettouchbumpcount"></block>
   <sep gap="20"></sep>
+
   <block type="sensors_nxtlight"></block>
   <sep gap="5"></sep>
   <block type="sensors_nxtlightgetvalue"></block>
   <sep gap="5"></sep>
   <block type="sensors_nxtlightsetmode"></block>
   <sep gap="20"></sep>
+
   <block type="sensors_nxtcolor"></block>
   <sep gap="5"></sep>
   <block type="sensors_nxtcolorgetcolor"></block>
   <sep gap="5"></sep>
   <block type="sensors_nxtcolorsetmode"></block>
   <sep gap="20"></sep>
+
   <block type="sensors_ev3color"></block>
   <sep gap="5"></sep>
   <block type="sensors_ev3colorgetvalue"></block>
   <sep gap="5"></sep>
   <block type="sensors_ev3colorsetmode"></block>
   <sep gap="20"></sep>
+
   <block type="sensors_ev3gyro"></block>
   <sep gap="5"></sep>
   <block type="sensors_ev3gyrogetvalue"></block>
   <sep gap="5"></sep>
   <block type="sensors_ev3gyrosetmode"></block>
   <sep gap="20"></sep>
+
   <block type="sensors_ev3ultrasonic"></block>
   <sep gap="5"></sep>
   <block type="sensors_ev3ultrasonicgetvalue"></block>
@@ -68,6 +73,7 @@
   <sep gap="5"></sep>
   <block type="sensors_ev3ultrasonicsetmode"></block>
   <sep gap="20"></sep>
+
   <block type="sensors_ev3infrared"></block>
   <sep gap="5"></sep>
   <block type="sensors_ev3infraredgetproximity">
@@ -104,6 +110,7 @@
   <sep gap="5"></sep>
   <block type="sensors_ev3infraredsetmode"></block>
   <sep gap="20"></sep>
+
   <block type="sensors_absoluteimu"></block>
   <sep gap="5"></sep>
   <block type="sensors_absoluteimugettilt"></block>
@@ -121,12 +128,15 @@
   <block type="sensors_absoluteimustartcmpscal"></block>
   <sep gap="5"></sep>
   <block type="sensors_absoluteimustopcmpscal"></block>
+  <sep gap="20"></sep>
+
   <block type="sensors_sumoeyes"></block>
   <sep gap="5"></sep>
   <block type="sensors_sumoeyesgetvalue"></block>
   <sep gap="5"></sep>
   <block type="sensors_sumoeyessetmode"></block>
   <sep gap="20"></sep>
+
   <block type="sensors_lineleader"></block>
   <sep gap="5"></sep>
   <block type="sensors_lineleadergetsteering"></block>
@@ -137,10 +147,12 @@
   <sep gap="5"></sep>
   <block type="sensors_lineleadergetrawcalibrated"></block>
   <sep gap="20"></sep>
+
   <block type="sensors_lsa"></block>
   <sep gap="5"></sep>
   <block type="sensors_lsagetrawcalibrated"></block>
   <sep gap="20"></sep>
+
 </category>
 
 
@@ -165,6 +177,7 @@ Blockly.Python['sensors_nxttouch'] = function(block) {
   var code = 'nxttouch_' + dropdown_sensor_selector;
   return [code, Blockly.Python.ORDER_NONE];
 };
+
 Blockly.Blocks['sensors_ev3touch'] = {
   init: function() {
     this.appendDummyInput()
@@ -184,6 +197,7 @@ Blockly.Python['sensors_ev3touch'] = function(block) {
   var code = 'ev3touch_' + dropdown_sensor_selector;
   return [code, Blockly.Python.ORDER_NONE];
 };
+
 Blockly.Blocks['sensors_istouchpressed'] = {
   init: function() {
     this.appendValueInput("sensor")
@@ -203,6 +217,7 @@ Blockly.Python['sensors_istouchpressed'] = function(block) {
   code = value_sensor + ".isPressed()";
   return [code, Blockly.Python.ORDER_NONE];
 };
+
 Blockly.Blocks['sensors_gettouchbumpcount'] = {
   init: function() {
     this.appendValueInput("sensor")
@@ -220,6 +235,7 @@ Blockly.Python['sensors_gettouchbumpcount'] = function(block) {
   code = value_sensor + ".getBumpCount()";
   return [code, Blockly.Python.ORDER_NONE];
 };
+
 Blockly.Blocks['sensors_resettouchbumpcount'] = {
   init: function() {
     this.appendValueInput("sensor")
@@ -260,6 +276,7 @@ Blockly.Python['sensors_nxtlight'] = function(block) {
   var code = 'nxtlight_' + dropdown_sensor_selector;
   return [code, Blockly.Python.ORDER_NONE];
 };
+
 Blockly.Blocks['sensors_nxtlightgetvalue'] = {
   init: function() {
     this.appendValueInput("sensor")
@@ -277,6 +294,7 @@ Blockly.Python['sensors_nxtlightgetvalue'] = function(block) {
   code = value_sensor + ".getValue()";
   return [code, Blockly.Python.ORDER_NONE];
 };
+
 Blockly.Blocks['sensors_nxtlightsetmode'] = {
   init: function() {
     this.appendValueInput("sensor")
@@ -321,6 +339,7 @@ Blockly.Python['sensors_nxtcolor'] = function(block) {
   var code = 'nxtcolor_' + dropdown_sensor_selector;
   return [code, Blockly.Python.ORDER_NONE];
 };
+
 Blockly.Blocks['sensors_nxtcolorgetcolor'] = {
   init: function() {
     this.appendValueInput("sensor")
@@ -338,6 +357,7 @@ Blockly.Python['sensors_nxtcolorgetcolor'] = function(block) {
   code = value_sensor + ".getColor()";
   return [code, Blockly.Python.ORDER_NONE];
 };
+
 Blockly.Blocks['sensors_nxtcolorsetmode'] = {
   init: function() {
     this.appendValueInput("sensor")
@@ -382,6 +402,7 @@ Blockly.Python['sensors_ev3color'] = function(block) {
   var code = 'ev3color_' + dropdown_sensor_selector;
   return [code, Blockly.Python.ORDER_NONE];
 };
+
 Blockly.Blocks['sensors_ev3colorgetvalue'] = {
   init: function() {
     this.appendValueInput("sensor")
@@ -399,6 +420,7 @@ Blockly.Python['sensors_ev3colorgetvalue'] = function(block) {
   code = value_sensor + ".getValue()";
   return [code, Blockly.Python.ORDER_NONE];
 };
+
 Blockly.Blocks['sensors_ev3colorsetmode'] = {
   init: function() {
     this.appendValueInput("sensor")
@@ -423,6 +445,7 @@ Blockly.Python['sensors_ev3colorsetmode'] = function(block) {
 };
 
 
+
 Blockly.Blocks['sensors_ev3gyro'] = {
   init: function() {
     this.appendDummyInput()
@@ -442,6 +465,7 @@ Blockly.Python['sensors_ev3gyro'] = function(block) {
   var code = 'ev3gyro_' + dropdown_sensor_selector;
   return [code, Blockly.Python.ORDER_NONE];
 };
+
 Blockly.Blocks['sensors_ev3gyrogetvalue'] = {
   init: function() {
     this.appendValueInput("sensor")
@@ -459,6 +483,7 @@ Blockly.Python['sensors_ev3gyrogetvalue'] = function(block) {
   code = value_sensor + ".readValue()";
   return [code, Blockly.Python.ORDER_NONE];
 };
+
 Blockly.Blocks['sensors_ev3gyrosetmode'] = {
   init: function() {
     this.appendValueInput("sensor")
@@ -483,6 +508,7 @@ Blockly.Python['sensors_ev3gyrosetmode'] = function(block) {
 };
 
 
+
 Blockly.Blocks['sensors_ev3ultrasonic'] = {
   init: function() {
     this.appendDummyInput()
@@ -502,6 +528,7 @@ Blockly.Python['sensors_ev3ultrasonic'] = function(block) {
   var code = 'ev3ultrasonic_' + dropdown_sensor_selector;
   return [code, Blockly.Python.ORDER_NONE];
 };
+
 Blockly.Blocks['sensors_ev3ultrasonicgetvalue'] = {
   init: function() {
     this.appendValueInput("sensor")
@@ -519,6 +546,7 @@ Blockly.Python['sensors_ev3ultrasonicgetvalue'] = function(block) {
   code = value_sensor + ".getDistance()";
   return [code, Blockly.Python.ORDER_NONE];
 };
+
 Blockly.Blocks['sensors_ev3ultrasonicdetect'] = {
   init: function() {
     this.appendValueInput("sensor")
@@ -536,6 +564,7 @@ Blockly.Python['sensors_ev3ultrasonicdetect'] = function(block) {
   code = value_sensor + ".detect()";
   return [code, Blockly.Python.ORDER_NONE];
 };
+
 Blockly.Blocks['sensors_ev3ultrasonicsetmode'] = {
   init: function() {
     this.appendValueInput("sensor")
@@ -561,11 +590,6 @@ Blockly.Python['sensors_ev3ultrasonicsetmode'] = function(block) {
 
 
 
-
-
-
-
-
 Blockly.Blocks['sensors_ev3infrared'] = {
   init: function() {
     this.appendDummyInput()
@@ -585,6 +609,7 @@ Blockly.Python['sensors_ev3infrared'] = function(block) {
   var code = 'ev3infrared_' + dropdown_sensor_selector;
   return [code, Blockly.Python.ORDER_NONE];
 };
+
 Blockly.Blocks['sensors_ev3infraredgetproximity'] = {
   init: function() {
     this.appendValueInput("sensor")
@@ -602,6 +627,7 @@ Blockly.Python['sensors_ev3infraredgetproximity'] = function(block) {
   code = value_sensor + ".readProximity()";
   return [code, Blockly.Python.ORDER_NONE];
 };
+
 Blockly.Blocks['sensors_ev3infraredchannelheading'] = {
   init: function() {
     this.appendValueInput("sensor")
@@ -623,6 +649,7 @@ Blockly.Python['sensors_ev3infraredchannelheading'] = function(block) {
   code = value_sensor + ".readChannelHeading(" + value_channel + ")";
   return [code, Blockly.Python.ORDER_NONE];
 };
+
 Blockly.Blocks['sensors_ev3infraredchannelproximity'] = {
   init: function() {
     this.appendValueInput("sensor")
@@ -666,6 +693,7 @@ Blockly.Python['sensors_ev3infraredgetremote'] = function(block) {
   code = value_sensor + ".readRemote(" + value_channel + ")";
   return [code, Blockly.Python.ORDER_NONE];
 };
+
 Blockly.Blocks['sensors_ev3infraredsetmode'] = {
   init: function() {
     this.appendValueInput("sensor")
@@ -691,9 +719,6 @@ Blockly.Python['sensors_ev3infraredsetmode'] = function(block) {
 
 
 
-
-
-
 Blockly.Blocks['sensors_absoluteimu'] = {
   init: function() {
     this.appendDummyInput()
@@ -715,6 +740,7 @@ Blockly.Python['sensors_absoluteimu'] = function(block) {
   var code = 'absoluteimu_' + dropdown_sensor_selector;
   return [code, Blockly.Python.ORDER_NONE];
 };
+
 Blockly.Blocks['sensors_absoluteimugettilt'] = {
   init: function() {
     this.appendDummyInput()
@@ -736,6 +762,7 @@ Blockly.Python['sensors_absoluteimugettilt'] = function(block) {
   code = value_sensor + ".get_tilt" + dropdown_axis_selector + "()";
   return [code, Blockly.Python.ORDER_NONE];
 };
+
 Blockly.Blocks['sensors_absoluteimugetacceleration'] = {
   init: function() {
     this.appendDummyInput()
@@ -757,24 +784,7 @@ Blockly.Python['sensors_absoluteimugetacceleration'] = function(block) {
   code = value_sensor + ".get_accel" + dropdown_axis_selector + "()";
   return [code, Blockly.Python.ORDER_NONE];
 };
-Blockly.Blocks['sensors_absoluteimugetheading'] = {
-  init: function() {
-    this.appendDummyInput()
-        .appendField("get heading from");
-    this.appendValueInput("sensor")
-        .setCheck("absoluteimu")
-    this.setInputsInline(true);
-    this.setOutput(true, "Number");
-    this.setColour(140);
-    this.setTooltip('');
-    this.setHelpUrl('https://www.mindsensors.com/forum');
-  }
-};
-Blockly.Python['sensors_absoluteimugetheading'] = function(block) {
-  var value_sensor = Blockly.Python.valueToCode(block, 'sensor', Blockly.Python.ORDER_ATOMIC);
-  code = value_sensor + ".get_heading()";
-  return [code, Blockly.Python.ORDER_NONE];
-};
+
 Blockly.Blocks['sensors_absoluteimugetmagnetometer'] = {
   init: function() {
     this.appendDummyInput()
@@ -796,6 +806,7 @@ Blockly.Python['sensors_absoluteimugetmagnetometer'] = function(block) {
   code = value_sensor + ".get_mag" + dropdown_axis_selector + "()";
   return [code, Blockly.Python.ORDER_NONE];
 };
+
 Blockly.Blocks['sensors_absoluteimugetgyro'] = {
   init: function() {
     this.appendDummyInput()
@@ -817,6 +828,26 @@ Blockly.Python['sensors_absoluteimugetgyro'] = function(block) {
   code = value_sensor + ".get_gyro" + dropdown_axis_selector + "()";
   return [code, Blockly.Python.ORDER_NONE];
 };
+
+Blockly.Blocks['sensors_absoluteimugetheading'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField("get heading from");
+    this.appendValueInput("sensor")
+        .setCheck("absoluteimu")
+    this.setInputsInline(true);
+    this.setOutput(true, "Number");
+    this.setColour(140);
+    this.setTooltip('');
+    this.setHelpUrl('https://www.mindsensors.com/forum');
+  }
+};
+Blockly.Python['sensors_absoluteimugetheading'] = function(block) {
+  var value_sensor = Blockly.Python.valueToCode(block, 'sensor', Blockly.Python.ORDER_ATOMIC);
+  code = value_sensor + ".get_heading()";
+  return [code, Blockly.Python.ORDER_NONE];
+};
+
 Blockly.Blocks['sensors_absoluteimusetaccel'] = {
   init: function() {
     this.appendValueInput("sensor")
@@ -839,6 +870,7 @@ Blockly.Python['sensors_absoluteimusetaccel'] = function(block) {
   code = value_sensor + ".accel_" + dropdown_mode_selector + "()\n";
   return code;
 };
+
 Blockly.Blocks['sensors_absoluteimustartcmpscal'] = {
   init: function() {
     this.appendValueInput("sensor")
@@ -857,6 +889,7 @@ Blockly.Python['sensors_absoluteimustartcmpscal'] = function(block) {
   code = value_sensor + ".start_cmpscal()\n";
   return code;
 };
+
 Blockly.Blocks['sensors_absoluteimustopcmpscal'] = {
   init: function() {
     this.appendValueInput("sensor")
@@ -875,6 +908,7 @@ Blockly.Python['sensors_absoluteimustopcmpscal'] = function(block) {
   code = value_sensor + ".stop_cmpscal()\n";
   return code;
 };
+
 
 
 Blockly.Blocks['sensors_sumoeyes'] = {
@@ -898,6 +932,7 @@ Blockly.Python['sensors_sumoeyes'] = function(block) {
   var code = 'sumoeyes_' + dropdown_sensor_selector;
   return [code, Blockly.Python.ORDER_NONE];
 };
+
 Blockly.Blocks['sensors_sumoeyesgetvalue'] = {
   init: function() {
     this.appendDummyInput()
@@ -916,6 +951,7 @@ Blockly.Python['sensors_sumoeyesgetvalue'] = function(block) {
   code = value_sensor + ".detectObstactleZone(True)";
   return [code, Blockly.Python.ORDER_NONE];
 };
+
 Blockly.Blocks['sensors_sumoeyessetmode'] = {
   init: function() {
     this.appendValueInput("sensor")
@@ -939,6 +975,8 @@ Blockly.Python['sensors_sumoeyessetmode'] = function(block) {
   return code;
 };
 
+
+
 Blockly.Blocks['sensors_lineleader'] = {
   init: function() {
     this.appendDummyInput()
@@ -960,6 +998,7 @@ Blockly.Python['sensors_lineleader'] = function(block) {
   var code = 'lineleader_' + dropdown_sensor_selector;
   return [code, Blockly.Python.ORDER_NONE];
 };
+
 Blockly.Blocks['sensors_lineleadergetsteering'] = {
   init: function() {
     this.appendDummyInput()
@@ -978,6 +1017,7 @@ Blockly.Python['sensors_lineleadergetsteering'] = function(block) {
   code = value_sensor + ".steering()";
   return [code, Blockly.Python.ORDER_NONE];
 };
+
 Blockly.Blocks['sensors_lineleadergetaverage'] = {
   init: function() {
     this.appendDummyInput()
@@ -996,6 +1036,7 @@ Blockly.Python['sensors_lineleadergetaverage'] = function(block) {
   code = value_sensor + ".average()";
   return [code, Blockly.Python.ORDER_NONE];
 };
+
 Blockly.Blocks['sensors_lineleadergetresult'] = {
   init: function() {
     this.appendDummyInput()
@@ -1014,6 +1055,7 @@ Blockly.Python['sensors_lineleadergetresult'] = function(block) {
   code = value_sensor + ".result()";
   return [code, Blockly.Python.ORDER_NONE];
 };
+
 Blockly.Blocks['sensors_lineleadergetrawcalibrated'] = {
   init: function() {
     this.appendDummyInput()
@@ -1032,6 +1074,8 @@ Blockly.Python['sensors_lineleadergetrawcalibrated'] = function(block) {
   code = value_sensor + ".ReadRaw_Calibrated()";
   return [code, Blockly.Python.ORDER_NONE];
 };
+
+
 
 Blockly.Blocks['sensors_lsa'] = {
   init: function() {
@@ -1054,6 +1098,7 @@ Blockly.Python['sensors_lsa'] = function(block) {
   var code = 'lsa_' + dropdown_sensor_selector;
   return [code, Blockly.Python.ORDER_NONE];
 };
+
 Blockly.Blocks['sensors_lsagetrawcalibrated'] = {
   init: function() {
     this.appendDummyInput()

@@ -34,6 +34,7 @@
   <block type="logic_null"></block>
   <block type="logic_ternary"></block>
 </category>
+
 <category name="Loops" colour="120">
   <block type="controls_repeat_ext">
     <value name="TIMES">
@@ -63,6 +64,7 @@
   <block type="controls_forEach"></block>
   <block type="controls_flow_statements"></block>
 </category>
+
 <category name="Math" colour="230">
   <block type="math_number"></block>
   <block type="math_arithmetic">
@@ -157,6 +159,7 @@
   </block>
   <block type="math_random_float"></block>
 </category>
+
 <category name="Text" colour="160">
   <block type="text"></block>
   <block type="text_join"></block>
@@ -234,6 +237,7 @@
     </value>
   </block>
 </category>
+
 <category name="Lists" colour="260">
   <block type="lists_create_with">
     <mutation items="0"></mutation>
@@ -285,6 +289,7 @@
   </block>
   <block type="lists_sort"></block>
 </category>
+
 <category name="Color" colour="20">
   <block type="colour_picker"></block>
   <block type="colour_random"></block>

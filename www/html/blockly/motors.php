@@ -33,11 +33,17 @@
       </shadow>
     </value>
   </block>
+
   <block type="motors_getposition"></block>
+
   <block type="motors_resetposition"></block>
+
   <block type="motors_brake"></block>
+
   <block type="motors_float"></block>
+
   <block type="motors_hold"></block>
+
   <block type="motors_syncspeed">
     <value name="SPEED">
       <shadow type="math_number">
@@ -45,8 +51,11 @@
       </shadow>
     </value>
   </block>
+
   <block type="motors_syncfloat"></block>
+
   <block type="motors_syncbrake"></block>
+
   <block type="motors_runsecs">
     <value name="SPEED">
       <shadow type="math_number">
@@ -59,6 +68,7 @@
       </shadow>
     </value>
   </block>
+
   <block type="motors_rundegrees">
     <value name="SPEED">
       <shadow type="math_number">
@@ -71,10 +81,15 @@
       </shadow>
     </value>
   </block>
+
   <block type="motors_isbusy"></block>
+
   <block type="motors_isstalled"></block>
+
   <block type="motors_isoverloaded"></block>
+
   <block type="motors_waituntilnotbusy"></block>
+
   <block type="motors_setparams">
     <value name="Kp_tacho">
       <shadow type="math_number">
@@ -117,6 +132,7 @@
       </shadow>
     </value>
   </block>
+
 </category>
 
 
@@ -147,6 +163,50 @@ Blockly.Python['motors_setspeed'] = function(block) {
   return code;
 };
 
+
+Blockly.Blocks['motors_getposition'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField("get position of")
+        .appendField(new Blockly.FieldDropdown([["BAM1", "BAM1"], ["BAM2", "BAM2"], ["BBM1", "BBM1"], ["BBM2", "BBM2"]]), "motor_selector");
+    this.setInputsInline(true);
+    this.setOutput(true, "Number");
+    this.setColour(240);
+    this.setTooltip('');
+    this.setHelpUrl('https://www.mindsensors.com/forum');
+  }
+};
+Blockly.Python['motors_getposition'] = function(block) {
+  var dropdown_motor_selector = block.getFieldValue('motor_selector');
+  Blockly.Python.definitions_.from_PiStorms_import_PiStorms = "from PiStorms import PiStorms";
+  Blockly.Python.definitions_.psm_PiStorms = "psm = PiStorms()";
+  var code = 'psm.'+ dropdown_motor_selector + '.pos()';
+  return [code, Blockly.Python.ORDER_NONE];
+};
+
+
+Blockly.Blocks['motors_resetposition'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField("reset position of")
+        .appendField(new Blockly.FieldDropdown([["BAM1", "BAM1"], ["BAM2", "BAM2"], ["BBM1", "BBM1"], ["BBM2", "BBM2"]]), "motor_selector");
+    this.setInputsInline(true);
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(240);
+    this.setTooltip('');
+    this.setHelpUrl('https://www.mindsensors.com/forum');
+  }
+};
+Blockly.Python['motors_resetposition'] = function(block) {
+  var dropdown_motor_selector = block.getFieldValue('motor_selector');
+  Blockly.Python.definitions_.from_PiStorms_import_PiStorms = "from PiStorms import PiStorms";
+  Blockly.Python.definitions_.psm_PiStorms = "psm = PiStorms()";
+  var code = 'psm.'+ dropdown_motor_selector + '.resetPos()\n';
+  return code;
+};
+
+
 Blockly.Blocks['motors_brake'] = {
   init: function() {
     this.appendDummyInput()
@@ -168,6 +228,7 @@ Blockly.Python['motors_brake'] = function(block) {
   var code = 'psm.'+ dropdown_motor_selector + '.brake()\n';
   return code;
 };
+
 
 Blockly.Blocks['motors_float'] = {
   init: function() {
@@ -191,6 +252,7 @@ Blockly.Python['motors_float'] = function(block) {
   return code;
 };
 
+
 Blockly.Blocks['motors_hold'] = {
   init: function() {
     this.appendDummyInput()
@@ -213,46 +275,6 @@ Blockly.Python['motors_hold'] = function(block) {
   return code;
 };
 
-Blockly.Blocks['motors_getposition'] = {
-  init: function() {
-    this.appendDummyInput()
-        .appendField("get position of")
-        .appendField(new Blockly.FieldDropdown([["BAM1", "BAM1"], ["BAM2", "BAM2"], ["BBM1", "BBM1"], ["BBM2", "BBM2"]]), "motor_selector");
-    this.setInputsInline(true);
-    this.setOutput(true, "Number");
-    this.setColour(240);
-    this.setTooltip('');
-    this.setHelpUrl('https://www.mindsensors.com/forum');
-  }
-};
-Blockly.Python['motors_getposition'] = function(block) {
-  var dropdown_motor_selector = block.getFieldValue('motor_selector');
-  Blockly.Python.definitions_.from_PiStorms_import_PiStorms = "from PiStorms import PiStorms";
-  Blockly.Python.definitions_.psm_PiStorms = "psm = PiStorms()";
-  var code = 'psm.'+ dropdown_motor_selector + '.pos()';
-  return [code, Blockly.Python.ORDER_NONE];
-};
-
-Blockly.Blocks['motors_resetposition'] = {
-  init: function() {
-    this.appendDummyInput()
-        .appendField("reset position of")
-        .appendField(new Blockly.FieldDropdown([["BAM1", "BAM1"], ["BAM2", "BAM2"], ["BBM1", "BBM1"], ["BBM2", "BBM2"]]), "motor_selector");
-    this.setInputsInline(true);
-    this.setPreviousStatement(true, null);
-    this.setNextStatement(true, null);
-    this.setColour(240);
-    this.setTooltip('');
-    this.setHelpUrl('https://www.mindsensors.com/forum');
-  }
-};
-Blockly.Python['motors_resetposition'] = function(block) {
-  var dropdown_motor_selector = block.getFieldValue('motor_selector');
-  Blockly.Python.definitions_.from_PiStorms_import_PiStorms = "from PiStorms import PiStorms";
-  Blockly.Python.definitions_.psm_PiStorms = "psm = PiStorms()";
-  var code = 'psm.'+ dropdown_motor_selector + '.resetPos()\n';
-  return code;
-};
 
 Blockly.Blocks['motors_syncspeed'] = {
   init: function() {
@@ -279,6 +301,7 @@ Blockly.Python['motors_syncspeed'] = function(block) {
   return code;
 };
 
+
 Blockly.Blocks['motors_syncfloat'] = {
   init: function() {
     this.appendDummyInput()
@@ -300,6 +323,7 @@ Blockly.Python['motors_syncfloat'] = function(block) {
   var code = 'psm.'+ dropdown_bank_selector + '.floatSync()\n';
   return code;
 };
+
 
 Blockly.Blocks['motors_syncbrake'] = {
   init: function() {
@@ -323,27 +347,6 @@ Blockly.Python['motors_syncbrake'] = function(block) {
   return code;
 };
 
-Blockly.Blocks['motors_waituntilnotbusy'] = {
-  init: function() {
-    this.appendDummyInput()
-        .appendField("wait until motor")
-        .appendField(new Blockly.FieldDropdown([["BAM1", "BAM1"], ["BAM2", "BAM2"], ["BBM1", "BBM1"], ["BBM2", "BBM2"]]), "motor_selector")
-        .appendField("stops");
-    this.setInputsInline(true);
-    this.setPreviousStatement(true, null);
-    this.setNextStatement(true, null);
-    this.setColour(240);
-    this.setTooltip('');
-    this.setHelpUrl('https://www.mindsensors.com/forum');
-  }
-};
-Blockly.Python['motors_waituntilnotbusy'] = function(block) {
-  var dropdown_bank_selector = block.getFieldValue('motor_selector');
-  Blockly.Python.definitions_.from_PiStorms_import_PiStorms = "from PiStorms import PiStorms";
-  Blockly.Python.definitions_.psm_PiStorms = "psm = PiStorms()";
-  var code = 'psm.'+ dropdown_bank_selector + '.waitUntilNotBusy()\n';
-  return code;
-};
 
 Blockly.Blocks['motors_runsecs'] = {
   init: function() {
@@ -379,6 +382,7 @@ Blockly.Python['motors_runsecs'] = function(block) {
   var code = 'psm.'+ dropdown_motor_selector + '.runSecs(' + value_time + ', ' + value_speed + ', ' + dropdown_brake_selector + ')\n';
   return code;
 };
+
 
 Blockly.Blocks['motors_rundegrees'] = {
   init: function() {
@@ -416,6 +420,7 @@ Blockly.Python['motors_rundegrees'] = function(block) {
   return code;
 };
 
+
 Blockly.Blocks['motors_isbusy'] = {
   init: function() {
     this.appendDummyInput()
@@ -436,6 +441,7 @@ Blockly.Python['motors_isbusy'] = function(block) {
   var code = 'psm.'+ dropdown_motor_selector + '.isBusy()';
   return [code, Blockly.Python.ORDER_NONE];
 };
+
 
 Blockly.Blocks['motors_isstalled'] = {
   init: function() {
@@ -458,6 +464,7 @@ Blockly.Python['motors_isstalled'] = function(block) {
   return [code, Blockly.Python.ORDER_NONE];
 };
 
+
 Blockly.Blocks['motors_isoverloaded'] = {
   init: function() {
     this.appendDummyInput()
@@ -477,6 +484,29 @@ Blockly.Python['motors_isoverloaded'] = function(block) {
   Blockly.Python.definitions_.psm_PiStorms = "psm = PiStorms()";
   var code = 'psm.'+ dropdown_motor_selector + '.isOverloaded()';
   return [code, Blockly.Python.ORDER_NONE];
+};
+
+
+Blockly.Blocks['motors_waituntilnotbusy'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField("wait until motor")
+        .appendField(new Blockly.FieldDropdown([["BAM1", "BAM1"], ["BAM2", "BAM2"], ["BBM1", "BBM1"], ["BBM2", "BBM2"]]), "motor_selector")
+        .appendField("stops");
+    this.setInputsInline(true);
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(240);
+    this.setTooltip('');
+    this.setHelpUrl('https://www.mindsensors.com/forum');
+  }
+};
+Blockly.Python['motors_waituntilnotbusy'] = function(block) {
+  var dropdown_bank_selector = block.getFieldValue('motor_selector');
+  Blockly.Python.definitions_.from_PiStorms_import_PiStorms = "from PiStorms import PiStorms";
+  Blockly.Python.definitions_.psm_PiStorms = "psm = PiStorms()";
+  var code = 'psm.'+ dropdown_bank_selector + '.waitUntilNotBusy()\n';
+  return code;
 };
 
 

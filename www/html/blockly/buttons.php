@@ -52,6 +52,7 @@ Blockly.Python['system_keypressed'] = function(block) {
   return [code, Blockly.Python.ORDER_NONE];
 };
 
+
 Blockly.Blocks['system_getkeypresscount'] = {
   init: function() {
     this.appendDummyInput()
@@ -69,6 +70,7 @@ Blockly.Python['system_getkeypresscount'] = function(block) {
   var code = 'psm.getKeyPressCountx()';
   return [code, Blockly.Python.ORDER_NONE];
 };
+
 
 Blockly.Blocks['system_resetkeypresscount'] = {
   init: function() {

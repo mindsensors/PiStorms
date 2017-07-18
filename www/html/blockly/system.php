@@ -33,6 +33,7 @@
       </shadow>
     </value>
   </block>
+
   <block type="system_sleep">
     <value name="TIME">
       <shadow type="math_number">
@@ -40,18 +41,45 @@
       </shadow>
     </value>
   </block>
+
   <block type="system_exit"></block>
+
   <block type="variable_pistorms"></block>
+
   <block type="system_shutdown"></block>
+
   <block type="system_getbattery"></block>
+
   <block type="system_getfirmware"></block>
+
   <block type="system_getvendor"></block>
+
   <block type="system_getdeviceid"></block>
 </category>
 
 
 
 <script>
+Blockly.Blocks['system_print'] = {
+  init: function() {
+    this.appendValueInput("TEXT")
+        .setCheck(null)
+        .appendField("print");
+    this.setInputsInline(true);
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(5);
+    this.setTooltip('');
+    this.setHelpUrl('https://www.mindsensors.com/forum');
+  }
+};
+Blockly.Python['system_print'] = function(block) {
+  var value_text = Blockly.Python.valueToCode(block, 'TEXT', Blockly.Python.ORDER_ATOMIC);
+  var code = 'print(' + value_text + ')\n';
+  return code;
+};
+
+
 Blockly.Blocks['system_sleep'] = {
   init: function() {
     this.appendValueInput("TIME")
@@ -74,6 +102,25 @@ Blockly.Python['system_sleep'] = function(block) {
   return code;
 };
 
+
+Blockly.Blocks['system_exit'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField("exit out of the program");
+    this.setInputsInline(true);
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(5);
+    this.setTooltip('');
+    this.setHelpUrl('https://www.mindsensors.com/forum');
+  }
+};
+Blockly.Python['system_exit'] = function(block) {
+  var code = 'sys.exit(-1)\n';
+  return code;
+};
+
+
 Blockly.Blocks['variable_pistorms'] = {
   init: function() {
     this.appendDummyInput()
@@ -92,24 +139,6 @@ Blockly.Python['variable_pistorms'] = function(block) {
   return [code, Blockly.Python.ORDER_NONE];
 };
 
-Blockly.Blocks['system_print'] = {
-  init: function() {
-    this.appendValueInput("TEXT")
-        .setCheck(null)
-        .appendField("print");
-    this.setInputsInline(true);
-    this.setPreviousStatement(true, null);
-    this.setNextStatement(true, null);
-    this.setColour(5);
-    this.setTooltip('');
-    this.setHelpUrl('https://www.mindsensors.com/forum');
-  }
-};
-Blockly.Python['system_print'] = function(block) {
-  var value_text = Blockly.Python.valueToCode(block, 'TEXT', Blockly.Python.ORDER_ATOMIC);
-  var code = 'print(' + value_text + ')\n';
-  return code;
-};
 
 Blockly.Blocks['system_shutdown'] = {
   init: function() {
@@ -130,22 +159,6 @@ Blockly.Python['system_shutdown'] = function(block) {
   return code;
 };
 
-Blockly.Blocks['system_exit'] = {
-  init: function() {
-    this.appendDummyInput()
-        .appendField("exit out of the program");
-    this.setInputsInline(true);
-    this.setPreviousStatement(true, null);
-    this.setNextStatement(true, null);
-    this.setColour(5);
-    this.setTooltip('');
-    this.setHelpUrl('https://www.mindsensors.com/forum');
-  }
-};
-Blockly.Python['system_exit'] = function(block) {
-  var code = 'sys.exit(-1)\n';
-  return code;
-};
 
 Blockly.Blocks['system_getbattery'] = {
   init: function() {
@@ -165,6 +178,7 @@ Blockly.Python['system_getbattery'] = function(block) {
   return [code, Blockly.Python.ORDER_NONE];
 };
 
+
 Blockly.Blocks['system_getfirmware'] = {
   init: function() {
     this.appendDummyInput()
@@ -182,6 +196,7 @@ Blockly.Python['system_getfirmware'] = function(block) {
   var code = 'psm.GetFirmwareVersion()';
   return [code, Blockly.Python.ORDER_NONE];
 };
+
 
 Blockly.Blocks['system_getvendor'] = {
   init: function() {
