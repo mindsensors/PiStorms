@@ -35,35 +35,30 @@
   <block type="sensors_gettouchbumpcount"></block>
   <sep gap="5"></sep>
   <block type="sensors_resettouchbumpcount"></block>
-  <sep gap="20"></sep>
 
   <block type="sensors_nxtlight"></block>
   <sep gap="5"></sep>
   <block type="sensors_nxtlightgetvalue"></block>
   <sep gap="5"></sep>
   <block type="sensors_nxtlightsetmode"></block>
-  <sep gap="20"></sep>
 
   <block type="sensors_nxtcolor"></block>
   <sep gap="5"></sep>
   <block type="sensors_nxtcolorgetcolor"></block>
   <sep gap="5"></sep>
   <block type="sensors_nxtcolorsetmode"></block>
-  <sep gap="20"></sep>
 
   <block type="sensors_ev3color"></block>
   <sep gap="5"></sep>
   <block type="sensors_ev3colorgetvalue"></block>
   <sep gap="5"></sep>
   <block type="sensors_ev3colorsetmode"></block>
-  <sep gap="20"></sep>
 
   <block type="sensors_ev3gyro"></block>
   <sep gap="5"></sep>
   <block type="sensors_ev3gyrogetvalue"></block>
   <sep gap="5"></sep>
   <block type="sensors_ev3gyrosetmode"></block>
-  <sep gap="20"></sep>
 
   <block type="sensors_ev3ultrasonic"></block>
   <sep gap="5"></sep>
@@ -72,7 +67,6 @@
   <block type="sensors_ev3ultrasonicdetect"></block>
   <sep gap="5"></sep>
   <block type="sensors_ev3ultrasonicsetmode"></block>
-  <sep gap="20"></sep>
 
   <block type="sensors_ev3infrared"></block>
   <sep gap="5"></sep>
@@ -109,7 +103,6 @@
   </block>
   <sep gap="5"></sep>
   <block type="sensors_ev3infraredsetmode"></block>
-  <sep gap="20"></sep>
 
   <block type="sensors_absoluteimu"></block>
   <sep gap="5"></sep>
@@ -128,14 +121,12 @@
   <block type="sensors_absoluteimustartcmpscal"></block>
   <sep gap="5"></sep>
   <block type="sensors_absoluteimustopcmpscal"></block>
-  <sep gap="20"></sep>
 
   <block type="sensors_sumoeyes"></block>
   <sep gap="5"></sep>
   <block type="sensors_sumoeyesgetvalue"></block>
   <sep gap="5"></sep>
   <block type="sensors_sumoeyessetmode"></block>
-  <sep gap="20"></sep>
 
   <block type="sensors_lineleader"></block>
   <sep gap="5"></sep>
@@ -146,13 +137,10 @@
   <block type="sensors_lineleadergetresult"></block>
   <sep gap="5"></sep>
   <block type="sensors_lineleadergetrawcalibrated"></block>
-  <sep gap="20"></sep>
 
   <block type="sensors_lsa"></block>
   <sep gap="5"></sep>
   <block type="sensors_lsagetrawcalibrated"></block>
-  <sep gap="20"></sep>
-
 </category>
 
 

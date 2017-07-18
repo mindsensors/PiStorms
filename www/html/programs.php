@@ -214,7 +214,6 @@ include "api/config.php";
 
 <xml id="toolbox" style="display: none">
     <?php include "blockly/standard.php"; ?>
-    <sep></sep>
     <?php include "blockly/motors.php"; ?>
     <?php include "blockly/servos.php"; ?>
     <?php include "blockly/sensors.php"; ?>
