@@ -230,7 +230,7 @@ class RCServoEncoder(RCServo, GrovePort):
             raise ValueError("The encoder must be on digital port 1 or 2.")
 
         RCServo.__init__(self, port, neutralPoint)
-        GroveDigitalPort.__init__(self, encoder, type=GRXCom.TYPE.ENCODER, mode=int(encoder[3]))
+        GrovePort.__init__(self, encoder, type=GRXCom.TYPE.ENCODER, mode=int(encoder[3]))
 
     def setTarget(self, value):
         if value.bit_length() > 64:
@@ -285,7 +285,7 @@ class PiStorms_GRX:
         return GRXCom.I2C.A.readByte(GRXCom.REGISTER.GO_BUTTON_STATE) % 2 == 1
 
     def getKeyPressValue(self): # F1-4
-        return {8: 1, 16: 2, 24: 3, 40: 4}[GRXCom.getKeyPressValue()]
+        return {0: 0, 8: 1, 16: 2, 24: 3, 40: 4}[GRXCom.getKeyPressValue()]
 
     def isF1Pressed(self):
         return (GRXCom.getKeyPressValue() == 8)
