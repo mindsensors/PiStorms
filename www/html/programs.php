@@ -210,10 +210,20 @@ include "api/config.php";
 <script type="text/javascript" src="assets/pnotify.min.js"></script>
 <script type="text/javascript" src="assets/jquery.slimscroll.min.js"></script>
 <script type="text/javascript" src="assets/bootstrap-slider.min.js"></script>
-<script type="text/javascript" src="assets/ps_blocks.js"></script>
 <script type="text/javascript" src="assets/sha256.min.js"></script>
 
-<?php include "components/blocks.php"; ?>
+<xml id="toolbox" style="display: none">
+    <?php include "blockly/standard.php"; ?>
+    <sep></sep>
+    <?php include "blockly/motors.php"; ?>
+    <?php include "blockly/servos.php"; ?>
+    <?php include "blockly/sensors.php"; ?>
+    <?php include "blockly/screen.php"; ?>
+    <?php include "blockly/led.php"; ?>
+    <?php include "blockly/buttons.php"; ?>
+    <?php include "blockly/system.php"; ?>
+?>
+</xml>
 
 <script src="assets/ace/ace.js"></script>
 
