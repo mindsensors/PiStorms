@@ -217,6 +217,7 @@ include "api/config.php";
     <?php include "blockly/motors.php"; ?>
     <?php include "blockly/servos.php"; ?>
     <?php include "blockly/sensors.php"; ?>
+    <?php include "blockly/grove.php"; ?>
     <?php include "blockly/screen.php"; ?>
     <?php include "blockly/led.php"; ?>
     <?php include "blockly/buttons.php"; ?>
@@ -228,10 +229,14 @@ setTimeout(()=>$("body").addClass("sidebar-collapse"), 10);
 
 var api = "http://<?=$_SERVER['SERVER_NAME']?>:3141/";
 $.get(api+'isgrx', function(data) {
-    if (data=='1')
+    if (data=='1') {
         $('#toolbox category[name=Motors]').remove();
-    else
+        $('#toolbox category[name=Sensors]').remove();
+        $('#toolbox category[name=Grove]').attr('name', 'Sensors');
+    } else {
         $('#toolbox category[name=Servos]').remove();
+        $('#toolbox category[name=Grove]').remove();
+    }
 });
 </script>
 

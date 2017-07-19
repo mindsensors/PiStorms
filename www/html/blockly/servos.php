@@ -58,6 +58,7 @@ makeBlock('servo_init',
         this.appendDummyInput()
             .appendField("servo at")
             .appendField(new Blockly.FieldDropdown(["BBS1","BBS2","BBS3","BAS3","BAS2","BAS1"].map(p=>[p,p])), "port")
+        this.setInputsInline(true);
         this.setOutput(true, "RCServo");
         this.setColour(230);
         this.setTooltip("Represents a servo plugged in to a specific port.");
@@ -67,7 +68,7 @@ makeBlock('servo_init',
         var port = block.getFieldValue('port');
         Blockly.Python.definitions_.import_RCServo = "from PiStorms_GRX import RCServo";
         Blockly.Python.definitions_[`servo_${port}`] = `servo_${port} = RCServo("${port}")`;
-        return [`servo_${port}`, Blockly.Python.ORDER_NONE];
+        return [`servo_${port}`, Blockly.Python.ORDER_ATOMIC];
     }
 );
 
@@ -80,6 +81,7 @@ makeBlock('servo_setPos',
         this.appendDummyInput()
             .appendField("to position")
             .appendField(new Blockly.FieldNumber(90, 0, 180, 1), "pos")
+        this.setInputsInline(true);
         this.setPreviousStatement(true, null);
         this.setNextStatement(true, null);
         this.setColour(230);
@@ -98,10 +100,11 @@ makeBlock('servo_setSpeed',
     function() {
         this.appendValueInput("servo")
             .setCheck("RCServo")
-            .appendField("set servo");
+            .appendField("set servo")
         this.appendDummyInput()
             .appendField("'s speed to")
-            .appendField(new Blockly.FieldNumber(50, -100, 100, 1), "speed");
+            .appendField(new Blockly.FieldNumber(50, -100, 100, 1), "speed")
+        this.setInputsInline(true);
         this.setPreviousStatement(true, null);
         this.setNextStatement(true, null);
         this.setColour(230);
@@ -120,7 +123,8 @@ makeBlock('servo_stop',
     function() {
         this.appendValueInput("servo")
             .setCheck("RCServo")
-            .appendField("stop servo");
+            .appendField("stop servo")
+        this.setInputsInline(true);
         this.setPreviousStatement(true, null);
         this.setNextStatement(true, null);
         this.setColour(230);
@@ -138,10 +142,11 @@ makeBlock('servo_setNeutralPoint',
     function() {
         this.appendValueInput("servo")
             .setCheck("RCServo")
-            .appendField("set");
+            .appendField("set")
         this.appendDummyInput()
             .appendField("'s neutral point to")
-            .appendField(new Blockly.FieldNumber(1500, 500, 2500, 1), "neutralPoint");
+            .appendField(new Blockly.FieldNumber(1500, 500, 2500, 1), "neutralPoint")
+        this.setInputsInline(true);
         this.setPreviousStatement(true, null);
         this.setNextStatement(true, null);
         this.setColour(230);
@@ -160,9 +165,10 @@ makeBlock('servo_setNeutral',
     function() {
         this.appendValueInput("servo")
             .setCheck("RCServo")
-            .appendField("move");
+            .appendField("move")
         this.appendDummyInput()
-            .appendField("to its neutral position");
+            .appendField("to its neutral position")
+        this.setInputsInline(true);
         this.setPreviousStatement(true, null);
         this.setNextStatement(true, null);
         this.setColour(230);
@@ -184,7 +190,8 @@ makeBlock('servo_setPulse',
         this.appendDummyInput()
             .appendField("'s pulse to")
             .appendField(new Blockly.FieldNumber(1500, 500, 2500, 1), "pulse")
-            .appendField("microseconds");
+            .appendField("microseconds")
+        this.setInputsInline(true);
         this.setPreviousStatement(true, null);
         this.setNextStatement(true, null);
         this.setColour(230);
@@ -203,11 +210,12 @@ makeBlock('servo_setPos_value',
     function() {
         this.appendValueInput("servo")
             .setCheck("RCServo")
-            .appendField("move servo");
+            .appendField("move servo")
         this.appendDummyInput()
-            .appendField("to position");
+            .appendField("to position")
         this.appendValueInput("pos")
-            .setCheck("Number");
+            .setCheck("Number")
+        this.setInputsInline(true);
         this.setPreviousStatement(true, null);
         this.setNextStatement(true, null);
         this.setColour(230);
@@ -226,11 +234,12 @@ makeBlock('servo_setSpeed_value',
     function() {
         this.appendValueInput("servo")
             .setCheck("RCServo")
-            .appendField("set servo");
+            .appendField("set servo")
         this.appendDummyInput()
-            .appendField("'s speed to");
+            .appendField("'s speed to")
         this.appendValueInput("speed")
-            .setCheck("Number");
+            .setCheck("Number")
+        this.setInputsInline(true);
         this.setPreviousStatement(true, null);
         this.setNextStatement(true, null);
         this.setColour(230);
@@ -249,10 +258,10 @@ makeBlock('servo_setPulse_value',
     function() {
         this.appendValueInput("servo")
             .setCheck("RCServo")
-            .appendField("set");
+            .appendField("set")
         this.appendValueInput("pulse")
             .setCheck("Number")
-            .appendField("'s pulse to");
+            .appendField("'s pulse to")
         this.setInputsInline(true);
         this.setPreviousStatement(true, null);
         this.setNextStatement(true, null);
