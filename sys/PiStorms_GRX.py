@@ -241,34 +241,43 @@ class RCServoEncoder(RCServo, GrovePort):
         return self.comm.readEncoderValue()
 
 
-class PiStorms_GRX:
+class PiStorms_GRX():
 
     def __init__(self, name="PiStorms_GRX", rotation=3):
         self.screen = mindsensorsUI(name, rotation)
 
+    # note the command will be sent to bank A. This will be important for operations such as resetting the encoder values.
+    @classmethod
     def command(self, cmd):
         if cmd not in range(256):
             raise ValueError("Command must be an integer between 0 and 255 (hint: try using a constant from GRXCom.COMMAND).")
         GRXCom.I2C.A.writeByte(GRXCom.REGISTER.COMMAND, cmd)
 
+    @classmethod
     def shutdown(self):
-        self.command(GRXCom.COMMAND.SHUTDOWN)
+        GRXCom.I2C.A.writeByte(GRXCom.REGISTER.COMMAND, GRXCom.COMMAND.SHUTDOWN)
 
+    @classmethod
     def batteryVoltage(self):
         return GRXCom.I2C.A.readByte(GRXCom.REGISTER.BATTERY_VOLTAGE) * 0.04
 
+    @classmethod
     def getFirmwareVersion(self):
         return GRXCom.I2C.A.readString(GRXCom.REGISTER.FIRMWARE_VERSION, 8)
 
+    @classmethod
     def getVendorName(self):
         return GRXCom.I2C.A.readString(GRXCom.REGISTER.VENDOR_NAME, 8)
 
+    @classmethod
     def getDeviceModel(self):
         return GRXCom.I2C.A.readString(GRXCom.REGISTER.DEVICE_MODEL, 8)
 
+    @classmethod
     def getDeviceFeatures(self):
         return GRXCom.I2C.A.readString(GRXCom.REGISTER.FEATURE, 8)
 
+    @classmethod
     def led(self, lednum, red, green, blue):
         for color in [red, green, blue]:
             if color not in range(256):
@@ -281,29 +290,38 @@ class PiStorms_GRX:
             raise ValueError("Invalid LED number (must be 1 or 2 for bank A or B).")
         comm.writeArray(GRXCom.REGISTER.LED, [red, green, blue])
 
+    @classmethod
     def isKeyPressed(self):
         return GRXCom.I2C.A.readByte(GRXCom.REGISTER.GO_BUTTON_STATE) % 2 == 1
 
+    @classmethod
     def getKeyPressValue(self): # F1-4
         return {0: 0, 8: 1, 16: 2, 24: 3, 40: 4}[GRXCom.getKeyPressValue()]
 
+    @classmethod
     def isF1Pressed(self):
         return (GRXCom.getKeyPressValue() == 8)
 
+    @classmethod
     def isF2Pressed(self):
         return (GRXCom.getKeyPressValue() == 16)
 
+    @classmethod
     def isF3Pressed(self):
         return (GRXCom.getKeyPressValue() == 24)
 
+    @classmethod
     def isF4Pressed(self):
         return (GRXCom.getKeyPressValue() == 40)
 
+    @classmethod
     def getKeyPressCount(self):
         return GRXCom.I2C.A.readByte(GRXCom.REGISTER.GO_PRESS_COUNT)
 
+    @classmethod
     def resetKeyPressCount(self):
         GRXCom.I2C.A.writeByte(GRXCom.REGISTER.GO_PRESS_COUNT, 0)
 
+    @classmethod
     def ping(self):
         GRXCom.ping()
