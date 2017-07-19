@@ -27,19 +27,21 @@
 
 <category name="Servos" colour="240">
   <block type="servo_init"></block>
-  <block type="servo_init2"></block>
   <sep gap="50"></sep>
-
-  <block type="servo_pos"></block>
-  <block type="servo_setspeed"></block>
+  <block type="servo_setPos"></block>
+  <block type="servo_setSpeed"></block>
   <block type="servo_stop"></block>
   <sep gap="50"></sep>
+  <block type="servo_setNeutralPoint"></block>
+  <block type="servo_setNeutral"></block>
 
-  <block type="servo_setneutralpoint"></block>
-  <block type="servo_setneutral"></block>
+  <sep gap="100"></sep>
+
+  <block type="servo_setPulse"></block>
   <sep gap="50"></sep>
-
-  <block type="servo_setpulse"></block>
+  <block type="servo_setPos_value"></block>
+  <block type="servo_setSpeed_value"></block>
+  <block type="servo_setPulse_value"></block>
 </category>
 
 
@@ -48,52 +50,30 @@
 Blockly.Blocks['servo_init'] = {
   init: function() {
     this.appendDummyInput()
-        .appendField("new servo at")
-        .appendField(new Blockly.FieldDropdown([["BAS1","'BAS1'"], ["BAS2","'BAS2'"], ["BAS3","'BAS3'"], ["BBS1","'BBS1'"], ["BBS2","'BBS2'"], ["BBS3","'BBS3'"]]), "port_selector");
-    this.setOutput(true, null);
+        .appendField("servo at")
+        .appendField(new Blockly.FieldDropdown(["BBS1","BBS2","BBS3","BAS3","BAS2","BAS1"].map(p=>[p,p])), "port");
+    this.setOutput(true, "RCServo");
     this.setColour(230);
-    this.setTooltip("Set up a new servo. Be sure to save it to a variable! Look under \"Custom Vars\".");
+    this.setTooltip("Represents a servo plugged in to a specific port.");
     this.setHelpUrl("http://www.mindsensors.com/reference/PiStorms/html/class_pi_storms_grx_1_1_pi_storms_grx.html");
   }
 };
 Blockly.Python['servo_init'] = function(block) {
-  var port = block.getFieldValue('port_selector');
-  Blockly.Python.definitions_.from_PiStorms_GRX_import_RCServo = "from PiStorms_GRX import RCServo";
-  var code = 'RCServo('+port+')';
-  return [code, Blockly.Python.ORDER_NONE];
+  var port = block.getFieldValue('port');
+  Blockly.Python.definitions_.import_RCServo = "from PiStorms_GRX import RCServo";
+  Blockly.Python.definitions_[`servo_${port}`] = `servo_${port} = RCServo("${port}")`;
+  return [`servo_${port}`, Blockly.Python.ORDER_NONE];
 };
 
 
-Blockly.Blocks['servo_init2'] = {
+Blockly.Blocks['servo_setPos'] = {
   init: function() {
+    this.appendValueInput("servo")
+        .setCheck("RCServo")
+        .appendField("move servo");
     this.appendDummyInput()
-        .appendField("new servo at")
-        .appendField(new Blockly.FieldDropdown([["BAS1","'BAS1'"], ["BAS2","'BAS2'"], ["BAS3","'BAS3'"], ["BBS1","'BBS1'"], ["BBS2","'BBS2'"], ["BBS3","'BBS3'"]]), "port_selector")
-        .appendField("with neutral point")
-        .appendField(new Blockly.FieldNumber(1500, 500, 2500, 1), "neutralPoint");
-    this.setOutput(true, null);
-    this.setColour(230);
-    this.setTooltip("Set up a new servo. Be sure to save it to a variable! Look under \"Custom Vars\".");
-    this.setHelpUrl("http://www.mindsensors.com/reference/PiStorms/html/class_pi_storms_grx_1_1_pi_storms_grx.html");
-  }
-};
-Blockly.Python['servo_init'] = function(block) {
-  var port = block.getFieldValue('port_selector');
-  var neutralPoint = block.getFieldValue('neutralPoint');
-  Blockly.Python.definitions_.from_PiStorms_GRX_import_RCServo = "from PiStorms_GRX import RCServo";
-  var code = 'RCServo('+port+', '+neutralPoint+')';
-  return [code, Blockly.Python.ORDER_NONE];
-};
-
-
-Blockly.Blocks['servo_pos'] = {
-  init: function() {
-    this.appendDummyInput()
-        .appendField("move")
-        .appendField(new Blockly.FieldVariable("servo"), "RCServo_instance")
         .appendField("to position")
-        .appendField(new Blockly.FieldNumber(90, 0, 180), "pos");
-        //.appendField(new Blockly.FieldAngle('0'), 'NUM'); // not using this because we can't restrict the bounds to a semi-circle
+        .appendField(new Blockly.FieldNumber(90, 0, 180, 1), "pos");
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
     this.setColour(230);
@@ -101,21 +81,21 @@ Blockly.Blocks['servo_pos'] = {
     this.setHelpUrl("http://www.mindsensors.com/reference/PiStorms/html/class_pi_storms_grx_1_1_pi_storms_grx.html");
   }
 };
-Blockly.Python['servo_pos'] = function(block) {
-  var servo = Blockly.Python.variableDB_.getName(block.getFieldValue('RCServo_instance'), Blockly.Variables.NAME_TYPE);
+Blockly.Python['servo_setPos'] = function(block) {
+  var servo = Blockly.Python.valueToCode(block, 'servo', Blockly.Python.ORDER_ATOMIC);
   var pos = block.getFieldValue('pos');
-  var code = servo+'.setPos('+pos+')\n';
-  return code;
+  return `${servo}.setPos(${pos})\n`;
 };
 
 
-Blockly.Blocks['servo_setspeed'] = {
+Blockly.Blocks['servo_setSpeed'] = {
   init: function() {
+    this.appendValueInput("servo")
+        .setCheck("RCServo")
+        .appendField("set servo");
     this.appendDummyInput()
-        .appendField("set")
-        .appendField(new Blockly.FieldVariable("servo"), "RCServo_instance")
-        .appendField("speed to")
-        .appendField(new Blockly.FieldNumber(0, -100, 100), "speed");
+        .appendField("'s speed to")
+        .appendField(new Blockly.FieldNumber(50, -100, 100, 1), "speed");
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
     this.setColour(230);
@@ -123,38 +103,37 @@ Blockly.Blocks['servo_setspeed'] = {
     this.setHelpUrl("http://www.mindsensors.com/reference/PiStorms/html/class_pi_storms_grx_1_1_pi_storms_grx.html");
   }
 };
-Blockly.Python['servo_setspeed'] = function(block) {
-  var servo = Blockly.Python.variableDB_.getName(block.getFieldValue('RCServo_instance'), Blockly.Variables.NAME_TYPE);
+Blockly.Python['servo_setSpeed'] = function(block) {
+  var servo = Blockly.Python.valueToCode(block, 'servo', Blockly.Python.ORDER_ATOMIC);
   var speed = block.getFieldValue('speed');
-  var code = servo+'.setSpeed('+speed+')\n';
-  return code;
+  return `${servo}.setSpeed(${speed})\n`;
 };
 
 
 Blockly.Blocks['servo_stop'] = {
   init: function() {
-    this.appendDummyInput()
-        .appendField("stop")
-        .appendField(new Blockly.FieldVariable("servo"), "RCServo_instance");
+    this.appendValueInput("servo")
+        .setCheck("RCServo")
+        .appendField("stop servo");
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
     this.setColour(230);
-    this.setTooltip("No matter what, stop sending a pulse to this servo. Even if a continuous rotation servo does not have its neutral point set correctly, this will stop it.");
+    this.setTooltip("No matter what, stop sending a pulse to this servo. Even if a continuous rotation servo does not have its neutral point set correctly, this will still stop it.");
     this.setHelpUrl("http://www.mindsensors.com/reference/PiStorms/html/class_pi_storms_grx_1_1_pi_storms_grx.html");
   }
 };
 Blockly.Python['servo_stop'] = function(block) {
-  var servo = Blockly.Python.variableDB_.getName(block.getFieldValue('RCServo_instance'), Blockly.Variables.NAME_TYPE);
-  var code = servo+'.stop()\n';
-  return code;
+  var servo = Blockly.Python.valueToCode(block, 'servo', Blockly.Python.ORDER_ATOMIC);
+  return `${servo}.stop()\n`;
 };
 
 
-Blockly.Blocks['servo_setneutralpoint'] = {
+Blockly.Blocks['servo_setNeutralPoint'] = {
   init: function() {
+    this.appendValueInput("servo")
+        .setCheck("RCServo")
+        .appendField("set");
     this.appendDummyInput()
-        .appendField("set")
-        .appendField(new Blockly.FieldVariable("servo"), "RCServo_instance")
         .appendField("'s neutral point to")
         .appendField(new Blockly.FieldNumber(1500, 500, 2500, 1), "neutralPoint");
     this.setPreviousStatement(true, null);
@@ -164,19 +143,19 @@ Blockly.Blocks['servo_setneutralpoint'] = {
     this.setHelpUrl("http://www.mindsensors.com/reference/PiStorms/html/class_pi_storms_grx_1_1_pi_storms_grx.html");
   }
 };
-Blockly.Python['servo_setneutralpoint'] = function(block) {
-  var servo = Blockly.Python.variableDB_.getName(block.getFieldValue('RCServo_instance'), Blockly.Variables.NAME_TYPE);
+Blockly.Python['servo_setNeutralPoint'] = function(block) {
+  var servo = Blockly.Python.valueToCode(block, 'servo', Blockly.Python.ORDER_ATOMIC);
   var neutralPoint = block.getFieldValue('neutralPoint');
-  var code = servo+'.setNeutralPoint('+neutralPoint+')\n';
-  return code;
+  return `${servo}.setNeutralPoint(${neutralPoint})\n`;
 };
 
 
-Blockly.Blocks['servo_setneutral'] = {
+Blockly.Blocks['servo_setNeutral'] = {
   init: function() {
+    this.appendValueInput("servo")
+        .setCheck("RCServo")
+        .appendField("move");
     this.appendDummyInput()
-        .appendField("move")
-        .appendField(new Blockly.FieldVariable("servo"), "RCServo_instance")
         .appendField("to its neutral position");
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
@@ -185,18 +164,18 @@ Blockly.Blocks['servo_setneutral'] = {
     this.setHelpUrl("http://www.mindsensors.com/reference/PiStorms/html/class_pi_storms_grx_1_1_pi_storms_grx.html");
   }
 };
-Blockly.Python['servo_setneutral'] = function(block) {
-  var servo = Blockly.Python.variableDB_.getName(block.getFieldValue('RCServo_instance'), Blockly.Variables.NAME_TYPE);
-  var code = servo+'.setNeutral()\n';
-  return code;
+Blockly.Python['servo_setNeutral'] = function(block) {
+  var servo = Blockly.Python.valueToCode(block, 'servo', Blockly.Python.ORDER_ATOMIC);
+  return `${servo}.setNeutral()\n`;
 };
 
 
-Blockly.Blocks['servo_setpulse'] = {
+Blockly.Blocks['servo_setPulse'] = {
   init: function() {
-    this.appendDummyInput()
+    this.appendValueInput("servo")
+        .setCheck("RCServo")
         .appendField("set")
-        .appendField(new Blockly.FieldVariable("servo"), "RCServo_instance")
+    this.appendDummyInput()
         .appendField("'s pulse to")
         .appendField(new Blockly.FieldNumber(1500, 500, 2500, 1), "pulse")
         .appendField("microseconds");
@@ -207,10 +186,78 @@ Blockly.Blocks['servo_setpulse'] = {
     this.setHelpUrl("http://www.mindsensors.com/reference/PiStorms/html/class_pi_storms_grx_1_1_pi_storms_grx.html");
   }
 };
-Blockly.Python['servo_setpulse'] = function(block) {
-  var servo = Blockly.Python.variableDB_.getName(block.getFieldValue('RCServo_instance'), Blockly.Variables.NAME_TYPE);
+Blockly.Python['servo_setPulse'] = function(block) {
+  var servo = Blockly.Python.valueToCode(block, 'servo', Blockly.Python.ORDER_ATOMIC);
   var pulse = block.getFieldValue('pulse');
-  var code = servo+'.setPulse('+pulse+')\n';
-  return code;
+  return `${servo}.setPulse(${pulse})\n`;
+};
+
+
+Blockly.Blocks['servo_setPos_value'] = {
+  init: function() {
+    this.appendValueInput("servo")
+        .setCheck("RCServo")
+        .appendField("move servo");
+    this.appendDummyInput()
+        .appendField("to position");
+    this.appendValueInput("pos")
+        .setCheck("Number");
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(230);
+    this.setTooltip("Move a (regular) servo to a position. The position can be between 0 and 180 degrees. This should match your physical servo.");
+    this.setHelpUrl("http://www.mindsensors.com/reference/PiStorms/html/class_pi_storms_grx_1_1_pi_storms_grx.html");
+  }
+};
+Blockly.Python['servo_setPos_value'] = function(block) {
+  var servo = Blockly.Python.valueToCode(block, 'servo', Blockly.Python.ORDER_ATOMIC);
+  var pos = Blockly.Python.valueToCode(block, 'pos', Blockly.Python.ORDER_ATOMIC);
+  return `${servo}.setPos(${pos})\n`;
+};
+
+
+Blockly.Blocks['servo_setSpeed_value'] = {
+  init: function() {
+    this.appendValueInput("servo")
+        .setCheck("RCServo")
+        .appendField("set servo");
+    this.appendDummyInput()
+        .appendField("'s speed to");
+    this.appendValueInput("speed")
+        .setCheck("Number");
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(230);
+    this.setTooltip("Set a continuous rotation servo to a speed from -100 (reverse) to 100 (forwards). If your servo moves even when set to 0 speed (\"drifting\"), be sure to run the calibration program in the 45-Utils folder!");
+    this.setHelpUrl("http://www.mindsensors.com/reference/PiStorms/html/class_pi_storms_grx_1_1_pi_storms_grx.html");
+  }
+};
+Blockly.Python['servo_setSpeed_value'] = function(block) {
+  var servo = Blockly.Python.valueToCode(block, 'servo', Blockly.Python.ORDER_ATOMIC);
+  var speed = Blockly.Python.valueToCode(block, 'speed', Blockly.Python.ORDER_ATOMIC);
+  return `${servo}.setSpeed(${speed})\n`;
+};
+
+
+Blockly.Blocks['servo_setPulse_value'] = {
+  init: function() {
+    this.appendValueInput("servo")
+        .setCheck("RCServo")
+        .appendField("set");
+    this.appendValueInput("pulse")
+        .setCheck("Number")
+        .appendField("'s pulse to");
+    this.setInputsInline(true);
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(230);
+    this.setTooltip("This is more low-level, most people won't have to (or want to) use this. You can set the number of microseconds between pulses sent to this servo. 500 is the minimum, 2500 is the maximum. 1500 should be the median, but read the tooltip for \"set neutral position\".");
+    this.setHelpUrl("http://www.mindsensors.com/reference/PiStorms/html/class_pi_storms_grx_1_1_pi_storms_grx.html");
+  }
+};
+Blockly.Python['servo_setPulse_value'] = function(block) {
+  var servo = Blockly.Python.valueToCode(block, 'servo', Blockly.Python.ORDER_ATOMIC);
+  var pulse = Blockly.Python.valueToCode(block, 'pulse', Blockly.Python.ORDER_ATOMIC);
+  return `${servo}.setPulse(${pulse})\n`;
 };
 </script>
