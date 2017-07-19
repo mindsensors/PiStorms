@@ -4,11 +4,11 @@ from PiStormsCom_GRX import GRXCom
 
 psm = PiStorms_GRX()
 
-leftServo = RCServo("BAM1", 1690)
-rightServo = RCServo("BBM1", 1300)
+leftServo = RCServo("BBM1", 1690)
+rightServo = RCServo("BAM1", 1350)
 
 leftEncoder = GrovePort("BBD1", type=GRXCom.TYPE.ENCODER) # no mode, not associated with any servo
-rightEncoder = GrovePort("BAD1", type=GRXCom.TYPE.ENCODER)
+rightEncoder = GrovePort("BAD2", type=GRXCom.TYPE.ENCODER)
 
 GRXCom.I2C.A.writeByte(GRXCom.REGISTER.COMMAND, GRXCom.COMMAND.RESET_ENCODERS)
 GRXCom.I2C.B.writeByte(GRXCom.REGISTER.COMMAND, GRXCom.COMMAND.RESET_ENCODERS)
@@ -25,7 +25,7 @@ for i in range(200):
         else:
             leftServo.setSpeed(50)
             rightServo.setSpeed(30)
-    except TypeError: pass # I2C fail
+    except TypeError: pass # I2C failure
 
 leftServo.stop()
 rightServo.stop()
