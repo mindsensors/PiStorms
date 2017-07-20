@@ -25,7 +25,7 @@
 
 from PiStormsCom_GRX import GRXCom
 from mindsensorsUI import mindsensorsUI
-import struct
+import struct,functools
 
 
 ## This class provides functions for Grove sensors.
@@ -293,6 +293,16 @@ class PiStorms_GRX():
     @classmethod
     def isKeyPressed(self):
         return GRXCom.I2C.A.readByte(GRXCom.REGISTER.GO_BUTTON_STATE) % 2 == 1
+
+    @classmethod
+    def waitForKeyPress(self):
+        self.untilKeyPress(functools.partial(time.sleep, 0.01))
+
+    @classmethod
+    def untilKeyPress(self, func):
+        initialKeyPressCount = self.getKeyPressCount()
+        while self.getKeyPressCount() == initialKeyPressCount:
+            func()
 
     @classmethod
     def getKeyPressValue(self): # F1-4

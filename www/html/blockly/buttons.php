@@ -29,6 +29,8 @@
   <block type="system_keypressed"></block>
   <block type="system_getkeypresscount"></block>
   <block type="system_resetkeypresscount"></block>
+  <block type="system_waitforkeypress"></block>
+  <block type="system_untilkeypress"></block>
 </category>
 
 
@@ -88,6 +90,49 @@ Blockly.Python['system_resetkeypresscount'] = function(block) {
   Blockly.Python.definitions_.from_PiStorms_import_PiStorms = "from PiStorms import PiStorms";
   Blockly.Python.definitions_.psm_PiStorms = "psm = PiStorms()";
   var code = 'psm.resetKeyPressCount()\n';
+  return code;
+};
+
+
+Blockly.Blocks['system_waitforkeypress'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField("wait for key press");
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(200);
+    this.setTooltip('Pause until the GO button is pressed');
+    this.setHelpUrl('');
+  }
+};
+Blockly.Python['system_waitforkeypress'] = function(block) {
+  Blockly.Python.definitions_.from_PiStorms_import_PiStorms = "from PiStorms import PiStorms";
+  Blockly.Python.definitions_.psm_PiStorms = "psm = PiStorms()";
+  var code = 'psm.waitForKeyPress()\n';
+  return code;
+};
+
+
+Blockly.Blocks['system_untilkeypress'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField("repeat until key press");
+    this.appendStatementInput("func")
+        .setCheck(null);
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(120);
+    this.setTooltip('Repeat until the GO button is pressed');
+    this.setHelpUrl('');
+  }
+};
+Blockly.Python['system_untilkeypress'] = function(block) {
+  var func = Blockly.Python.statementToCode(block, 'func');
+  Blockly.Python.definitions_.from_PiStorms_import_PiStorms = "from PiStorms import PiStorms";
+  Blockly.Python.definitions_.psm_PiStorms = "psm = PiStorms()";
+  var code = 'psm.untilKeyPress()\n';
+  var anon = Blockly.Python.FUNCTION_NAME_PLACEHOLDER_.slice(1,-1);
+  code = `def ${anon}():\n${func}psm.untilKeyPress(${anon})\n`;
   return code;
 };
 </script>
