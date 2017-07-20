@@ -220,6 +220,7 @@ include "api/config.php";
     <?php include "blockly/grove.php"; ?>
     <?php include "blockly/screen.php"; ?>
     <?php include "blockly/led.php"; ?>
+    <?php include "blockly/led_grx.php"; ?>
     <?php include "blockly/buttons.php"; ?>
     <?php include "blockly/buttons_grx.php"; ?>
     <?php include "blockly/system.php"; ?>
@@ -236,10 +237,13 @@ $.get(api+'isgrx', function(data) {
         $('#toolbox category[name=Grove]').attr('name', 'Sensors');
         $('#toolbox category[name=Buttons]').remove();
         $('#toolbox category[name=Buttons_GRX]').attr('name', 'Buttons');
+        $('#toolbox category[name=LED]').remove();
+        $('#toolbox category[name=LED_GRX]').attr('name', 'LED');
     } else {
         $('#toolbox category[name=Servos]').remove();
         $('#toolbox category[name=Grove]').remove();
         $('#toolbox category[name=Buttons_GRX]').remove();
+        $('#toolbox category[name=LED_GRX]').remove();
     }
 });
 </script>
