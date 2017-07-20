@@ -52,10 +52,12 @@ data = np.empty(0) # start with a completely empty data array
 canvas = plt.get_current_fig_manager().canvas
 disp = psm.screen.disp
 
-while not psm.isKeyPressed():
+def mainLoop():
     data = np.append(data, psm.battVoltage()) # add a data point with the current battery voltage
     plt.plot(data, color="blue") # plot the data on the graph
     plt.tight_layout() # make sure the entire plot fits on screen
     canvas.draw()
     disp.buffer = Image.frombytes('RGB', canvas.get_width_height(), canvas.tostring_rgb()).rotate(-90*psm.screen.currentRotation)
     disp.display()
+
+psm.untilKeyPress(mainLoop)

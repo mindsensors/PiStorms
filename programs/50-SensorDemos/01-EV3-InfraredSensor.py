@@ -30,9 +30,8 @@ psm = PiStorms()
 
 m = ["EV3InfraredSensor-Demo", "Connect EV3 IR sensor",
  "to BAS1, and Press OK to continue"]
-psm.screen.askQuestion(m,["OK"])
+psm.screen.showMessage(m)
 
-doExit = False
 oldValue = True
 value = True
 count = 0
@@ -45,7 +44,7 @@ psm.screen.termPrintAt(8, "Press Go to stop program")
 change = 1
 
 
-while(not doExit):
+def mainLoop():
     oldValue = value
     if change == 1: #setMode only if the screen mode changed
         msg0 = ""
@@ -82,12 +81,7 @@ while(not doExit):
     if (oldValue != value):
         psm.screen.termPrintAt(3, msg0)
         psm.screen.termPrintAt(4, msg)
-    if(psm.isKeyPressed() == True):
-        psm.screen.clearScreen()
-        IR = EV3InfraredSensor("BAS1", 9) #Turn off detecting
-        psm.screen.termPrintln("")
-        psm.screen.termPrintln("Exiting to menu")
-        doExit = True
+
     change = 0
     if(psm.screen.isTouched()): #Change mode if screen is tapped
         count = count + 1
@@ -101,4 +95,9 @@ while(not doExit):
         time.sleep(.5)
 
 
+psm.untilKeyPress(mainLoop)
 
+psm.screen.clearScreen()
+IR = EV3InfraredSensor("BAS1", 9) #Turn off detecting
+psm.screen.termPrintln("")
+psm.screen.termPrintln("Exiting to menu")

@@ -31,7 +31,7 @@ m = ["Motor-Demo", "Connect motor to Bank A M1.",
  "Motor will turn 360 degrees, and stop",
  "with brake.",
   "Click OK to continue"]
-psm.screen.askQuestion(m,["OK"])
+psm.screen.showMessage(m)
 
 # run motor for 360 degrees, and at the completion,
 # brake while stopping

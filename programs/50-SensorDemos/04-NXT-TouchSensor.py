@@ -29,17 +29,15 @@ psm = PiStorms()
 
 m = ["NXTTouchSensor-Demo", "Connect NXT Touch sensor",
  "to BAS1, and Press OK to continue"]
-psm.screen.askQuestion(m,["OK"])
+psm.screen.showMessage(m)
 
-doExit = False
 old_touch = True
 touch = True
 
 old_touch_count = 0
 touch_count = 0
 
-#main loop
-while(not doExit):
+def mainLoop():
     #save the previous touch value
     old_touch = touch
     #
@@ -65,11 +63,6 @@ while(not doExit):
         psm.screen.termPrintAt(7, "Touch screen to reset Count")
         psm.screen.termPrintAt(8, "Press GO to stop program")
 
-    if(psm.isKeyPressed() == True): # if the GO button is pressed
-        psm.screen.clearScreen()
-        psm.screen.termPrintAt(8, "Exiting to menu")
-        doExit = True
-
     #
     # check if screen touched.
     #
@@ -79,3 +72,7 @@ while(not doExit):
         psm.BAS1.resetTouchesNXT()
 
 
+psm.untilKeyPress(mainLoop)
+
+psm.screen.clearScreen()
+psm.screen.termPrintAt(8, "Exiting to menu")

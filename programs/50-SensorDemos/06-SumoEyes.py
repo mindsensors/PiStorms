@@ -36,10 +36,10 @@ se_sensor = MsDevices.SumoEyes(psm.BAS1)
 currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
 
 # Ask the user to connect the sensor to BAS1
-question = ["SumoEyes Demo", "Connect SumoEyes sensor to BAS1,",
+m = ["SumoEyes Demo", "Connect SumoEyes sensor to BAS1,",
 "and press OK to continue, then"," ",
 "Press GO to stop the program", "Tap the screen to switch mode"]
-psm.screen.askQuestion(question,["OK"])
+psm.screen.showMessage(m)
 
 
 x = 10
@@ -53,9 +53,7 @@ mode = se_sensor.LONG_RANGE
 psm.screen.termPrintAt(8,"Mode: LONG_RANGE")
 psm.screen.termPrintAt(9,"Press GO to stop")
 
-# Main loop
-exit = False
-while not exit:
+def mainLoop():
     #psm.screen.termPrintAt(6, "SumoEyes: " + se_sensor.detectObstactleZone(True))
     z = se_sensor.detectObstactleZone(True)
     psm.screen.fillBmp(x,y,w,h, path=currentdir+'/'+'SumoEyes-view-'+z+'.png', display = True)
@@ -69,8 +67,5 @@ while not exit:
             psm.screen.termPrintAt(8, "Mode: LONG_RANGE")
         se_sensor.setRange(mode)
 
-    # Code to exit the program
-    if psm.isKeyPressed():
-        psm.screen.termPrintAt(9, "Exiting program")
-        exit = True
-
+psm.untilKeyPress(mainLoop)
+psm.screen.termPrintAt(9, "Exiting program")

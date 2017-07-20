@@ -60,4 +60,4 @@ plt.savefig(image.name, format="png")
 psm.screen.fillBmp(0,0, 320,240, image.name)
 
 # wait until GO is pressed to exit
-while not psm.isKeyPressed(): pass
+psm.waitForKeyPress()

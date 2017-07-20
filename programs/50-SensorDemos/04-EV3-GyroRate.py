@@ -32,14 +32,12 @@ m = ["EV3Gyro-Rate-Demo", "Connect EV3 Gyro to BAS1",
  "Then move sensor to see readings.",
  "",
  "Press Go to stop program."]
-psm.screen.askQuestion(m,["OK"])
+psm.screen.showMessage(m)
 
-doExit = False
 old_rateValue = -10
 rateValue = 0
 
-#main loop
-while(not doExit):
+def mainLoop():
     #save the previous value
     old_rateValue = rateValue
     #
@@ -53,10 +51,8 @@ while(not doExit):
         psm.screen.clearScreen()
         psm.screen.drawAutoText(msg, 15, 164, fill=(255, 255, 255), size = 18)
 
-    if(psm.isKeyPressed() == True): # if the GO button is pressed
-        psm.screen.clearScreen()
-        psm.screen.termPrintln("")
-        psm.screen.termPrintln("Exiting to menu")
-        doExit = True
+psm.untilKeyPress(mainLoop)
 
-
+psm.screen.clearScreen()
+psm.screen.termPrintln("")
+psm.screen.termPrintln("Exiting to menu")

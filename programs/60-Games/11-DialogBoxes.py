@@ -49,5 +49,4 @@ time.sleep(5)
 psm.screen.setMode(psm.screen.PS_MODE_TERMINAL)
 psm.screen.termPrintln("Thank you for waiting!")
 psm.screen.termPrintAt(8, "Press GO to exit")
-while (not psm.isKeyPressed()): # while GO is not pressed...
-    pass # do nothing
+psm.waitForKeyPress()

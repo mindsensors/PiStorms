@@ -38,8 +38,6 @@ sys.path.insert(0,parentdir)
 
 ev3l = EV3Lights()
 psm = PiStorms()
-#exit variable will be used later to exit the program and return to PiStormsMaster
-doExit = False
 
 psm.screen.termPrintln("EV3Lights Demo")
 psm.screen.termPrintln("connect mindsensors.com's ")
@@ -61,8 +59,7 @@ time.sleep(.1)
 
 time_gap = 0.5
 
-while(not doExit):
-    #
+def mainLoop():
     try:
         psm.led(1, 100,0,0)
         ev3l.setColor(EV3Lights.RED, 100)
@@ -94,11 +91,11 @@ while(not doExit):
         psm.led(1,0,0,0)
         psm.screen.termPrintAt(6,"connect EV3Lights on BAS1 ")
 
-    if(psm.isKeyPressed() == True): # if the GO button is pressed
-        psm.screen.clearScreen()
-        psm.screen.termPrintln("")
-        psm.screen.termPrintln("Exiting to menu")
-        time.sleep(0.5)
-        psm.led(1, 0,0,0)
-        psm.led(2, 0,0,0)
-        doExit = True
+psm.untilKeyPress(mainLoop)
+
+psm.screen.clearScreen()
+psm.screen.termPrintln("")
+psm.screen.termPrintln("Exiting to menu")
+time.sleep(0.5)
+psm.led(1, 0,0,0)
+psm.led(2, 0,0,0)

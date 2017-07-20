@@ -92,7 +92,7 @@ include "api/config.php";
                 <li><a>Device: <b><span class="device_id"><i class="fa fa-refresh fa-spin"></i>&nbsp;&nbsp;Fetching</span></b></a></li>
                 <li><a>Software Version: <b><span class="software_version"><i class="fa fa-refresh fa-spin"></i>&nbsp;&nbsp;Fetching</span></b> <?php echo ($updates == "both" || $updates == "software") ? $needsupdate : ($updates == "loading" ? "" : $uptodate); ?></a></li>
                 <li><a>Firmware Version: <b><span class="firmware_version"><i class="fa fa-refresh fa-spin"></i>&nbsp;&nbsp;Fetching</span></b> <?php echo ($updates == "both" || $updates == "hardware") ? $needsupdate : ($updates == "loading" ? "" : $uptodate); ?></a></li>
-                <li data-toggle="tooltip" data-trigger="hover" data-html="true" title="You can run <code>01-Change_Hostname</code> to change this."><a>Hostname: <b><?php echo gethostname();?></b></a></li>
+                <li><a>Hostname: <b data-toggle="tooltip" data-trigger="hover" data-html="true" title="You can run <code>01-Change_Hostname</code> to change this."><?php echo gethostname();?></b></a></li>
                 <li><a>eth0: <b><span class="eth0_ip"><i class="fa fa-refresh fa-spin"></i>&nbsp;&nbsp;Fetching</span></b></a></li>
                 <li><a>wlan0: <b><span class="wlan0_ip"><i class="fa fa-refresh fa-spin"></i>&nbsp;&nbsp;Fetching</span></b></a></li>
               </ul>

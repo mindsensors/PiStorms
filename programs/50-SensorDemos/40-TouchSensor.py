@@ -30,7 +30,7 @@ psm = PiStorms()
 
 m = ["EV3TouchSensor-Demo", "Connect EV3 Touch sensor",
  "to BAS1, and Press OK to continue"]
-psm.screen.askQuestion(m,["OK"])
+psm.screen.showMessage(m)
 
 #
 # we are attaching a TouchSensor to Port BAS1
@@ -39,7 +39,6 @@ psm.screen.askQuestion(m,["OK"])
 # touchSensor = LegoDevices.NXTTouchSensor("BAS1")
 touchSensor = LegoDevices.EV3TouchSensor("BAS1")
 
-doExit = False
 old_touch = True
 touch = True
 
@@ -48,8 +47,8 @@ touch_count = 0
 
 psm.screen.termPrintAt(7, "Touch screen to reset Count")
 psm.screen.termPrintAt(8, "Press GO to stop program")
-#main loop
-while(not doExit):
+
+def mainLoop():
     #save the previous touch value
     old_touch = touch
     #
@@ -80,10 +79,7 @@ while(not doExit):
         # if scren was touched, reset BAS1 touch count
         touchSensor.resetBumpCount()
 
+psm.untilKeyPress(mainLoop)
 
-    if(psm.isKeyPressed() == True): # if the GO button is pressed
-        psm.screen.clearScreen()
-        psm.screen.termPrintAt(8, "Exiting to menu")
-        doExit = True
-
-
+psm.screen.clearScreen()
+psm.screen.termPrintAt(8, "Exiting to menu")

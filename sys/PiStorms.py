@@ -72,7 +72,7 @@
 
 from PiStormsCom import PiStormsCom
 from mindsensorsUI import mindsensorsUI
-import time,sys,os,ctypes,math,random
+import time,sys,os,math,random,ctypes,functools
 
 ## @package PiStorms
 #  This module contains classes and functions necessary for the use of PiStorms from mindsensors.com
@@ -942,6 +942,40 @@ class PiStorms:
     #  @endcode
     def isKeyPressed(self):
         return self.psc.isKeyPressed()
+
+    ## Wait until the GO button is pressed
+    #  @param self The object pointer.
+    #  @remark
+    #  To use this function in your program:
+    #  @code
+    #  from PiStorms import PiStorms
+    #  ...
+    #  psm = PiStorms()
+    #  psm.screen.termPrintln("Press GO to continue...")
+    #  psm.waitForKeyPress()
+    #  @endcode
+    def waitForKeyPress(self):
+        self.untilKeyPress(functools.partial(time.sleep, 0.01))
+
+    ## Repeat an action until the GO button is pressed
+    #  @param self The object pointer.
+    #  @param func The function to be called repeatedly
+    #  @remark
+    #  To use this function in your program:
+    #  @code
+    #  from PiStorms import PiStorms
+    #  ...
+    #  psm = PiStorms()
+    #  
+    #  def mainLoop():
+    #      psm.screen.termPrintln(psm.battVoltage())
+    #  
+    #  psm.untilKeyPress(mainLoop)
+    #  @endcode
+    def untilKeyPress(self, func):
+        initialKeyPressCount = self.getKeyPressCount()
+        while self.getKeyPressCount() == initialKeyPressCount:
+            func()
 
     ## Check if any Function button is pressed
     #  @param self The object pointer.

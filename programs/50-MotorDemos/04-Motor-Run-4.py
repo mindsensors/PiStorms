@@ -29,7 +29,7 @@ psm = PiStorms()
 
 m = ["Motors-Synchronised", "Connect 4 motors.",
   "And click OK to continue"]
-psm.screen.askQuestion(m,["OK"])
+psm.screen.showMessage(m)
 
 # Start the motor at speed 75 for unlimited duration.
 psm.BAM1.setSpeedSync(75)

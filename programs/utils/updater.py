@@ -51,13 +51,13 @@ opt = str(sys.argv[1])
 
 #m = ["Software Updater", "Not yet implemented.",
 #  "option: " + opt]
-#psm.screen.askQuestion(m,["OK"])
+#psm.screen.showMessage(m)
 
 isConnected = available()
 if (isConnected == False):
     m = ["Software Updater", "You are not connected to Internet.",
       "Internet connection required."]
-    psm.screen.askQuestion(m,["OK"])
+    psm.screen.showMessage(m)
     sys.exit(-1)
 
 if ( opt == "update:hardware" ):

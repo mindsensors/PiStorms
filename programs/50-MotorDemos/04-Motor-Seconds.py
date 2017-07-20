@@ -31,7 +31,7 @@ m = ["Motor-Demo", "Connect motor to Bank A M1.",
  "Motor will run for 5 seconds, ",
  "and stop with float.",
   "Click OK to continue"]
-psm.screen.askQuestion(m,["OK"])
+psm.screen.showMessage(m)
 
 # run motor for 5 seconds, and at the completion,
 # brake while stopping and hold position while stopped

@@ -63,7 +63,7 @@ isConnected = available()
 if (isConnected == False):
     m = ["Hardware Updater", "You are not connected to Internet.",
       "Internet connection required"]
-    psm.screen.askQuestion(m,["OK"])
+    psm.screen.showMessage(m)
     sys.exit(-1)
 
 print "running hardware_update.py"
@@ -84,7 +84,7 @@ if ( hw_version < "1.7"):
     print "Firmware unknown or too old for auto update"
     m = ["Firmware Updater", "Current Firmware unkown or too old.",
       "Can not auto update."]
-    psm.screen.askQuestion(m,["OK"])
+    psm.screen.showMessage(m)
     sys.exit(-1)
 
 try:
@@ -100,7 +100,7 @@ except:
 
 m = ["Firmware Updater", "Remove all sensors and motors.",
   "Then press OK to continue."]
-psm.screen.askQuestion(m,["OK"])
+psm.screen.showMessage(m)
 #
 # Download the update from mindsensors server.
 #
@@ -117,7 +117,7 @@ status = subprocess.call(cmd, shell=True)
 if ( status != 0 ):
     m = ["Firmware Updater", "Error while downloading upgrader.",
       upgrader]
-    psm.screen.askQuestion(m,["OK"])
+    psm.screen.showMessage(m)
     sys.exit(-1)
 
 cmd = "cd /var/tmp/upd/; tar -zxvf /var/tmp/upd/" + upgrader
@@ -130,7 +130,7 @@ status = subprocess.call(cmd, shell=True)
 if ( status != 0 ):
     m = ["Firmware Updater", "Error while downloading update:",
       fw_file_name]
-    psm.screen.askQuestion(m,["OK"])
+    psm.screen.showMessage(m)
     sys.exit(-1)
 else:
     psm.screen.termPrintAt(3, "Download complete")
@@ -148,7 +148,7 @@ status = subprocess.call(cmd, shell=True)
 if ( status != 0 ):
     m = ["Firmware Updater", "Error while performing update.",
       "status: " + str(status)]
-    psm.screen.askQuestion(m,["OK"])
+    psm.screen.showMessage(m)
     sys.exit(-1)
 else:
     version_json_update_field('status', 'Done')
@@ -157,10 +157,7 @@ else:
     psm.screen.termPrintAt(5, fw_file_name)
     psm.screen.termPrintAt(7, "Now Calibrate screen ...")
     psm.screen.termPrintAt(8, "Press GO button to continue")
-    doExit = False
-    while (doExit == False):
-        if(psm.isKeyPressed() == True): # if the GO button is pressed
-            doExit = True
+    psm.waitForKeyPress()
 
     # screen calibration required after firmware change
     # force calibrations
