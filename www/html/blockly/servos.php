@@ -219,7 +219,7 @@ makeBlock('servo_setPos_value',
         this.setPreviousStatement(true, null);
         this.setNextStatement(true, null);
         this.setColour(230);
-        this.setTooltip("Move a (regular) servo to a position. The position can be between 0 and 180 degrees. This should match your physical servo.");
+        this.setTooltip("Move a (regular) servo to a position. The position can be between 0 and 180 degrees. This should match your physical servo.\n\nCareful! The position input isn't checked. Make sure it is between 0 and 180, or the program will crash.");
         this.setHelpUrl("http://www.mindsensors.com/reference/PiStorms/html/class_pi_storms_grx_1_1_pi_storms_grx.html");
     },
     function(block) {
@@ -243,7 +243,7 @@ makeBlock('servo_setSpeed_value',
         this.setPreviousStatement(true, null);
         this.setNextStatement(true, null);
         this.setColour(230);
-        this.setTooltip("Set a continuous rotation servo to a speed from -100 (reverse) to 100 (forwards). If your servo moves even when set to 0 speed (\"drifting\"), be sure to run the calibration program in the 45-Utils folder!");
+        this.setTooltip("Set a continuous rotation servo to a speed from -100 (reverse) to 100 (forwards). If your servo moves even when set to 0 speed (\"drifting\"), be sure to run the calibration program in the 45-Utils folder.\n\nCareful! The speed input isn't checked. Make sure it is between -100 and 100, or the program will crash.");
         this.setHelpUrl("http://www.mindsensors.com/reference/PiStorms/html/class_pi_storms_grx_1_1_pi_storms_grx.html");
     },
     function(block) {
@@ -266,7 +266,7 @@ makeBlock('servo_setPulse_value',
         this.setPreviousStatement(true, null);
         this.setNextStatement(true, null);
         this.setColour(230);
-        this.setTooltip("This is more low-level, most people won't have to (or want to) use this. You can set the number of microseconds between pulses sent to this servo. 500 is the minimum, 2500 is the maximum. 1500 should be the median, but read the tooltip for \"set neutral position\".");
+        this.setTooltip("This is more low-level, most people won't have to (or want to) use this. You can set the number of microseconds between pulses sent to this servo. 500 is the minimum, 2500 is the maximum. 1500 should be the median, but read the tooltip for \"set neutral position\".\n\nCareful! The pulse input isn't checked. Make sure it is between 500 and 2500, or the program will crash.");
         this.setHelpUrl("http://www.mindsensors.com/reference/PiStorms/html/class_pi_storms_grx_1_1_pi_storms_grx.html");
     },
     function(block) {
