@@ -221,7 +221,7 @@ class Grove_UV_Sensor(GrovePort):
     ## @note This is an approximation!
     #  @return The estimated measured EPA standard UV index
     def UVindex(self):
-        return self.intensity()/200.0
+        return int(self.intensity()/200.0)
 
 ## This class supports the Grove Moisture Sensor v1.4
 #
