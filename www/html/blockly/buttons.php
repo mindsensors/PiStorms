@@ -67,7 +67,7 @@ Blockly.Blocks['system_getkeypresscount'] = {
 Blockly.Python['system_getkeypresscount'] = function(block) {
   Blockly.Python.definitions_.from_PiStorms_import_PiStorms = "from PiStorms import PiStorms";
   Blockly.Python.definitions_.psm_PiStorms = "psm = PiStorms()";
-  var code = 'psm.getKeyPressCountx()';
+  var code = 'psm.getKeyPressCount()';
   return [code, Blockly.Python.ORDER_NONE];
 };
 
