@@ -134,7 +134,11 @@ class GRXCom():
             print "Failed to read touchscreen"
             return (0, 0)
         if (numpy.std(x) < tolerance and numpy.std(y) < tolerance):
-            return (int(numpy.mean(x)), int(numpy.mean(y)))
+            mx = int(numpy.mean(x))
+            my = int(numpy.mean(y))
+            if mx+my < 3: # avoid spurious readings
+                return (0, 0)
+            return (mx,my)
         else:
             return (0, 0)
 
