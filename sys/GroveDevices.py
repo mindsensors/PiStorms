@@ -27,16 +27,7 @@
 from mindsensors_i2c import mindsensors_i2c
 from PiStormsCom_GRX import GRXCom
 from PiStorms_GRX import GrovePort
-import math
-
-## This class provides functions for Grove sensors.
-#  This class has derived classes for each sensor.
-#  @remark There is no need to use this class directly in your program.
-
-## This class provides functionality for I2C Grove sensors.
-#  This class has derived classes for each sensor.
-#  @remark There is no need to use this class directly in your program.
-#class Grove_I2C_Sensor(GroveSensor, mindsensors_i2c):
+import math, time
 
 ## This class supports the Grove Button v1.1
 #
@@ -315,7 +306,6 @@ class Grove_Air_Quality_Sensor(GrovePort):
         else:
             return "Fresh air"
 
-'''
 ## This class supports the Grove Sunlight Sensor v1.4
 #
 #  This versatile sensor can read IR, visible, and UV light, all in one convenient package!
@@ -324,12 +314,11 @@ class Grove_Air_Quality_Sensor(GrovePort):
 #
 #  @code
 #  import GroveDevices
-#  # initialize a sunlight sensor connected to Bank A analog 1
-#  # make sure it is plugged in to the I2C port first
+#  # initialize a sunlight sensor (make sure it is plugged in to the I2C port first)
 #  sun = GroveDevices.Grove_Sunlight_Sensor()
 #  print("I see this {} IR light, {} visible light, and {} UV light.".format(sun.readIR(), sun.readVisible(), sun.readUV()))
 #  @endcode
-class Grove_Sunlight_Sensor(Grove_I2C_Sensor):
+class Grove_Sunlight_Sensor(mindsensors_i2c):
     # Commands
     SI114X_SET = 0xA0
     SI114X_RESET = 0x01
@@ -391,7 +380,7 @@ class Grove_Sunlight_Sensor(Grove_I2C_Sensor):
     #  @param i2c_address Address of your sunlight sensor
     #  @remark
     def __init__(self, address=0x60):
-        super(Grove_Sunlight_Sensor, self).__init__(address)
+        mindsensors_i2c.__init__(self, address)
         self.reset()
         self.deInit()
 
@@ -458,4 +447,3 @@ class Grove_Sunlight_Sensor(Grove_I2C_Sensor):
 
     def readUV(self):
         return self.readInteger(self.SI114X_AUX_DATA0_UVINDEX0)
-'''

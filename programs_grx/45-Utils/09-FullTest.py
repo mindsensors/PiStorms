@@ -108,10 +108,6 @@ def testDigitalOutput():
             time.sleep(0.01)
         time.sleep(0.3)
 
-def testI2C():
-    ports = [PiStorms_GRX.GrovePort(port, GRXCom.TYPE.I2C) for port in ALL]
-    # read device name of AbsoluteIMU with Grove<->NXT cable
-
 def testTachometer():
     psm.screen.showMessage(["Tachometer / Encoder", "Connect an encoder to each of the 4 digital ports along the top and verify its readings by manually rotate the wheel. Each rotation should measure 72 units. Press GO to proceed."], wrapText=True, goBtn=True)
     ports = [PiStorms_GRX.GrovePort(port, GRXCom.TYPE.ENCODER) for port in DIGITAL]
@@ -131,5 +127,4 @@ testServos()
 testDigitalInput()
 testDigitalOutput()
 testAnalogInput()
-testI2C()
 testTachometer()

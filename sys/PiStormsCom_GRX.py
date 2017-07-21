@@ -40,7 +40,6 @@ class GRXCom():
         ANALOG_INPUT = 1
         DIGITAL_OUTPUT = 2
         DIGITAL_INPUT = 3
-        I2C = 4
         ENCODER = 5
         SERIAL = 6
     #class TYPE_SUPPORT must be defined after the entirity of GRXCom is defined
@@ -204,7 +203,7 @@ class GRXCom():
 
 
 class TYPE_SUPPORT:
-    ALL = [GRXCom.TYPE.NONE, GRXCom.TYPE.DIGITAL_OUTPUT, GRXCom.TYPE.DIGITAL_INPUT, GRXCom.TYPE.I2C]
+    ALL = [GRXCom.TYPE.NONE, GRXCom.TYPE.DIGITAL_OUTPUT, GRXCom.TYPE.DIGITAL_INPUT]
     ANALOG = ALL + [GRXCom.TYPE.ANALOG_INPUT]
     DIGITAL = ALL + [GRXCom.TYPE.ENCODER]
     # note: SERIAL is only supported on A1 and A2
