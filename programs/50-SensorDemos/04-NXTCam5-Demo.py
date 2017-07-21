@@ -53,7 +53,7 @@ def doQRCode(doInit):
         psm.screen.termPrintAt(5, "qrcode tracking")
         cam.command(81)
         time.sleep(3)
-        
+
     psm.screen.termPrintAt(6, "QRCode seen:")
     qrcode = cam.readString(0x42, 8)
     print "QRCode: " + str(qrcode)
@@ -184,7 +184,7 @@ while(not doExit):
 
     drawButtons()
     id = cam.GetDeviceId()
-    pos = id.find('\0') 
+    pos = id.find('\0')
     psm.screen.termPrintAt(6, "Device ID: " + id[:pos])
 
     #cam.command(79)  # object
@@ -195,7 +195,7 @@ while(not doExit):
     if( psm.isKeyPressed() == True) or ( psm.screen.checkButton(0,0,30,30)):
         psm.screen.clearScreen()
         psm.screen.termPrintAt(8, "Exiting to menu")
-        doExit = True 
+        doExit = True
 
     btn = checkButtonPress()
     if ( btn != "" ):

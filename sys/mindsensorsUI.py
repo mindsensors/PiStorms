@@ -647,7 +647,7 @@ class mindsensorsUI():
         self.fillRect(10, self.terminalCursor*20+42, 320, 19, (0,0,0), display = False)
         self.termPrint(text)
 
-    ## Refresh a screen line 
+    ## Refresh a screen line
     #  @param self The object pointer.
     #  @param lineNum The line number to refresh.
     #  @param display Choose to immediately push the drawing to the screen.
@@ -903,7 +903,7 @@ class mindsensorsUI():
         self.buttonText = []
         oldMode = self.currentMode
         self.setMode(self.PS_MODE_POPUP)
-    
+
     ## Draw a line on the screen (rotated to screen)
     #  @param self The object pointer.
     #  @param x1, y1, x2, y2 The x and y coordinates of each endpoint of the line.
