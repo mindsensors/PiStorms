@@ -3,7 +3,6 @@
 # http://www.mindsensors.com/blog/how-to/pistorms-python-programming-tutorial
 #
 # It is recommended that you write your own program based on tutorial.
-
 #
 
 # Imports (that would be used later)
