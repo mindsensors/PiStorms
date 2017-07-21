@@ -83,7 +83,10 @@ app = Flask(__name__)
 from PiStormsCom import PiStormsCom
 from PiStormsCom_GRX import GRXCom
 
-if "GRX" in PiStormsCom.bankA.readString(0x18, 8).upper():
+import ConfigParser
+config = ConfigParser.RawConfigParser()
+config.read("/usr/local/mindsensors/conf/msdev.cfg")
+if "GRX" in config.get('msdev', 'device'):
     psc = GRXCom
 else:
     psc = PiStormsCom()
@@ -111,7 +114,7 @@ import ConfigParser
 config = ConfigParser.ConfigParser()
 config.read("/usr/local/mindsensors/conf/msdev.cfg")
 home_folder = config.get("msdev","homefolder")
-if psc == GRXCom:
+if "GRX" in config.get('msdev', 'device'):
     programs_folder = os.path.join(home_folder, "programs_grx")
 else:
     programs_folder = os.path.join(home_folder, "programs")

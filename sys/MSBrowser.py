@@ -52,8 +52,8 @@ def getProgramDir():
         dir = "/home/pi/PiStorms/programs"
     # normalize the path that was provided to remove any trailing slash.
     dir = os.path.normpath(dir)
-    # possibly append "_grx" if a PiStorms GRX is connected
-    if "GRX" in mindsensors_i2c(0x34>>1).readString(0x18, 8).upper() and dir[-3:] != "grx":
+    # possibly append "_grx" if a PiStorms GRX is connected, using the "programs_grx" folder
+    if "GRX" in config.get('msdev', 'device'):
         dir += "_grx"
     return dir
 def getRotation():
@@ -235,7 +235,7 @@ if __name__ == "__main__":
         deviceName = socket.gethostname()
         rotation = getRotation()
         scrn = initScreen()
-        if "GRX" in PiStormsCom.bankA.readString(0x18, 8).upper():
+        if "GRX" in config.get('msdev', 'device'):
             psc = GRXCom
         else:
             psc = PiStormsCom()

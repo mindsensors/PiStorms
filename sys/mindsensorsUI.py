@@ -38,6 +38,7 @@ import MS_ILI9341 as TFT
 from Adafruit_ILI9341 import ILI9341_INVOFF
 import Adafruit_GPIO as GPIO
 import Adafruit_GPIO.SPI as SPI
+import ConfigParser
 
 ## @package mindsensorsUI
 #  This module contains classes and functions necessary for use of LCD touchscreen on mindsensors.com products
@@ -110,10 +111,13 @@ class mindsensorsUI():
     #  screen = mindsensorsUI()
     #  @endcode
     def __init__(self, name = "PiStorms", rotation = 3):
-        if "GRX" in PiStormsCom.bankA.readString(0x18, 8).upper():
+        config = ConfigParser.RawConfigParser()
+        config.read("/usr/local/mindsensors/conf/msdev.cfg")
+        if "GRX" in config.get('msdev', 'device'):
             self.comm = GRXCom
         else:
             self.comm = PiStormsCom()
+        # note self.comm is only used to getTouchscreenCoordinates and to getKeyPressCount
         self.disp.begin()
         self.clearScreen()
         self.disp.command(ILI9341_INVOFF)
@@ -396,7 +400,7 @@ class mindsensorsUI():
         if(display):
             self.disp.display()
 
-    ## Draw a bitmap image on the screen (.png files rcommended)
+    ## Draw a bitmap image on the screen (.png files recommended)
     #  @param self The object pointer.
     #  @param x The upper left x coordinate of the image.
     #  @param y The upper left y coordinate of the image.

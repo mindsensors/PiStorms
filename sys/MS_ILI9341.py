@@ -29,7 +29,7 @@ import os
 import datetime
 from PIL import Image, ImageDraw
 from fcntl import flock, LOCK_EX, LOCK_UN
-from PiStormsCom import PiStormsCom
+import ConfigParser
 
 class ILI9341(Adafruit_ILI9341.ILI9341):
     def __init__(self, dc, spi, rst=None, gpio=None, width=Adafruit_ILI9341.ILI9341_TFTWIDTH,
@@ -38,7 +38,9 @@ class ILI9341(Adafruit_ILI9341.ILI9341):
         height)
         self.touch_record_path = "/tmp/pistormstouchrecord"
         self.record_path = "/tmp/pistormsrecord"
-        if "GRX" in PiStormsCom.bankA.readString(0x18, 8).upper():
+        config = ConfigParser.RawConfigParser()
+        config.read("/usr/local/mindsensors/conf/msdev.cfg")
+        if "GRX" in config.get('msdev', 'device'):
             self.background_path = "/usr/local/mindsensors/images/artwork-for-grx-images.png"
         else:
             self.background_path = "/usr/local/mindsensors/images/artwork-for-images.png"

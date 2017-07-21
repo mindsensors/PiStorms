@@ -40,6 +40,17 @@ show_logo() {
 
 do_start () {
     #show_logo
+
+    # update msdev.cfg
+    if [ -f /usr/local/mindsensors/conf/msdev.cfg ]
+    then
+        homefolder=`grep homefolder /usr/local/mindsensors/conf/msdev.cfg | cut -d"=" -f2`
+    else
+      echo "config file is missing"
+      homefolder=/home/pi/PiStorms
+    fi
+    sudo python $homefolder/programs/utils/get-device-type.py
+
 	sleep 1
 	sudo python /usr/local/bin/MSDriver.py >/var/tmp/psmd.out 2>&1 &
     chmod a+rw /dev/i2c* > /dev/null 2>&1
