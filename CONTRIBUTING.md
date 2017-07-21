@@ -76,14 +76,25 @@ A helper function `makeBlock` was tested in `www/html/blockly/servos.php`. This 
 
 
 ### Services
-- MSDriver.sh
-- MSBrowser.sh
-- MSWeb.sh
+A couple system services are set up for specific PiStorms operations. These script files are copied from `setup` to `/etc/init.d/` when `setup/setup.sh` is run, in addition to making them execute at startup with the proper priority.
+
+#### MSDriver.sh
+This is responsible for running `programs/utils/get-device-type.py` to boot to update the device field of `/etc/local/mindsensors/conf/msdev.cfg` checking for a help GO button to shutdown, and showing the mindsensors.com logo whlie the Pi shuts down. The device field of `/etc/local/mindsensors/conf/msdev.cfg` is used in many places to run code differing between the PiStorms and PiStorms-GRX. These include MSBrowser and MSWeb, so MSDriver has a higher priority so it can run and update the config file first.
+
+The `goPressCount` register holds the number of times the GO button has been pressed. This maxes out at 250, at which point additional key presses will not alter this value until it is set to 0. Alternatively, when the GO button is held for ten seconds this register will read 253. `MSDriver.py` is responsible for checking if this register reads 253, and running a shutdown command when it does.
+
+The `lckfile` nonsense was intended to have this work on a system which uses a different service manager than `systemd`. This would work in conjunction with `sys/psm_shutdown`.
+
+#### MSBrowser.sh
+This is responsible for running the browser program. This is what prints the message "Loading PiStorms" "Please wait". It also updates `/var/tmp/.hw_version` (used in `sys/ps_updater.py` and `programs/utils/hardware_update.py`). It starts the browser and redirects its output to `var/tmp/psmb.out` (read by MSWeb). It also runs `ps_messenger_check.py` and `ps_updater.py` once (to check for updates(?)). Finally, it runs `pistorms-diag.sh` for record diagnostics information, and writes it to `/boot`. If a user contacts mindsensors.com support, we might ask for this file. Having it on the boot partition means they can pop the microSD card in their computer and copy the file off, no `scp` needed.
+
+#### MSWeb.sh
+Simple enough, this runs `www/web_api/MSWeb.py`. Note this is different than the Apache server, this just helps when the web interface needs to get information from the system. MSWeb.py uses Flask to host various endpoints. For instance, `GET`ting `/firmware` will return the current firmware version. Similar for `/device`, `/battery`, etc. Some endpoints like `/shutdown` will run a command, `psm_shutdown` in this case.
 
 
 ### Executables
-- psm_shutdown
-- swarmserver
+- **psm_shutdown**: Runs some mess with `/tmp/.psm_shutdown.lck` before passing its arguments onto `/sbin/shutdown`.
+- **swarmserver**: The binary used to orchestrate the swarm demo.
 
 
 ## Coordinate systems
