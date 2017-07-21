@@ -224,12 +224,27 @@ Lets walk through what setup.sh does from start to finish, and what happens at b
 
 The PiStorms has firmware which controls the motor and sensor ports, and which gets input from the touch part of the touchscreen. The Raspberry Pi sends commands over I2C to the PiStorms to tell it what to do. The screen itself communicates via SPI. This means that the screen might work, but you won't be able to tap anything because you can't get touchscreen values from the PiStorms if I2C is broken. The opposite is, therefore, true, too. The screen will not work if SPI is broken, but you could still move motors, etc. if I2C is still functioning.
 
+
+## Relevant filesystem locations
+- **/home/pi/PiStorms**: The home folder
+- **/usr/local/mindsensors/images**: Images used in MSBrowser.py, by MS_ILI9341.py for framing screenshots, and the default prefix for relative filename arguments to `fillBmp` in mindsensorsUI
+- **/usr/local/mindsensors/conf**: Contains only `msdev.cfg`, used for keeping track of the device type (PiStorms or PiStorms-GRX), screen rotation, homefolder (most likely `/home/pi/PiStorms`), and notification and update servers
+- **/usr/local/lib/python2.7/dist-packages**: Where most of the `.py` files are copied from `sys` to. Python looks here when you attempt to import a module. See [suggestions](https://github.com/mindsensors/PiStorms/blob/master/CONTRIBUTING.md#suggestions)
+- **/etc/init.d**: Where `.sh` scripts from `setup` are placed to run at startup as services
+- **/usr/local/bin/**: Where `MSBrowser.py`, `MSDriver.py`, `pistorms-diag.sh`, `ps_messenger_check.py`, `psm_shutdown`, `ps_updater.py`, and `swarmserver` reside
+- **/var/tmp**: Where `ps_data.json`, `ps_images` (directory), `ps_m`, `psmb.out`, `psm-diag.txt`, `psmd.out`, `ps_u`, `ps_versions.json`, `sws.out`, and `webapi.out` are
+- **/boot**: Where `psm-diag.txt` is copied for ease of access
+- **/home/pi/PiStorms/programs/utils**: Various programs used from MS services
+
+
 ## Design improvement suggestions
 - There are a number of things I would like to better organize or clean up, but most would be difficult due to the requirement of supporting previous systems. Backwards compatibility is the issue.
 - For example, the images MSBrowser relies on should not be cluttering up the general programs folder.
 - `rmap.py` should be renamed to make its purpose (Scratch) more clear.
 - `MsDevices.py` and `mindsensors.py` should be merged.
 - The log files should have more meaningful names and be put in `/var/log`, not `/tmp`. Further, `.psm_shutdown.lck` should be in `/var/lock`, not `/tmp`. Note `/var/lock` *is* on a temporary file system, so a reboot will remove any stale locks.
+- `MSBrowser.py`, `MSDriver.py`, `ps_messenger_check.py`, and `ps_updater.py` should not be in `/usr/local/bin` because they are not executable *binaries*.
+
 
 ## Original version of repository structure notes
 This was found in a file last modified April 5th, 2016, the day before the first commit to this repository. Copied verbatim:
