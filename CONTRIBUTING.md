@@ -23,6 +23,43 @@ This document will introduce you to the repository's structure and how the PiSto
 - Log files are also accessible from the web interface
 
 
+### Blockly
+> Blockly is library that adds a visual code editor to web and Android apps. The Blockly editor uses interlocking, graphical blocks to represent code concepts like variables, logical expressions, loops, and more. It allows users to apply programming principles without having to worry about syntax or the intimidation of a blinking cursor on the command line.
+
+On the programs tab of the web interface lets you edit text, or Blockly programs. You can think of Blockly like Scratch, but built with extensibility in mind. There are a set of standard blocks, then we add in blocks for the PiStorms, such as those for reading sensors, moving motors, and drawing on the screen. You can find a blog post introducing the systen [here](http://www.mindsensors.com/blog/pistorms/visual-programming-for-pistorms-robots).
+
+Diving in to the nitty-gritty, let's look at how we add these blocks. Each block has two components: a definition of how the block should look (input/output, connections, etc.) and how to generate code from that visual block. These are referred to as the *Block Definition* and the *Generator*. In this project we are using JavaScript to define the block and JavaScript to generate the Python code for each block.
+
+The left sidebar of the Blockly editor is called the *toolbox*. This is defined in `www/html/programs.php`, in an <xml> tag with the id="toolbox". To avoid this file being literally thousands of lines long, we use php to include the files in `www/html/blockly/`. Each file in this directory defines a category, and creates the block definition and generator.
+
+First is a <category> tag which defines the category and which blocks it consists of. If you add a block but don't see it in the toolbox, you likely forgot to add an entry to this xml. Also check the spelling of the `type` attribute of your <block> tag, it might not match what you define later. Alternatively, if you see a small black block then it could not find a block definition matching that `type`.
+
+The `name` attribute of the <category> tag is the label that will appear for the user in the toolbox. The `colour` attribute (yes, must have British spelling) defines the color of the small bar to the left of the category label. Note this does not affect the color of the blocks *inside* this category, those are defined individually.
+
+Some further content might be included in the <block> tag to define the default arguments (?). <sep> tags are used to adjust the spacing between blocks. By default there is a gap size of 20 between blocks, so specifying a gap of 5 will pull the blocks closer together, while something larger like 50 will visually separate them into groups.
+
+Then there is the <script> tag. Here we detail the block definition and generator. The [Blockly Developer Tools](https://blockly-demo.appspot.com/static/demos/blockfactory/index.html) is a great resource for experimenting with the creation of blocks and learning how the block definition works. If you do use this tool be sure to change the block definition language from JSON to JavaScript and that target language of the generator to Python.
+
+Shortly after the xml toolbox definition there's a short script. This `GET`s the `isgrx` endpoint from MSWeb (see [services](https://github.com/mindsensors/PiStorms/blob/master/CONTRIBUTING.md#services)). Note the toolbox includes both the GRX and standard PiStorms categories. The script removes the categories which are not pertinent to the current device. Note to avoid duplicate category names, the GRX equivalents are postponed with a `_GRX`, which is then removed after that category for the standard PiStorms is removes.
+
+A better way to do this might be to include only the standard PiStorms categories and possibly replace them when the page loads. This would happen before the user is able to open a Blockly program, so they wouldn't notice. However, to keep things consistent (all content in the `www/html/blockly` directory loaded when the page is generated through PHP), this approach was avoided. JavaScript would have to be able to request the GRX categories to include via MSWeb.
+
+As each file in `www/html/blockly` is directly included, the <script> tags will also appear inside of the xml tag. Perhaps this shouldn't be the case, but it works and is much cleaner to have the block definitions and generators in the same file as the related xml.
+
+A helper function `makeBlock` was tested in `www/html/blockly/servos.php`. This was added in an attempt to make the block definitions and generators easier to read. I believe it succeeds in this and should be considered for use in the other `www/html/blockly` files.
+
+
+### Services
+- MSDriver.sh
+- MSBrowser.sh
+- MSWeb.sh
+
+
+### Executables
+- psm_shutdown
+- swarmserver
+
+
 ## Coordinate systems
 
 | ​ | ​ | ​ |
