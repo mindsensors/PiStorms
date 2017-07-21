@@ -40,4 +40,3 @@ psm.BAM1.runSecs(5, 75, False)
 m = ["Motor-Demo", "Motor is now turning for 5 seconds",
   "and will stop with float.", "Click EXIT to exit program"]
 psm.screen.askQuestion(m,["EXIT"])
-

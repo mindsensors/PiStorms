@@ -62,4 +62,3 @@ while not psm.isKeyPressed():
     plt.tight_layout() # make sure the entire plot fits on screen
     plt.savefig(image.name, format="png") # save it
     psm.screen.fillBmp(0,0, 320,240, image.name) # show it on screen
-

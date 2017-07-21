@@ -51,4 +51,3 @@ while psm.screen.askYesOrNoQuestion(message, wrapText=True):
         break
     else:
         psm.screen.showMessage(["Failure", 'Unable to set hostname to "%s".' % hostname], wrapText=True)
-

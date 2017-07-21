@@ -136,6 +136,3 @@ try:
 except:
     print "ps_updater.py connection failed"
     exit()
-
-
-

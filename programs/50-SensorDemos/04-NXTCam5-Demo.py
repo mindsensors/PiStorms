@@ -228,4 +228,3 @@ while(not doExit):
     func(False)
 
     time.sleep(0.4)
-

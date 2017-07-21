@@ -40,4 +40,3 @@ psm.BAM1.runDegs(360, 75, True, False)
 m = ["Motor-Demo", "Motor should have turned 360 degrees",
   "and stop with brake and hold.", "click EXIT to exit program"]
 psm.screen.askQuestion(m,["EXIT"])
-

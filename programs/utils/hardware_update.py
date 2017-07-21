@@ -163,5 +163,3 @@ else:
     # force calibrations
     os.system("sudo python " +  homefolder + "/programs/utils/01-Calibrate.py force")
     sys.exit(0)
-
-

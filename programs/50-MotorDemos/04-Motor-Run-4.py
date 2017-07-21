@@ -46,4 +46,3 @@ psm.BBM1.floatSync()
 m = ["Motor-Demo", "Motor should be stopped now",
   "click EXIT to exit program"]
 psm.screen.askQuestion(m,["EXIT"])
-

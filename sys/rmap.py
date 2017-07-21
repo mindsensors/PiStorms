@@ -585,4 +585,3 @@ def rmap_print(message):
 
 def print_dict():
     print dict
-

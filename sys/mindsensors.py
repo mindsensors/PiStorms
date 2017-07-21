@@ -2156,4 +2156,3 @@ class EV3Lights(mindsensors_i2c):
     def setColor(self, Color, intensity):
         array = [intensity]
         self.writeArray(Color, array)
-

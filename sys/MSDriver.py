@@ -57,5 +57,3 @@ while (True):
     except:
         #print " read failed"
         count = count + 1
-
-

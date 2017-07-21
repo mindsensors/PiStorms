@@ -210,4 +210,3 @@ class TYPE_SUPPORT:
     # note: SERIAL is only supported on A1 and A2
 GRXCom.TYPE_SUPPORT = TYPE_SUPPORT
 del TYPE_SUPPORT
-

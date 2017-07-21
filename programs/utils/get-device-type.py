@@ -41,4 +41,3 @@ else:
 
 with open("/usr/local/mindsensors/conf/msdev.cfg", 'wb') as configfile:
     config.write(configfile)
-

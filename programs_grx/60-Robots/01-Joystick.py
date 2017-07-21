@@ -19,4 +19,3 @@ while not psm.isKeyPressed() and not joystick.get_button(16):
 
 l.stop()
 r.stop()
-
