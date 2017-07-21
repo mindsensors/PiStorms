@@ -61,13 +61,13 @@ if (isConnected == False):
     sys.exit(-1)
 
 if ( opt == "update:hardware" ):
-	script = "hardware_update.py"
+    script = "hardware_update.py"
 
 if ( opt == "update:software" ):
-	script = "software_update.py"
+    script = "software_update.py"
 
 if ( opt == "update:both" ):
-	script = "software_update.py"
+    script = "software_update.py"
 
 cmd = "sudo rm -rf /var/tmp/upd"
 subprocess.call(cmd, shell=True)

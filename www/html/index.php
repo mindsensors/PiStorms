@@ -217,14 +217,14 @@ update_voltage();
 function redirectShutdown() {window.location = "./shutdown.php";}
 function redirectRestart() {window.location = "./reboot.php";}
 $("#shut_btn").click(function(){
-	$.get(api+"shutdown", function(data){});
-	notify("Success","Shutdown Signal Sent","success");
-	window.setTimeout(redirectShutdown, 1000);
+    $.get(api+"shutdown", function(data){});
+    notify("Success","Shutdown Signal Sent","success");
+    window.setTimeout(redirectShutdown, 1000);
 });
 $("#rebt_btn").click(function(){
-	$.get(api+"reboot", function(data){});
-	notify("Success","Restart Signal Sent","success");
-	window.setTimeout(redirectRestart, 1000);
+    $.get(api+"reboot", function(data){});
+    notify("Success","Restart Signal Sent","success");
+    window.setTimeout(redirectRestart, 1000);
 });
 $("#stop_br").click(function(){$.get(api+"stopbrowser", function(data){});notify("Success","Signal to stop browser sent","success");});
 $("#start_br").click(function(){$.get(api+"startbrowser", function(data){});notify("Success","Signal to start browser sent","success");});

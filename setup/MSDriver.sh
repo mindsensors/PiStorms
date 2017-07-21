@@ -51,10 +51,10 @@ do_start () {
     fi
     sudo python $homefolder/programs/utils/get-device-type.py
 
-	sleep 1
-	sudo python /usr/local/bin/MSDriver.py >/var/tmp/psmd.out 2>&1 &
+    sleep 1
+    sudo python /usr/local/bin/MSDriver.py >/var/tmp/psmd.out 2>&1 &
     chmod a+rw /dev/i2c* > /dev/null 2>&1
-	sleep 1
+    sleep 1
 }
 
 do_status() {
@@ -64,13 +64,13 @@ do_status() {
 
 case "$1" in
   start|"")
-	do_start
-	;;
-  restart|reload|force-reload)
-	sudo kill -9 `ps -ef | grep MSDriver.py |grep -v grep| cut -c11-16`
     do_start
-	exit 3
-	;;
+    ;;
+  restart|reload|force-reload)
+    sudo kill -9 `ps -ef | grep MSDriver.py |grep -v grep| cut -c11-16`
+    do_start
+    exit 3
+    ;;
   stop_orig)
     show_logo
 
@@ -81,7 +81,7 @@ case "$1" in
       rm -f $lckfile
       psm_shutdown
     fi
-	;;
+    ;;
   stop)
     show_logo
     SHUTDOWN=3
@@ -93,14 +93,14 @@ case "$1" in
     systemctl list-jobs | egrep -q 'halt.target.*start' && HALT=1 || HALT=0
     systemctl list-jobs | egrep -q 'poweroff.target.*start' && POWEROFF=1 || POWEROFF=0
     #Only power off PiStorms if Raspberry Pi is being shutdown (and not reboot)
-	if [ $SHUTDOWN -eq 1 ]
-	then
-		if [ $REBOOT -eq 1 ]
-		then
-		    echo "in reboot mode...."
-		else
-		    echo "in poweroff or halt mode...."
-		      echo "Shutting down PiStorms..."
+    if [ $SHUTDOWN -eq 1 ]
+    then
+        if [ $REBOOT -eq 1 ]
+        then
+            echo "in reboot mode...."
+        else
+            echo "in poweroff or halt mode...."
+              echo "Shutting down PiStorms..."
               line=`cat $lckfile|tr -d [:space:]`
               if [ x$line = xgo_pressed ]
               then
@@ -112,18 +112,18 @@ case "$1" in
                   rm -f $lckfile
                   psm_shutdown
               fi
-		fi
-	else
-		echo "in starting mode... "
-	fi
-	;;
+        fi
+    else
+        echo "in starting mode... "
+    fi
+    ;;
   status)
     do_status
-	;;
+    ;;
   *)
-	echo "Usage: MSDriver [start|stop|status|restart]" >&2
-	exit 3
-	;;
+    echo "Usage: MSDriver [start|stop|status|restart]" >&2
+    exit 3
+    ;;
 esac
 
 :
