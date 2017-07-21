@@ -149,7 +149,7 @@ def software():
 @app.route("/device", methods=['GET', 'OPTIONS'])
 @crossdomain(origin='*')
 def device():
-    return str(psc.GetDeviceId())
+    return str(config.get('msdev', 'device'))
 
 @app.route("/eth0", methods=['GET', 'OPTIONS'])
 @crossdomain(origin='*')
