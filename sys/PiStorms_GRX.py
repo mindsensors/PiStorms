@@ -25,7 +25,7 @@
 
 from PiStormsCom_GRX import GRXCom
 from mindsensorsUI import mindsensorsUI
-import struct,functools
+import time
 
 
 ## This class provides functions for Grove sensors.
@@ -296,19 +296,19 @@ class PiStorms_GRX():
 
     @classmethod
     def waitForKeyPress(self):
-        self.untilKeyPress(functools.partial(time.sleep, 0.01))
+        self.untilKeyPress(time.sleep, 0.01)
 
     @classmethod
-    def untilKeyPress(self, func):
+    def untilKeyPress(self, func, *args, **kwargs):
         initialKeyPressCount = self.getKeyPressCount()
         while self.getKeyPressCount() == initialKeyPressCount:
-            func()
+            func(*args, **kwargs)
 
     # note this is not a class method because it needs self.screen, an instance attribute
-    def untilKeyPressOrTouch(self, func):
+    def untilKeyPressOrTouch(self, func, *args, **kwargs):
         initialKeyPressCount = self.getKeyPressCount()
         while self.getKeyPressCount() == initialKeyPressCount and not self.screen.isTouched():
-            func()
+            func(*args, **kwargs)
 
     @classmethod
     def getKeyPressValue(self): # F1-4
