@@ -44,6 +44,8 @@ def testLEDs():
 
 def testTouchscreen():
     psm.screen.showMessage(["Touchscreen Test", "Use the paint program to check for touchscreen accuracy in all 4 corners. Also check the software function keys. When you are done press GO to continue."], wrapText=True)
+    psm.screen.forceMessage(["Loading...",
+                             "Starting the 04-Paint.py"])
     os.system("sudo python /home/pi/PiStorms/programs_grx/60-Games/04-Paint.py")
 
 def testServos():
@@ -58,8 +60,7 @@ def testServos():
 def testDigitalInput():
     psm.screen.showMessage(["Digital Input", "Connect the Grove Button sensor to each port and verify its reading. Press GO to proceed."], wrapText=True, goBtn=True)
     ports = [PiStorms_GRX.GrovePort(port, GRXCom.TYPE.DIGITAL_INPUT) for port in ALL]
-    initialKeyPressCount = psm.getKeyPressCount()
-    while psm.getKeyPressCount() == initialKeyPressCount:
+    def run():
         psm.screen.clearScreen(display=False)
         psm.screen.drawAutoText(ports[0].readValue(), 20, 150, display=False)
         psm.screen.drawAutoText(ports[1].readValue(), 20, 120, display=False)
@@ -74,13 +75,13 @@ def testDigitalInput():
         psm.screen.drawAutoText(ports[7].readValue(), 290,  90, display=False)
         psm.screen.drawAutoText(ports[8].readValue(), 290, 120, display=False)
         psm.screen.drawAutoText(ports[9].readValue(), 290, 150)
+    psm.untilKeyPress(run)
     psm.screen.clearScreen(display=False)
 
 def testAnalogInput():
     psm.screen.showMessage(["Analog Input", "Connect the Grove Light sensor to each port and verify its reading. Press GO to proceed."], wrapText=True, goBtn=True)
     ports = [PiStorms_GRX.GrovePort(port, GRXCom.TYPE.ANALOG_INPUT) for port in ANALOG]
-    initialKeyPressCount = psm.getKeyPressCount()
-    while psm.getKeyPressCount() == initialKeyPressCount:
+    def run():
         psm.screen.clearScreen(display=False)
         psm.screen.drawAutoText(ports[0].readValue(), 20, 150, display=False)
         psm.screen.drawAutoText(ports[1].readValue(), 20, 120, display=False)
@@ -89,6 +90,7 @@ def testAnalogInput():
         psm.screen.drawAutoText(ports[3].readValue(), 260,  90, display=False)
         psm.screen.drawAutoText(ports[4].readValue(), 260, 120, display=False)
         psm.screen.drawAutoText(ports[5].readValue(), 260, 150)
+    psm.untilKeyPress(run)
     psm.screen.clearScreen(display=False)
 
 def testDigitalOutput():
@@ -97,27 +99,44 @@ def testDigitalOutput():
                              "to each port and verify it flashes.",
                              "Press GO to proceed."])
     ports = [PiStorms_GRX.GrovePort(port, GRXCom.TYPE.DIGITAL_OUTPUT) for port in ALL]
-    initialKeyPressCount = psm.getKeyPressCount()
-    while psm.getKeyPressCount() == initialKeyPressCount:
+    def run():
         for port in ports:
             port.writeValue(0)
             time.sleep(0.01)
-        time.sleep(0.3)
+        time.sleep(0.2)
         for port in ports:
             port.writeValue(1)
             time.sleep(0.01)
-        time.sleep(0.3)
+        time.sleep(0.2)
+    psm.untilKeyPress(run)
 
 def testTachometer():
     psm.screen.showMessage(["Tachometer / Encoder", "Connect an encoder to each of the 4 digital ports along the top and verify its readings by manually rotate the wheel. Each rotation should measure 72 units. Press GO to proceed."], wrapText=True, goBtn=True)
-    ports = [PiStorms_GRX.GrovePort(port, GRXCom.TYPE.ENCODER) for port in DIGITAL]
-    while not psm.isKeyPressed():
+    GRXCom.I2C.A.writeByte(GRXCom.DIGITAL[0] + GRXCom.OFFSET.TYPE, 0)
+    GRXCom.I2C.A.writeByte(GRXCom.DIGITAL[1] + GRXCom.OFFSET.TYPE, 0)
+    GRXCom.I2C.B.writeByte(GRXCom.DIGITAL[0] + GRXCom.OFFSET.TYPE, 0)
+    GRXCom.I2C.B.writeByte(GRXCom.DIGITAL[1] + GRXCom.OFFSET.TYPE, 0)
+    time.sleep(0.1)
+    GRXCom.I2C.A.writeByte(GRXCom.DIGITAL[0] + GRXCom.OFFSET.TYPE, GRXCom.TYPE.ENCODER)
+    GRXCom.I2C.A.writeByte(GRXCom.DIGITAL[1] + GRXCom.OFFSET.TYPE, GRXCom.TYPE.ENCODER)
+    GRXCom.I2C.B.writeByte(GRXCom.DIGITAL[0] + GRXCom.OFFSET.TYPE, GRXCom.TYPE.ENCODER)
+    GRXCom.I2C.B.writeByte(GRXCom.DIGITAL[1] + GRXCom.OFFSET.TYPE, GRXCom.TYPE.ENCODER)
+    def run():
+        BAD1 = GRXCom.I2C.A.readLongSigned(GRXCom.DIGITAL[0] + GRXCom.OFFSET.ENCODER_VALUE)
+        BAD2 = GRXCom.I2C.A.readLongSigned(GRXCom.DIGITAL[1] + GRXCom.OFFSET.ENCODER_VALUE)
+        BBD2 = GRXCom.I2C.B.readLongSigned(GRXCom.DIGITAL[1] + GRXCom.OFFSET.ENCODER_VALUE)
+        BBD1 = GRXCom.I2C.B.readLongSigned(GRXCom.DIGITAL[0] + GRXCom.OFFSET.ENCODER_VALUE)
         psm.screen.clearScreen(display=False)
-        psm.screen.drawAutoText("BBD1: %s"%ports[0].readValue(),  20, 20, display=False)
-        psm.screen.drawAutoText("BBD2: %s"%ports[1].readValue(),  20, 50, display=False)
-        psm.screen.drawAutoText("BAD2: %s"%ports[2].readValue(), 210, 20, display=False)
-        psm.screen.drawAutoText("BAD1: %s"%ports[3].readValue(), 210, 50)
-    while psm.isKeyPressed(): time.sleep(0.01) # wait for release
+        psm.screen.drawAutoText("BBD1: %s"%BBD1,  20, 20, display=False)
+        psm.screen.drawAutoText("BBD2: %s"%BBD2,  20, 50, display=False)
+        psm.screen.drawAutoText("BAD2: %s"%BAD2, 210, 20, display=False)
+        psm.screen.drawAutoText("BAD1: %s"%BAD1, 210, 50)
+    psm.untilKeyPress(run)
+    time.sleep(0.1)
+    GRXCom.I2C.A.writeByte(GRXCom.DIGITAL[0] + GRXCom.OFFSET.TYPE, 0)
+    GRXCom.I2C.A.writeByte(GRXCom.DIGITAL[1] + GRXCom.OFFSET.TYPE, 0)
+    GRXCom.I2C.B.writeByte(GRXCom.DIGITAL[0] + GRXCom.OFFSET.TYPE, 0)
+    GRXCom.I2C.B.writeByte(GRXCom.DIGITAL[1] + GRXCom.OFFSET.TYPE, 0)
     psm.screen.clearScreen(display=False)
 
 testGObutton()
