@@ -25,6 +25,7 @@
 
 from PiStormsCom_GRX import GRXCom
 from mindsensorsUI import mindsensorsUI
+import ConfigParser
 import time
 
 
@@ -108,13 +109,20 @@ class RCServo():
     #                      servo continues to spin when you call stop or setNeutral,
     #                      it likely has the wrong neutral point set. You can update
     #                      this at any time with setNeutralPoint(self, neutralPoint).
-    def __init__(self, port=None, neutralPoint=1500):
-        if port == None:
+    def __init__(self, port=None, neutralPoint=None):
+        if port == None or port[2]!="M":
             raise TypeError("You must specify a port as an argument." \
                     " Please do so in the form B?M# where ? is A or B" \
                     " for the bank letter (which half of the PiStorms)," \
                     " and # is the servo number: 1, 2 or 3." \
                     " For example: BBM3 is Bank B, Motor 3.")
+        if neutralPoint == None:
+            config = ConfigParser.RawConfigParser()
+            config.read("/usr/local/mindsensors/conf/msdev.cfg")
+            if config.has_section('neutralpoint') and config.has_option('neutralpoint', port.upper()):
+                neutralPoint = config.get('neutralpoint', port.upper())
+            else:
+                neutralPoint = 1500
 
         try:
             if not len(port) == 4:
@@ -215,7 +223,7 @@ class RCServoEncoder(RCServo, GrovePort):
     ## Initialize an RC servo object with an associated encoder.
     #  @param encoder You may associate an encoder with this servo by specifying
     #                 the digital port it is connected to.
-    def __init__(self, port=None, neutralPoint=1500, encoder=None):
+    def __init__(self, port=None, neutralPoint=None, encoder=None):
         if port == None:
             raise TypeError("You must specify a port as an argument")
         if encoder == None:

@@ -1,43 +1,65 @@
-import time
+import time, sys
+import ConfigParser
 from PiStormsCom_GRX import GRXCom
 from PiStorms_GRX import PiStorms_GRX, RCServo, GrovePort
+
 psm = PiStorms_GRX()
+config = ConfigParser.RawConfigParser()
+config.read("/usr/local/mindsensors/conf/msdev.cfg")
 
 # introduce program and intent
 # give option to quit
 bank = psm.screen.askQuestion(["Motor Bank", "Which bank is your servo connected to?"], [" <-- B", " "*13+"A -->"], wrapText=True)
 bank = ["B", "A"][bank]
-port = psm.screen.askQuestion(["Motor Port", "Which port number is your servo connected to?"], [1, 2, 3], wrapText=True)
-port = ["1", "2", "3"][port]
-servo = "B{}M{}".format(bank, port)
-#print(servo)
-servo = RCServo(servo)
-#time.sleep(0.5)
-#servo.stop()
+port = psm.screen.askQuestion(["Motor Port", "Which port number is your servo connected to?"],
+                              [1,2,3] if bank!="A" else [3,2,1], wrapText=True)
+port = (["1","2","3"] if bank!="A" else ["3","2","1"])[port]
+port = "B{}M{}".format(bank, port)
+servo = RCServo(port)
+servo.stop()
+
+def exit():
+    servo.stop()
+    psm.screen.forceMessage(["Exiting...", "Calibration cancelled"])
+    time.sleep(1)
+    sys.exit(0)
 
 if psm.screen.askYesOrNoQuestion(["Encoder", "Do you have an encoder attached to this servo?"], wrapText=True):
-    port = psm.screen.askQuestion(["Encoder Port", "Which port is your encoder connected to?"],
-            ["B{}D1".format(bank), "B{}D2".format(bank)], wrapText=True)
-    port = ["1", "2"][port]
-    encoder = "B{}D{}".format(bank, port)
-    encoder = GrovePort(encoder, type=GRXCom.TYPE.ENCODER, mode=int(port))
-    # maybe add option to cancel here
+    # zero-indexed encoder port number
+    encPortNum0 = psm.screen.askQuestion(["Encoder Port", "Which port is your encoder connected to?"],
+                                         ["B{}D1".format(bank), "B{}D2".format(bank)], wrapText=True)
+    encPortNum = ["1", "2"][encPortNum0]
+    encPort = "B{}D{}".format(bank, encPortNum)
+    encoder = GrovePort(encPort, type=GRXCom.TYPE.ENCODER, mode=int(encPortNum0))
     # no comma at the end of this line so the string merges with the following line (no backslash necessary)
-    psm.screen.showMessage(["Ready to begin", "This program will now find the neutral point of this servo automatically."
-                            " Please make sure the servo can spin freely before proceeding."], wrapText=True)
-    pulse = 1500
-    initialKeyPressCount = psm.getKeyPressCount()
-    while psm.getKeyPressCount() == initialKeyPressCount:
-        servo.setPulse(pulse)
-        encoderStart = encoder.readValue()
-        time.sleep(1)
-        encoderEnd = encoder.readValue()
-        encoderDifference = encoderEnd - encoderStart
-        psm.screen.termReplaceLastLine(encoderDifference)
-        if abs(encoderDifference) < 2:
-            break
-        else:
-            pulse += encoderDifference*2
+    answer = psm.screen.askQuestion(["Ready to begin", "This program will now find the neutral point of this servo automatically."
+                                     " Please make sure the servo can spin freely before proceeding."],
+                                     ["OK", "Cancel"], goBtn=True, wrapText=True)
+    if answer != 0: exit()
+
+    def showStatus(n):
+        psm.screen.forceMessage(["Please wait", "Finding neutral point...", "Trying to get this number to 0: {}".format(n), "", "(press GO to cancel)"])
+    def find(direction):
+        pulse = 1500
+        initialKeyPressCount = psm.getKeyPressCount()
+        while True:
+            servo.setPulse(pulse)
+            encoderStart = encoder.readValue()
+            time.sleep(1)
+            encoderEnd = encoder.readValue()
+            encoderDifference = encoderEnd - encoderStart
+            if abs(encoderDifference) < 2:
+                return pulse
+            else:
+                pulse += direction*encoderDifference*2
+            showStatus(encoderDifference)
+            if psm.getKeyPressCount() != initialKeyPressCount:
+                exit()
+    psm.screen.forceMessage(["Please wait", "Finding neutral point...", "", "", "(press GO to cancel)"])
+    try:
+        pulse = find(+1)
+    except ValueError:
+        pulse = find(-1)
 else:
     psm.screen.termPrintln("Please adjust this number")
     psm.screen.termPrintln("until the servo stops spinning.")
@@ -61,7 +83,15 @@ else:
         psm.screen.drawDisplay(pulse)
         servo.setPulse(pulse)
         time.sleep(0.3)
-    #TODO: account for possibility of a wider range of values which cause servo to still
-    #TODO: save value
 
-servo.stop()
+answer = psm.screen.askQuestion(["Done!", "Found neutral point: {}".format(pulse),
+                                 "Hit OK or GO to save"], ["OK", "Cancel"])
+if answer == 1: exit()
+
+if not config.has_section('neutralpoint'):
+    config.add_section('neutralpoint')
+config.set('neutralpoint', port, pulse)
+with open("/usr/local/mindsensors/conf/msdev.cfg", 'wb') as configfile:
+    config.write(configfile)
+
+#TODO: account for possibility of a wider range of values which cause servo to still
