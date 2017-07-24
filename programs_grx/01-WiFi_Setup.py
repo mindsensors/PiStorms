@@ -22,25 +22,25 @@
 # History:
 # Date          Author          Comments
 # March 2016    Roman Bohuk     Initial Authoring
+# July 2017     Seth Tenembaum  Update for GRX
 
-# Setup (to be present in all programs)
-import os,sys,inspect,time,thread
-import socket,fcntl,struct
-currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
-parentdir = os.path.dirname(currentdir)
-sys.path.insert(0,parentdir)
-
-from PiStorms import PiStorms
+import os, sys, time, re, subprocess
+from PiStorms_GRX import PiStorms_GRX
 from TouchScreenInput import TouchScreenInput
 from wireless import Wireless
 from wifi import Cell
-import re, subprocess
+import ConfigParser
+
+config = ConfigParser.RawConfigParser()
+config.read("/usr/local/mindsensors/conf/msdev.cfg")
+homefolder = config.get("msdev", "homefolder")
+currentdir = os.path.join(homefolder, "programs")
 
 # Globals
 config_file = "/etc/wpa_supplicant/wpa_supplicant.conf" # Config file for Wi-Fi
 wifi = None
 wlan_inteface = "wlan0"
-psm = PiStorms()
+psm = PiStorms_GRX()
 
 # Check if a wifi adapter is available
 try:
@@ -337,6 +337,7 @@ page = 0 # Current page
 ssids = get_available() # Available ssid's
 draw_options() # Displays UI options
 shown = draw_connections(ssids, page) # Displays a page of available networks
+initialKeyPressCount = psm.getKeyPressCount()
 exit = False
 
 # Main loop
@@ -385,4 +386,5 @@ while not exit:
         shown = draw_connections(ssids, page)
 
     # Exit
-    if(psm.isKeyPressed()): exit = True
+    if psm.getKeyPressCount() != initialKeyPressCount:
+        exit = True
