@@ -33,7 +33,7 @@
 # DEALINGS IN THE SOFTWARE.
 import sys,rmap,threading,time,math,socket,scratch,subprocess,datetime
 import rmapcfg
-from PiStorms import PiStorms
+from PiStorms_GRX import PiStorms_GRX
 
 debug = False
 device_dict = rmap.dict
@@ -41,7 +41,7 @@ read_dict = rmap.read_dict
 command_array = []
 command_array1 = []
 string_message = ""
-psm = PiStorms()
+psm = PiStorms_GRX()
 lasttime = int(round(time.time() * 1000))
 # Connect to Scratch
 try:

@@ -24,13 +24,13 @@
 # 06/22/16   Deepak     Initial development.
 #
 
-from PiStorms import PiStorms
+from PiStorms_GRX import PiStorms_GRX
 import sys, subprocess
 
-psm = PiStorms()
+psm = PiStorms_GRX()
 m = ["PiStorms",
- "Are you sure you want to shutdown?" ]
-res = psm.screen.askQuestion(m,["OK", "Cancel"])
+     "Are you sure you want to shutdown?"]
+res = psm.screen.askQuestion(m, ["OK","Cancel"])
 
 if (res == 0):
     cmd = "sudo psm_shutdown -h now"

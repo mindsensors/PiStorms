@@ -24,9 +24,10 @@
 # 01/01/16   Deepak     Initial development.
 #
 import json, time, os, sys, inspect, thread
+import ConfigParser
 from ws4py.client.threadedclient import WebSocketClient
 from swarmclient import *
-from PiStorms import PiStorms
+from PiStorms_GRX import PiStorms_GRX
 
 #
 # message sender
@@ -34,11 +35,15 @@ from PiStorms import PiStorms
 currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
 parentdir = os.path.dirname(currentdir)
 sys.path.insert(0,parentdir)
-psm = PiStorms()
+psm = PiStorms_GRX()
 doExit = False
 bmpw = 60
 old_x = 110
 old_y = 80
+config = ConfigParser.RawConfigParser()
+config.read("/usr/local/mindsensors/conf/msdev.cfg")
+homefolder = config.get("msdev", "homefolder")
+currentdir = os.path.join(homefolder, "programs")
 
 psm.screen.clearScreen()
 if __name__ == '__main__':
