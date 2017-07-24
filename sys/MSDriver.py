@@ -30,7 +30,7 @@ config = ConfigParser.RawConfigParser()
 config.read("/usr/local/mindsensors/conf/msdev.cfg")
 if "GRX" in config.get('msdev', 'device'):
     KEY_COUNT = 0xC0
-else
+else:
     KEY_COUNT = 0xDB
 
 lckfile = "/tmp/.psm_shutdown.lck"

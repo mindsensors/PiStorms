@@ -263,19 +263,19 @@ class PiStorms_GRX():
 
     @classmethod
     def getFirmwareVersion(self):
-        return GRXCom.I2C.A.readString(GRXCom.REGISTER.FIRMWARE_VERSION, 8)
+        return GRXCom.I2C.A.readString(GRXCom.REGISTER.FIRMWARE_VERSION, 8).rstrip(chr(0x00))
 
     @classmethod
     def getVendorName(self):
-        return GRXCom.I2C.A.readString(GRXCom.REGISTER.VENDOR_NAME, 8)
+        return GRXCom.I2C.A.readString(GRXCom.REGISTER.VENDOR_NAME, 8).rstrip(chr(0x00))
 
     @classmethod
     def getDeviceModel(self):
-        return GRXCom.I2C.A.readString(GRXCom.REGISTER.DEVICE_MODEL, 8)
+        return GRXCom.I2C.A.readString(GRXCom.REGISTER.DEVICE_MODEL, 8).rstrip(chr(0x00))
 
     @classmethod
     def getDeviceFeatures(self):
-        return GRXCom.I2C.A.readString(GRXCom.REGISTER.FEATURE, 8)
+        return GRXCom.I2C.A.readString(GRXCom.REGISTER.FEATURE, 8).rstrip(chr(0x00))
 
     @classmethod
     def led(self, lednum, red, green, blue):
@@ -304,9 +304,15 @@ class PiStorms_GRX():
         while self.getKeyPressCount() == initialKeyPressCount:
             func()
 
+    # note this is not a class method because it needs self.screen, an instance attribute
+    def untilKeyPressOrTouch(self, func):
+        initialKeyPressCount = self.getKeyPressCount()
+        while self.getKeyPressCount() == initialKeyPressCount and not self.screen.isTouched():
+            func()
+
     @classmethod
     def getKeyPressValue(self): # F1-4
-        return {0: 0, 8: 1, 16: 2, 24: 3, 40: 4}[GRXCom.getKeyPressValue()]
+        return {0:0, 8:1, 16:2, 24:3, 40:4}[GRXCom.getKeyPressValue()]
 
     @classmethod
     def isF1Pressed(self):
