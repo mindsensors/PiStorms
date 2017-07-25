@@ -1,5 +1,4 @@
 import os, sys, time
-import colorsys
 
 import PiStorms_GRX
 from PiStormsCom_GRX import GRXCom
@@ -11,7 +10,7 @@ SERVOS  = ["BBM1", "BBM2", "BBM3", "BAM3", "BAM2", "BAM1"]
 
 psm = PiStorms_GRX.PiStorms_GRX()
 
-def testGObutton():
+def testGObutton(helpText):
     if psm.isKeyPressed():
         psm.screen.forceMessage(["Quitting Test",
                                  "GO button was detected to be pressed",
@@ -27,19 +26,19 @@ def testGObutton():
     psm.resetKeyPressCount()
     while psm.getKeyPressCount() == 0: time.sleep(0.01)
 
-def testLEDs():
+def testLEDs(helpText):
     psm.screen.forceMessage(["LED test",
                              "The LEDs should start cycling,",
                              "press GO to continue."])
-    hueToRGB = lambda hue: [int(val*255) for val in colorsys.hsv_to_rgb(hue/360.0, 1, 1)]
-    hue = 0
-    initialKeyPressCount = psm.getKeyPressCount()
-    while psm.getKeyPressCount() == initialKeyPressCount:
-        psm.led(1, *hueToRGB(hue))
-        psm.led(2, *hueToRGB(hue+120))
-        hue += 10
-        time.sleep(0.05)
+    def run():
+        for color in [(255,0,0), (0,255,0), (0,0,255)]:
+            psm.led(1, *color)
+            time.sleep(0.5)
+            psm.led(2, *color)
+            time.sleep(0.5)
+    psm.untilKeyPress(run)
     psm.led(1, 0,0,0)
+    time.sleep(0.01)
     psm.led(2, 0,0,0)
 
 def testTouchscreen(helpText):
@@ -48,8 +47,10 @@ def testTouchscreen(helpText):
                              "Starting the 04-Paint.py"])
     os.system("sudo python /home/pi/PiStorms/programs_grx/60-Games/04-Paint.py")
 
-def testServos():
+def testServos(helpText):
+    psm.screen.dumpTerminal()
     psm.screen.termPrintln("Setting servos in sequence")
+    psm.screen.setMode(psm.screen.PS_MODE_TERMINAL)
     servos = [PiStorms_GRX.RCServo(port) for port in SERVOS]
     def run():
         for servo in servos:
@@ -65,6 +66,8 @@ def testDigitalInput(helpText):
     ports = [PiStorms_GRX.GrovePort(port, GRXCom.TYPE.DIGITAL_INPUT) for port in ALL]
     def run():
         psm.screen.clearScreen(display=False)
+        psm.screen.drawAutoText("Digital input", x=999, y=50, align="center", display=False)
+
         psm.screen.drawAutoText(ports[0].readValue(), 20, 150, display=False)
         psm.screen.drawAutoText(ports[1].readValue(), 20, 120, display=False)
         psm.screen.drawAutoText(ports[2].readValue(), 20,  90, display=False)
@@ -86,6 +89,8 @@ def testAnalogInput(helpText):
     ports = [PiStorms_GRX.GrovePort(port, GRXCom.TYPE.ANALOG_INPUT) for port in ANALOG]
     def run():
         psm.screen.clearScreen(display=False)
+        psm.screen.drawAutoText("Analog input", x=999, y=50, align="center", display=False)
+
         psm.screen.drawAutoText(ports[0].readValue(), 20, 150, display=False)
         psm.screen.drawAutoText(ports[1].readValue(), 20, 120, display=False)
         psm.screen.drawAutoText(ports[2].readValue(), 20,  90, display=False)
@@ -96,7 +101,7 @@ def testAnalogInput(helpText):
     psm.untilKeyPress(run)
     psm.screen.clearScreen(display=False)
 
-def testDigitalOutput():
+def testDigitalOutput(helpText):
     psm.screen.forceMessage(["Digital Output",
                              "Connect the Grove LED socket",
                              "to each port and verify it flashes.",
@@ -130,6 +135,7 @@ def testTachometer(helpText):
         BBD2 = GRXCom.I2C.B.readLongSigned(GRXCom.DIGITAL[1] + GRXCom.OFFSET.ENCODER_VALUE)
         BBD1 = GRXCom.I2C.B.readLongSigned(GRXCom.DIGITAL[0] + GRXCom.OFFSET.ENCODER_VALUE)
         psm.screen.clearScreen(display=False)
+        psm.screen.drawAutoText("Tachometer test", x=999, y=100, align="center", display=False)
         psm.screen.drawAutoText("BBD1: %s"%BBD1,  20, 20, display=False)
         psm.screen.drawAutoText("BBD2: %s"%BBD2,  20, 50, display=False)
         psm.screen.drawAutoText("BAD2: %s"%BAD2, 210, 20, display=False)
@@ -154,20 +160,14 @@ if __name__ == "__main__":
     for y in range(42, 202, 20):
         psm.screen.drawButton(0, y, 30, 20, text="O", display=False)
     psm.screen.drawButton(0, 205, 320, 35, text="Run", align="center", display=False)
-    # draw button for enabling help
     psm.screen.drawAutoText("Help: No", 200, 42, display=False)
     psm.screen.drawButton(200, 68, 83, 30, text="Toggle", display=False)
-    # draw button to exit program or not
-    #psm.screen.drawAutoText("Exit: Yes", 200, 120)
-    #psm.screen.drawButton(200, 146, 83, 30, text="Toggle")
-    #psm.screen.fillRect(200, 120, 83, 21, fill=(0,0,0))
-    #psm.screen.drawAutoText("Exit: No", 200, 120)
     psm.screen.drawButton(200, 120, 100, 30, text="Deselect all", display=False)
+    psm.screen.disp.display()
     # state variables
     subtests = [True]*8
     selectText = True # True for "Deselect", False for "Select"
     helpText = False
-    psm.screen.disp.display()
     # poll buttons
     while not psm.screen.checkButton(0, 205, 320, 35):
         for i in range(len(subtests)):
@@ -190,21 +190,6 @@ if __name__ == "__main__":
             psm.screen.fillRect(200, 42, 83, 21, fill=(0,0,0), display=False)
             psm.screen.drawAutoText("Help: No" if helpText else "Help: Yes", 200, 42)
             helpText = not helpText
-    #print subtests, selectText, helpText
     psm.screen.clearScreen()
-    if subtests[0]:
-        testGObutton()
-    if subtests[1]:
-        testLEDs()
-    if subtests[2]:
-        testTouchscreen(helpText)
-    if subtests[3]:
-        testServos()
-    if subtests[4]:
-        testDigitalInput(helpText)
-    if subtests[5]:
-        testDigitalOutput()
-    if subtests[6]:
-        testAnalogInput(helpText)
-    if subtests[7]:
-        testTachometer(helpText)
+    for i, test in enumerate([testGObutton, testLEDs, testTouchscreen, testServos, testDigitalInput, testDigitalOutput, testAnalogInput, testTachometer]):
+        if subtests[i]: test(helpText)
