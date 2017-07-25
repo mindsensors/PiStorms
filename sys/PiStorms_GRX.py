@@ -69,6 +69,9 @@ class GrovePort():
         if mode not in range(256):
             raise ValueError("Sensor port mode must be an integer between 0 and 255.")
 
+        if port == "BBD2" and type == GRXCom.TYPE.ENCODER:
+            raise ValueError("BBD2 does not support encoders at this time. Please use BBD1, BAD1 or BAD2.")
+
         address = addresses[number]
         self.comm = GRXCom(i2c, address)
         self.comm.setType(type, mode)
