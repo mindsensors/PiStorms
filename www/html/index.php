@@ -25,8 +25,6 @@
 # May 2017     Seth Tenembaum  Remove login requirement
 */
 
-include "api/config.php";
-
 ?><!DOCTYPE html>
 <html>
 <head>
@@ -45,9 +43,8 @@ include "api/config.php";
     .btn-settings {
         margin:5px;
     }
-
-    #needs-update-tooltip {
-        cursor: pointer;
+    .right-pad {
+        margin-right:0.5em;
     }
   </style>
   <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -89,12 +86,12 @@ include "api/config.php";
             </div>
             <div class="box-footer no-padding">
               <ul class="nav nav-stacked">
-                <li><a>Device: <b><span class="device_id"><i class="fa fa-refresh fa-spin"></i>&nbsp;&nbsp;Fetching</span></b></a></li>
-                <li><a>Software Version: <b><span class="software_version"><i class="fa fa-refresh fa-spin"></i>&nbsp;&nbsp;Fetching</span></b> <?php echo ($updates == "both" || $updates == "software") ? $needsupdate : ($updates == "loading" ? "" : $uptodate); ?></a></li>
-                <li><a>Firmware Version: <b><span class="firmware_version"><i class="fa fa-refresh fa-spin"></i>&nbsp;&nbsp;Fetching</span></b> <?php echo ($updates == "both" || $updates == "hardware") ? $needsupdate : ($updates == "loading" ? "" : $uptodate); ?></a></li>
+                <li><a>Device: <b><span class="device_id"><i class="fa fa-refresh fa-spin right-pad"></i>Fetching</span></b></a></li>
+                <li><a>Software Version: <b><span class="software_version"><i class="fa fa-refresh fa-spin right-pad"></i>Fetching</span></b></a></li>
+                <li><a>Firmware Version: <b><span class="firmware_version"><i class="fa fa-refresh fa-spin right-pad"></i>Fetching</span></b></a></li>
                 <li><a>Hostname: <b data-toggle="tooltip" data-trigger="hover" data-html="true" title="You can run <code>01-Change_Hostname</code> to change this."><?php echo gethostname();?></b></a></li>
-                <li><a>eth0: <b><span class="eth0_ip"><i class="fa fa-refresh fa-spin"></i>&nbsp;&nbsp;Fetching</span></b></a></li>
-                <li><a>wlan0: <b><span class="wlan0_ip"><i class="fa fa-refresh fa-spin"></i>&nbsp;&nbsp;Fetching</span></b></a></li>
+                <li><a>eth0: <b><span class="eth0_ip"><i class="fa fa-refresh fa-spin right-pad"></i>Fetching</span></b></a></li>
+                <li><a>wlan0: <b><span class="wlan0_ip"><i class="fa fa-refresh fa-spin right-pad"></i>Fetching</span></b></a></li>
               </ul>
             </div>
           </div>
@@ -107,10 +104,10 @@ include "api/config.php";
 
             <div class="info-box-content">
               <span class="info-box-text">Battery</span>
-              <span class="info-box-number"><span class="battery_v"><i class="fa fa-refresh fa-spin"></i></span>&nbsp;&nbsp;V</span>
+              <span class="info-box-number"><span class="battery_v"><i class="fa fa-refresh fa-spin right-pad"></i></span> V</span>
 
               <span class="progress-description" id="battery-text">
-                Well Charged
+                Unknown
               </span>
             </div>
           </div>
@@ -126,9 +123,11 @@ include "api/config.php";
               </div>
             </div>
             <div class="box-body text-center">
-              <button type="button" id="shut_btn" class="btn btn-danger btn-flat btn-settings"><i class="fa fa-power-off" aria-hidden="true"></i>&nbsp;&nbsp;Shutdown</button> <button type="button" id="rebt_btn" class="btn btn-primary btn-flat btn-settings"><i class="fa fa-repeat" aria-hidden="true"></i>&nbsp;&nbsp;Reboot</button>
+              <button type="button" id="shut_btn" class="btn btn-danger btn-flat btn-settings"><i class="fa fa-power-off right-pad" aria-hidden="true"></i>Shutdown</button>
+              <button type="button" id="rebt_btn" class="btn btn-primary btn-flat btn-settings"><i class="fa fa-repeat right-pad" aria-hidden="true"></i>Reboot</button>
               <br>
-              <button type="button" id="stop_br" class="btn btn-warning btn-flat btn-settings"><i class="fa fa-desktop" aria-hidden="true"></i>&nbsp;&nbsp;Stop Browser</button> <button type="button" id="start_br" class="btn btn-primary btn-flat btn-success"><i class="fa fa-desktop" aria-hidden="true"></i>&nbsp;&nbsp;Start Browser</button>
+              <button type="button" id="stop_br" class="btn btn-warning btn-flat btn-settings"><i class="fa fa-desktop right-pad" aria-hidden="true"></i>Stop Browser</button>
+              <button type="button" id="start_br" class="btn btn-primary btn-flat btn-success"><i class="fa fa-desktop right-pad" aria-hidden="true"></i>Start Browser</button>
               <br>
             </div>
           </div>
@@ -191,7 +190,6 @@ function update_voltage() {
         $(".battery_v").html(data);
         update_battery_box(parseFloat(data));
     });
-    setTimeout(update_voltage,3000);
 }
 
 var battery_status = {
@@ -213,6 +211,7 @@ function update_battery_box(volt) {
     $("#battery-symbol").addClass("fa-battery-" + tier);
 }
 update_voltage();
+setInterval(update_voltage, 3000);
 
 function redirectShutdown() {window.location = "./shutdown.php";}
 function redirectRestart() {window.location = "./reboot.php";}
@@ -228,10 +227,6 @@ $("#rebt_btn").click(function(){
 });
 $("#stop_br").click(function(){$.get(api+"stopbrowser", function(data){});notify("Success","Signal to stop browser sent","success");});
 $("#start_br").click(function(){$.get(api+"startbrowser", function(data){});notify("Success","Signal to start browser sent","success");});
-
-$("#needs-update-tooltip").click(function() {
-    window.open("https://github.com/mindsensors/PiStorms");
-});
 </script>
 
 </body>

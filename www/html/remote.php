@@ -25,8 +25,6 @@
 # May 2017     Seth Tenembaum  Remove login requirement
 */
 
-include "api/config.php";
-
 ?><!DOCTYPE html>
 <html>
 <head>
@@ -44,11 +42,6 @@ include "api/config.php";
   <link rel="stylesheet" href="assets/slider.css">
   <link href="assets/bootstrap-toggle.min.css" rel="stylesheet">
   <style>
-    .btn-sq {
-      width: 50px !important;
-      height: 50px !important;
-      font-size: 24px;
-    }
     .btn-settings {
         margin: 5px;
     }

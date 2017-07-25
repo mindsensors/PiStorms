@@ -24,8 +24,6 @@
 # July 2016    Roman Bohuk     Initial Authoring
 # May 2017     Seth Tenembaum  Remove login requirement
 */
-include "config.php";
-
 $pic = $_GET["image"];
 
 $basepath = '/var/tmp/ps_images/';
