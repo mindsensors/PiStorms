@@ -92,6 +92,58 @@ class Grove_Flame_Sensor(GrovePort):
     def fireDetected(self):
         return self.readValue() == 1
 
+## This class supports the Grove LED Socket Kit v1.4
+#
+#  This simple Grove module lets you connect and LED and turn it on or off.
+#  You can use it for a power light, a simple status indicator,
+#  or anything else you might use and LED for.
+#
+#  Documentation: http://wiki.seeed.cc/Grove-LED_Socket_Kit/
+#
+#  @code
+#  import time
+#  import GroveDevices
+#  # initialize a Grove LED connected to Bank A digital 1
+#  led = GroveDevices.Grove_LED_Socket("BAD1")
+#  led.setLED(True)
+#  time.sleep(1)
+#  led.setLED(False)
+#  @endcode
+class Grove_LED_Socket(GrovePort):
+    def __init__(self, port):
+        GrovePort.__init__(self, port, type=GRXCom.TYPE.DIGITAL_OUTPUT)
+    def setLED(self, state):
+        self.writeValue(1 if state else 0)
+    def on(self):
+        self.writeValue(1)
+    def off(self):
+        self.writeValue(0)
+
+## This class supports the Grove Buzzer v1.2
+#
+#  The Grove Buzzer uses a piezoelectric buzzer to produce an audible tone.
+#
+#  Documentation: http://wiki.seeed.cc/Grove-Buzzer/
+#
+#  @code
+#  import time
+#  import GroveDevices
+#  # initialize a Grove Buzzer connected to Bank A digital 1
+#  buzzer = GroveDevices.Grove_Buzzer("BAD1")
+#  buzzer.on()
+#  time.sleep(1)
+#  buzzer.off()
+#  @endcode
+class Grove_Buzzer(GrovePort):
+    def __init__(self, port):
+        GrovePort.__init__(self, port, type=GRXCom.TYPE.DIGITAL_OUTPUT)
+    def setBuzz(self, state):
+        self.writeValue(1 if state else 0)
+    def on(self):
+        self.writeValue(1)
+    def off(self):
+        self.writeValue(0)
+
 ## This class supports the Grove Luminance Sensor v1.0
 #
 #  The Grove Luminance Sensor detects the ambient light level.
