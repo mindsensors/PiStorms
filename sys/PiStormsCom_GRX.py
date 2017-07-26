@@ -35,6 +35,9 @@ class GRXCom():
     class I2C:
         A = mindsensors_i2c(0x34 >> 1)
         B = mindsensors_i2c(0x36 >> 1)
+        class __metaclass__(type):
+            def __iter__(self):
+                return iter([self.A, self.B])
     class TYPE:
         NONE = 0
         ANALOG_INPUT = 1
