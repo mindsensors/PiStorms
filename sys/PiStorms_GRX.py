@@ -91,9 +91,9 @@ class GrovePort():
 #  three on Bank A and three on Bank B. The pins on the outside, closer to
 #  the edge of the device, are numbered 1. The next pins inward are pin 2,
 #  and the pins closest to the center are pin 3. The ports are represented
-#  in the form "BAM1" for Bank A Motor 1. Looking at the top of the device
+#  in the form "BAS1" for Bank A Servo 1. Looking at the top of the device
 #  with the screen facing you, the ports are, from left to right:
-#  BBM1, BBM2, BBM3, BAM3, BAM2, BAM1.
+#  > BBS1, BBS2, BBS3, BAS3, BAS2, BAS1
 #  The signal pin should be facing away from you (closer to the Raspberry Pi)
 #  and the ground pin should be closer to you, towards the front of the device
 #  with the screen. Of course this leaves the voltage pin in the center.
@@ -101,24 +101,27 @@ class GrovePort():
 class RCServo():
 
     ## Initialize an RC servo object.
-    #  @param port Must be a valid port, one of [BAM1, BAM2, BAM3, BBM1, BBM2, BBM3].
+    #  @param port Must be a valid port, one of [BAS1, BAS2, BAS3, BBS1, BBS2, BBS3].
     #              The first two characters are "BA" or "BB", for "Bank A" or "Bank B".
-    #              The third character is 'M' for "Motor". The fourth character
+    #              The third character is 'S' for "Servo". The fourth character
     #              is the pin number. See the RCServo class documentation for details.
     #  @param neutralPoint You may specify the neutral point of this servo.
     #                      The default is 1500, but as a result of the manufacturing
     #                      process for these servos each has a slightly different
     #                      neutral point. For example, if your continuous rotation
-    #                      servo continues to spin when you call stop or setNeutral,
-    #                      it likely has the wrong neutral point set. You can update
-    #                      this at any time with setNeutralPoint(self, neutralPoint).
+    #                      servo continues to spin when you call setNeutral, it likely
+    #                      has the wrong neutral point set. You can update this at any
+    #                      time with setNeutralPoint(self, neutralPoint).
+    #                      If you have ran 45-Utils/03-FindNeutralPoint.py, this
+    #                      configuration will be loaded automatically. Make sure the port
+    #                      is the same as when you configured it.
     def __init__(self, port=None, neutralPoint=None):
-        if port == None or port[2]!="M":
+        if port == None or port[2]!="S":
             raise TypeError("You must specify a port as an argument." \
-                    " Please do so in the form B?M# where ? is A or B" \
+                    " Please do so in the form B?S# where ? is A or B" \
                     " for the bank letter (which half of the PiStorms)," \
                     " and # is the servo number: 1, 2 or 3." \
-                    " For example: BBM3 is Bank B, Motor 3.")
+                    " For example: BBS3 is Bank B, Motor 3.")
         if neutralPoint == None:
             config = ConfigParser.RawConfigParser()
             config.read("/usr/local/mindsensors/conf/msdev.cfg")

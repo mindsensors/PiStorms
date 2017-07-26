@@ -2,8 +2,8 @@ from PiStorms_GRX import PiStorms_GRX
 psm = PiStorms_GRX()
 
 from PiStorms_GRX import RCServo
-l = RCServo("BAM1", 1300)
-r = RCServo("BAM2", 1690)
+l = RCServo("BAS1", 1300)
+r = RCServo("BAS2", 1690)
 
 import pygame
 pygame.init()

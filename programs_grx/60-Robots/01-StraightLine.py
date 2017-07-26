@@ -4,8 +4,8 @@ from PiStormsCom_GRX import GRXCom
 
 psm = PiStorms_GRX()
 
-leftServo = RCServo("BBM1", 1690)
-rightServo = RCServo("BAM1", 1350)
+leftServo = RCServo("BBS1", 1690)
+rightServo = RCServo("BAS1", 1350)
 
 leftEncoder = GrovePort("BBD1", type=GRXCom.TYPE.ENCODER) # no mode, not associated with any servo
 rightEncoder = GrovePort("BAD2", type=GRXCom.TYPE.ENCODER)

@@ -14,7 +14,7 @@ bank = ["B", "A"][bank]
 port = psm.screen.askQuestion(["Motor Port", "Which port number is your servo connected to?"],
                               [1,2,3] if bank!="A" else [3,2,1], wrapText=True)
 port = (["1","2","3"] if bank!="A" else ["3","2","1"])[port]
-port = "B{}M{}".format(bank, port)
+port = "B{}S{}".format(bank, port)
 servo = RCServo(port)
 servo.stop()
 

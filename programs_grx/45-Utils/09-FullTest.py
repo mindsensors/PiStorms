@@ -6,7 +6,7 @@ from PiStormsCom_GRX import GRXCom
 DIGITAL = ["BBD1", "BBD2", "BAD2", "BAD1"]
 ANALOG  = ["BBA1", "BBA2", "BBA3", "BAA3", "BAA2", "BAA1"]
 ALL     = ["BBA1", "BBA2", "BBA3", "BBD1", "BBD2", "BAD2", "BAD1", "BAA3", "BAA2", "BAA1"]
-SERVOS  = ["BBM1", "BBM2", "BBM3", "BAM3", "BAM2", "BAM1"]
+SERVOS  = ["BBS1", "BBS2", "BBS3", "BAS3", "BAS2", "BAS1"]
 
 psm = PiStorms_GRX.PiStorms_GRX()
 
