@@ -9,7 +9,7 @@ m = ["Grove Light Sensor Demo",
 psm.screen.showMessage(m, wrapText=True)
 
 # title
-psm.screen.drawDisplay("Grove Light Sensor Demo")
+psm.screen.drawDisplay("Light Sensor Demo")
 
 def mainLoop():
     reading = lightSensor.lightLevel()
