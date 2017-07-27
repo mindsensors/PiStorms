@@ -229,7 +229,7 @@ class RCServoEncoder(RCServo, GrovePort):
     ## Initialize an RC servo object with an associated encoder.
     #  @param encoder You may associate an encoder with this servo by specifying
     #                 the digital port it is connected to.
-    def __init__(self, port=None, neutralPoint=None, encoder=None):
+    def __init__(self, port=None, encoder=None, neutralPoint=None):
         if port == None:
             raise TypeError("You must specify a port as an argument")
         if encoder == None:
@@ -246,13 +246,16 @@ class RCServoEncoder(RCServo, GrovePort):
         RCServo.__init__(self, port, neutralPoint)
         GrovePort.__init__(self, encoder, type=GRXCom.TYPE.ENCODER, mode=int(encoder[3]))
 
-    def setTarget(self, value):
+    def setTarget(self, degrees):
+        # divide by 5 to convert to 1/72ths
+        value = degrees/5
         if value.bit_length() > 64:
             raise ValueError("Encoder target must fit in a signed long data type.")
         self.comm.setEncoderTarget(value)
 
     def readEncoder(self):
-        return self.comm.readEncoderValue()
+        # multiply by 5 to convert back to 1/360ths, degrees
+        return self.comm.readEncoderValue()*5
 
 
 class PiStorms_GRX():
