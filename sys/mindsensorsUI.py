@@ -675,16 +675,16 @@ class mindsensorsUI():
     #  @param imageX The x-coordinate of the optional image icon.
     #  @param imageY The y-coordinate of the optional image icon.
     def drawButton(self, x, y, width, height, prefix="btns_",text="OK", display=True, align="left", image=None, imageX=None, imageY=None):
-        self.fillBmp(x, y, 14, height, prefix+"left.png", display=display)
-        self.fillBmp(x+14, y, width-28, height, prefix+"center.png", display=display)
-        self.fillBmp(x+width-14, y, 14, height, prefix+"right.png", display=display)
+        self.fillBmp(x, y, 14, height, prefix+"left.png", display=False)
+        self.fillBmp(x+14, y, width-28, height, prefix+"center.png", display=False)
+        self.fillBmp(x+width-14, y, 14, height, prefix+"right.png", display=False)
 
         textX = x+10
         if image:
             textX += 32
             imgY = imageY or y+((height-32)/2)
             imgX = imageX or x+4
-            self.fillBmp(imgX, imgY, 32, 32, image, display=display)
+            self.fillBmp(imgX, imgY, 32, 32, image, display=False)
 
         self.drawAutoText(text,textX, y+(height/2)-10, size=16, fill = (0,0,0), display=display, align=align)
 
