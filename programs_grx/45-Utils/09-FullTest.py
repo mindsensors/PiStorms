@@ -55,10 +55,10 @@ def testServos(helpText):
     def run():
         for servo in servos:
             servo.setPos(0)
-            time.sleep(0.3)
+            time.sleep(0.5)
         for servo in servos:
             servo.setPos(180)
-            time.sleep(0.3)
+            time.sleep(0.5)
     psm.untilKeyPress(run)
 
 def testDigitalInput(helpText):
