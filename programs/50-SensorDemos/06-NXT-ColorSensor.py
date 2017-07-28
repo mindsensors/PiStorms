@@ -30,7 +30,7 @@ psm = PiStorms()
 
 m = ["NXTColorSensor-Demo", "Connect NXT Color sensor",
  "to BAS1, and Press OK to continue"]
-psm.screen.showMessage(m)
+psm.screen.askQuestion(m,["OK"])
 
 #
 # we are attaching a NXTTouchSensor to Port BAS1
@@ -39,6 +39,7 @@ psm.screen.showMessage(m)
 #touchSensor = LegoDevices.NXTTouchSensor("BAS1")
 colorSensor = LegoDevices.NXTColorSensor("BAS1")
 
+doExit = False
 old_color = -1
 color = 0
 
@@ -47,8 +48,8 @@ touch_count = 0
 
 psm.screen.termPrintAt(7, "Touch screen to reset Count")
 psm.screen.termPrintAt(8, "Press GO to stop program")
-
-def mainLoop():
+#main loop
+while(not doExit):
     #save the previous touch value
     old_color = color
     #
@@ -63,6 +64,11 @@ def mainLoop():
         psm.screen.termPrintAt(2, "")
         psm.screen.termPrintAt(3, msg)
 
-psm.untilKeyPress(mainLoop)
-psm.screen.clearScreen()
-psm.screen.termPrintAt(8, "Exiting to menu")
+
+
+    if(psm.isKeyPressed() == True): # if the GO button is pressed
+        psm.screen.clearScreen()
+        psm.screen.termPrintAt(8, "Exiting to menu")
+        doExit = True
+
+

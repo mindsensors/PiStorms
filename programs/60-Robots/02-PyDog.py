@@ -50,7 +50,9 @@ psm.screen.drawAutoText("I am PyDog", 50, 140, fill=(255, 0, 0), size = 45)
 count = 0
 
 
-def mainLoop():
+#main loop
+while(not exit):
+
     if(psm.BBS2.distanceUSEV3() < 200): #if ultrasonic sensor reading is <200 (~6")
 
         #play Barking sound
@@ -90,16 +92,20 @@ def mainLoop():
             psm.BAM1.setSpeed(0);
             time.sleep(1)
 
+
         #clear screen of scared emoticon
         psm.screen.fillRect(0, 0, 320, 240)
 
-        #redraw "Hello I am PyDog"
+
+
+        #redraw "Hello I am Sam"
         psm.screen.drawAutoText("Hello", 80, 30, fill=(255, 0, 0), size = 70)
         psm.screen.drawAutoText("I am PyDog", 50, 140, fill=(255, 0, 0), size = 45)
 
-psm.untilKeyPress(mainLoop)
 
-psm.screen.clearScreen()
-psm.screen.termPrintln("")
-psm.screen.termPrintln("Exiting to menu")
-time.sleep(0.5)
+    if(psm.isKeyPressed() == True): # if the GO button is pressed
+        psm.screen.clearScreen()
+        psm.screen.termPrintln("")
+        psm.screen.termPrintln("Exiting to menu")
+        time.sleep(0.5)
+        exit = True

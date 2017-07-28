@@ -29,11 +29,13 @@ psm = PiStorms()
 
 m = ["Ultrasonic-Demo", "Connect EV3 Ultrasonic sensor",
  "to BAS1, and Press OK to continue"]
-psm.screen.showMessage(m)
+psm.screen.askQuestion(m,["OK"])
 
+doExit = False
 dist = 0
 
-def mainLoop():
+#main loop
+while(not doExit):
     old_dist = dist
 
     #
@@ -48,8 +50,12 @@ def mainLoop():
         psm.screen.drawAutoText(msg, 35, 200, fill=(255, 255, 255), size = 18)
         psm.screen.drawAutoText("Press Go to stop program", 15, 218, fill=(255, 255, 255), size = 18)
 
-psm.untilKeyPress(mainLoop)
+    if(psm.isKeyPressed() == True): # if the GO button is pressed
+        psm.screen.clearScreen()
+        psm.screen.termPrintln("")
+        psm.screen.termPrintln("Exiting to menu")
+        doExit = True
 
-psm.screen.clearScreen()
-psm.screen.termPrintln("")
-psm.screen.termPrintln("Exiting to menu")
+
+
+

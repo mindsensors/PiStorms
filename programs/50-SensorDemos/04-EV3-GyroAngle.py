@@ -32,12 +32,14 @@ m = ["EV3Gyro-Angle-Demo", "Connect EV3 Gyro to BAS1",
  "Then move sensor to see readings.",
  "",
  "Press Go to stop program."]
-psm.screen.showMessage(m)
+psm.screen.askQuestion(m,["OK"])
 
+doExit = False
 old_angleValue = -10
 angleValue = 0
 
-def mainLoop():
+#main loop
+while(not doExit):
     #save the previous value
     old_angleValue = angleValue
     #
@@ -51,8 +53,10 @@ def mainLoop():
         psm.screen.clearScreen()
         psm.screen.drawAutoText(msg, 15, 164, fill=(255, 255, 255), size = 18)
 
-psm.untilKeyPress(mainLoop)
+    if(psm.isKeyPressed() == True): # if the GO button is pressed
+        psm.screen.clearScreen()
+        psm.screen.termPrintln("")
+        psm.screen.termPrintln("Exiting to menu")
+        doExit = True
 
-psm.screen.clearScreen()
-psm.screen.termPrintln("")
-psm.screen.termPrintln("Exiting to menu")
+

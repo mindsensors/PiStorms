@@ -41,7 +41,7 @@ for addr in range(0x00,0x34,2) + range(0x38,0xEF,2):
 def ping(i2c):
     return i2c.readByte(0x00) != None
 
-def mainLoop()
+while not psm.isKeyPressed():
     found = filter(ping, i2c_all)
 
     psm.screen.terminalBuffer = [""]*20
@@ -69,5 +69,3 @@ def mainLoop()
         psm.screen.refresh()
         psm.screen.drawAutoText("(here) -->", 235, 110, fill=(0,200,0), display=False)
         psm.screen.drawAutoText("(here) -->", 235,  36, fill=(0,200,0))
-
-psm.untilKeyPress(mainLoop)

@@ -54,7 +54,7 @@ image = tempfile.NamedTemporaryFile() # we will be overwriting this same file
 data = np.append(data, psm.battVoltage())
 data = np.append(data, psm.battVoltage())
 
-def mainLoop():
+while not psm.isKeyPressed():
     data = np.append(data, psm.battVoltage()) # add a data point with the current battery voltage
     smooth_x = np.linspace(0, len(data)-1, len(data)*5) # an array 5 times the length of data for the smoothed data
     if axis.lines: axis.lines.pop() # if there's already a line on the graph (old), remove it
@@ -63,4 +63,3 @@ def mainLoop():
     plt.savefig(image.name, format="png") # save it
     psm.screen.fillBmp(0,0, 320,240, image.name) # show it on screen
 
-psm.untilKeyPress(mainLoop)

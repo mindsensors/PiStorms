@@ -34,16 +34,19 @@ psm = PiStorms()
 psm.screen.termPrintAt(2, "PiStorms ")
 psm.screen.termPrintAt(3, "GO button test:")
 
+exit = False
 print "Running Button Test"
 print "press anywhere in PiStorms Screen to exit"
 psm.screen.termPrintAt(8, "Touch Display to Exit")
 psm.screen.termPrintln(" ")
+while(not exit):
 
-def mainLoop()
+    pass
+
     psm.screen.termPrintAt(5, "GO Button is = " +str(psm.isKeyPressed()))
     psm.screen.termPrintAt(6, "Press Count = " +str(psm.getKeyPressCount()))
+    if (psm.screen.isTouched()):
+        psm.screen.termPrintln(" ")
+        psm.screen.termPrintln("Exiting .....")
+        exit = True
 
-psm.untilKeyPress(mainLoop)
-
-psm.screen.termPrintln(" ")
-psm.screen.termPrintln("Exiting .....")

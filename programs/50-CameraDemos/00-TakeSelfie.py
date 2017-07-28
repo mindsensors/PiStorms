@@ -40,21 +40,23 @@ try:
     picam = PiCamera()
 except:
      m = ["Take Selfie", "Camera not enabled.", "Run raspi-config and enable camera"]
-     psm.screen.showMessage(m)
+     psm.screen.askQuestion(m,["OK"])
      exit()
 exitNow = 0
 time.sleep(.2)
 while not exitNow:
-    psm.screen.termPrintAt(8, "Click Go to take a picture")
-    if(psm.isKeyPressed()):
-        picam.capture('/tmp/pic.jpg')
-        psm.screen.fillBmp(0,0,320,240,path = "/tmp/pic.jpg")
-        psm.screen.termPrintAt(8, "Captured!")
-        time.sleep(1)
-        psm.screen.termPrintAt(9, "Touch the screen to exit")
+	psm.screen.termPrintAt(8, "Click Go to take a picture")
+	if(psm.isKeyPressed()):
+		picam.capture('/tmp/pic.jpg')
+		psm.screen.fillBmp(0,0,320,240,path = "/tmp/pic.jpg")
+		psm.screen.termPrintAt(8, "Captured!")
+		time.sleep(1)
+		psm.screen.termPrintAt(9, "Touch the screen to exit")
 
-    if (psm.screen.isTouched()):
-            psm.screen.clearScreen()
-            psm.screen.termPrintAt(9,"Exiting to menu")
-            time.sleep(0.5)
-            exitNow = True
+	if (psm.screen.isTouched()):
+			psm.screen.clearScreen()
+			psm.screen.termPrintAt(9,"Exiting to menu")
+			time.sleep(0.5)
+			exitNow = True
+
+

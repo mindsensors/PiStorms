@@ -55,7 +55,7 @@ imu = ABSIMU()
 psm.BAS1.activateCustomSensorI2C()
 image = tempfile.NamedTemporaryFile()
 
-def mainLoop():
+while not psm.isKeyPressed():
     h = imu.get_heading()
     data = np.append(data, \
             np.interp(h, [0,360], [0,tau]))
@@ -64,4 +64,3 @@ def mainLoop():
     plt.savefig(image.name, format="png")
     psm.screen.fillBmp(0,0, 320,240, image.name)
 
-psm.untilKeyPress(mainLoop)

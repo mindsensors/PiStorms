@@ -38,6 +38,8 @@ sys.path.insert(0,parentdir)
 
 imu=ABSIMU()
 psm = PiStorms()
+#exit variable will be used later to exit the program and return to PiStormsMaster
+doExit = False
 
 psm.screen.termPrintln("AbsIMU test")
 psm.screen.termPrintln("connect mindsensors.com's ")
@@ -47,11 +49,13 @@ psm.led(2, 0,0,0)
 
 psm.BAS1.activateCustomSensorI2C() #Connect the I2C sensor on the port BBS1
 time.sleep(.1)
-
+#main loop
 # This test program will print IMU data on Terminal
 # Compass heading is represented on Red LED on BANKB
 # Program will exit when someone touch the screen or Go Button
-def mainLoop():
+
+while(not doExit):
+    #
     try:
         heading = imu.get_heading()
         accl = imu.get_accelall()
@@ -70,11 +74,12 @@ def mainLoop():
 
     time.sleep(.1)
 
-psm.untilKeyPress(mainLoop)
 
-psm.screen.clearScreen()
-psm.screen.termPrintln("")
-psm.screen.termPrintln("Exiting to menu")
-time.sleep(0.5)
-psm.led(1, 0,0,0)
-psm.led(2, 0,0,0)
+    if(psm.isKeyPressed() == True): # if the GO button is pressed
+        psm.screen.clearScreen()
+        psm.screen.termPrintln("")
+        psm.screen.termPrintln("Exiting to menu")
+        time.sleep(0.5)
+        psm.led(1, 0,0,0)
+        psm.led(2, 0,0,0)
+        doExit = True

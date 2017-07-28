@@ -30,7 +30,7 @@ m = ["EV3 SensorMux demo", "Connect EV3 Sensor Mux to BAS1",
  "and attach a EV3 Touch Sensor",
  "to channel C1 of your Mux",
  "and Press OK to continue"]
-psm.screen.showMessage(m)
+psm.screen.askQuestion(m,["OK"])
 
 # the Mux is an i2c device, so activate the i2c line on that port.
 psm.BAS1.activateCustomSensorI2C()
@@ -43,9 +43,9 @@ psm.BAS1.activateCustomSensorI2C()
 #Channel 3: 0xA4
 muxC1=EV3SensAdapt(0xA0)
 
+doExit = False
 psm.screen.termPrintAt(8, "Press GO button to exit")
-
-def mainLoop():
+while (not doExit):
     try:
         # check for touch
         x = muxC1.isTouchedEV3()
@@ -57,9 +57,8 @@ def mainLoop():
         psm.screen.termPrintAt(6,"read error")
 
     time.sleep(.1)
-
-psm.untilKeyPress(mainLoop)
-
-psm.screen.clearScreen()
-psm.screen.termPrintAt(6, "Exiting to menu")
-time.sleep(0.2)
+    if(psm.isKeyPressed() == True): # if the GO button is pressed
+        psm.screen.clearScreen()
+        psm.screen.termPrintAt(6, "Exiting to menu")
+        time.sleep(0.2)
+        doExit = True

@@ -35,6 +35,7 @@ currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentfram
 parentdir = os.path.dirname(currentdir)
 sys.path.insert(0,parentdir)
 psm = PiStorms()
+doExit = False
 bmpw = 60
 old_x = 110
 old_y = 80
@@ -76,12 +77,12 @@ if __name__ == '__main__':
     except:
         m = ["Swarm-Demo", "Network unreachable",
               "Attach Ethernet cable or configure WiFi" ]
-        psm.screen.showMessage(m)
+        psm.screen.askQuestion(m,["OK"])
 
     if ( len(nbrs_list) == 0 ):
         m = ["Swarm-Demo", "A swarm requires at least two PiStorms", "robots.",
                            "Get another PiStorms robot to add to", "your swarm."]
-        psm.screen.showMessage(m)
+        psm.screen.askQuestion(m,["OK"])
 
     psm.screen.clearScreen()
     psm.screen.fillBmp(old_x, old_y, bmpw, bmpw, path = currentdir+'/'+"smiley.png")
@@ -110,12 +111,12 @@ if __name__ == '__main__':
             print "registration failed"
             sys.stdout.flush()
             m = ["Swarm-Demo", "Swarm server registration failed."]
-            psm.screen.showMessage(m)
+            psm.screen.askQuestion(m,["OK"])
             exit()
 
         old_tsx = 0
         old_tsy = 0
-        def mainLoop():
+        while doExit == False:
             if ( psm.screen.isTouched() ):
                 #
                 # someone touched on the screen.
@@ -148,9 +149,14 @@ if __name__ == '__main__':
                     old_x = image_x
                     old_y = image_y
 
-        psm.untilKeyPress(mainLoop)
-        psm.screen.clearScreen()
-        psm.screen.termPrintAt(8, "Exiting to menu")
+
+            if(psm.isKeyPressed() == True): # if the GO button is pressed
+                psm.screen.clearScreen()
+                psm.screen.termPrintAt(8, "Exiting to menu")
+                #time.sleep(0.2)
+                doExit = True
+            pass
 
     except KeyboardInterrupt:
         ws.close()
+

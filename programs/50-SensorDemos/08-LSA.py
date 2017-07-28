@@ -31,7 +31,7 @@ psm = PiStorms()
 
 m = ["LightSensorArray-Demo", "Connect LightSensorArray sensor",
  "to BAS1, and Press OK to continue"]
-psm.screen.showMessage(m)
+psm.screen.askQuestion(m,["OK"])
 
 #
 # we are attaching a LightSensorArray to Port BAS1
@@ -39,13 +39,14 @@ psm.screen.showMessage(m)
 #
 lsa_sensor = MsDevices.LightSensorArray(psm.BAS1)
 
+doExit = False
 lsa_reading = []
 old_lsa_reading = []
 
 psm.screen.termPrintAt(7, "LightSensorArray readings")
 psm.screen.termPrintAt(8, "Press GO to stop program")
-
-def mainLoop():
+#main loop
+while(not doExit):
     #
     #wipe the old graph.
     #
@@ -73,6 +74,9 @@ def mainLoop():
     time.sleep(0.4)
     psm.screen.fillRect(5, 0, 300, 4, fill = (200,0,0), display = True)
 
-psm.untilKeyPress(mainLoop)
-psm.screen.clearScreen()
-psm.screen.termPrintAt(8, "Exiting to menu")
+    if(psm.isKeyPressed() == True): # if the GO button is pressed
+        psm.screen.clearScreen()
+        psm.screen.termPrintAt(8, "Exiting to menu")
+        doExit = True
+
+

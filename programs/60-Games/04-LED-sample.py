@@ -38,7 +38,7 @@ if(version < 2.05):
  "Please upgrade your PiStorms.",
  "  ",
  "Click OK to exit."]
-    psm.screen.showMessage(m)
+    psm.screen.askQuestion(m,["OK"])
     exit = True
 else:
     exit = False
@@ -46,8 +46,9 @@ else:
 
 d1 = 0.2
 d2 = 0.2
+oldKeyPressCount = psm.getKeyPressCount()
+while(not exit):
 
-def mainLoop():
     psm.led(2,0,255,0)
     time.sleep(d1)
     psm.led(1,0,255,0)
@@ -61,11 +62,13 @@ def mainLoop():
     psm.led(1,0,0,255)
     time.sleep(d2)
 
-psm.untilKeyPress(mainLoop)
+    newKeyPressCount = psm.getKeyPressCount()
+    if ( newKeyPressCount > oldKeyPressCount ):
+        psm.screen.termPrintln("")
+        psm.screen.termPrintAt(8, "Exiting to menu")
+        time.sleep(1)
+        psm.led(1,0,0,0)
+        psm.led(2,0,0,0)
+        time.sleep(1)
+        exit = True
 
-psm.screen.termPrintln("")
-psm.screen.termPrintAt(8, "Exiting to menu")
-time.sleep(1)
-psm.led(1,0,0,0)
-psm.led(2,0,0,0)
-time.sleep(1)

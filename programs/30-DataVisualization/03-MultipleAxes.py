@@ -60,7 +60,7 @@ imu = ABSIMU()
 psm.BAS1.activateCustomSensorI2C()
 image = tempfile.NamedTemporaryFile()
 
-def mainLoop():
+while not psm.isKeyPressed():
     tilt = imu.get_tiltall()[0] # read the x, y, and z tilt data
     if tilt == ('','',''):
         answer = psm.screen.askQuestion(["AbsoluteIMU not found!", "Please connect an AbsoluteIMU sensor", "to BAS1."], ["OK", "Cancel"], goBtn=True)
@@ -74,5 +74,3 @@ def mainLoop():
     axis.autoscale_view()
     plt.savefig(image.name, format="png")
     psm.screen.fillBmp(0,0, 320,240, image.name)
-
-psm.untilKeyPress(mainLoop)

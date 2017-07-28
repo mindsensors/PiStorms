@@ -49,11 +49,9 @@ plt.grid(True)
 data = np.empty(0) # start with a completely empty data array
 image = tempfile.NamedTemporaryFile() # we will be overwriting this same file
 
-def mainLoop():
+while not psm.isKeyPressed():
     data = np.append(data, psm.battVoltage()) # add a data point with the current battery voltage
     plt.plot(data, color="blue") # plot the data on the graph
     plt.tight_layout() # make sure the entire plot fits on screen
     plt.savefig(image.name, format="png") # save it
     psm.screen.fillBmp(0,0, 320,240, image.name) # show it on screen
-
-psm.untilKeyPress(mainLoop)

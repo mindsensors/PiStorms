@@ -54,12 +54,10 @@ axis = plt.gca() # get current axis
 data = np.empty(0)
 image = tempfile.NamedTemporaryFile() # we will be overwriting this same file
 
-def mainLoop():
+while not psm.screen.isTouched():
     data = np.append(data, psm.isKeyPressed()) # add a data point with the current GO button state
     if axis.lines: axis.lines.pop() # if there's already a line on the graph (old), remove it
     lines = plt.plot(data[-20:], color="blue") # plot the last 20 data points on the graph (new line)
     plt.tight_layout() # make sure the entire plot fits on screen
     plt.savefig(image.name, format="png")
     psm.screen.fillBmp(0,0, 320,240, image.name)
-
-psm.untilKeyPress(mainLoop)

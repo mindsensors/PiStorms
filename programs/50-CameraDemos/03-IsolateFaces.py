@@ -41,7 +41,7 @@ try:
     picam = PiCamera()
 except:
      m = ["PopHeads", "Camera not enabled.", "Run raspi-config and enable camera"]
-     psm.screen.showMessage(m)
+     psm.screen.askQuestion(m,["OK"])
      exit()
 exitNow = 0
 time.sleep(.2)
@@ -50,44 +50,46 @@ faceCascade = cv2.CascadeClassifier(haar_path)
 #psm.screen.fillRect(95, 145, 110, 160)
 #psm.screen.fillRect(100, 150, 100, 150, fill=(0,0,0))
 while not exitNow:
-    psm.screen.termPrintAt(9, "Click Go to take a picture")
-    if(psm.isKeyPressed()):
-        # call("raspistill -o /tmp/cam.jpg", shell=True)
-        # time.sleep(2)
-        # psm.screen.fillBmp(0,0,100,100,path = "/tmp/cam.jpg")
-        # time.sleep(2)
-        picam.capture('/tmp/pic.jpg')
-        psm.screen.fillBmp(0,0,320,240,path = "/tmp/pic.jpg")
-        psm.screen.termPrintAt(8, "Captured!")
-        time.sleep(1)
-        psm.screen.termPrintAt(8, "Detecting faces...")
-        img = cv2.imread('/tmp/pic.jpg')
-        (imh, imw) = img.shape[:2]
-        grayimg = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-        faces = faceCascade.detectMultiScale(grayimg, scaleFactor=1.1, minNeighbors=5, minSize=(30, 30), flags = cv2.cv.CV_HAAR_SCALE_IMAGE)
-        print imw, imh, faces
-        mask = np.zeros(img.shape,dtype = np.uint8)
-        for (x,y,w,h) in faces:
-            cv2.circle(mask, (x+(w/2), y+(h/2)), int((w+h)/4), (255,255,255), -1)
-            # psm.screen.fillCircle(x-(w/4), y, int((w+h)/6), fill = (255,255,255),display = False)
-            # psm.screen.fillCircle(x-(w/4), y, int(-2+(w+h)/6), fill = (0,0,0),display = False)
-            # psm.screen.fillCircle(x-(w/4)+w/6, y-h/6, 4, fill = (255,255,255),display = False)
-            # psm.screen.fillCircle(x-(w/4)-w/6, y-h/6, 4, fill = (255,255,255),display = True)
-            #psm.screen.fillRect(x-(w/2), x-(w/2), w/2, h/2, fill = (0,0,0))
+	psm.screen.termPrintAt(9, "Click Go to take a picture")
+	if(psm.isKeyPressed()):
+		# call("raspistill -o /tmp/cam.jpg", shell=True)
+		# time.sleep(2)
+		# psm.screen.fillBmp(0,0,100,100,path = "/tmp/cam.jpg")
+		# time.sleep(2)
+		picam.capture('/tmp/pic.jpg')
+		psm.screen.fillBmp(0,0,320,240,path = "/tmp/pic.jpg")
+		psm.screen.termPrintAt(8, "Captured!")
+		time.sleep(1)
+		psm.screen.termPrintAt(8, "Detecting faces...")
+		img = cv2.imread('/tmp/pic.jpg')
+		(imh, imw) = img.shape[:2]
+		grayimg = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+		faces = faceCascade.detectMultiScale(grayimg, scaleFactor=1.1, minNeighbors=5, minSize=(30, 30), flags = cv2.cv.CV_HAAR_SCALE_IMAGE)
+		print imw, imh, faces
+		mask = np.zeros(img.shape,dtype = np.uint8)
+		for (x,y,w,h) in faces:
+			cv2.circle(mask, (x+(w/2), y+(h/2)), int((w+h)/4), (255,255,255), -1)
+			# psm.screen.fillCircle(x-(w/4), y, int((w+h)/6), fill = (255,255,255),display = False)
+			# psm.screen.fillCircle(x-(w/4), y, int(-2+(w+h)/6), fill = (0,0,0),display = False)
+			# psm.screen.fillCircle(x-(w/4)+w/6, y-h/6, 4, fill = (255,255,255),display = False)
+			# psm.screen.fillCircle(x-(w/4)-w/6, y-h/6, 4, fill = (255,255,255),display = True)
+			#psm.screen.fillRect(x-(w/2), x-(w/2), w/2, h/2, fill = (0,0,0))
 
-        img = Image.open('/tmp/pic.jpg')
-        img = np.array(img)
-        mask = np.array(mask)
-        img = 255-img
-        faceImg = mask*img
-        psm.screen.fillImgArray(0, 0, 320, 240, faceImg)
-        if ((len(faces)) > 1) or ((len(faces)) == 0):
-            psm.screen.termPrintAt(8, " Found {0} faces!".format(len(faces)))
-        elif (len(faces)) == 1:
-            psm.screen.termPrintAt(8, " Found {0} face!".format(len(faces)))
+		img = Image.open('/tmp/pic.jpg')
+		img = np.array(img)
+		mask = np.array(mask)
+		img = 255-img
+		faceImg = mask*img
+		psm.screen.fillImgArray(0, 0, 320, 240, faceImg)
+		if ((len(faces)) > 1) or ((len(faces)) == 0):
+			psm.screen.termPrintAt(8, " Found {0} faces!".format(len(faces)))
+		elif (len(faces)) == 1:
+			psm.screen.termPrintAt(8, " Found {0} face!".format(len(faces)))
 
-    if (psm.screen.isTouched()):
-            psm.screen.clearScreen()
-            psm.screen.termPrintAt(9,"Exiting to menu")
-            time.sleep(0.5)
-            exitNow = True
+	if (psm.screen.isTouched()):
+			psm.screen.clearScreen()
+			psm.screen.termPrintAt(9,"Exiting to menu")
+			time.sleep(0.5)
+			exitNow = True
+
+

@@ -32,7 +32,7 @@ psm = PiStorms()
 # "Motor will turn 360 degrees, and stop",
 # "with brake.",
 #  "Click OK to continue"]
-#psm.screen.showMessage(m)
+#psm.screen.askQuestion(m,["OK"])
 
 # run motor for 360 degrees, and at the completion,
 # brake while stopping
@@ -58,8 +58,11 @@ psm.screen.drawAutoText(msg, 15, 200, fill=(255, 255, 255), size = 18)
 #  "and stop with brake and hold.", "click EXIT to exit program"]
 #psm.screen.askQuestion(m,["EXIT"])
 
-psm.waitForKeyPress()
+doExit = False
+while (doExit == False):
+    if(psm.isKeyPressed() == True): # if the GO button is pressed
+        psm.screen.clearScreen()
+        psm.screen.termPrintln("")
+        psm.screen.termPrintln("Exiting to menu")
+        doExit = True
 
-psm.screen.clearScreen()
-psm.screen.termPrintln("")
-psm.screen.termPrintln("Exiting to menu")

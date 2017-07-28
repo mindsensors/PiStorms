@@ -30,8 +30,9 @@ psm = PiStorms()
 
 m = ["EV3GyroSensor-Demo", "Connect EV3 Gyro sensor",
  "to BAS1, and Press OK to continue"]
-psm.screen.showMessage(m)
+psm.screen.askQuestion(m,["OK"])
 
+doExit = False
 oldValue = True
 value = True
 count = 0
@@ -44,7 +45,7 @@ psm.screen.termPrintAt(8, "between rate/angle")
 psm.screen.termPrintAt(9, "Press Go to stop program")
 
 change = 1
-def mainLoop():
+while(not doExit):
     oldValue = value
     if change == 1:#setMode only if the screen mode changed
         if (count == 0):
@@ -61,6 +62,12 @@ def mainLoop():
 
     if (oldValue != value):
         psm.screen.termPrintAt(4, msg)
+    if(psm.isKeyPressed() == True):
+        psm.screen.clearScreen()
+        gyro = EV3GyroSensor("BAS1", 9) #Turn off detecting
+        psm.screen.termPrintln("")
+        psm.screen.termPrintln("Exiting to menu")
+        doExit = True
     change = 0
     if(psm.screen.isTouched()): #Change mode if screen is tapped
         count = count + 1
@@ -70,9 +77,5 @@ def mainLoop():
         change = 1
         time.sleep(.5)
 
-psm.untilKeyPress(mainLoop)
 
-psm.screen.clearScreen()
-gyro = EV3GyroSensor("BAS1", 9) #Turn off detecting
-psm.screen.termPrintln("")
-psm.screen.termPrintln("Exiting to menu")
+

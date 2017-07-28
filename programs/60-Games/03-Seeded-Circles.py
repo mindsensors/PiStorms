@@ -31,47 +31,73 @@ import random, time
 psm = PiStorms()
 
 #
-# To exit this program, press the GO button
+# To exit this program, press & hold GO button and touch the screen
 #
 
-psm.screen.termPrintAt(1, "To Exit: press the GO button")
+psm.screen.termPrintAt(1, "To Exit: press & hold GO button")
+psm.screen.termPrintAt(2, "and touch the screen.")
 time.sleep(4)
 
-def drawCircles():
-    if ( psm.screen.isTouched() ):
-        x = psm.screen.TS_X()
-        y = psm.screen.TS_Y()
-        tsx = psm.screen.TS_To_ImageCoords_X(x,y)
-        tsy = psm.screen.TS_To_ImageCoords_Y(x,y)
+while not (bool(psm.isKeyPressed()) and psm.screen.isTouched()):
+  if ( psm.screen.isTouched() ):
+    x = psm.screen.TS_X()
+    y = psm.screen.TS_Y()
+    tsx = psm.screen.TS_To_ImageCoords_X(x,y)
+    tsy = psm.screen.TS_To_ImageCoords_Y(x,y)
 
-        isTouched = True
-        tFactor = 2
-    else:
-        isTouched = False
-        tFactor = 0
+    isTouched = True
+    tFactor = 2
+  else:
+    isTouched = False
+    tFactor = 0
 
-    # repeat 4 times
-    for i in range(4):
-        if (isTouched):
-            x = tsx
-            y = tsy
-        else:
-            x = (random.randint(30, 300))
-            y = (random.randint(30, 300))
-        psm.screen.fillCircle(x, y,
-                   (random.randint(10, 35+(tFactor*30))),
-                   (0, 0, random.randint(150,255)),
-                   display = True)
-
-    if (isTouched):
-        x = tsx
-        y = tsy
-    else:
-        x = (random.randint(80, 300))
-        y = (random.randint(70, 300))
-    psm.screen.fillCircle(x, y,
+  if (isTouched):
+    x = tsx
+    y = tsy
+  else:
+    x = (random.randint(30, 300))
+    y = (random.randint(30, 300))
+  psm.screen.fillCircle(x, y,
+               (random.randint(10, 35+(tFactor*30))),
+               (0, 0, random.randint(150,255)),
+               display = True)
+  if (isTouched):
+    x = tsx
+    y = tsy
+  else:
+    x = (random.randint(30, 300))
+    y = (random.randint(30, 300))
+  psm.screen.fillCircle(x, y,
+               (random.randint(10, 35+(tFactor*30))),
+               (random.randint(150,255), 0, 0),
+               display = True)
+  if (isTouched):
+    x = tsx
+    y = tsy
+  else:
+    x = (random.randint(30, 250))
+    y = (random.randint(30, 250))
+  psm.screen.fillCircle(x, y,
+               (random.randint(10, 20+(tFactor*30))),
+               ((random.randint(50,255), random.randint(50,255), 0)),
+               display = True)
+  if (isTouched):
+    x = tsx
+    y = tsy
+  else:
+    x = (random.randint(30, 300))
+    y = (random.randint(30, 300))
+  psm.screen.fillCircle(x, y,
+               (random.randint(10, 20+(tFactor*30))),
+               (51, 255, 51),
+               display = True)
+  if (isTouched):
+    x = tsx
+    y = tsy
+  else:
+    x = (random.randint(80, 300))
+    y = (random.randint(70, 300))
+  psm.screen.fillCircle(x, y,
                (random.randint(20, 40+(tFactor*30))),
                (random.randint(110,151), random.randint(150,204), random.randint(60,255)),
                display = True)
-
-psm.untilKeyPress(drawCircles)

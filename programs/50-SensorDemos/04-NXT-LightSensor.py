@@ -32,13 +32,15 @@ m = ["NXTLightSensor-Demo", "Connect NXT Light sensor to BAS1",
  "Then move sensor at different lights",
  "",
  "Press Go to terminate"]
-psm.screen.showMessage(m)
+psm.screen.askQuestion(m,["OK"])
 
+doExit = False
 old_lightValue = True
 lightValue = True
 reflectiveMode = True
 
-def mainLoop():
+#main loop
+while(not doExit):
     #save the previous value
     old_lightValue = lightValue
     #
@@ -60,6 +62,12 @@ def mainLoop():
         psm.screen.drawAutoText("Touch screen to change mode", 15, 182, fill=(255, 255, 255), size = 18)
         psm.screen.drawAutoText("  between ambient/reflected", 15, 200, fill=(255, 255, 255), size = 18)
 
+    if(psm.isKeyPressed() == True): # if the GO button is pressed
+        psm.screen.clearScreen()
+        psm.screen.termPrintln("")
+        psm.screen.termPrintln("Exiting to menu")
+        doExit = True
+
     #
     # check if screen touched.
     #
@@ -70,8 +78,4 @@ def mainLoop():
         else:
             reflectiveMode = False
 
-psm.untilKeyPress(mainLoop)
 
-psm.screen.clearScreen()
-psm.screen.termPrintln("")
-psm.screen.termPrintln("Exiting to menu")

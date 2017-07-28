@@ -125,20 +125,25 @@ class Sam:
         time.sleep(1) # wait for motors to finish
         self.RIGHT_ARM.resetPos()
         self.LEFT_ARM.resetPos()
-        self.lastStartledAt = time.time()
-        psm.untilKeyPress(self.mainLoop)
-        self.psm.led(1, 0,0,0) # turn off LEDs after the main loop
-        self.psm.led(2, 0,0,0)
+        self.mainLoop()
 
     def mainLoop(self):
-        if self.eye,s() < 500 and time.time() - self.lastStartledAt > self.STARTLE_DELAY:
-            self.startled()
-            self.lastStartledAt = time.time()
-        elif self.checkWaving():
-            self.wave()
-            self.lastStartledAt = time.time() # don't get startled right after waving at someone
-        else:
-            self.isSomeoneThere()
+        self.exit = False
+        self.lastStartledAt = time.time()
+        while not self.exit:
+            if self.eyes() < 500 and time.time() - self.lastStartledAt > self.STARTLE_DELAY:
+                self.startled()
+                self.lastStartledAt = time.time()
+            elif self.checkWaving():
+                self.wave()
+                self.lastStartledAt = time.time() # don't get startled right after waving at someone
+            else:
+                self.isSomeoneThere()
+
+            if self.psm.isKeyPressed(): # if the GO button is pressed
+                self.psm.led(1, 0,0,0) # turn off LEDs
+                self.psm.led(2, 0,0,0)
+                self.exit = True
 
     def startled(self):
         # quickly flash LEDs between red and green, twice
@@ -227,11 +232,14 @@ class Sam:
 Display, in huge numbers, the current reading of the ultrasonic sensor
 '''
 def ultrasonicDebug():
-    def printDistance():
+    while True:
         psm.screen.fillRect(0, 0, 320, 240)
         psm.screen.drawAutoText(str(psm.BBS2.distanceUSEV3()), 10, 50, fill=(0, 0, 255), size = 120)
         #print psm.BBS2.distanceUSEV3() # if you want to print the values, maybe redirect the output to a file
-    psm.untilKeyPress(printDistance)
+
+        if psm.isKeyPressed(): # if the GO button is pressed
+            return # `break` would work just as well here
+            #raise SystemExit() # or this if you want to quit the program entirely
 
 
 Sam(psm) # while loop will halt execution here

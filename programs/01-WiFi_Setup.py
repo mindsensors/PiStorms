@@ -337,8 +337,10 @@ page = 0 # Current page
 ssids = get_available() # Available ssid's
 draw_options() # Displays UI options
 shown = draw_connections(ssids, page) # Displays a page of available networks
+exit = False
 
-def mainLoop():
+# Main loop
+while not exit:
     # Navigation buttons
     next = psm.screen.checkButton(220, 45, 100, 35)
     prev = psm.screen.checkButton(20, 45, 100, 35)
@@ -382,4 +384,5 @@ def mainLoop():
         draw_options()
         shown = draw_connections(ssids, page)
 
-psm.untilKeyPress(mainLoop)
+    # Exit
+    if(psm.isKeyPressed()): exit = True

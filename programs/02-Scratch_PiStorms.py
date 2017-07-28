@@ -59,8 +59,9 @@ except NameError:
     #pass
     print "Did not send Ready"
 
+doExit = False
 # Handles messages received from Scratch
-def mainLoop():
+while doExit == False:
     try:
         # Receives message from Scratch
         msg = s.receive()
@@ -184,6 +185,12 @@ def mainLoop():
                 s.sensorupdate({"RMAP Status" : 2})
         command_array = []
         #time.sleep(.15)
+        if(psm.isKeyPressed() == True): # if the GO button is pressed
+            psm.screen.clearScreen()
+            psm.screen.termPrintln("")
+            psm.screen.termPrintln("Exiting to menu")
+            #time.sleep(0.2)
+            doExit = True
 
     # Keyboard interrupt exception
     except KeyboardInterrupt:
@@ -196,7 +203,7 @@ def mainLoop():
         psm.screen.termPrintAt(1, "Press GO to cancel")
         errorCounter = 0
         error = 1
-        while (error == 1):
+        while (error == 1) and (doExit == False) :
             rmap.rmap_print("Disconnected")
             timeout = time.time() + 5
             while time.time() < timeout:
@@ -221,10 +228,3 @@ def mainLoop():
                     psm.screen.termPrintAt(7, "Scrach connection failed")
                     time.sleep(10)
                     sys.exit(0)
-
-
-psm.untilKeyPress(mainLoop)
-
-psm.screen.clearScreen()
-psm.screen.termPrintln("")
-psm.screen.termPrintln("Exiting to menu")

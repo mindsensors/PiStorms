@@ -15,7 +15,8 @@ pygame.init()
 joystick = pygame.joystick.Joystick(0)
 joystick.init()
 
-def mainLoop():
+# LOOP while GO is not pressed
+while not psm.isKeyPressed():
     # let Pygame update, check the joystick, etc.
     pygame.event.pump()
     # moves right motor foward and backwards with joystick value
@@ -23,6 +24,3 @@ def mainLoop():
     psm.BAM1.setSpeed(joystick.get_axis(1) * 100)
     # moves left motor foward and backwards with joystick value
     psm.BAM2.setSpeed(joystick.get_axis(4) * 100)
-
-# keep checking the joysticks until you press GO
-psm.untilKeyPress(mainLoop)

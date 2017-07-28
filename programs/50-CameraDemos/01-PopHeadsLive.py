@@ -59,7 +59,7 @@ try:
     camera = PiCamera()
 except:
     m = ["PopHeads", "Camera not enabled.", "Run raspi-config and enable camera"]
-    psm.screen.showMessage(m)
+    psm.screen.askQuestion(m,["OK"])
     exit()
 
 camera.resolution = (320, 240)
@@ -76,8 +76,8 @@ lastTime = time.time()*1000.0
 lastfaces = {}
 
 for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=True):
-    # grab the raw NumPy array representing the image, then initialize the timestamp
-    # and occupied/unoccupied text
+	# grab the raw NumPy array representing the image, then initialize the timestamp
+	# and occupied/unoccupied text
     image = frame.array
     (imh, imw) = image.shape[:2]
 
@@ -99,7 +99,7 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
 
     psm.screen.fillImgArray(0, 0, 320, 240, image)
 
-    # Draw a rectangle around the faces
+	# Draw a rectangle around the faces
 
     for (x, y, w, h) in lastfaces:
         psm.screen.fillCircle((x+w)-w/2, y+h-h/2, int((w+h)/3), fill = (0,0,0),display = True)
@@ -122,11 +122,15 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
     key = cv2.waitKey(1) & 0xFF
     lastfaces = faces
 
-    # clear the stream in preparation for the next frame
+	# clear the stream in preparation for the next frame
     rawCapture.truncate(0)
 
-    # if the `q` key was pressed, break from the loop
+	# if the `q` key was pressed, break from the loop
     if((psm.isKeyPressed() == True) and psm.screen.isTouched()):
         break
     #if key == ord("q"):
     #    break
+
+
+
+

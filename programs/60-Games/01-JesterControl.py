@@ -44,19 +44,25 @@ psm.screen.fillRect(0, 0, 320, 240)
 psm.screen.fillBmp(50, 20, 100, 100, path = currentdir+'/'+"faceClown.png")
 psm.screen.drawAutoText("Hi There!", 15, 140, fill=(0, 0, 0), size = 30)
 psm.screen.drawAutoText("poke my eyes or tap my nose", 15, 170, fill=(0, 0, 0), size = 20)
-time.sleep(0.5)
-# count down 3, 2, 1, GO!
-for countdown in ["3", "2", "1", "GO"]:
-    psm.screen.fillRect(50,200,25,25)
-    psm.screen.drawAutoText(countdown, 50,200, fill=(0,0,0), size=25)
-    time.sleep(0.5)
+time.sleep(.5)
+psm.screen.drawAutoText("3", 50,200,fill=(0,0,0),size=25)
+time.sleep(.5)
+psm.screen.fillRect(50,200,25,25)
+psm.screen.drawAutoText("2", 50,200,fill=(0,0,0),size=25)
+time.sleep(.5)
+psm.screen.fillRect(50,200,25,25)
+psm.screen.drawAutoText("1", 50,200,fill=(0,0,0),size=25)
+time.sleep(.5)
+psm.screen.fillRect(50,200,25,25)
+psm.screen.drawAutoText("GO", 50,200,fill=(0,0,0),size=25)
+time.sleep(.5)
 
 currFace = -1
 
 # sets screen to a white background
 psm.screen.fillRect(0, 0, 320, 240)
 
-def drawJester():
+while(not exit):
     #plain face
     if(currFace != 0):
         psm.screen.fillBmp(40, 0, 240, 240, path = currentdir+'/'+"faceClown.png")
@@ -77,9 +83,9 @@ def drawJester():
         psm.screen.fillBmp(40,0,240,240, path = currentdir+'/'+"faceClown_nose.png")
         currFace = 1
 
-psm.untilKeyPress(drawJester)
-
-psm.screen.clearScreen()
-psm.screen.termPrintln("")
-psm.screen.termPrintln("Exiting to menu")
-time.sleep(0.5)
+    if(psm.isKeyPressed() == True): # if the GO button is pressed
+        psm.screen.clearScreen()
+        psm.screen.termPrintln("")
+        psm.screen.termPrintln("Exiting to menu")
+        time.sleep(0.5)
+        exit = True

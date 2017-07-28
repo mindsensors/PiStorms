@@ -32,8 +32,9 @@ m = ["NXTLightSensor-Demo", "Connect NXT Light sensor to BAS1",
  "and Press OK to continue.",
  "Then move colored objects in front",
  "of Color sensor"]
-psm.screen.showMessage(m)
+psm.screen.askQuestion(m,["OK"])
 
+doExit = False
 oldValue = True
 value = True
 count = 0
@@ -46,7 +47,7 @@ psm.screen.termPrintAt(8, "between reflected/ambient")
 psm.screen.termPrintAt(9, "Press Go to stop program")
 
 change = 1
-def mainLoop():
+while(not doExit):
     oldValue = value
     if change == 1: #setMode only if the screen mode changed
         mode = "Light Value"
@@ -66,7 +67,12 @@ def mainLoop():
 
     if (oldValue != value):
         psm.screen.termPrintAt(4, msg)
-
+    if(psm.isKeyPressed() == True):
+        psm.screen.clearScreen()
+        colorSensor = NXTLightSensor("BAS1", 9) #Turn off detecting
+        psm.screen.termPrintln("")
+        psm.screen.termPrintln("Exiting to menu")
+        doExit = True
     change = 0
     if(psm.screen.isTouched()): #Change mode if screen is tapped
         count = count + 1
@@ -75,10 +81,3 @@ def mainLoop():
         psm.screen.termPrintAt(4, "Switching...")
         change = 1
         time.sleep(.5)
-
-psm.untilKeyPress(mainLoop)
-
-psm.screen.clearScreen()
-colorSensor = NXTLightSensor("BAS1", 9) #Turn off detecting
-psm.screen.termPrintln("")
-psm.screen.termPrintln("Exiting to menu")
