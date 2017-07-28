@@ -227,8 +227,22 @@ class RCServo():
 #  the PiStorms-GRX.
 class RCServoEncoder(RCServo, GrovePort):
     ## Initialize an RC servo object with an associated encoder.
+    #  @param port Must be a valid port, one of [BAS1, BAS2, BAS3, BBS1, BBS2, BBS3].
+    #              The first two characters are "BA" or "BB", for "Bank A" or "Bank B".
+    #              The third character is 'S' for "Servo". The fourth character
+    #              is the pin number. See the RCServo class documentation for details.
     #  @param encoder You may associate an encoder with this servo by specifying
     #                 the digital port it is connected to.
+    #  @param neutralPoint You may specify the neutral point of this servo.
+    #                      The default is 1500, but as a result of the manufacturing
+    #                      process for these servos each has a slightly different
+    #                      neutral point. For example, if your continuous rotation
+    #                      servo continues to spin when you call setNeutral, it likely
+    #                      has the wrong neutral point set. You can update this at any
+    #                      time with setNeutralPoint(self, neutralPoint).
+    #                      If you have ran 45-Utils/03-FindNeutralPoint.py, this
+    #                      configuration will be loaded automatically. Make sure the port
+    #                      is the same as when you configured it.
     def __init__(self, port=None, encoder=None, neutralPoint=None):
         if port == None:
             raise TypeError("You must specify a port as an argument")
@@ -246,6 +260,10 @@ class RCServoEncoder(RCServo, GrovePort):
         RCServo.__init__(self, port, neutralPoint)
         GrovePort.__init__(self, encoder, type=GRXCom.TYPE.ENCODER, mode=int(encoder[3]))
 
+    ## Set the position which this servo should target. It will try to move
+    #  until it knows from the encoder that it's in the right place.
+    #  @param degrees Where the servo should target. This is in degrees
+    #         and may be between negative two billion and positive two billion.
     def setTarget(self, degrees):
         # divide by 5 to convert to 1/72ths
         value = degrees/5
@@ -253,47 +271,143 @@ class RCServoEncoder(RCServo, GrovePort):
             raise ValueError("Encoder target must fit in a signed long data type.")
         self.comm.setEncoderTarget(value)
 
+    ## Read the current position of this servo according to the encoder.
     def readEncoder(self):
         # multiply by 5 to convert back to 1/360ths, degrees
         return self.comm.readEncoderValue()*5
 
 
+## PiStorms_GRX: This class provides functions for the PiStorms-GRX.
+#  GrovePort, RCServo, and RCServoEncoder are all separate classes and should be initialized as needed.
 class PiStorms_GRX():
 
+    ## Create an object which represents the PiStorms-GRX
+    #  @param name The display title that will appear at the top of the LCD touchscreen.
+    #  @param rotation The rotation of the LCD touchscreen.
+    #  @remark
+    #  There is no need to use this function directly. To initialize the PiStorms_GRX class in your program:
+    #  @code
+    #  from PiStorms_GRX import PiStorms_GRX
+    #  ...
+    #  psm = PiStorms_GRX()
+    #  @endcode
     def __init__(self, name="PiStorms_GRX", rotation=3):
         self.screen = mindsensorsUI(name, rotation)
 
-    # note the command will be sent to bank A. This will be important for operations such as resetting the encoder values.
+    ## Send a command to the PiStorms
+    #  @param cmd The command byte to send. This should be a value of GRXCom.COMMAND.
+    #  @note The command will be sent to bank A. This will be important for operations such as resetting the encoder values.
+    #  @remark
+    #  You shouldn't need to use this method directly in your programs, but if you do:
+    #  @code
+    #  from PiStorms_GRX import PiStorms_GRX
+    #  from PiStormsCom_GRX import GRXCom
+    #  ...
+    #  PiStorms_GRX.command(GRXCom.COMMAND.SHUTDOWN)
+    #  @endcode
     @classmethod
     def command(self, cmd):
         if cmd not in range(256):
             raise ValueError("Command must be an integer between 0 and 255 (hint: try using a constant from GRXCom.COMMAND).")
         GRXCom.I2C.A.writeByte(GRXCom.REGISTER.COMMAND, cmd)
 
+    ## Shutdown the Raspberry Pi
+    #  @remark
+    #  To use this function in your program:
+    #  @code
+    #  from PiStorms_GRX import PiStorms_GRX
+    #  ...
+    #  psm = PiStorms_GRX()
+    #  psm.Shutdown()
+    #  @endcode
     @classmethod
     def shutdown(self):
         GRXCom.I2C.A.writeByte(GRXCom.REGISTER.COMMAND, GRXCom.COMMAND.SHUTDOWN)
 
+    ## Returns the input battery voltage
+    #  @remark
+    #  To use this function in your program:
+    #  @code
+    #  from PiStorms_GRX import PiStorms_GRX
+    #  ...
+    #  psm = PiStorms_GRX()
+    #  volts = psm.batteryVoltage()
+    #  if(volts > 6):
+    #      # do some task
+    #  @endcode
     @classmethod
     def batteryVoltage(self):
         return GRXCom.I2C.A.readByte(GRXCom.REGISTER.BATTERY_VOLTAGE) * 0.04
 
+    ## Returns the PiStorms firmware version
+    #  @remark
+    #  To use this function in your program:
+    #  @code
+    #  from PiStorms_GRX import PiStorms_GRX
+    #  ...
+    #  psm = PiStorms_GRX()
+    #  fwVersion = psm.getFirmwareVersion()
+    #  print str(fwVersion)
+    #  @endcode
     @classmethod
     def getFirmwareVersion(self):
         return GRXCom.I2C.A.readString(GRXCom.REGISTER.FIRMWARE_VERSION, 8).rstrip(chr(0x00))
 
+    ## Returns the PiStorms vendor name
+    #  @remark
+    #  To use this function in your program:
+    #  @code
+    #  from PiStorms_GRX import PiStorms_GRX
+    #  ...
+    #  psm = PiStorms_GRX()
+    #  venName = psm.getVendorName()
+    #  print str(venName)
+    #  @endcode
     @classmethod
     def getVendorName(self):
         return GRXCom.I2C.A.readString(GRXCom.REGISTER.VENDOR_NAME, 8).rstrip(chr(0x00))
 
+    ## Returns the PiStorms model name
+    #  @remark
+    #  To use this function in your program:
+    #  @code
+    #  from PiStorms_GRX import PiStorms_GRX
+    #  ...
+    #  psm = PiStorms_GRX()
+    #  model = psm.getDeviceModel()
+    #  print str(model)
+    #  @endcode
     @classmethod
     def getDeviceModel(self):
         return GRXCom.I2C.A.readString(GRXCom.REGISTER.DEVICE_MODEL, 8).rstrip(chr(0x00))
 
+    ## Returns the PiStorms feature (read from bank A) (ex: "GRX-A")
+    #  @remark
+    #  To use this function in your program:
+    #  @code
+    #  from PiStorms_GRX import PiStorms_GRX
+    #  ...
+    #  psm = PiStorms_GRX()
+    #  feature = psm.getDeviceModel()
+    #  print str(feature)
+    #  @endcode
     @classmethod
     def getDeviceFeatures(self):
         return GRXCom.I2C.A.readString(GRXCom.REGISTER.FEATURE, 8).rstrip(chr(0x00))
 
+    ## Writes to the specified RGB LED
+    #  @param lednum The number to specify the LED (1 for BankA, 2 for BankB).
+    #  @param red The red value to write to the specified LED (0-255).
+    #  @param green The green value to write to the specified LED (0-255).
+    #  @param blue The blue value to write to the specified LED (0-255).
+    #  @remark
+    #  To use this function in your program:
+    #  @code
+    #  from PiStorms_GRX import PiStorms_GRX
+    #  ...
+    #  psm = PiStorms_GRX()
+    #  psm.led(1,255,0,0)
+    #  @endcode
     @classmethod
     def led(self, lednum, red, green, blue):
         for color in [red, green, blue]:
@@ -311,56 +425,199 @@ class PiStorms_GRX():
     def isKeyPressed(self):
         return GRXCom.I2C.A.readByte(GRXCom.REGISTER.GO_BUTTON_STATE) % 2 == 1
 
+    ## Wait until the GO button is pressed
+    #  @remark
+    #  To use this function in your program:
+    #  @code
+    #  from PiStorms_GRX import PiStorms_GRX
+    #  ...
+    #  psm = PiStorms_GRX()
+    #  psm.screen.termPrintln("Press GO to continue...")
+    #  psm.waitForKeyPress()
+    #  @endcode
     @classmethod
     def waitForKeyPress(self):
         self.untilKeyPress(time.sleep, 0.01)
 
-    # beware of scope issues! you might have to use the keyword `global`
+    ## Repeat an action until the GO button is pressed
+    #  @param func The function to be called repeatedly
+    #  @param args Positional arguments to be passed to func
+    #  @param kwargs Keyword arguments to be passed to func
+    #  @warning Beware of scope issues! In Python, functions introduce a new scope.
+    #  You might have to use the keyword "global" to achieve your intended behavior.
+    #  @remark
+    #  To use this function in your program:
+    #  @code
+    #  from PiStorms_GRX import PiStorms_GRX
+    #  ...
+    #  psm = PiStorms_GRX()
+    #
+    #  def mainLoop():
+    #      psm.screen.termPrintln(psm.battVoltage())
+    #
+    #  psm.untilKeyPress(mainLoop)
+    #  @endcode
     @classmethod
     def untilKeyPress(self, func, *args, **kwargs):
         initialKeyPressCount = self.getKeyPressCount()
         while self.getKeyPressCount() == initialKeyPressCount:
             func(*args, **kwargs)
 
-    # note this is not a class method because it needs self.screen, an instance attribute
+    ## Repeat an action until the GO button is pressed or the touchscreen is touched
+    #  @param func The function to be called repeatedly
+    #  @param args Positional arguments to be passed to func
+    #  @param kwargs Keyword arguments to be passed to func
+    #  @warning Beware of scope issues! In Python, functions introduce a new scope.
+    #  You might have to use the keyword "global" to achieve your intended behavior.
+    #  @note This is not a class method because it needs self.screen, an instance attribute
+    #  @remark
+    #  To use this function in your program:
+    #  @code
+    #  from PiStorms_GRX import PiStorms_GRX
+    #  ...
+    #  psm = PiStorms_GRX()
+    #
+    #  def mainLoop():
+    #      psm.screen.termPrintln(psm.battVoltage())
+    #
+    #  psm.untilKeyPressOrTouch(mainLoop)
+    #  @endcode
     def untilKeyPressOrTouch(self, func, *args, **kwargs):
         initialKeyPressCount = self.getKeyPressCount()
         while self.getKeyPressCount() == initialKeyPressCount and not self.screen.isTouched():
             func(*args, **kwargs)
 
-    # note this is not a class method because it needs self.screen, an instance attribute
+    ## Repeat an action until the touchscreen is touched
+    #  @param func The function to be called repeatedly
+    #  @param args Positional arguments to be passed to func
+    #  @param kwargs Keyword arguments to be passed to func
+    #  @warning Beware of scope issues! In Python, functions introduce a new scope.
+    #  You might have to use the keyword "global" to achieve your intended behavior.
+    #  @note This is not a class method because it needs self.screen, an instance attribute
+    #  @remark
+    #  To use this function in your program:
+    #  @code
+    #  from PiStorms_GRX import PiStorms_GRX
+    #  ...
+    #  psm = PiStorms_GRX()
+    #
+    #  def mainLoop():
+    #      psm.screen.termPrintln(psm.battVoltage())
+    #
+    #  psm.untilTouch(mainLoop)
+    #  @endcode
     def untilTouch(self, func, *args, **kwargs):
         while not self.screen.isTouched():
             func(*args, **kwargs)
 
+    ## Check if any function button is pressed
+    #  @remark
+    #  To use this function in your program:
+    #  @code
+    #  from PiStorms_GRX import PiStorms_GRX
+    #  ...
+    #  psm = PiStorms_GRX()
+    #  key = psm.getKeyValue()
+    #  if(key == 0):
+    #      # no function button is pressed
+    #  @endcode
     @classmethod
     def getKeyPressValue(self): # F1-4
         return {0:0, 8:1, 16:2, 24:3, 40:4}[GRXCom.getKeyPressValue()]
 
+    ## Check if F1 function button is pressed
+    #  @remark
+    #  To use this function in your program:
+    #  @code
+    #  from PiStorms_GRX import PiStorms_GRX
+    #  ...
+    #  psm = PiStorms_GRX()
+    #  if psm.isF1Pressed():
+    #      # F1 is pressed, do some task
+    #  @endcode
     @classmethod
     def isF1Pressed(self):
         return (GRXCom.getKeyPressValue() == 8)
 
+    ## Check if F2 function button is pressed
+    #  @remark
+    #  To use this function in your program:
+    #  @code
+    #  from PiStorms_GRX import PiStorms_GRX
+    #  ...
+    #  psm = PiStorms_GRX()
+    #  if psm.isF1Pressed():
+    #      # F2 is pressed, do some task
+    #  @endcode
     @classmethod
     def isF2Pressed(self):
         return (GRXCom.getKeyPressValue() == 16)
 
+    ## Check if F3 function button is pressed
+    #  @remark
+    #  To use this function in your program:
+    #  @code
+    #  from PiStorms_GRX import PiStorms_GRX
+    #  ...
+    #  psm = PiStorms_GRX()
+    #  if psm.isF1Pressed():
+    #      # F3 is pressed, do some task
+    #  @endcode
     @classmethod
     def isF3Pressed(self):
         return (GRXCom.getKeyPressValue() == 24)
 
+    ## Check if F4 function button is pressed
+    #  @remark
+    #  To use this function in your program:
+    #  @code
+    #  from PiStorms_GRX import PiStorms_GRX
+    #  ...
+    #  psm = PiStorms_GRX()
+    #  if psm.isF1Pressed():
+    #      # F4 is pressed, do some task
+    #  @endcode
     @classmethod
     def isF4Pressed(self):
         return (GRXCom.getKeyPressValue() == 40)
 
+    ## Returns the number of times the GO button has been pressed
+    #  @see untilKeyPress
+    #  @remark
+    #  To use this function in your program:
+    #  @code
+    #  from PiStorms_GRX import PiStorms_GRX
+    #  ...
+    #  psm = PiStorms_GRX()
+    #  initialKeyPressCount = psm.getKeyPressCount()
+    #  ...
+    #  if(psm.getKeyPressCount() != initialKeyPressCount):
+    #      # the GO button has been pressed at least once (or reset)
+    #  @endcode
     @classmethod
     def getKeyPressCount(self):
         return GRXCom.I2C.A.readByte(GRXCom.REGISTER.GO_PRESS_COUNT)
 
+    ## Resets the GO button press count to 0
+    #  @see untilKeyPress
+    #  @remark
+    #  To use this function in your program:
+    #  @code
+    #  from PiStorms_GRX import PiStorms_GRX
+    #  ...
+    #  psm = PiStorms_GRX()
+    #  psm.resetKeyPressCount()
+    #  ...
+    #  if(psm.getKeyPressCount() != 0):
+    #      # the GO button has been pressed at least once
+    #  @endcode
     @classmethod
     def resetKeyPressCount(self):
         GRXCom.I2C.A.writeByte(GRXCom.REGISTER.GO_PRESS_COUNT, 0)
 
+    ### @cond Doxygen_ignore_this
+    ## Pings the PiStorms for reliable I2C communication
     @classmethod
     def ping(self):
         GRXCom.ping()
+    ### @endcond

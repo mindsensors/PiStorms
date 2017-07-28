@@ -429,7 +429,7 @@ class Grove_Sunlight_Sensor(mindsensors_i2c):
 
 
     ## Initialize the class with the i2c address of your sunlight sensor
-    #  @param i2c_address Address of your sunlight sensor
+    #  @param address Address of your sunlight sensor
     #  @remark
     def __init__(self, address=0x60):
         mindsensors_i2c.__init__(self, address)

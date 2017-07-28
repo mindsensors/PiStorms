@@ -878,7 +878,7 @@ class PiStorms:
     #  ...
     #  psm = PiStorms()
     #  fwVersion = psm.GetFirmwareVersion()
-    #  print str(devID)
+    #  print str(fwVersion)
     #  @endcode
     def GetFirmwareVersion(self):
         return self.psc.GetFirmwareVersion()
@@ -892,7 +892,7 @@ class PiStorms:
     #  ...
     #  psm = PiStorms()
     #  venName = psm.GetVendorName()
-    #  print str(devID)
+    #  print str(venName)
     #  @endcode
     def GetVendorName(self):
         return self.psc.GetVendorName()
@@ -960,7 +960,9 @@ class PiStorms:
     ## Repeat an action until the GO button is pressed
     #  @param self The object pointer.
     #  @param func The function to be called repeatedly
-    #  Beware of scope issues! In Python, functions introduce a new scope.
+    #  @param args Positional arguments to be passed to func
+    #  @param kwargs Keyword arguments to be passed to func
+    #  @warning Beware of scope issues! In Python, functions introduce a new scope.
     #  You might have to use the keyword "global" to achieve your intended behavior.
     #  @remark
     #  To use this function in your program:
