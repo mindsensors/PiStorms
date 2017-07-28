@@ -1,7 +1,9 @@
 var searchData=
 [
-  ['led',['led',['../class_pi_storms_1_1_pi_storms.html#a7c71baa9dd1af6d3d1dadfe0b271d3a5',1,'PiStorms::PiStorms']]],
+  ['led',['led',['../class_pi_storms_1_1_pi_storms.html#a7c71baa9dd1af6d3d1dadfe0b271d3a5',1,'PiStorms.PiStorms.led()'],['../class_pi_storms___g_r_x_1_1_pi_storms___g_r_x.html#a694293e9df549011c04adc68e777f483',1,'PiStorms_GRX.PiStorms_GRX.led()']]],
   ['legosensor',['LegoSensor',['../class_lego_devices_1_1_lego_sensor.html',1,'LegoDevices']]],
+  ['length',['length',['../classscratch_1_1_scratch.html#a0da0a0d3dcd186cadb57cfb4b2b5b943',1,'scratch::Scratch']]],
+  ['lightlevel',['lightLevel',['../class_grove_devices_1_1_grove___light___sensor.html#a1f734b082ab60068c4679f125fc2cb08',1,'GroveDevices::Grove_Light_Sensor']]],
   ['lightsensorarray',['LightSensorArray',['../class_ms_devices_1_1_light_sensor_array.html',1,'MsDevices']]],
   ['lightsensornxt',['lightSensorNXT',['../class_pi_storms_1_1_pi_storms_sensor.html#a7779789be8cd07475b32e58daa1f4cba',1,'PiStorms::PiStormsSensor']]],
   ['lineleader',['LINELEADER',['../classmindsensors_1_1_l_i_n_e_l_e_a_d_e_r.html',1,'mindsensors']]],
@@ -22,5 +24,6 @@ var searchData=
   ['lsa_5faddress',['LSA_ADDRESS',['../classmindsensors_1_1_l_s_a.html#a3da92269065fae2f52a49def4420b15f',1,'mindsensors.LSA.LSA_ADDRESS()'],['../class_ms_devices_1_1_light_sensor_array.html#af8454674d2ff031a6e878255a25e86a6',1,'MsDevices.LightSensorArray.LSA_ADDRESS()']]],
   ['lsa_5fcalibrated',['LSA_CALIBRATED',['../classmindsensors_1_1_l_s_a.html#ac2ca6086369e508cffded1e5854a95d7',1,'mindsensors.LSA.LSA_CALIBRATED()'],['../class_ms_devices_1_1_light_sensor_array.html#a56ee93c5713be19e67689a5a4299d07e',1,'MsDevices.LightSensorArray.LSA_CALIBRATED()']]],
   ['lsa_5fcommand',['LSA_COMMAND',['../classmindsensors_1_1_l_s_a.html#a5db9d9b5d654cbabd749bb43e4adb76d',1,'mindsensors.LSA.LSA_COMMAND()'],['../class_ms_devices_1_1_light_sensor_array.html#aad70184f76154f8ffeee777f512e3c90',1,'MsDevices.LightSensorArray.LSA_COMMAND()']]],
-  ['lsa_5funcalibrated',['LSA_UNCALIBRATED',['../classmindsensors_1_1_l_s_a.html#a01f3876eac9ead22bea4f6027f8834b9',1,'mindsensors.LSA.LSA_UNCALIBRATED()'],['../class_ms_devices_1_1_light_sensor_array.html#a03c02e150568a6017020b6626bc6b132',1,'MsDevices.LightSensorArray.LSA_UNCALIBRATED()']]]
+  ['lsa_5funcalibrated',['LSA_UNCALIBRATED',['../classmindsensors_1_1_l_s_a.html#a01f3876eac9ead22bea4f6027f8834b9',1,'mindsensors.LSA.LSA_UNCALIBRATED()'],['../class_ms_devices_1_1_light_sensor_array.html#a03c02e150568a6017020b6626bc6b132',1,'MsDevices.LightSensorArray.LSA_UNCALIBRATED()']]],
+  ['luminance',['luminance',['../class_grove_devices_1_1_grove___luminance___sensor.html#a291b312dd1f0e97753f0c9deff0a3feb',1,'GroveDevices::Grove_Luminance_Sensor']]]
 ];

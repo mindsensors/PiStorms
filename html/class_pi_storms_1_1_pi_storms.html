@@ -31,7 +31,7 @@
   <td id="projectlogo"><img alt="Logo" src="logo-with-transparent-bg-w300.png"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">PiStorms
-   &#160;<span id="projectnumber">4.013</span>
+   &#160;<span id="projectnumber">4.015</span>
    </div>
    <div id="projectbrief">PiStorms Library Reference by mindsensors.com</div>
   </td>
@@ -156,6 +156,12 @@ def&#160;</td><td class="memItemRight" valign="bottom"><b>command</b></td></tr>
 <tr class="memitem:a362502a417b3f8133bfa3a4712f16c9e"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_pi_storms_1_1_pi_storms.html#a362502a417b3f8133bfa3a4712f16c9e">isKeyPressed</a></td></tr>
 <tr class="memdesc:a362502a417b3f8133bfa3a4712f16c9e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check if the GO button is pressed.  <a href="#a362502a417b3f8133bfa3a4712f16c9e">More...</a><br /></td></tr>
 <tr class="separator:a362502a417b3f8133bfa3a4712f16c9e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a403167bbf80007eab2c60cafa8b89996"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_pi_storms_1_1_pi_storms.html#a403167bbf80007eab2c60cafa8b89996">waitForKeyPress</a></td></tr>
+<tr class="memdesc:a403167bbf80007eab2c60cafa8b89996"><td class="mdescLeft">&#160;</td><td class="mdescRight">Wait until the GO button is pressed.  <a href="#a403167bbf80007eab2c60cafa8b89996">More...</a><br /></td></tr>
+<tr class="separator:a403167bbf80007eab2c60cafa8b89996"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8a4150e836b74ca4d145769f4228ae42"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_pi_storms_1_1_pi_storms.html#a8a4150e836b74ca4d145769f4228ae42">untilKeyPress</a></td></tr>
+<tr class="memdesc:a8a4150e836b74ca4d145769f4228ae42"><td class="mdescLeft">&#160;</td><td class="mdescRight">Repeat an action until the GO button is pressed.  <a href="#a8a4150e836b74ca4d145769f4228ae42">More...</a><br /></td></tr>
+<tr class="separator:a8a4150e836b74ca4d145769f4228ae42"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae887d43a8e6d077b617e4e7e4dd291fa"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_pi_storms_1_1_pi_storms.html#ae887d43a8e6d077b617e4e7e4dd291fa">getKeyPressValue</a></td></tr>
 <tr class="memdesc:ae887d43a8e6d077b617e4e7e4dd291fa"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check if any Function button is pressed.  <a href="#ae887d43a8e6d077b617e4e7e4dd291fa">More...</a><br /></td></tr>
 <tr class="separator:ae887d43a8e6d077b617e4e7e4dd291fa"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -348,7 +354,7 @@ Public Attributes</h2></td></tr>
 <div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;...</div>
 <div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;psm = <a class="code" href="namespace_pi_storms.html">PiStorms</a>()</div>
 <div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;fwVersion = psm.GetFirmwareVersion()</div>
-<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="keywordflow">print</span> str(devID)</div>
+<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="keywordflow">print</span> str(fwVersion)</div>
 </div><!-- fragment --> </dd></dl>
 
 </div>
@@ -440,7 +446,7 @@ Public Attributes</h2></td></tr>
 <div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;...</div>
 <div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;psm = <a class="code" href="namespace_pi_storms.html">PiStorms</a>()</div>
 <div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;venName = psm.GetVendorName()</div>
-<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="keywordflow">print</span> str(devID)</div>
+<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="keywordflow">print</span> str(venName)</div>
 </div><!-- fragment --> </dd></dl>
 
 </div>
@@ -719,6 +725,95 @@ Public Attributes</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="a8a4150e836b74ca4d145769f4228ae42"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">def PiStorms.PiStorms.untilKeyPress </td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>self</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>func</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>args</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>kwargs</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Repeat an action until the GO button is pressed. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">self</td><td>The object pointer. </td></tr>
+    <tr><td class="paramname">func</td><td>The function to be called repeatedly </td></tr>
+    <tr><td class="paramname">args</td><td>Positional arguments to be passed to func </td></tr>
+    <tr><td class="paramname">kwargs</td><td>Keyword arguments to be passed to func </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section warning"><dt>Warning</dt><dd>Beware of scope issues! In Python, functions introduce a new scope. You might have to use the keyword "global" to achieve your intended behavior. </dd></dl>
+<dl class="section remark"><dt>Remarks</dt><dd>To use this function in your program: <div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="keyword">from</span> PiStorms <span class="keyword">import</span> PiStorms</div>
+<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;...</div>
+<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;psm = <a class="code" href="namespace_pi_storms.html">PiStorms</a>()</div>
+<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;</div>
+<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="keyword">def </span>mainLoop():</div>
+<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;    psm.screen.termPrintln(psm.battVoltage())</div>
+<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;</div>
+<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;psm.untilKeyPress(mainLoop)</div>
+</div><!-- fragment --> </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a403167bbf80007eab2c60cafa8b89996"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">def PiStorms.PiStorms.waitForKeyPress </td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>self</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Wait until the GO button is pressed. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">self</td><td>The object pointer. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section remark"><dt>Remarks</dt><dd>To use this function in your program: <div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="keyword">from</span> PiStorms <span class="keyword">import</span> PiStorms</div>
+<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;...</div>
+<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;psm = <a class="code" href="namespace_pi_storms.html">PiStorms</a>()</div>
+<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;psm.screen.termPrintln(<span class="stringliteral">&quot;Press GO to continue...&quot;</span>)</div>
+<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;psm.waitForKeyPress()</div>
+</div><!-- fragment --> </dd></dl>
+
+</div>
+</div>
 <h2 class="groupheader">Member Data Documentation</h2>
 <a class="anchor" id="a88a51296c290b9c107082d557b33c500"></a>
 <div class="memitem">
@@ -869,7 +964,7 @@ Public Attributes</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespace_pi_storms.html">PiStorms</a></li><li class="navelem"><a class="el" href="class_pi_storms_1_1_pi_storms.html">PiStorms</a></li>
-    <li class="footer">Generated on Thu Jun 29 2017 19:10:36 for PiStorms by
+    <li class="footer">Generated on Fri Jul 28 2017 21:25:19 for PiStorms by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.8 </li>
   </ul>

@@ -1,5 +1,6 @@
 var searchData=
 [
+  ['data',['data',['../classscratch_1_1_scratch.html#a4e86ce5518be36b06677a1f202da5505',1,'scratch::Scratch']]],
   ['data1',['DATA1',['../classmindsensors_1_1_e_v3_sens_adapt.html#a4e4c524a19c691962ff2d1361a05e571',1,'mindsensors::EV3SensAdapt']]],
   ['data2',['DATA2',['../classmindsensors_1_1_e_v3_sens_adapt.html#ab34fbc5fa52eb701f0a3c40f665cc5fe',1,'mindsensors::EV3SensAdapt']]],
   ['data3',['DATA3',['../classmindsensors_1_1_e_v3_sens_adapt.html#a63d4238251983a822f115cd8cade18a2',1,'mindsensors::EV3SensAdapt']]],
@@ -9,6 +10,7 @@ var searchData=
   ['data7',['DATA7',['../classmindsensors_1_1_e_v3_sens_adapt.html#a611b1aef14ec5b4083eacabcafac1b3d',1,'mindsensors::EV3SensAdapt']]],
   ['data8',['DATA8',['../classmindsensors_1_1_e_v3_sens_adapt.html#ab552b9ab708b010997726b8084b2f20c',1,'mindsensors::EV3SensAdapt']]],
   ['detectobstactlezone',['detectObstactleZone',['../class_ms_devices_1_1_sumo_eyes.html#ad8f1fa4d6444d8df5eb2b15cdd61a218',1,'MsDevices::SumoEyes']]],
+  ['detectsound',['detectSound',['../class_grove_devices_1_1_grove___loudness___sensor.html#ab323c38dbb6509d08b2878c82927012c',1,'GroveDevices::Grove_Loudness_Sensor']]],
   ['disconnect',['disconnect',['../classscratch_1_1_scratch.html#a53d90ee25e21bcff7b1e40cf4db61a5e',1,'scratch::Scratch']]],
   ['dist',['DIST',['../classmindsensors_1_1_d_i_s_t.html',1,'mindsensors']]],
   ['dist_5faddress',['DIST_ADDRESS',['../classmindsensors_1_1_d_i_s_t.html#a90f01c9415176b7a2e8c4e7c67d5946f',1,'mindsensors::DIST']]],
@@ -21,6 +23,7 @@ var searchData=
   ['drawarrows',['drawArrows',['../classmindsensors_u_i_1_1mindsensors_u_i.html#a585aa981fe68f0015547cb79f060d0c9',1,'mindsensorsUI::mindsensorsUI']]],
   ['drawautotext',['drawAutoText',['../classmindsensors_u_i_1_1mindsensors_u_i.html#a44614ac0c1744e3060b1828d830c38f6',1,'mindsensorsUI::mindsensorsUI']]],
   ['drawbutton',['drawButton',['../classmindsensors_u_i_1_1mindsensors_u_i.html#ac96eae599738a85f1fa46e724e206a09',1,'mindsensorsUI::mindsensorsUI']]],
+  ['drawcircle',['drawCircle',['../classmindsensors_u_i_1_1mindsensors_u_i.html#a6e2f5d3b3a36cfd65ed3146adb8a45e2',1,'mindsensorsUI::mindsensorsUI']]],
   ['drawdisplay',['drawDisplay',['../classmindsensors_u_i_1_1mindsensors_u_i.html#ac51b76c29e1086431684a174bff416b9',1,'mindsensorsUI::mindsensorsUI']]],
   ['drawline',['drawLine',['../classmindsensors_u_i_1_1mindsensors_u_i.html#a2410b6a740c20a9ae78d1e44ac362f54',1,'mindsensorsUI::mindsensorsUI']]],
   ['drawpolyline',['drawPolyLine',['../classmindsensors_u_i_1_1mindsensors_u_i.html#ad9f8d95553bf5785accccde597ef0d4c',1,'mindsensorsUI::mindsensorsUI']]],

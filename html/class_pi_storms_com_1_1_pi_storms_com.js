@@ -14,5 +14,11 @@ var class_pi_storms_com_1_1_pi_storms_com =
     [ "led", "class_pi_storms_com_1_1_pi_storms_com.html#ae4077ffadb02c4322f082eab7e1d11b5", null ],
     [ "ping", "class_pi_storms_com_1_1_pi_storms_com.html#a63e1b52a891e07bbfcd2b76a03089d7c", null ],
     [ "resetKeyPressCount", "class_pi_storms_com_1_1_pi_storms_com.html#ab7fa25bb8f08bab9f50216a968bebe84", null ],
-    [ "Shutdown", "class_pi_storms_com_1_1_pi_storms_com.html#a635d7ef6068c9d7670605f26801db134", null ]
+    [ "Shutdown", "class_pi_storms_com_1_1_pi_storms_com.html#a635d7ef6068c9d7670605f26801db134", null ],
+    [ "PS_B", "class_pi_storms_com_1_1_pi_storms_com.html#a2e4b52d746e8cbdcda8f1ec23f09fff5", null ],
+    [ "PS_BattV", "class_pi_storms_com_1_1_pi_storms_com.html#a04a679d2161fa00a727c29cdf681a1ce", null ],
+    [ "PS_G", "class_pi_storms_com_1_1_pi_storms_com.html#a82e87c7e3f976cebad5c85e955a14bf3", null ],
+    [ "PS_Key1Count", "class_pi_storms_com_1_1_pi_storms_com.html#ae49b9be33852cc9037fa9d6888226766", null ],
+    [ "PS_KeyPress", "class_pi_storms_com_1_1_pi_storms_com.html#a848eb70214c57785849bfed3e0516c21", null ],
+    [ "PS_R", "class_pi_storms_com_1_1_pi_storms_com.html#a87ad40357ba0fc93b4f35cfe2141019b", null ]
 ];

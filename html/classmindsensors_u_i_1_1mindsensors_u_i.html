@@ -31,7 +31,7 @@
   <td id="projectlogo"><img alt="Logo" src="logo-with-transparent-bg-w300.png"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">PiStorms
-   &#160;<span id="projectnumber">4.013</span>
+   &#160;<span id="projectnumber">4.015</span>
    </div>
    <div id="projectbrief">PiStorms Library Reference by mindsensors.com</div>
   </td>
@@ -188,8 +188,11 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:a56815c0feab998340bd0af580ec77202"><td class="mdescLeft">&#160;</td><td class="mdescRight">Draw a rectangle on the screen (rotated to screen)  <a href="#a56815c0feab998340bd0af580ec77202">More...</a><br /></td></tr>
 <tr class="separator:a56815c0feab998340bd0af580ec77202"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8d0e07da6e2a7e44844012bf8c1d537d"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmindsensors_u_i_1_1mindsensors_u_i.html#a8d0e07da6e2a7e44844012bf8c1d537d">fillCircle</a></td></tr>
-<tr class="memdesc:a8d0e07da6e2a7e44844012bf8c1d537d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Draw a circle on the screen (rotated to screen)  <a href="#a8d0e07da6e2a7e44844012bf8c1d537d">More...</a><br /></td></tr>
+<tr class="memdesc:a8d0e07da6e2a7e44844012bf8c1d537d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Draw a filled circle on the screen (rotated to screen)  <a href="#a8d0e07da6e2a7e44844012bf8c1d537d">More...</a><br /></td></tr>
 <tr class="separator:a8d0e07da6e2a7e44844012bf8c1d537d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6e2f5d3b3a36cfd65ed3146adb8a45e2"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmindsensors_u_i_1_1mindsensors_u_i.html#a6e2f5d3b3a36cfd65ed3146adb8a45e2">drawCircle</a></td></tr>
+<tr class="memdesc:a6e2f5d3b3a36cfd65ed3146adb8a45e2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Draw a circle on the screen (rotated to screen)  <a href="#a6e2f5d3b3a36cfd65ed3146adb8a45e2">More...</a><br /></td></tr>
+<tr class="separator:a6e2f5d3b3a36cfd65ed3146adb8a45e2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2df6161c22352ef12fa959e830b44ad6"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmindsensors_u_i_1_1mindsensors_u_i.html#a2df6161c22352ef12fa959e830b44ad6">fillBmp</a></td></tr>
 <tr class="memdesc:a2df6161c22352ef12fa959e830b44ad6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Draw a bitmap image on the screen (.png files rcommended)  <a href="#a2df6161c22352ef12fa959e830b44ad6">More...</a><br /></td></tr>
 <tr class="separator:a2df6161c22352ef12fa959e830b44ad6"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -971,6 +974,80 @@ int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class
 
 </div>
 </div>
+<a class="anchor" id="a6e2f5d3b3a36cfd65ed3146adb8a45e2"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">def mindsensorsUI.mindsensorsUI.drawCircle </td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>self</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>x</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>y</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>radius</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>fill</em> = <code>None</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>outline</em> = <code>(0,0</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>display</em> = <code>True</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Draw a circle on the screen (rotated to screen) </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">self</td><td>The object pointer. </td></tr>
+    <tr><td class="paramname">x</td><td>The center x coordinate of the circle. </td></tr>
+    <tr><td class="paramname">y</td><td>The center y coordinate of the circle. </td></tr>
+    <tr><td class="paramname">radius</td><td>The radius of the circle. </td></tr>
+    <tr><td class="paramname">fill</td><td>The color of the inside of the circle. Optional, defaults to None </td></tr>
+    <tr><td class="paramname">outline</td><td>The color of the outer edge of the circle. Optional, defaults to Black </td></tr>
+    <tr><td class="paramname">display</td><td>Choose to immediately push the drawing to the screen. Optional, defaults to True. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section remark"><dt>Remarks</dt><dd>To use this function in your program: <div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;...</div>
+<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;red circle with blue outline:</div>
+<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;screen.drawCircle(100, 100, 15, fill = (255,0,0), outline=(0,0,255))</div>
+</div><!-- fragment --> </dd></dl>
+
+</div>
+</div>
 <a class="anchor" id="ac51b76c29e1086431684a174bff416b9"></a>
 <div class="memitem">
 <div class="memproto">
@@ -1294,7 +1371,7 @@ int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class
       </table>
 </div><div class="memdoc">
 
-<p>Draw a circle on the screen (rotated to screen) </p>
+<p>Draw a filled circle on the screen (rotated to screen) </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">self</td><td>The object pointer. </td></tr>
@@ -2405,7 +2482,7 @@ int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacemindsensors_u_i.html">mindsensorsUI</a></li><li class="navelem"><a class="el" href="classmindsensors_u_i_1_1mindsensors_u_i.html">mindsensorsUI</a></li>
-    <li class="footer">Generated on Thu Jun 29 2017 19:10:36 for PiStorms by
+    <li class="footer">Generated on Fri Jul 28 2017 21:25:19 for PiStorms by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.8 </li>
   </ul>

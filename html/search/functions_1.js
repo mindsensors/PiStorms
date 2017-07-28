@@ -5,6 +5,7 @@ var searchData=
   ['accel_5f4g',['accel_4G',['../classmindsensors_1_1_a_b_s_i_m_u.html#ad964872e7d22127a3681f3329fb34821',1,'mindsensors.ABSIMU.accel_4G()'],['../class_ms_devices_1_1_absolute_i_m_u.html#a0ab2f602923634d813da839113328192',1,'MsDevices.AbsoluteIMU.accel_4G()']]],
   ['accel_5f8g',['accel_8G',['../classmindsensors_1_1_a_b_s_i_m_u.html#a5bf457535e26cc9c6cb73a9ccf70313a',1,'mindsensors.ABSIMU.accel_8G()'],['../class_ms_devices_1_1_absolute_i_m_u.html#add7664924b9ea2a403681987d8452550',1,'MsDevices.AbsoluteIMU.accel_8G()']]],
   ['activatecustomsensori2c',['activateCustomSensorI2C',['../class_pi_storms_1_1_pi_storms_sensor.html#aacf6782d99e6b3c0916b34165e1415d5',1,'PiStorms::PiStormsSensor']]],
+  ['airquality',['airQuality',['../class_grove_devices_1_1_grove___air___quality___sensor.html#a9120eafe1d5e1ab9318f8abebf3711ec',1,'GroveDevices::Grove_Air_Quality_Sensor']]],
   ['ambientlightsensorev3',['ambientLightSensorEV3',['../class_pi_storms_1_1_pi_storms_sensor.html#a9cc2f2f8e8578161c94526a6f8d6b18d',1,'PiStorms::PiStormsSensor']]],
   ['analogsensor',['analogSensor',['../class_pi_storms_1_1_pi_storms_sensor.html#a87237ff5cd0c977332a530b3cd1619da',1,'PiStorms::PiStormsSensor']]],
   ['askquestion',['askQuestion',['../classmindsensors_u_i_1_1mindsensors_u_i.html#a94dc1f1bd3a9928e4103c73a9c7a6f54',1,'mindsensorsUI::mindsensorsUI']]],

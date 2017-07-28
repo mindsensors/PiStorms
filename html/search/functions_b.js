@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['numtouchesev3',['numTouchesEV3',['../class_pi_storms_1_1_pi_storms_sensor.html#af99452f8b722361b4aaf56fbcba12a54',1,'PiStorms::PiStormsSensor']]],
-  ['numtouchesnxt',['numTouchesNXT',['../class_pi_storms_1_1_pi_storms_sensor.html#a58633ccbaafa51e2bfb37f6a2afb01fa',1,'PiStorms::PiStormsSensor']]]
+  ['moisturelevel',['moistureLevel',['../class_grove_devices_1_1_grove___moisture___sensor.html#a38610184067bc1f17dcac88d32f82084',1,'GroveDevices::Grove_Moisture_Sensor']]],
+  ['motiondetected',['motionDetected',['../class_grove_devices_1_1_grove___p_i_r___motion___sensor.html#ada975601a31a1778c00c0d3d493e9f1d',1,'GroveDevices::Grove_PIR_Motion_Sensor']]]
 ];

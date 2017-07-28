@@ -1,7 +1,8 @@
 var searchData=
 [
-  ['waituntilnotbusy',['waitUntilNotBusy',['../classmindsensors_1_1_m_m_x.html#ab314ebbca3b6765316d92f0293d17548',1,'mindsensors.MMX.waitUntilNotBusy()'],['../class_pi_storms_1_1_pi_storms_motor.html#ac27402f75ecb00bcaf497e168d088383',1,'PiStorms.PiStormsMotor.waitUntilNotBusy()']]],
-  ['wakeup',['Wakeup',['../classmindsensors_1_1_l_i_n_e_l_e_a_d_e_r.html#a78d1112379bc67dca873657ee6708e84',1,'mindsensors.LINELEADER.Wakeup()'],['../classmindsensors_1_1_l_s_a.html#a4373a2279afb2edb827b5610d0f3dd2e',1,'mindsensors.LSA.Wakeup()'],['../class_ms_devices_1_1_line_leader.html#ae833907c1451da07f50b736db6185512',1,'MsDevices.LineLeader.Wakeup()'],['../class_ms_devices_1_1_light_sensor_array.html#a2b8294f366ce8fc2abcfc2a3063b21c3',1,'MsDevices.LightSensorArray.Wakeup()']]],
-  ['white_5fcal',['White_Cal',['../classmindsensors_1_1_l_i_n_e_l_e_a_d_e_r.html#a3ee66c5afd25722459baff8ce917e967',1,'mindsensors.LINELEADER.White_Cal()'],['../classmindsensors_1_1_l_s_a.html#a795c96bcdae74581fd2b75197144e277',1,'mindsensors.LSA.White_Cal()'],['../class_ms_devices_1_1_line_leader.html#a7e7608005dbfc69a4006633a76051834',1,'MsDevices.LineLeader.White_Cal()'],['../class_ms_devices_1_1_light_sensor_array.html#ad83dd0c2eb2ea4bc275af6e37620cca0',1,'MsDevices.LightSensorArray.White_Cal()']]],
-  ['writeimageregisters',['writeImageRegisters',['../classmindsensors_1_1_n_x_t_c_a_m.html#a62b0195951ffcc29e66bc8d6735cb229',1,'mindsensors::NXTCAM']]]
+  ['untilkeypress',['untilKeyPress',['../class_pi_storms_1_1_pi_storms.html#a8a4150e836b74ca4d145769f4228ae42',1,'PiStorms.PiStorms.untilKeyPress()'],['../class_pi_storms___g_r_x_1_1_pi_storms___g_r_x.html#a9857f8659e6a074f1e8ee91a3114d32f',1,'PiStorms_GRX.PiStorms_GRX.untilKeyPress()']]],
+  ['untilkeypressortouch',['untilKeyPressOrTouch',['../class_pi_storms___g_r_x_1_1_pi_storms___g_r_x.html#a0f137d15401b1a9e9e21c178ffe5a2d6',1,'PiStorms_GRX::PiStorms_GRX']]],
+  ['untiltouch',['untilTouch',['../class_pi_storms___g_r_x_1_1_pi_storms___g_r_x.html#ac563063144c9ed720fbdb9ab757fff38',1,'PiStorms_GRX::PiStorms_GRX']]],
+  ['update_5ftextbox',['update_textbox',['../class_touch_screen_input_1_1_touch_screen_input.html#ac415572b22ae401b9ea5ad98dc034dd9',1,'TouchScreenInput::TouchScreenInput']]],
+  ['uvindex',['UVindex',['../class_grove_devices_1_1_grove___u_v___sensor.html#a3262e11ff2d1c4b3cc53af3e39a6e925',1,'GroveDevices::Grove_UV_Sensor']]]
 ];

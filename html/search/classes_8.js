@@ -1,9 +1,8 @@
 var searchData=
 [
-  ['nxtcam',['NXTCAM',['../classmindsensors_1_1_n_x_t_c_a_m.html',1,'mindsensors']]],
-  ['nxtcam5',['NXTCam5',['../class_ms_devices_1_1_n_x_t_cam5.html',1,'MsDevices']]],
-  ['nxtcolorsensor',['NXTColorSensor',['../class_lego_devices_1_1_n_x_t_color_sensor.html',1,'LegoDevices']]],
-  ['nxtlightsensor',['NXTLightSensor',['../class_lego_devices_1_1_n_x_t_light_sensor.html',1,'LegoDevices']]],
-  ['nxtservo',['NXTSERVO',['../classmindsensors_1_1_n_x_t_s_e_r_v_o.html',1,'mindsensors']]],
-  ['nxttouchsensor',['NXTTouchSensor',['../class_lego_devices_1_1_n_x_t_touch_sensor.html',1,'LegoDevices']]]
+  ['legosensor',['LegoSensor',['../class_lego_devices_1_1_lego_sensor.html',1,'LegoDevices']]],
+  ['lightsensorarray',['LightSensorArray',['../class_ms_devices_1_1_light_sensor_array.html',1,'MsDevices']]],
+  ['lineleader',['LINELEADER',['../classmindsensors_1_1_l_i_n_e_l_e_a_d_e_r.html',1,'mindsensors']]],
+  ['lineleader',['LineLeader',['../class_ms_devices_1_1_line_leader.html',1,'MsDevices']]],
+  ['lsa',['LSA',['../classmindsensors_1_1_l_s_a.html',1,'mindsensors']]]
 ];

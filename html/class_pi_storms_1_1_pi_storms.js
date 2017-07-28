@@ -16,6 +16,8 @@ var class_pi_storms_1_1_pi_storms =
     [ "led", "class_pi_storms_1_1_pi_storms.html#a7c71baa9dd1af6d3d1dadfe0b271d3a5", null ],
     [ "resetKeyPressCount", "class_pi_storms_1_1_pi_storms.html#a10f937f6193386407775095fd868dd44", null ],
     [ "Shutdown", "class_pi_storms_1_1_pi_storms.html#aa827f5eef4b3d0f66235c0db52ab2c4e", null ],
+    [ "untilKeyPress", "class_pi_storms_1_1_pi_storms.html#a8a4150e836b74ca4d145769f4228ae42", null ],
+    [ "waitForKeyPress", "class_pi_storms_1_1_pi_storms.html#a403167bbf80007eab2c60cafa8b89996", null ],
     [ "BAM1", "class_pi_storms_1_1_pi_storms.html#a88a51296c290b9c107082d557b33c500", null ],
     [ "BAM2", "class_pi_storms_1_1_pi_storms.html#a117d708a1c8b309c5c0abf79be0ae268", null ],
     [ "BAS1", "class_pi_storms_1_1_pi_storms.html#a0d9219a6011de41aebbe468db4443798", null ],

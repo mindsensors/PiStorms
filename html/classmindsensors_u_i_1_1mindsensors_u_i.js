@@ -11,6 +11,7 @@ var classmindsensors_u_i_1_1mindsensors_u_i =
     [ "drawArrows", "classmindsensors_u_i_1_1mindsensors_u_i.html#a585aa981fe68f0015547cb79f060d0c9", null ],
     [ "drawAutoText", "classmindsensors_u_i_1_1mindsensors_u_i.html#a44614ac0c1744e3060b1828d830c38f6", null ],
     [ "drawButton", "classmindsensors_u_i_1_1mindsensors_u_i.html#ac96eae599738a85f1fa46e724e206a09", null ],
+    [ "drawCircle", "classmindsensors_u_i_1_1mindsensors_u_i.html#a6e2f5d3b3a36cfd65ed3146adb8a45e2", null ],
     [ "drawDisplay", "classmindsensors_u_i_1_1mindsensors_u_i.html#ac51b76c29e1086431684a174bff416b9", null ],
     [ "drawLine", "classmindsensors_u_i_1_1mindsensors_u_i.html#a2410b6a740c20a9ae78d1e44ac362f54", null ],
     [ "drawPolyLine", "classmindsensors_u_i_1_1mindsensors_u_i.html#ad9f8d95553bf5785accccde597ef0d4c", null ],

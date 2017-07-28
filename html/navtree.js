@@ -30,8 +30,9 @@ var NAVTREE =
 var NAVTREEINDEX =
 [
 ".html",
-"class_pi_storms_1_1_pi_storms_sensor.html#a7779789be8cd07475b32e58daa1f4cba",
-"classmindsensors_1_1_n_x_t_c_a_m.html#a9593505ef4128c6c5aca8599a98b3e7c"
+"class_pi_storms_1_1_pi_storms.html#a0803e3e86afdf243abea0960d2774f73",
+"class_touch_screen_input_1_1_touch_screen_input.html#aa127d1f194b9cf53ea47026df56ad2b1",
+"classmindsensors_u_i_1_1mindsensors_u_i.html#aef885866805073e6459f0d35c3ac00e8"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';
