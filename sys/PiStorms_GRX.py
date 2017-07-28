@@ -315,6 +315,7 @@ class PiStorms_GRX():
     def waitForKeyPress(self):
         self.untilKeyPress(time.sleep, 0.01)
 
+    # beware of scope issues! you might have to use the keyword `global`
     @classmethod
     def untilKeyPress(self, func, *args, **kwargs):
         initialKeyPressCount = self.getKeyPressCount()
@@ -325,6 +326,11 @@ class PiStorms_GRX():
     def untilKeyPressOrTouch(self, func, *args, **kwargs):
         initialKeyPressCount = self.getKeyPressCount()
         while self.getKeyPressCount() == initialKeyPressCount and not self.screen.isTouched():
+            func(*args, **kwargs)
+
+    # note this is not a class method because it needs self.screen, an instance attribute
+    def untilTouch(self, func, *args, **kwargs):
+        while not self.screen.isTouched():
             func(*args, **kwargs)
 
     @classmethod

@@ -960,6 +960,8 @@ class PiStorms:
     ## Repeat an action until the GO button is pressed
     #  @param self The object pointer.
     #  @param func The function to be called repeatedly
+    #  Beware of scope issues! In Python, functions introduce a new scope.
+    #  You might have to use the keyword "global" to achieve your intended behavior.
     #  @remark
     #  To use this function in your program:
     #  @code
@@ -972,10 +974,10 @@ class PiStorms:
     #
     #  psm.untilKeyPress(mainLoop)
     #  @endcode
-    def untilKeyPress(self, func):
+    def untilKeyPress(self, func, *args, **kwargs):
         initialKeyPressCount = self.getKeyPressCount()
         while self.getKeyPressCount() == initialKeyPressCount:
-            func()
+            func(*args, **kwargs)
 
     ## Check if any Function button is pressed
     #  @param self The object pointer.
