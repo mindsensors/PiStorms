@@ -26,8 +26,6 @@
 # May 2017     Seth Tenembaum  Remove login requirement
 */
 
-include "api/config.php";
-
 ?><!DOCTYPE html>
 <html>
 <head>
@@ -47,10 +45,8 @@ include "api/config.php";
   <script src="assets/blockly/python_compressed.js"></script>
   <script src="assets/blockly/msg/js/en.js"></script>
   <style>
-    .btn-sq {
-      width: 50px !important;
-      height: 50px !important;
-      font-size: 24px;
+    .right-pad {
+        margin-right:0.5em;
     }
   </style>
   <style type="text/css" media="screen">
@@ -109,13 +105,13 @@ include "api/config.php";
             <div class="box-header">
               <h3 class="box-title">Your Programs</h3>
               <div class="box-tools pull-right">
-                <button type="button" onclick="addfile('py');" class="btn btn-sm btn-flat btn-success"><i class="fa fa-plus"></i>&nbsp;&nbsp;File</button>
-                <button type="button" onclick="addfile('bl');" class="btn btn-sm btn-flat btn-info"><i class="fa fa-plus"></i>&nbsp;&nbsp;Blockly File</button>
-                <button type="button" onclick="addfile('folder');" class="btn btn-sm btn-flat btn-primary"><i class="fa fa-plus"></i>&nbsp;&nbsp;Folder</button>
+                <button type="button" onclick="addfile('py');" class="btn btn-sm btn-flat btn-success"><i class="fa fa-plus right-pad"></i>File</button>
+                <button type="button" onclick="addfile('bl');" class="btn btn-sm btn-flat btn-info"><i class="fa fa-plus right-pad"></i>Blockly File</button>
+                <button type="button" onclick="addfile('folder');" class="btn btn-sm btn-flat btn-primary"><i class="fa fa-plus right-pad"></i>Folder</button>
               </div>
             </div>
             <div class="box-body" id="programs_list" style="max-height:640px; overflow: auto;">
-              <div class="text-center"><h4><i class="fa fa-refresh fa-spin"></i>&nbsp;&nbsp;Fetching</h4></div>
+              <div class="text-center"><h4><i class="fa fa-refresh fa-spin right-pad"></i>Fetching</h4></div>
             </div>
           </div>
         </div>
@@ -210,10 +206,43 @@ include "api/config.php";
 <script type="text/javascript" src="assets/pnotify.min.js"></script>
 <script type="text/javascript" src="assets/jquery.slimscroll.min.js"></script>
 <script type="text/javascript" src="assets/bootstrap-slider.min.js"></script>
-<script type="text/javascript" src="assets/ps_blocks.js"></script>
 <script type="text/javascript" src="assets/sha256.min.js"></script>
 
-<?php include "components/blocks.php"; ?>
+<xml id="toolbox" style="display: none">
+    <?php include "blockly/standard.php"; ?>
+    <?php include "blockly/motors.php"; ?>
+    <?php include "blockly/servos.php"; ?>
+    <?php include "blockly/sensors.php"; ?>
+    <?php include "blockly/grove.php"; ?>
+    <?php include "blockly/screen.php"; ?>
+    <?php include "blockly/led.php"; ?>
+    <?php include "blockly/led_grx.php"; ?>
+    <?php include "blockly/buttons.php"; ?>
+    <?php include "blockly/buttons_grx.php"; ?>
+    <?php include "blockly/system.php"; ?>
+</xml>
+
+<script>
+setTimeout(()=>$("body").addClass("sidebar-collapse"), 10);
+
+var api = "http://<?=$_SERVER['SERVER_NAME']?>:3141/";
+$.get(api+'isgrx', function(data) {
+    if (data=='1') {
+        $('#toolbox category[name=Motors]').remove();
+        $('#toolbox category[name=Sensors]').remove();
+        $('#toolbox category[name=Grove]').attr('name', 'Sensors');
+        $('#toolbox category[name=Buttons]').remove();
+        $('#toolbox category[name=Buttons_GRX]').attr('name', 'Buttons');
+        $('#toolbox category[name=LED]').remove();
+        $('#toolbox category[name=LED_GRX]').attr('name', 'LED');
+    } else {
+        $('#toolbox category[name=Servos]').remove();
+        $('#toolbox category[name=Grove]').remove();
+        $('#toolbox category[name=Buttons_GRX]').remove();
+        $('#toolbox category[name=LED_GRX]').remove();
+    }
+});
+</script>
 
 <script src="assets/ace/ace.js"></script>
 
@@ -335,7 +364,7 @@ function aceedit(filename, location, id, content) {
 function edit(filename, location, id) {
     $.post(api+"fetchscript", {path: location}, function(result){
         edittype = progs[id][2];
-        $("#edit_options").html('<span style="font-size:20px;padding-bottom:0px;margin-bottom:-10px;display:block;">Edit <b>' + filename + '</b></span><br><button type="button" class="btn btn-success btn-flat btn-settings" onclick="save(\'' + location + '\')"><i class="fa fa-save" aria-hidden="true"></i>&nbsp;&nbsp;Save</button><!--<button type="button" class="btn btn-danger btn-flat btn-settings"><i class="fa fa-ban" aria-hidden="true"></i>&nbsp;&nbsp;Cancel</button>-->');
+        $("#edit_options").html('<span style="font-size:20px;padding-bottom:0px;margin-bottom:-10px;display:block;">Edit <b>' + filename + '</b></span><br><button type="button" class="btn btn-success btn-flat btn-settings" onclick="save(\'' + location + '\')"><i class="fa fa-save right-pad" aria-hidden="true"></i>Save</button>');
         if (progs[id][2] == "bl") {
             blocklyedit(filename, location, id, result);
             return 0;

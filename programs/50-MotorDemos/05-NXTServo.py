@@ -46,4 +46,3 @@ psm.screen.showMessage(["NXTServo Example", "Servo 1 should be at position 100."
 
 nxt_servo.setPosition(1, 200)
 psm.screen.showMessage(["NXTServo Example", "Servo 1 should be at position 200."])
-

@@ -83,4 +83,3 @@ ping -c 3 8.8.8.8
 echo ""
 echo "PiStorms Diagnostics test concluded...."
 echo "---------------------------------------"
-

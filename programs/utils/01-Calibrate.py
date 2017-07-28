@@ -34,4 +34,3 @@ m = [ "Touch Screen Calibration",
       "Calibration is disabled in this relese. If you need assistance, please contact mindsensors support at: support@mindsensors.com"
     ]
 psm.screen.showMessage(m, wrapText=True)
-

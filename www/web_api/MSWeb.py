@@ -81,7 +81,15 @@ def dirTraversal(file_name, current_directory):
 app = Flask(__name__)
 
 from PiStormsCom import PiStormsCom
-psc = PiStormsCom()
+from PiStormsCom_GRX import GRXCom
+
+import ConfigParser
+config = ConfigParser.RawConfigParser()
+config.read("/usr/local/mindsensors/conf/msdev.cfg")
+if "GRX" in config.get('msdev', 'device'):
+    psc = GRXCom
+else:
+    psc = PiStormsCom()
 
 import MS_ILI9341
 import Adafruit_GPIO.SPI as SPI
@@ -106,6 +114,11 @@ import ConfigParser
 config = ConfigParser.ConfigParser()
 config.read("/usr/local/mindsensors/conf/msdev.cfg")
 home_folder = config.get("msdev","homefolder")
+if "GRX" in config.get('msdev', 'device'):
+    programs_folder = os.path.join(home_folder, "programs_grx")
+else:
+    programs_folder = os.path.join(home_folder, "programs")
+programs_folder_abspath = os.path.abspath(programs_folder)+'/'
 
 message_file = '/var/tmp/ps_data.json'
 messages = {"date": "", "status": "None", "message": "none"}
@@ -136,7 +149,7 @@ def software():
 @app.route("/device", methods=['GET', 'OPTIONS'])
 @crossdomain(origin='*')
 def device():
-    return str(psc.GetDeviceId())
+    return str(config.get('msdev', 'device'))
 
 @app.route("/eth0", methods=['GET', 'OPTIONS'])
 @crossdomain(origin='*')
@@ -173,7 +186,7 @@ def led():
         red = request.form['red']
         blue = request.form['blue']
         green = request.form['green']
-        if led in ['1','2'] and red.isdigit() and blue.isdigit() and green.isdigit():
+        if led in ['1','2'] and all(c.isdigit() for c in [red, blue, green]):
             red = int(red) % 256
             blue = int(blue) % 256
             green = int(green) % 256
@@ -283,13 +296,13 @@ def getmessagejson():
 @app.route("/getprograms", methods=['POST', 'OPTIONS'])
 @crossdomain(origin='*')
 def getprograms():
-    files = os.listdir(os.path.join(home_folder, "programs", request.form["path"]))
+    files = os.listdir(os.path.join(programs_folder, request.form["path"]))
 
-    if not request.form["path"].startswith(os.path.abspath(os.path.join(home_folder, "programs"))+'/'): return "0"
+    if not request.form["path"].startswith(programs_folder_abspath): return "0"
 
     out = []
     for i in files:
-        dir = os.path.join(home_folder, "programs", request.form["path"], i)
+        dir = os.path.join(programs_folder, request.form["path"], i)
         typ = ""
         if os.path.isdir(dir): typ = "folder"
         elif os.path.isfile(dir): typ = os.path.splitext(dir)[1][1::].lower()
@@ -315,7 +328,7 @@ def fetchscript():
 @crossdomain(origin='*')
 def removefile():
     try:
-        if os.path.isfile(request.form["path"]) and request.form["path"].startswith(os.path.abspath(os.path.join(home_folder, "programs"))+'/'):
+        if os.path.isfile(request.form["path"]) and request.form["path"].startswith(programs_folder_abspath):
             os.remove(request.form["path"])
         return "1"
     except: return "0"
@@ -324,7 +337,7 @@ def removefile():
 @crossdomain(origin='*')
 def removedir():
     try:
-        if os.path.isdir(request.form["path"]) and request.form["path"].startswith(os.path.abspath(os.path.join(home_folder, "programs"))+'/') and os.path.normpath(request.form["path"]) != os.path.normpath(os.path.abspath(os.path.join(home_folder, "programs"))):
+        if os.path.isdir(request.form["path"]) and request.form["path"].startswith(programs_folder_abspath) and os.path.normpath(request.form["path"]) != os.path.normpath(os.path.abspath(programs_folder)):
             shutil.rmtree(request.form["path"])
         return "1"
     except Exception as e:
@@ -355,8 +368,8 @@ copyright = """
 @crossdomain(origin='*')
 def addobject():
     try:
-        if not (os.path.isdir(request.form["path"]) and request.form["type"] in ["folder","py","bl"] and request.form["path"] and request.form["path"].startswith(os.path.abspath(os.path.join(home_folder, "programs"))+'/')):
-            return "0";
+        if not (os.path.isdir(request.form["path"]) and request.form["type"] in ["folder","py","bl"] and request.form["path"] and request.form["path"].startswith(programs_folder_abspath)):
+            return "0"
         filename = os.path.basename(request.form["filename"].rstrip(os.sep))
         folderpath = os.path.join(request.form["path"], filename)
         if request.form["type"] == "folder":
@@ -377,8 +390,8 @@ def addobject():
 @crossdomain(origin='*')
 def renameobject():
     try:
-        if not (os.path.isdir(request.form["path"]) and request.form["path"] and request.form["path"].startswith(os.path.abspath(os.path.join(home_folder, "programs"))+'/')):
-            return "0";
+        if not (os.path.isdir(request.form["path"]) and request.form["path"] and request.form["path"].startswith(programs_folder_abspath)):
+            return "0"
         filename = os.path.basename(request.form["filename"].rstrip(os.sep))
         folderpath = os.path.join(request.form["path"], filename)
         filenamenew = os.path.basename(request.form["filenamenew"].rstrip(os.sep))
@@ -425,7 +438,12 @@ def brakemotors():
 @app.route("/getprogramsdir", methods=['GET', 'OPTIONS'])
 @crossdomain(origin='*')
 def getprogramsdir():
-    return os.path.abspath(os.path.join(home_folder, "programs"))+'/'
+    return programs_folder_abspath
+
+@app.route("/isgrx", methods=['GET', 'OPTIONS'])
+@crossdomain(origin='*')
+def isgrx():
+    return "1" if psc == GRXCom else "0"
 
 if __name__ == "__main__":
     app.run("0.0.0.0", 3141, threaded=True)

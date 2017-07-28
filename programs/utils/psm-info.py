@@ -53,4 +53,3 @@ try:
     print " wlan0 :    "+ get_ip_address('wlan0')
 except:
     print " wlan0 : not present"
-

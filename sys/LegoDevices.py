@@ -391,5 +391,3 @@ class EV3InfraredSensor(LegoSensor):
         if(remote == 4 or remote == 6 or remote == 8):
             R=-1
         return (L, R)
-
-

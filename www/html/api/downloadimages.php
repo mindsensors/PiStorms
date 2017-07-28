@@ -1,6 +1,4 @@
 <?php
-include "config.php";
-
 $zip = new ZipArchive;
 $download = 'screenshots_export.zip';
 $zip->open($download, ZipArchive::CREATE);

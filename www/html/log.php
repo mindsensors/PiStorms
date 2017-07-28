@@ -25,8 +25,6 @@
 # May 2017     Seth Tenembaum  Remove login requirement
 */
 
-include "api/config.php";
-
 ?><!DOCTYPE html>
 <html>
 <head>
@@ -42,10 +40,8 @@ include "api/config.php";
   <link rel="stylesheet" href="assets/skin-red.min.css">
   <link rel="stylesheet" href="assets/slider.css">
   <style>
-    .btn-sq {
-      width: 50px !important;
-      height: 50px !important;
-      font-size: 24px;
+    .right-pad {
+        margin-right:0.5em;
     }
   </style>
   <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -79,7 +75,7 @@ include "api/config.php";
   <div class="content-wrapper">
 
     <section class="content">
-      <h2 class="page-header"><i class="fa fa-file-text-o"></i>&nbsp;&nbsp;PiStorms Logs</h2>
+      <h2 class="page-header"><i class="fa fa-file-text-o right-pad"></i>PiStorms Logs</h2>
       <div class="row">
         <div class="col-md-12">
           <div class="nav-tabs-custom">

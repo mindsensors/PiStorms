@@ -82,4 +82,3 @@ textbox.bind_led_off_func(off)
 result = textbox.getInput(hide=True)
 
 psm.screen.showMessage(["Result is...", result])
-

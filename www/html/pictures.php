@@ -25,8 +25,6 @@
 # May 2017     Seth Tenembaum  Remove login requirement
 */
 
-include "api/config.php";
-
 ?><!DOCTYPE html>
 <html>
 <head>
@@ -43,10 +41,8 @@ include "api/config.php";
   <link rel="stylesheet" href="assets/slider.css">
   <link href="assets/bootstrap-toggle.min.css" rel="stylesheet">
   <style>
-    .btn-sq {
-      width: 50px !important;
-      height: 50px !important;
-      font-size: 24px;
+    .right-pad {
+        margin-right:0.5em;
     }
   </style>
   <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -87,14 +83,11 @@ include "api/config.php";
               <h3 class="box-title">Take Screenshots</h3>
             </div>
             <div class="box-body">
-               <button id="srwb" style="margin:5px" class="btn btn-flat btn-danger"><i class="fa fa-play"></i>&nbsp;&nbsp;Start Recording Screenshots</button>
-               <button id="stpr" style="margin:5px" class="btn btn-flat btn-danger"><i class="fa fa-stop"></i>&nbsp;&nbsp;Stop Recording Screenshots</button>
-               <button id="clar" style="margin:5px" class="btn btn-flat btn-warning"><i class="fa fa-ban"></i>&nbsp;&nbsp;Clear Screenshots</button>
-               <!--<br>
-               <button id="srwbt" style="margin:5px" class="btn btn-flat btn-success"><i class="fa fa-play"></i>&nbsp;&nbsp;Start Recording Touch Locations</button>
-               <button id="stprt" style="margin:5px" class="btn btn-flat btn-success"><i class="fa fa-stop"></i>&nbsp;&nbsp;Stop Recording Touch Locations</button>-->
+               <button id="srwb" style="margin:5px" class="btn btn-flat btn-danger"><i class="fa fa-play right-pad"></i>Start Recording Screenshots</button>
+               <button id="stpr" style="margin:5px" class="btn btn-flat btn-danger"><i class="fa fa-stop right-pad"></i>Stop Recording Screenshots</button>
+               <button id="clar" style="margin:5px" class="btn btn-flat btn-warning"><i class="fa fa-ban right-pad"></i>Clear Screenshots</button>
                <br>
-               <div id="touchdiv" style="margin:5px;display:none"><b>Record Touch Locations:</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" checked data-toggle="toggle" data-size="small" data-onstyle="success" data-offstyle="danger" data-width="70" data-on="ON" data-off="OFF" id="touchrecord"></div>
+               <div id="touchdiv" style="margin:5px;display:none"><b style="margin-right:1em;">Record Touch Locations:</b><input type="checkbox" checked data-toggle="toggle" data-size="small" data-onstyle="success" data-offstyle="danger" data-width="70" data-on="ON" data-off="OFF" id="touchrecord"></div>
             </div>
           </div>
         </div>

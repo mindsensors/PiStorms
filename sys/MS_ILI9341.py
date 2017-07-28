@@ -22,12 +22,14 @@
 # History:
 # Date         Author          Comments
 # June 2016    Roman Bohuk     Initial Authoring
+# July 2017    Seth Tenembaum  Add alternate skin for GRX
 
 import Adafruit_ILI9341
 import os
 import datetime
 from PIL import Image, ImageDraw
 from fcntl import flock, LOCK_EX, LOCK_UN
+import ConfigParser
 
 class ILI9341(Adafruit_ILI9341.ILI9341):
     def __init__(self, dc, spi, rst=None, gpio=None, width=Adafruit_ILI9341.ILI9341_TFTWIDTH,
@@ -36,7 +38,12 @@ class ILI9341(Adafruit_ILI9341.ILI9341):
         height)
         self.touch_record_path = "/tmp/pistormstouchrecord"
         self.record_path = "/tmp/pistormsrecord"
-        self.background_path = "/usr/local/mindsensors/images/artwork-for-images.png"
+        config = ConfigParser.RawConfigParser()
+        config.read("/usr/local/mindsensors/conf/msdev.cfg")
+        if "GRX" in config.get('msdev', 'device'):
+            self.background_path = "/usr/local/mindsensors/images/artwork-for-grx-images.png"
+        else:
+            self.background_path = "/usr/local/mindsensors/images/artwork-for-images.png"
         self.x = -1
         self.y = -1
         self.store = False

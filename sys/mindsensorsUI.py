@@ -30,6 +30,7 @@
 # 1/25/17    Seth      Additional dialog options
 
 from PiStormsCom import PiStormsCom
+from PiStormsCom_GRX import GRXCom
 import time, os, sys, math
 import Image, ImageDraw, ImageFont
 import textwrap
@@ -37,6 +38,7 @@ import MS_ILI9341 as TFT
 from Adafruit_ILI9341 import ILI9341_INVOFF
 import Adafruit_GPIO as GPIO
 import Adafruit_GPIO.SPI as SPI
+import ConfigParser
 
 ## @package mindsensorsUI
 #  This module contains classes and functions necessary for use of LCD touchscreen on mindsensors.com products
@@ -109,7 +111,13 @@ class mindsensorsUI():
     #  screen = mindsensorsUI()
     #  @endcode
     def __init__(self, name = "PiStorms", rotation = 3):
-        self.comm = PiStormsCom()
+        config = ConfigParser.RawConfigParser()
+        config.read("/usr/local/mindsensors/conf/msdev.cfg")
+        if "GRX" in config.get('msdev', 'device'):
+            self.comm = GRXCom
+        else:
+            self.comm = PiStormsCom()
+        # note self.comm is only used to getTouchscreenCoordinates and to getKeyPressCount
         self.disp.begin()
         self.clearScreen()
         self.disp.command(ILI9341_INVOFF)
@@ -662,7 +670,7 @@ class mindsensorsUI():
         self.fillRect(10, self.terminalCursor*20+42, 320, 19, (0,0,0), display = False)
         self.termPrint(text)
 
-    ## Refresh a screen line 
+    ## Refresh a screen line
     #  @param self The object pointer.
     #  @param lineNum The line number to refresh.
     #  @param display Choose to immediately push the drawing to the screen.
@@ -690,16 +698,16 @@ class mindsensorsUI():
     #  @param imageX The x-coordinate of the optional image icon.
     #  @param imageY The y-coordinate of the optional image icon.
     def drawButton(self, x, y, width, height, prefix="btns_",text="OK", display=True, align="left", image=None, imageX=None, imageY=None):
-        self.fillBmp(x, y, 14, height, prefix+"left.png", display=display)
-        self.fillBmp(x+14, y, width-28, height, prefix+"center.png", display=display)
-        self.fillBmp(x+width-14, y, 14, height, prefix+"right.png", display=display)
+        self.fillBmp(x, y, 14, height, prefix+"left.png", display=False)
+        self.fillBmp(x+14, y, width-28, height, prefix+"center.png", display=False)
+        self.fillBmp(x+width-14, y, 14, height, prefix+"right.png", display=False)
 
         textX = x+10
         if image:
             textX += 32
             imgY = imageY or y+((height-32)/2)
             imgX = imageX or x+4
-            self.fillBmp(imgX, imgY, 32, 32, image, display=display)
+            self.fillBmp(imgX, imgY, 32, 32, image, display=False)
 
         self.drawAutoText(text,textX, y+(height/2)-10, size=16, fill = (0,0,0), display=display, align=align)
 
@@ -918,7 +926,7 @@ class mindsensorsUI():
         self.buttonText = []
         oldMode = self.currentMode
         self.setMode(self.PS_MODE_POPUP)
-    
+
     ## Draw a line on the screen (rotated to screen)
     #  @param self The object pointer.
     #  @param x1, y1, x2, y2 The x and y coordinates of each endpoint of the line.

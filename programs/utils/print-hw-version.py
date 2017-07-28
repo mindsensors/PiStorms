@@ -32,4 +32,3 @@ from PiStormsCom import PiStormsCom
 psm_comm = PiStormsCom()
 
 print str(psm_comm.GetFirmwareVersion() )[:5]
-

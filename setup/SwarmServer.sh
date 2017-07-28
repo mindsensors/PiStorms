@@ -23,24 +23,24 @@ do_status () {
 
 case "$1" in
   start|"")
-	do_start
-	;;
-  restart|reload|force-reload)
-	sudo kill -9 `ps -ef | grep swarmserver |grep -v grep| cut -c11-16`
     do_start
-	exit 3
-	;;
+    ;;
+  restart|reload|force-reload)
+    sudo kill -9 `ps -ef | grep swarmserver |grep -v grep| cut -c11-16`
+    do_start
+    exit 3
+    ;;
   stop)
-	sudo kill -9 `ps -ef | grep swarmserver |grep -v grep| cut -c11-16`
-	;;
+    sudo kill -9 `ps -ef | grep swarmserver |grep -v grep| cut -c11-16`
+    ;;
   status)
-	do_status
-	exit $?
-	;;
+    do_status
+    exit $?
+    ;;
   *)
-	echo "Usage: swarmserver [start|stop|status|restart]" >&2
-	exit 3
-	;;
+    echo "Usage: swarmserver [start|stop|status|restart]" >&2
+    exit 3
+    ;;
 esac
 
 :

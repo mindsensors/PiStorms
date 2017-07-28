@@ -235,4 +235,3 @@ def ultrasonicDebug():
 
 
 Sam(psm) # while loop will halt execution here
-

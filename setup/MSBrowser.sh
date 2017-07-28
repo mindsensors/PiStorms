@@ -56,28 +56,28 @@ do_status () {
 
 case "$1" in
   start|"")
-	do_start
-	;;
+    do_start
+    ;;
   restart|reload|force-reload)
-	sudo kill -9 `ps -ef | grep MSBrowser.py |grep -v grep| cut -c11-16`
+    sudo kill -9 `ps -ef | grep MSBrowser.py |grep -v grep| cut -c11-16`
     rm -f /var/lock/msbrowser
     rm -f /var/lock/ili9341
     do_start
-	exit 3
-	;;
+    exit 3
+    ;;
   stop)
-	sudo kill -9 `ps -ef | grep MSBrowser.py |grep -v grep| cut -c11-16`
+    sudo kill -9 `ps -ef | grep MSBrowser.py |grep -v grep| cut -c11-16`
     rm -f /var/lock/msbrowser
     rm -f /var/lock/ili9341
-	;;
+    ;;
   status)
-	do_status
-	exit $?
-	;;
+    do_status
+    exit $?
+    ;;
   *)
-	echo "Usage: MSBrowser [start|stop|status|restart]" >&2
-	exit 3
-	;;
+    echo "Usage: MSBrowser [start|stop|status|restart]" >&2
+    exit 3
+    ;;
 esac
 
 :

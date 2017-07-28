@@ -966,10 +966,10 @@ class PiStorms:
     #  from PiStorms import PiStorms
     #  ...
     #  psm = PiStorms()
-    #  
+    #
     #  def mainLoop():
     #      psm.screen.termPrintln(psm.battVoltage())
-    #  
+    #
     #  psm.untilKeyPress(mainLoop)
     #  @endcode
     def untilKeyPress(self, func):

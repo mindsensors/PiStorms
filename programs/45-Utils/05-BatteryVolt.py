@@ -40,7 +40,7 @@ lastled = 0
 while(not exit):
     voltVal = psm.battVoltage()
     psm.screen.termReplaceLastLine(str(voltVal) + "V")
-	
+
     if(voltVal >= 8and lastled != 1):
         psm.led(1,0,255,0)
         psm.led(2,0,255,0)
@@ -59,4 +59,3 @@ while(not exit):
         psm.led(1,0,0,0)
         psm.led(2,0,0,0)
         exit = True
-		

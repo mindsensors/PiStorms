@@ -25,8 +25,6 @@
 # May 2017     Seth Tenembaum  Remove login requirement
 */
 
-include "api/config.php";
-
 ?><!DOCTYPE html>
 <html>
 <head>

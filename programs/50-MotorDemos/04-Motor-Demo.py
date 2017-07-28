@@ -44,4 +44,3 @@ psm.BAM1.float()
 m = ["Motor-Demo", "Motor should be stopped now",
   "click EXIT to exit program"]
 psm.screen.askQuestion(m,["EXIT"])
-

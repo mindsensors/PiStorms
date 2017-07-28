@@ -109,13 +109,16 @@ sudo cp -p ../sys/rmap.py /usr/local/lib/python2.7/dist-packages/
 sudo cp -p ../sys/rmapcfg.py /usr/local/lib/python2.7/dist-packages/
 sudo cp -p ../sys/scratch.py /usr/local/lib/python2.7/dist-packages/
 sudo cp -p ../sys/PiStorms.py /usr/local/lib/python2.7/dist-packages/
+sudo cp -p ../sys/PiStorms_GRX.py /usr/local/lib/python2.7/dist-packages/
 sudo cp -p ../sys/PiStormsCom.py /usr/local/lib/python2.7/dist-packages/
+sudo cp -p ../sys/PiStormsCom_GRX.py /usr/local/lib/python2.7/dist-packages/
 sudo cp -p ../sys/TouchScreenInput.py /usr/local/lib/python2.7/dist-packages/
 sudo cp -p ../sys/mindsensorsUI.py /usr/local/lib/python2.7/dist-packages/
 sudo cp -p ../sys/MS_ILI9341.py /usr/local/lib/python2.7/dist-packages/
 sudo cp -p ../sys/mindsensors.py /usr/local/lib/python2.7/dist-packages/
 sudo cp -p ../sys/MsDevices.py /usr/local/lib/python2.7/dist-packages/
 sudo cp -p ../sys/LegoDevices.py /usr/local/lib/python2.7/dist-packages/
+sudo cp -p ../sys/GroveDevices.py /usr/local/lib/python2.7/dist-packages/
 sudo cp -p ../sys/swarmclient.py /usr/local/lib/python2.7/dist-packages/
 
 # copy web interface files

@@ -31,6 +31,7 @@ import sys, os, time, json, socket, signal, logging
 from mindsensors_i2c import mindsensors_i2c
 from mindsensorsUI import mindsensorsUI
 from PiStormsCom import PiStormsCom
+from PiStormsCom_GRX import GRXCom
 import Image, ImageDraw, ImageFont
 from datetime import datetime
 from fcntl import flock, LOCK_EX, LOCK_UN, LOCK_NB
@@ -50,7 +51,11 @@ def getProgramDir():
     except:
         dir = "/home/pi/PiStorms/programs"
     # normalize the path that was provided to remove any trailing slash.
-    return os.path.normpath(dir)
+    dir = os.path.normpath(dir)
+    # possibly append "_grx" if a PiStorms GRX is connected, using the "programs_grx" folder
+    if "GRX" in config.get('msdev', 'device'):
+        dir += "_grx"
+    return dir
 def getRotation():
     if (os.getenv("PSREVERSE", "0") == "1"):
         return 3
@@ -90,8 +95,14 @@ def runProgram(program):
     scrn.clearScreen()
     exitStatus = os.system("sudo python {}".format(program))
     # stop (float) motors, if they are still running after the program finishes
-    psc.bankA.writeByte(PiStormsCom.PS_Command, PiStormsCom.c)
-    psc.bankB.writeByte(PiStormsCom.PS_Command, PiStormsCom.c)
+    if psc == GRXCom:
+        for s in GRXCom.SERVO:
+            GRXCom.I2C.A.writeArray(s, [0,0])
+            GRXCom.I2C.B.writeArray(s, [0,0])
+    else:
+        psc.bankA.writeByte(PiStormsCom.PS_Command, PiStormsCom.c)
+        psc.bankB.writeByte(PiStormsCom.PS_Command, PiStormsCom.c)
+
     return exitStatus
 def promptUpdate():
     try:
@@ -109,10 +120,10 @@ def promptUpdate():
             if data["status"] != "New" or data["update"] == "none":
                 return
             message = {
-                "update:none": "There are no updates available.",
-                "update:hardware": "New PiStorms firmware is available.",
-                "update:software": "New software, libraries, and samples are available.",
-                "update:both": "New firmware, software, libraries, and samples are available."
+                "none": "There are no updates available.",
+                "hardware": "New PiStorms firmware is available.",
+                "software": "New software, libraries, and samples are available.",
+                "both": "New firmware, software, libraries, and samples are available."
             }
             response = scrn.askQuestion(
                     ["Software Update", message[data["update"]], "Install updates?"],
@@ -223,8 +234,11 @@ if __name__ == "__main__":
         PROGRAM_DIRECTORY = getProgramDir()
         deviceName = socket.gethostname()
         rotation = getRotation()
-        psc = PiStormsCom()
         scrn = initScreen()
+        if "GRX" in config.get('msdev', 'device'):
+            psc = GRXCom
+        else:
+            psc = PiStormsCom()
         # A stack of lists. One list is pushed each time a folder is opened,
         # and popped when going up a directory. The 0th element of the list is a string
         # for the folder, followed by a list of files in that folder, and finally
