@@ -87,11 +87,12 @@
             <div class="box-footer no-padding">
               <ul class="nav nav-stacked">
                 <li><a>Device: <b><span class="device_id"><i class="fa fa-refresh fa-spin right-pad"></i>Fetching</span></b></a></li>
-                <li><a>Software Version: <b><span class="software_version"><i class="fa fa-refresh fa-spin right-pad"></i>Fetching</span></b></a></li>
-                <li><a>Firmware Version: <b><span class="firmware_version"><i class="fa fa-refresh fa-spin right-pad"></i>Fetching</span></b></a></li>
+                <li><a>Software version: <b><span class="software_version"><i class="fa fa-refresh fa-spin right-pad"></i>Fetching</span></b></a></li>
+                <li><a>Firmware version: <b><span class="firmware_version"><i class="fa fa-refresh fa-spin right-pad"></i>Fetching</span></b></a></li>
                 <li><a>Hostname: <b data-toggle="tooltip" data-trigger="hover" data-html="true" title="You can run <code>01-Change_Hostname</code> to change this."><?php echo gethostname();?></b></a></li>
                 <li><a>eth0: <b><span class="eth0_ip"><i class="fa fa-refresh fa-spin right-pad"></i>Fetching</span></b></a></li>
                 <li><a>wlan0: <b><span class="wlan0_ip"><i class="fa fa-refresh fa-spin right-pad"></i>Fetching</span></b></a></li>
+                <li><a>Home folder: <b><span class="home_folder"><i class="fa fa-refresh fa-spin right-pad"></i>Fetching</span></b></a></li>
               </ul>
             </div>
           </div>
@@ -183,6 +184,10 @@ $.get(api+"eth0", function(data){
 
 $.get(api+"wlan0", function(data){
     $(".wlan0_ip").html(data);
+});
+
+$.get(api+"getprogramsdir", function(data){
+    $(".home_folder").html(data);
 });
 
 function update_voltage() {

@@ -29,6 +29,7 @@ from flask import Flask, make_response, request, current_app
 from functools import update_wrapper
 import os
 import shutil
+import json
 
 # http://flask.pocoo.org/snippets/56/
 def crossdomain(origin=None, methods=None, headers=None, max_age=21600, attach_to_all=True, automatic_options=True):
@@ -108,11 +109,6 @@ def get_ip_address(ifname):
         return "not present"
 
 
-import json
-import ConfigParser
-
-config = ConfigParser.ConfigParser()
-config.read("/usr/local/mindsensors/conf/msdev.cfg")
 home_folder = config.get("msdev","homefolder")
 if "GRX" in config.get('msdev', 'device'):
     programs_folder = os.path.join(home_folder, "programs_grx")
