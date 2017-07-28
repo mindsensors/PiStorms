@@ -8,7 +8,13 @@ config = ConfigParser.RawConfigParser()
 config.read("/usr/local/mindsensors/conf/msdev.cfg")
 
 # introduce program and intent
-# give option to quit
+m = ["Find Neutral Point - Introduction",
+     'Every servo is slightly different due to the manufacturing process. This could make a continuous rotation servo "drift" when you set the speed to "0".']
+psm.screen.showMessage(m, wrapText=True)
+m[1] = "This program can help you find what value *actually* makes your servo stop. This will be saved to a configuration file so you don't have to worry about it again. Would you like to continue?"
+if not psm.screen.askYesOrNoQuestion(m, wrapText=True, goBtn=True):
+    sys.exit(0)
+
 bank = psm.screen.askQuestion(["Motor Bank", "Which bank is your servo connected to?"], [" <-- B", " "*13+"A -->"], wrapText=True)
 bank = ["B", "A"][bank]
 port = psm.screen.askQuestion(["Motor Port", "Which port number is your servo connected to?"],
