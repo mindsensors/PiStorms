@@ -981,6 +981,46 @@ class PiStorms:
         while self.getKeyPressCount() == initialKeyPressCount:
             func(*args, **kwargs)
 
+    ## Repeat an action until the GO button is pressed
+    #  or the screen is touched
+    #  @param self The object pointer.
+    #  @param func The function to be called repeatedly
+    #  @remark
+    #  To use this function in your program:
+    #  @code
+    #  from PiStorms import PiStorms
+    #  ...
+    #  psm = PiStorms()
+    #
+    #  def mainLoop():
+    #      psm.screen.termPrintln(psm.battVoltage())
+    #
+    #  psm.untilKeyPressOrTouch(mainLoop)
+    #  @endcode
+    def untilKeyPressOrTouch(self, func, *args, **kwargs):
+        initialKeyPressCount = self.getKeyPressCount()
+        while self.getKeyPressCount() == initialKeyPressCount and not self.screen.isTouched():
+            func(*args, **kwargs)
+
+    ## Repeat an action until the touchscreen is touched
+    #  @param self The object pointer.
+    #  @param func The function to be called repeatedly
+    #  @remark
+    #  To use this function in your program:
+    #  @code
+    #  from PiStorms import PiStorms
+    #  ...
+    #  psm = PiStorms()
+    #
+    #  def mainLoop():
+    #      psm.screen.termPrintln(psm.battVoltage())
+    #
+    #  psm.untilTouch(mainLoop)
+    #  @endcode
+    def untilTouch(self, func, *args, **kwargs):
+        while not self.screen.isTouched():
+            func(*args, **kwargs)
+
     ## Check if any Function button is pressed
     #  @param self The object pointer.
     #  @remark

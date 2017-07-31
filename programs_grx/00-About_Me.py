@@ -40,6 +40,7 @@ except IOError:
 
 psm.screen.drawDisplay("About Me")
 psm.screen.termPrintln("Device: {}".format(psm.getDeviceModel()))
+psm.screen.termPrintln("Feature: {}".format(psm.getDeviceFeatures()))
 psm.screen.termPrintln("f/w version: {}".format(psm.getFirmwareVersion()))
 psm.screen.termPrintln("s/w version: {}".format(version_no))
 psm.screen.termPrintln("Hostname: {}".format(socket.gethostname()))
