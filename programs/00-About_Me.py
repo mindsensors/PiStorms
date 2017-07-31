@@ -18,65 +18,35 @@
 #mindsensors.com invests time and resources providing this open source code,
 #please support mindsensors.com  by purchasing products from mindsensors.com!
 #Learn more product option visit us @  http://www.mindsensors.com/
-#
-# History:
-# Date      Author      Comments
-# July 2015  Henry     Initial Authoring from SensorShield import SensorShield
 
-import os,sys,inspect,time,thread
-import socket,fcntl,struct
-
-
-def get_ip_address(ifname):
-    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-    return socket.inet_ntoa(fcntl.ioctl(
-        s.fileno(),
-        0x8915,  # SIOCGIFADDR
-        struct.pack('256s', ifname[:15])
-    )[20:24])
-
-
-
-currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
-parentdir = os.path.dirname(currentdir)
-sys.path.insert(0,parentdir)
+import os, socket
+import ConfigParser
 from PiStorms import PiStorms
 psm = PiStorms()
 
-psm.screen.termPrintln("                     About Me")
-psm.screen.termPrintln(" ")
-
-version_file = parentdir + "/.version"
-if (os.path.isfile(version_file)):
-    f = open(version_file, 'r')
-    ln = f.readline()
-    version_no = ln.strip()
-    f.close()
-else:
+config = ConfigParser.RawConfigParser()
+config.read("/usr/local/mindsensors/conf/msdev.cfg")
+homefolder = config.get("msdev", "homefolder")
+try:
+    with open(os.path.join(homefolder, ".version"), "r") as f:
+        version_no = f.readline().strip()
+except IOError:
     version_no = "unknown"
 
+psm.screen.drawDisplay("About Me")
+psm.screen.termPrintln("Device: {}".format(psm.GetDeviceId().rstrip("\0")))
+psm.screen.termPrintln("Feature: {}".format(psm.psc.GetDeviceFeatures().rstrip("\0")))
+psm.screen.termPrintln("f/w version: {}".format(psm.GetFirmwareVersion().rstrip("\0")))
+psm.screen.termPrintln("s/w version: {}".format(version_no))
+psm.screen.termPrintln("Hostname: {}".format(socket.gethostname()))
+psm.screen.termPrintln("Battery: {}V".format(psm.battVoltage()))
 
-exit = False
-lastled = 0
-#psm.screen.termPrintAt(1," Vendor  : "+ str(psm.GetVendorName() ))
-psm.screen.termPrintAt(1," Device : "+ str(psm.GetDeviceId() ))
-psm.screen.termPrintAt(2," f/w version : "+ str(psm.GetFirmwareVersion() )[:5])
-psm.screen.termPrintAt(3," s/w version : "+ version_no)
-psm.screen.termPrintAt(4," Hostname :     "   + socket.gethostname() )
-voltVal = psm.battVoltage()
-psm.screen.termPrintAt(5," Battery :     "   + str(voltVal)+"V" )
-while(not exit):
+def getIP(iface):
+    ip = os.popen('ifconfig {} | grep "inet addr" | cut -d: -f2 | cut -d" " -f1'.format(iface)).read().rstrip()
+    return ip if ip != '' else "not present"
+def updateNetworkInfo():
+    psm.screen.termPrintAt(5, "eth0: {}".format(getIP("eth0")))
+    psm.screen.termPrintAt(6, "wlan0: {}".format(getIP("wlan0")))
+psm.untilKeyPressOrTouch(updateNetworkInfo)
 
-    try:
-        psm.screen.termPrintAt(6," eth0 :     "   + get_ip_address('eth0'))
-    except:
-        psm.screen.termPrintAt(6," eth0 :     not present")
-    try:
-        psm.screen.termPrintAt(7," wlan0 :    "+ get_ip_address('wlan0'))
-    except:
-        psm.screen.termPrintAt(7," wlan0 :     not present")
-
-    if( psm.isKeyPressed() == True or psm.screen.isTouched()):
-        psm.screen.termPrintln("")
-        psm.screen.termPrintln("Exiting to menu")
-        exit = True
+psm.screen.termPrintAt(8, "Exiting to menu")
