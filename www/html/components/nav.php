@@ -40,7 +40,8 @@ $act = 'class="active"';
         <li <?php if($pg=="log.php"){echo $act;}?>><a href="log.php"><i class="fa fa-file-text-o"></i> <span>Logs</span></a></li>
         <li <?php if($pg=="message.php"){echo $act;}?>><a href="message.php"><i class="fa fa-comment"></i> <span>Messages</span></a></li>
         <li class="header">HELP</li>
-        <li><a href="http://www.mindsensors.com/blog" target="_blank"><i class="fa fa-book"></i> <span>Blog</span></a></li>
+        <li><a href="http://www.mindsensors.com/reference/PiStorms/html/index.html" target="_blank"><i class="fa fa-book"></i> <span>Documentation</span></a></li>
+        <li><a href="http://www.mindsensors.com/blog" target="_blank"><i class="fa fa-rss"></i> <span>Blog</span></a></li>
         <li><a href="http://www.mindsensors.com/forum" target="_blank"><i class="fa fa-users"></i> <span>Forum</span></a></li>
         <li><a href="#" data-toggle="modal" data-target="#questionFormModal"><i class="fa fa-bug"></i> <span>Submit a Bug</span></a></li>
       </ul>
