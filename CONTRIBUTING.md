@@ -143,13 +143,20 @@ Simple enough, this runs `www/web_api/MSWeb.py`. Note this is different than the
 - When developing, run setup/enableHardlinks.sh to hard link the source files from `/home/pi/PiStorms/...` to their intended locations in the file system (where `setup.h` copies them). This will avoid, for instance, modifying `sys/MSBrowser.sh`, but forgetting to copy it to `/usr/local/bin/MSBrowser.sh` and wondering why your edits don't seem to be changing anything (still, don't forget to run `sudo /etc/init.d/MSBrowser.sh restart`!).
 
 ### sys
+- **GroveDevices.py**: Implementations on Grove sensors (and actuators), inherit from the GrovePort class in the PiStorms_GRX module
 - **LegoDevices.py**: Basic NXT and EV3 sensors
 - **MSBrowser.py**: The [browser program](https://github.com/mindsensors/PiStorms/blob/master/CONTRIBUTING.md#the-browser)
 - **MSDriver.py**: Shuts down the Raspberry Pi after GO is held for 5 seconds
 - **MS_ILI9341.py**: Inherits from `Adafruit_ILI9341` and adds screenshot support
 - **MsDevices.py**: Implementations of mindsensors sensors
 - **PiStorms.py**: The wrapper class users instantiate and use. It mainly aligns one-to-one with PiStormsCom functions.
+- **PiStorms_GRX.py**: This module implements the GrovePort, RCServo, RCServoEncoder, and PiStorms_GRX classes.
+  - *GrovePort*: This "abstract" class represents a generic Grove sensor. You can provide a port and type to the __init__ method. It will check that these arugments are valid, then this object will have a `.readValue` or `.writeValue` method. That's it. The classes in GroveDevices inherit from this class.
+  - *RCServo*: This class models an RC servo connected to one of the GRX's six servo ports. It supports accounting for the neutral point, which will be loaded from msdev.cfg if these configuration values exist.
+  - *RCServoEncoder*: This is a subclass of the previous two classes. It models a servo with an associated encoder, which may be used to set a target position.
+  - *PiStorms_GRX*: This understandably represents the PiStorms-GRX. Its' methods are modeled after those of the PiStorms class, but most all of them are class methods because there's no reason to need an instance of PiStorms_GRX.
 - **PiStormsCom.py**: Handles primary I2C communications
+- **PiStormsCom_GRX.py**: This module contains the GRXCom class, the communications class for the PiStorms-GRX. It has two instances of mindsensors_i2c, one for each bank. It has constants for beginning port addresses, offsets, port modes, other registers, and commands. Some methods are built for compatibility with PiStormsCom. These are all class methods as they have no reason to require an instance. However, you can provide an instance of mindsensor_i2c (one of GRXCom.I2C) and address (from GRXCom.SERVO, GRXCom.ANALOG, or GRXCom.DIGITAL) to create an instance of GRXCom. This provides utility methods like setType and analogRead.
 - **TouchScreenInput.py**: A convenience module to get text input using a touchscreen keyboard
 - **mindsensors.py**: Implementations of more mindsensors sensors
 - **mindsensorsUI.py**: Represents the screen, providing useful graphics functions
