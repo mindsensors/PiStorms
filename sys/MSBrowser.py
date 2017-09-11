@@ -180,7 +180,7 @@ def drawUpArrow():
 def drawRefreshArrow():
     scrn.drawButton(0, 0, 50, 50, image="refresharrow.png", text="", display=False, imageX=8)
 def drawExclamation():
-    scrn.fillBmp(230, 7, 34, 34, "Exclamation-mark-icon.png", display=False);
+    scrn.fillBmp(230, 7, 34, 34, "Exclamation-mark-icon.png", display=False)
 def drawBatteryIndicator(*ignored):
     if (scrn.currentMode == scrn.PS_MODE_POPUP):
         return
