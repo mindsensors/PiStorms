@@ -71,7 +71,7 @@ class ILI9341(Adafruit_ILI9341.ILI9341):
 
     def getBuffer(self):
         """Gets the copy of a buffer"""
-        return self.buffer.copy().transpose(Image.ROTATE_270)
+        return self.buffer.transpose(Image.ROTATE_270)
 
     def getSectionBounds(self, left, upper, right, lower):
         """Gets the section of the screen"""

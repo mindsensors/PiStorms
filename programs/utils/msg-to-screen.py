@@ -44,7 +44,6 @@ disp.clear()
 
 image = disp.buffer
 fill = (255,255,255)
-angle = Image.ROTATE_90
 
 font = ImageFont.truetype("/usr/share/fonts/truetype/freefont/FreeSans.ttf", 30)
 draw = ImageDraw.Draw(image)
@@ -52,7 +51,7 @@ t_width, t_height = draw.textsize(TEXT_TITLE, font=font)
 textimage = Image.new('RGBA', (t_width, t_height), (0,0,0,0))
 textdraw = ImageDraw.Draw(textimage)
 textdraw.text((0,0), TEXT_TITLE, font=font, fill=fill)
-rotated = textimage.transpose(angle)
+rotated = textimage.transpose(Image.ROTATE_90)
 x_pos = 280
 y_pos = 80
 position = (y_pos,x_pos-t_width)
@@ -64,7 +63,7 @@ t_width, t_height = draw.textsize(TEXT_MSG, font=font)
 textimage = Image.new('RGBA', (t_width, t_height), (0,0,0,0))
 textdraw = ImageDraw.Draw(textimage)
 textdraw.text((0,0), TEXT_MSG, font=font, fill=fill)
-rotated = textimage.transpose(angle)
+rotated = textimage.transpose(Image.ROTATE_90)
 x_pos = 280
 y_pos = 120
 position = (y_pos,x_pos-t_width)

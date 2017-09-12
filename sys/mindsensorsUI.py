@@ -444,37 +444,30 @@ class mindsensorsUI():
         actx = self.screenXFromImageCoords(x,y)
         acty = self.screenYFromImageCoords(x,y)
         # if the caller only provided icon name, assume it is in our system repository
-        if ( path[0] != "/" ):
+        if (path[0] != "/"):
             path = "/usr/local/mindsensors/images/" + path
 
         # if the image is missing, use a default X image.
-        if ( os.path.isfile(path)):
+        if (os.path.isfile(path)):
             image = Image.open(path)
         else:
             image = Image.open("/usr/local/mindsensors/images/missing.png")
 
-        non_transparent = Image.new('RGBA',image.size,(255,255,255,255))
-        #changed by Deepak.
-        non_transparent.paste(image,(0,0))
-
-        tempimage = image
-
-        tempimage = tempimage.resize((width,height),Image.ANTIALIAS)
+        image = image.resize((width,height), Image.ANTIALIAS)
 
         cr = self.currentRotation
         if(cr == 1):
             actx -= height
-            tempimage = tempimage.transpose(Image.ROTATE_270)
+            image = image.transpose(Image.ROTATE_270)
         if(cr == 2):
             acty -= height
             actx -= width
-            tempimage = tempimage.transpose(Image.ROTATE_180)
-        if(cr ==3):
+            image = image.transpose(Image.ROTATE_180)
+        if(cr == 3):
             acty -= width
-            tempimage = tempimage.transpose(Image.ROTATE_90)
+            image = image.transpose(Image.ROTATE_90)
 
-        #changed by Deepak.
-        buff.paste(tempimage,(actx,acty))
+        buff.paste(image, (actx,acty))
         if(display):
             self.disp.display()
 
@@ -498,26 +491,22 @@ class mindsensorsUI():
         acty = self.screenYFromImageCoords(x,y)
 
         image = Image.fromarray(image)
-        non_transparent = Image.new('RGBA',image.size,(255,255,255,255))
-        non_transparent.paste(image,(0,0))
 
-        tempimage = image
-
-        tempimage = tempimage.resize((width,height),Image.ANTIALIAS)
+        image = image.resize((width,height), Image.ANTIALIAS)
 
         cr = self.currentRotation
         if(cr == 1):
             actx -= height
-            tempimage = tempimage.transpose(Image.ROTATE_270)
+            image = image.transpose(Image.ROTATE_270)
         if(cr == 2):
             acty -= height
             actx -= width
-            tempimage = tempimage.transpose(Image.ROTATE_180)
-        if(cr ==3):
+            image = image.transpose(Image.ROTATE_180)
+        if(cr == 3):
             acty -= width
-            tempimage = tempimage.transpose(Image.ROTATE_90)
+            image = image.transpose(Image.ROTATE_90)
 
-        buff.paste(tempimage,(actx,acty))
+        buff.paste(image, (actx,acty))
         if(display):
             self.disp.display()
 

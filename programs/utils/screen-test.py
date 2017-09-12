@@ -38,14 +38,13 @@ disp.clear()
 image = disp.buffer
 text = "PiStorms screen test"
 fill = (255,255,255)
-angle = Image.ROTATE_90
 font = ImageFont.truetype("/usr/share/fonts/truetype/freefont/FreeSans.ttf", 20)
 draw = ImageDraw.Draw(image)
 width, height = draw.textsize(text, font=font)
 textimage = Image.new('RGBA', (width, height), (0,0,0,0))
 textdraw = ImageDraw.Draw(textimage)
 textdraw.text((0,0), text, font=font, fill=fill)
-rotated = textimage.transpose(angle)
+rotated = textimage.transpose(Image.ROTATE_90)
 position = (120,100)
 image.paste(rotated, position, rotated)
 disp.display()
