@@ -247,8 +247,10 @@ class mindsensorsUI():
         textimage = Image.new('RGBA', (width, height), (0,0,0,0))
         textdraw = ImageDraw.Draw(textimage)
         textdraw.text((0,0), text, font=font, fill=fill)
-        rotated = textimage.rotate(angle, expand=True)
-        image.paste(rotated, position, rotated)
+        if angle == - 90: textimage = textimage.transpose(Image.ROTATE_270)
+        if angle == -180: textimage = textimage.transpose(Image.ROTATE_180)
+        if angle == -270: textimage = textimage.transpose(Image.ROTATE_90)
+        image.paste(textimage, position, textimage)
         if(display):
             self.disp.display()
 
@@ -458,16 +460,18 @@ class mindsensorsUI():
         tempimage = image
 
         tempimage = tempimage.resize((width,height),Image.ANTIALIAS)
-        tempimage = tempimage.rotate(-90*self.currentRotation, expand=True)
 
         cr = self.currentRotation
         if(cr == 1):
             actx -= height
+            tempimage = tempimage.transpose(Image.ROTATE_270)
         if(cr == 2):
             acty -= height
             actx -= width
+            tempimage = tempimage.transpose(Image.ROTATE_180)
         if(cr ==3):
             acty -= width
+            tempimage = tempimage.transpose(Image.ROTATE_90)
 
         #changed by Deepak.
         buff.paste(tempimage,(actx,acty))
@@ -500,16 +504,18 @@ class mindsensorsUI():
         tempimage = image
 
         tempimage = tempimage.resize((width,height),Image.ANTIALIAS)
-        tempimage = tempimage.rotate(-90*self.currentRotation, expand=True)
 
         cr = self.currentRotation
         if(cr == 1):
             actx -= height
+            tempimage = tempimage.transpose(Image.ROTATE_270)
         if(cr == 2):
             acty -= height
             actx -= width
+            tempimage = tempimage.transpose(Image.ROTATE_180)
         if(cr ==3):
             acty -= width
+            tempimage = tempimage.transpose(Image.ROTATE_90)
 
         buff.paste(tempimage,(actx,acty))
         if(display):

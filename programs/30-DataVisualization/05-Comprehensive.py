@@ -89,7 +89,7 @@ while not stop:
     canvas.draw()
     if psm.screen.getMode() != psm.screen.PS_MODE_POPUP: # as long as there's not a popup about the sensor missing...
         # directly write the matplotlib canvas to the PiStorms screen (faster than using an intermediary)
-        disp.buffer = Image.frombytes('RGB', canvas.get_width_height(), canvas.tostring_rgb()).rotate(-90*psm.screen.currentRotation, expand=True)
+        disp.buffer = Image.frombytes('RGB', canvas.get_width_height(), canvas.tostring_rgb()).transpose(Image.ROTATE_90)
         disp.display() # update the screen
 
 # save the final picture and data to files in ~/Documents
