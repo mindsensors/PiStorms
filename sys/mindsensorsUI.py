@@ -247,7 +247,7 @@ class mindsensorsUI():
         textimage = Image.new('RGBA', (width, height), (0,0,0,0))
         textdraw = ImageDraw.Draw(textimage)
         textdraw.text((0,0), text, font=font, fill=fill)
-        rotated = textimage.rotate(angle, expand=1)
+        rotated = textimage.rotate(angle, expand=True)
         image.paste(rotated, position, rotated)
         if(display):
             self.disp.display()
@@ -458,7 +458,7 @@ class mindsensorsUI():
         tempimage = image
 
         tempimage = tempimage.resize((width,height),Image.ANTIALIAS)
-        tempimage = tempimage.rotate(-90*self.currentRotation)
+        tempimage = tempimage.rotate(-90*self.currentRotation, expand=True)
 
         cr = self.currentRotation
         if(cr == 1):
@@ -500,7 +500,7 @@ class mindsensorsUI():
         tempimage = image
 
         tempimage = tempimage.resize((width,height),Image.ANTIALIAS)
-        tempimage = tempimage.rotate(-90*self.currentRotation)
+        tempimage = tempimage.rotate(-90*self.currentRotation, expand=True)
 
         cr = self.currentRotation
         if(cr == 1):

@@ -52,7 +52,7 @@ t_width, t_height = draw.textsize(TEXT_TITLE, font=font)
 textimage = Image.new('RGBA', (t_width, t_height), (0,0,0,0))
 textdraw = ImageDraw.Draw(textimage)
 textdraw.text((0,0), TEXT_TITLE, font=font, fill=fill)
-rotated = textimage.rotate(angle, expand=1)
+rotated = textimage.rotate(angle, expand=True)
 x_pos = 280
 y_pos = 80
 position = (y_pos,x_pos-t_width)
@@ -64,7 +64,7 @@ t_width, t_height = draw.textsize(TEXT_MSG, font=font)
 textimage = Image.new('RGBA', (t_width, t_height), (0,0,0,0))
 textdraw = ImageDraw.Draw(textimage)
 textdraw.text((0,0), TEXT_MSG, font=font, fill=fill)
-rotated = textimage.rotate(angle, expand=1)
+rotated = textimage.rotate(angle, expand=True)
 x_pos = 280
 y_pos = 120
 position = (y_pos,x_pos-t_width)
