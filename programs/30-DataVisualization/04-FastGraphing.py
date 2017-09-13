@@ -57,5 +57,5 @@ while not psm.isKeyPressed():
     plt.plot(data, color="blue") # plot the data on the graph
     plt.tight_layout() # make sure the entire plot fits on screen
     canvas.draw()
-    disp.buffer = Image.frombytes('RGB', canvas.get_width_height(), canvas.tostring_rgb()).rotate(-90*psm.screen.currentRotation)
+    disp.buffer = Image.frombytes('RGB', canvas.get_width_height(), canvas.tostring_rgb()).transpose(Image.ROTATE_90)
     disp.display()
