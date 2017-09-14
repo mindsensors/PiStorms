@@ -64,32 +64,32 @@ while(not exit):
             #Quickly wag dog tail
             count = 0
             while count < 5:
-                #psm.BAM2.setSpeed(-5);
-                psm.BBM1.setSpeed(10);
-                psm.BAM1.setSpeed(-10);
+                #psm.BAM2.setSpeed(-5)
+                psm.BBM1.setSpeed(10)
+                psm.BAM1.setSpeed(-10)
                 time.sleep(0.05)
-                #psm.BAM2.setSpeed(5);
-                psm.BBM1.setSpeed(-10);
-                psm.BAM1.setSpeed(10);
+                #psm.BAM2.setSpeed(5)
+                psm.BBM1.setSpeed(-10)
+                psm.BAM1.setSpeed(10)
                 time.sleep(0.05)
                 count = count + 1
-            psm.BAM2.setSpeed(0);
-            psm.BBM1.setSpeed(0);
-            psm.BAM1.setSpeed(0);
+            psm.BAM2.setSpeed(0)
+            psm.BBM1.setSpeed(0)
+            psm.BAM1.setSpeed(0)
             count = 0
             while count < 10:
-                psm.BAM2.setSpeed(-5);
-                #psm.BBM1.setSpeed(15);
-                #psm.BAM1.setSpeed(-15);
+                psm.BAM2.setSpeed(-5)
+                #psm.BBM1.setSpeed(15)
+                #psm.BAM1.setSpeed(-15)
                 time.sleep(0.2)
-                psm.BAM2.setSpeed(5);
-                #psm.BBM1.setSpeed(-15);
-                #psm.BAM1.setSpeed(15);
+                psm.BAM2.setSpeed(5)
+                #psm.BBM1.setSpeed(-15)
+                #psm.BAM1.setSpeed(15)
                 time.sleep(0.2)
                 count = count + 1
-            psm.BAM2.setSpeed(0);
-            psm.BBM1.setSpeed(0);
-            psm.BAM1.setSpeed(0);
+            psm.BAM2.setSpeed(0)
+            psm.BBM1.setSpeed(0)
+            psm.BAM1.setSpeed(0)
             time.sleep(1)
 
 
