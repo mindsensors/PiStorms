@@ -293,6 +293,7 @@ class PiStorms_GRX():
     #  @endcode
     def __init__(self, name="PiStorms_GRX", rotation=3):
         self.screen = mindsensorsUI(name, rotation)
+        self.resetKeyPressCount()
 
     ## Send a command to the PiStorms
     #  @param cmd The command byte to send. This should be a value of GRXCom.COMMAND.
