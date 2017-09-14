@@ -32,9 +32,7 @@ from PiStorms_GRX import PiStorms_GRX
 psm = PiStorms_GRX()
 psm.screen.termPrintln("Please wait a moment")
 psm.screen.termPrintln("as matplotlib loads...")
-psm.screen.termPrintln("")
-psm.screen.termPrintln("Press and hold GO briefly")
-psm.screen.termPrintln("to stop the program running.")
+psm.screen.termPrintAt(3, "Press GO to quit.")
 
 import matplotlib
 matplotlib.use("AGG")
@@ -52,7 +50,7 @@ data = np.empty(0) # start with a completely empty data array
 canvas = plt.get_current_fig_manager().canvas
 disp = psm.screen.disp
 
-while not psm.isKeyPressed():
+while psm.getKeyPressCount() < 1:
     data = np.append(data, psm.batteryVoltage()) # add a data point with the current battery voltage
     plt.plot(data, color="blue") # plot the data on the graph
     plt.tight_layout() # make sure the entire plot fits on screen

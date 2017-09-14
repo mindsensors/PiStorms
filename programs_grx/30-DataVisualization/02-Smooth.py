@@ -30,9 +30,7 @@ from PiStorms_GRX import PiStorms_GRX
 psm = PiStorms_GRX()
 psm.screen.termPrintln("Please wait a moment")
 psm.screen.termPrintln("as matplotlib loads...")
-psm.screen.termPrintln("")
-psm.screen.termPrintln("Press and hold GO briefly")
-psm.screen.termPrintln("to stop the program running.")
+psm.screen.termPrintAt(3, "Press GO to quit.")
 
 import matplotlib
 matplotlib.use("AGG")
@@ -54,7 +52,7 @@ image = tempfile.NamedTemporaryFile() # we will be overwriting this same file
 data = np.append(data, psm.batteryVoltage())
 data = np.append(data, psm.batteryVoltage())
 
-while not psm.isKeyPressed():
+while psm.getKeyPressCount() < 1:
     data = np.append(data, psm.batteryVoltage()) # add a data point with the current battery voltage
     smooth_x = np.linspace(0, len(data)-1, len(data)*5) # an array 5 times the length of data for the smoothed data
     if axis.lines: axis.lines.pop() # if there's already a line on the graph (old), remove it

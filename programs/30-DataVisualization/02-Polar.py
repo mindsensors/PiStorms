@@ -31,9 +31,7 @@ from PiStorms import PiStorms
 psm = PiStorms()
 psm.screen.termPrintln("Please wait a moment")
 psm.screen.termPrintln("as matplotlib loads...")
-psm.screen.termPrintln("")
-psm.screen.termPrintln("Press and hold GO briefly")
-psm.screen.termPrintln("to stop the program running.")
+psm.screen.termPrintAt(3, "Press GO to quit.")
 
 import matplotlib
 matplotlib.use("AGG")
@@ -55,7 +53,7 @@ imu = ABSIMU()
 psm.BAS1.activateCustomSensorI2C()
 image = tempfile.NamedTemporaryFile()
 
-while not psm.isKeyPressed():
+while psm.getKeyPressCount() < 1:
     h = imu.get_heading()
     data = np.append(data, \
             np.interp(h, [0,360], [0,tau]))

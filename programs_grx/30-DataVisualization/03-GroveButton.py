@@ -33,9 +33,7 @@ from PiStorms_GRX import PiStorms_GRX
 psm = PiStorms_GRX()
 psm.screen.termPrintln("Please wait a moment")
 psm.screen.termPrintln("as matplotlib loads...")
-psm.screen.termPrintln("")
-psm.screen.termPrintln("Press and hold GO briefly")
-psm.screen.termPrintln("to stop the program running.")
+psm.screen.termPrintAt(3, "Press GO to quit.")
 
 import matplotlib
 matplotlib.use("AGG")
@@ -55,7 +53,7 @@ plt.ylim((-0.05, 1.05)) # set y-axis range, off by a bit so the line isn't right
 data = np.empty(0) # start with a completely empty data array
 image = tempfile.NamedTemporaryFile() # we will be overwriting this same file
 
-while not psm.isKeyPressed():
+while psm.getKeyPressCount() < 1:
     data = np.append(data, button.isPressed()) # add a data point with the current button state
     plt.plot(data, color="blue") # plot the data on the graph
     plt.tight_layout() # make sure the entire plot fits on screen

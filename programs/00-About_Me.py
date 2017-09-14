@@ -42,11 +42,11 @@ psm.screen.termPrintln("Hostname: {}".format(socket.gethostname()))
 psm.screen.termPrintln("Battery: {}V".format(psm.battVoltage()))
 
 def getIP(iface):
-    ip = os.popen('ifconfig {} | grep "inet addr" | cut -d: -f2 | cut -d" " -f1'.format(iface)).read().rstrip()
+    ip = os.popen("ifconfig {} | tail +2 | awk '/inet / {{print $2}}'".format(iface)).read()
     return ip if ip != '' else "not present"
 def updateNetworkInfo():
-    psm.screen.termPrintAt(5, "eth0: {}".format(getIP("eth0")))
-    psm.screen.termPrintAt(6, "wlan0: {}".format(getIP("wlan0")))
+    psm.screen.termPrintAt(6, "eth0: {}".format(getIP("eth0")))
+    psm.screen.termPrintAt(7, "wlan0: {}".format(getIP("wlan0")))
 psm.untilKeyPressOrTouch(updateNetworkInfo)
 
 psm.screen.termPrintAt(8, "Exiting to menu")

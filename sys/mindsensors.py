@@ -1144,7 +1144,7 @@ class MMX(mindsensors_i2c):
             self.writeArray( self.MMX_SPEED_M1, array)
         if ( (motor_number & 0x02) != 0 ):
             array = [speed, 0, 0, ctrl]
-            self.writeArray( self.MMX_SPEED_M2, array);
+            self.writeArray( self.MMX_SPEED_M2, array)
         if ( motor_number == self.MMX_Motor_Both ) :
             self.writeByte(self.MMX_COMMAND, 83)
 
@@ -1255,7 +1255,7 @@ class MMX(mindsensors_i2c):
         if ( motor_number == self.MMX_Motor_Both ) :
             self.writeByte(self.MMX_COMMAND, 83)
         if ( waitForCompletion == True ):
-            time.sleep(0.050);  # this delay is required for the status byte to be available for reading.
+            time.sleep(0.050)  # this delay is required for the status byte to be available for reading.
             self.MMX_WaitUntilTimeDone(motor_number)
 
     ### @cond
@@ -1326,7 +1326,7 @@ class MMX(mindsensors_i2c):
         if ( motor_number == self.MMX_Motor_Both ) :
             self.writeByte(self.MMX_COMMAND, 83)
         if ( waitForCompletion == True ):
-            time.sleep(0.050);  # this delay is required for the status byte to be available for reading.
+            time.sleep(0.050)  # this delay is required for the status byte to be available for reading.
             self.MMX_WaitUntilTachoDone(motor_number)
 
     ## Run the motor for a specific amount of rotations
@@ -1366,7 +1366,7 @@ class MMX(mindsensors_i2c):
         if ( motor_number == self.MMX_Motor_Both ) :
             self.writeByte(self.MMX_COMMAND, 83)
         if ( waitForCompletion == True ):
-            time.sleep(0.050);  # this delay is required for the status byte to be available for reading.
+            time.sleep(0.050)  # this delay is required for the status byte to be available for reading.
             self.MMX_WaitUntilTachoDone(motor_number)
 
     ## Run the motor for a specific amount of rotations
@@ -1404,7 +1404,7 @@ class MMX(mindsensors_i2c):
         if ( motor_number == self.MMX_Motor_Both ) :
             self.writeByte(self.MMX_COMMAND, 83)
         if ( waitForCompletion == True ):
-            time.sleep(0.050);  # this delay is required for the status byte to be available for reading.
+            time.sleep(0.050)  # this delay is required for the status byte to be available for reading.
             self.MMX_WaitUntilTachoDone(motor_number)
 
     ### @cond
