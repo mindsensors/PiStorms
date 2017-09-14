@@ -59,14 +59,14 @@ case "$1" in
     do_start
     ;;
   restart|reload|force-reload)
-    sudo kill -9 `ps -ef | grep MSBrowser.py |grep -v grep| cut -c11-16` 2> /dev/null
+    sudo kill -SIGKILL $(ps -aux | awk '/MSBrowser.py/ && !/awk/ {print $2}' | tail -1) 2> /dev/null
     rm -f /var/lock/msbrowser
     rm -f /var/lock/ili9341
     do_start
     exit 3
     ;;
   stop)
-    sudo kill -9 `ps -ef | grep MSBrowser.py |grep -v grep| cut -c11-16` 2> /dev/null
+    sudo kill -SIGKILL $(ps -aux | awk '/MSBrowser.py/ && !/awk/ {print $2}' | tail -1) 2> /dev/null
     rm -f /var/lock/msbrowser
     rm -f /var/lock/ili9341
     ;;

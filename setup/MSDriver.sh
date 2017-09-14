@@ -67,7 +67,7 @@ case "$1" in
     do_start
     ;;
   restart|reload|force-reload)
-    sudo kill -9 `ps -ef | grep MSDriver.py |grep -v grep| cut -c11-16` 2> /dev/null
+    sudo kill -SIGKILL $(ps -aux | awk '/MSDriver.py/ && !/awk/ {print $2}' | tail -1) 2> /dev/null
     do_start
     exit 3
     ;;
