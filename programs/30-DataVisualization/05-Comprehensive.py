@@ -52,6 +52,7 @@ plt.xlabel('time')
 plt.ylabel('tilt')
 plt.title('3-Axis AbsoluteIMU Tilt')
 plt.grid(True)
+plt.ylim((-130, 130))
 
 data = np.zeros([3,DATA_SIZE], dtype="int_")
 plt.plot(data.T) # transpose
