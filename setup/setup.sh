@@ -99,7 +99,7 @@ if [ -f /etc/init.d/SwarmServer.sh ]
 then
     sudo /etc/init.d/SwarmServer.sh stop
 else
-    sudo kill -9 `ps -ef | grep swarmserver |grep -v grep| cut -c11-16`
+    sudo kill -9 `ps -ef | grep swarmserver |grep -v grep| cut -c11-16` 2> /dev/null
 fi
 sleep 2
 sudo cp -p ../sys/swarmserver /usr/local/bin/

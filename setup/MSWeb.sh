@@ -29,12 +29,12 @@ case "$1" in
     do_start
     ;;
   restart|reload|force-reload)
-    sudo kill -9 `ps -ef | grep MSWeb.py |grep -v grep| cut -c11-16`
+    sudo kill -9 `ps -ef | grep MSWeb.py |grep -v grep| cut -c11-16` 2> /dev/null
     do_start
     exit 3
     ;;
   stop)
-    sudo kill -9 `ps -ef | grep MSWeb.py |grep -v grep| cut -c11-16`
+    sudo kill -9 `ps -ef | grep MSWeb.py |grep -v grep| cut -c11-16` 2> /dev/null
     ;;
   status)
     do_status
