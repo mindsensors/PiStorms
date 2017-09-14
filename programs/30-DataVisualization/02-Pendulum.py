@@ -33,6 +33,7 @@ from PiStorms import PiStorms
 psm = PiStorms()
 psm.screen.termPrintln("Please wait a moment")
 psm.screen.termPrintln("as matplotlib loads...")
+psm.screen.termPrintAt(3, "Press GO to quit.")
 
 import matplotlib
 matplotlib.use("AGG")
@@ -67,7 +68,7 @@ data = np.empty(0, dtype="int_") # data starts completely empty (signed integer 
 stop = False
 def captureData():
     global data, stop # share the data and stop variables from the global namespace
-    while not psm.isKeyPressed():
+    while psm.getKeyPressCount() < 1:
         try:
             accel = imu.get_accely() + imu.get_accelx() # acceleration in the x+y direction
             if accel == '': raise TypeError("AbsoluteIMU not connected to BAS1")

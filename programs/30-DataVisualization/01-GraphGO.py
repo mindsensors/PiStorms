@@ -33,9 +33,7 @@ from PiStorms import PiStorms
 psm = PiStorms()
 psm.screen.termPrintln("Please wait a moment")
 psm.screen.termPrintln("as matplotlib loads...")
-psm.screen.termPrintln("")
-psm.screen.termPrintln("Tap and hold to exit")
-psm.screen.termPrintln("when program runs.")
+psm.screen.termPrintAt(3, "Tap and hold the screen to quit.")
 
 import matplotlib
 matplotlib.use("AGG")

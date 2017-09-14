@@ -28,6 +28,7 @@ from PiStorms import PiStorms
 psm = PiStorms()
 psm.screen.termPrintln("Please wait a moment")
 psm.screen.termPrintln("as matplotlib loads...")
+psm.screen.termPrintAt(3, "Press GO to quit.")
 
 import matplotlib
 matplotlib.use("AGG")
@@ -53,7 +54,7 @@ dataz = np.empty(0, dtype="int_")
 stop = False
 def captureData():
     global datax, datay, dataz, stop
-    while not psm.isKeyPressed():
+    while psm.getKeyPressCount() < 1:
         accel = imu.get_accelall()[0]
         if accel == ('','',''):
             answer = psm.screen.askQuestion(["AbsoluteIMU not found!", "Please connect an AbsoluteIMU sensor", "to BAS1."], ["OK", "Cancel"], goBtn=True)

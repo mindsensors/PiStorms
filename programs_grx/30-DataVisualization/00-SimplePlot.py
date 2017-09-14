@@ -32,6 +32,7 @@ from PiStorms_GRX import PiStorms_GRX
 psm = PiStorms_GRX()
 psm.screen.termPrintln("Please wait a moment")
 psm.screen.termPrintln("as matplotlib loads...")
+psm.screen.termPrintAt(3, "Press GO to quit.")
 
 import matplotlib
 matplotlib.use("AGG")
