@@ -262,6 +262,12 @@ then
     sudo /usr/sbin/update-rc.d vncserver-x11-serviced enable
 fi
 
+if [ -f /lib/systemd/system/apache2.service ]
+then
+    sudo sed -i 's/PrivateTmp=true/PrivateTmp=false/' /lib/systemd/system/apache2.service
+    sudo sed -i 's/PrivateTmp=true/PrivateTmp=false/' /lib/systemd/system/apache2@.service
+fi
+
 echo "
 Install completed!
 Please reboot your Raspberry Pi for changes to take effect."
