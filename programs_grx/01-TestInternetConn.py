@@ -24,6 +24,9 @@
 # March 2016    Roman Bohuk     Initial Authoring
 # July 2017     Seth Tenembaum  Update for GRX
 
+import os, inspect
+currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
+
 import time, socket
 from PiStorms_GRX import PiStorms_GRX
 psm = PiStorms_GRX()
@@ -38,7 +41,7 @@ def checkInternet():
 
 psm.screen.drawAutoText("Testing internet connection", 20, 30, fill=(255,255,255), size=23, display=False)
 psm.screen.fillRect(20, 80, 320, 240, fill=(0,0,0), display=False)
-psm.screen.fillBmp(110, 110, 100, 100, path='load.png', display=False)
+psm.screen.fillBmp(110, 110, 100, 100, path=currentdir+'/'+'load.png', display=False)
 psm.screen.disp.display()
 #time.sleep(1)
 
@@ -50,7 +53,7 @@ image = "wifi_green.png" if c else "x_red.png"
 psm.screen.clearScreen(display=False)
 psm.screen.drawAutoText(message1, 35, 20, fill=color, size=25, display=False)
 psm.screen.drawAutoText("to the internet!", 35, 50, fill=color, size=25, display=False)
-psm.screen.fillBmp(120, 85, 80, 80, path=image, display=False)
+psm.screen.fillBmp(120, 85, 80, 80, path=currentdir+'/'+image, display=False)
 
 psm.screen.drawButton(35, 170, width=250, height=40, text="Continue", display=False)
 psm.screen.disp.display()
