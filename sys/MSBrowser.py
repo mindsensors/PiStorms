@@ -181,6 +181,10 @@ def drawRefreshArrow():
     scrn.drawButton(0, 0, 50, 50, image="refresharrow.png", text="", display=False, imageX=8)
 def drawExclamation():
     scrn.fillBmp(230, 7, 34, 34, "Exclamation-mark-icon.png", display=False)
+def drawPageNumber(index, numberOfFiles, filesPerPage):
+    scrn.drawAutoText("Page", 4, 195, size=16, display=False)
+    string = "%d of %d" % (1+index/filesPerPage, 1+numberOfFiles/filesPerPage)
+    scrn.drawAutoText(string, 4, 213, size=16, display=False)
 def drawBatteryIndicator(*ignored):
     if (scrn.currentMode == scrn.PS_MODE_POPUP):
         return
@@ -209,11 +213,11 @@ def itemButtonPressed(folder, files, index, filesPerPage):
         if scrn.checkButton(50, 50+(i%filesPerPage)*45, 320-50*2, 45):
             return os.path.join(folder, files[i])
     return False
-def getPageOfItems(files, index, filePerPage):
-    if (index+filePerPage-1 > len(files)-1):
-        return range(INDEX, len(files))
+def getPageOfItems(files, index, filesPerPage):
+    if (index+filesPerPage-1 > len(files)-1):
+        return range(index, len(files))
     else:
-        return range(INDEX, INDEX+FILES_PER_PAGE)
+        return range(index, index+filesPerPage)
 
 if __name__ == "__main__":
     logging.basicConfig(stream=sys.stderr, level=logging.INFO)
@@ -279,6 +283,8 @@ if __name__ == "__main__":
             if exclamation:
                 drawExclamation()
 
+            drawPageNumber(INDEX, len(FILES), FILES_PER_PAGE)
+
             drawBatteryIndicator()
 
             while True:
@@ -315,6 +321,6 @@ if __name__ == "__main__":
     except KeyboardInterrupt:
         logging.info("Quitting MSBrowser")
         scrn.refresh()
-        scrn.termReplaceLastLine("PiStormsBrowser Exited")
+        scrn.termReplaceLastLine("PiStorms browser exited")
     finally:
         flock(mutex, LOCK_UN)
