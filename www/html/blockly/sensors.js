@@ -1,4 +1,3 @@
-<?php
 /*
 # Copyright (c) 2016 mindsensors.com
 #
@@ -23,8 +22,9 @@
 # Date           Author          Comments
 # July 2017      Seth Tenembaum  Split into multiple files
 */
-?>
 
+
+var sensors = `
 <category name="Sensors" colour="60">
   <block type="sensors_nxttouch"></block>
   <sep gap="5"></sep>
@@ -142,10 +142,9 @@
   <sep gap="5"></sep>
   <block type="sensors_lsagetrawcalibrated"></block>
 </category>
+`;
 
 
-
-<script>
 Blockly.Blocks['sensors_nxttouch'] = {
   init: function() {
     this.appendDummyInput()
@@ -1105,4 +1104,3 @@ Blockly.Python['sensors_lsagetrawcalibrated'] = function(block) {
   code = value_sensor + ".ReadRaw_Calibrated()";
   return [code, Blockly.Python.ORDER_ATOMIC];
 };
-</script>

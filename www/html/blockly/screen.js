@@ -1,4 +1,3 @@
-<?php
 /*
 # Copyright (c) 2016 mindsensors.com
 #
@@ -23,8 +22,9 @@
 # Date           Author          Comments
 # July 2017      Seth Tenembaum  Split into multiple files
 */
-?>
 
+
+var screen = `
 <category name="Screen" colour="300">
   <block type="screen_drawrect">
     <value name="x">
@@ -292,10 +292,9 @@
     </value>
   </block>
 </category>
+`;
 
 
-
-<script>
 Blockly.Blocks['screen_drawrect'] = {
   init: function() {
     this.appendDummyInput()
@@ -955,4 +954,3 @@ function hexToRgb(hex) {
         b: parseInt(result[3], 16)
     } : null;
 }
-</script>

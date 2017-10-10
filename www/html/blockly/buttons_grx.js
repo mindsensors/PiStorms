@@ -1,4 +1,3 @@
-<?php
 /*
 # Copyright (c) 2016 mindsensors.com
 #
@@ -23,19 +22,19 @@
 # Date           Author          Comments
 # July 2017      Seth Tenembaum  Split into multiple files
 */
-?>
 
-<category name="Buttons_GRX" colour="200">
+
+var buttons = `
+<category name="Buttons" colour="200">
   <block type="system_keypressed"></block>
   <block type="system_getkeypresscount"></block>
   <block type="system_resetkeypresscount"></block>
   <block type="system_waitforkeypress"></block>
   <block type="system_untilkeypress"></block>
 </category>
+`;
 
 
-
-<script>
 Blockly.Blocks['system_keypressed'] = {
   init: function() {
     this.appendDummyInput()
@@ -135,4 +134,3 @@ Blockly.Python['system_untilkeypress'] = function(block) {
   code = `def ${anon}():\n${func}grx.untilKeyPress(${anon})\n`;
   return code;
 };
-</script>

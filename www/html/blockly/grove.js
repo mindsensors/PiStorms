@@ -1,4 +1,3 @@
-<?php
 /*
 # Copyright (c) 2016 mindsensors.com
 #
@@ -23,8 +22,9 @@
 # Date           Author          Comments
 # July 2017      Seth Tenembaum  Split into multiple files
 */
-?>
 
+
+var sensors = `
 <category name="Grove" colour="60">
   <block type="Grove_Button"></block>
   <sep gap="5"></sep>
@@ -76,10 +76,9 @@
   <sep gap="5"></sep>
   <block type="Grove_Air_Quality_Sensor__qualitativeMeasurement"></block>
 </category>
+`;
 
 
-
-<script>
 function makeBlock(identifier, parameters, generateCode) {
     Blockly.Blocks[identifier] = {init: parameters};
     Blockly.Python[identifier] = generateCode;
@@ -571,4 +570,3 @@ makeBlock('Grove_Air_Quality_Sensor__qualitativeMeasurement',
         return [`${sensor}.airQuality()`, Blockly.Python.ATOMIC];
     }
 );
-</script>

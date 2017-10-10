@@ -1,4 +1,3 @@
-<?php
 /*
 # Copyright (c) 2016 mindsensors.com
 #
@@ -23,8 +22,9 @@
 # Date           Author          Comments
 # July 2017      Seth Tenembaum  Split into multiple files
 */
-?>
 
+
+var system = `
 <category name="System" colour="5">
   <block type="system_print">
     <value name="TEXT">
@@ -56,10 +56,9 @@
 
   <block type="system_getdeviceid"></block>
 </category>
+`;
 
 
-
-<script>
 Blockly.Blocks['system_print'] = {
   init: function() {
     this.appendValueInput("TEXT")
@@ -234,4 +233,3 @@ Blockly.Python['system_getdeviceid'] = function(block) {
   var code = 'psm.GetDeviceId()';
   return [code, Blockly.Python.ORDER_ATOMIC];
 };
-</script>

@@ -1,4 +1,3 @@
-<?php
 /*
 # Copyright (c) 2016 mindsensors.com
 #
@@ -23,8 +22,9 @@
 # Date           Author          Comments
 # July 2017      Seth Tenembaum  Split into multiple files
 */
-?>
 
+
+var motors = `
 <category name="Motors" colour="240">
   <block type="motors_setspeed">
     <value name="SPEED">
@@ -134,10 +134,9 @@
   </block>
 
 </category>
+`;
 
 
-
-<script>
 Blockly.Blocks['motors_setspeed'] = {
   init: function() {
     this.appendDummyInput()
@@ -562,4 +561,3 @@ Blockly.Python['motors_setparams'] = function(block) {
   var code = 'psm.'+ dropdown_motor_selector + '.SetPerformanceParameters(' + value_kp_tacho + ', ' + value_ki_tacho + ', ' + value_kd_tacho + ', ' + value_kp_speed + ', ' + value_ki_speed + ', ' + value_kd_speed + ', ' + value_passcount + ', ' + value_tolerance + ')\n';
   return code;
 };
-</script>

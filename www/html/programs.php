@@ -208,40 +208,9 @@
 <script type="text/javascript" src="assets/bootstrap-slider.min.js"></script>
 <script type="text/javascript" src="assets/sha256.min.js"></script>
 
-<xml id="toolbox" style="display: none">
-    <?php include "blockly/standard.php"; ?>
-    <?php include "blockly/motors.php"; ?>
-    <?php include "blockly/servos.php"; ?>
-    <?php include "blockly/sensors.php"; ?>
-    <?php include "blockly/grove.php"; ?>
-    <?php include "blockly/screen.php"; ?>
-    <?php include "blockly/led.php"; ?>
-    <?php include "blockly/led_grx.php"; ?>
-    <?php include "blockly/buttons.php"; ?>
-    <?php include "blockly/buttons_grx.php"; ?>
-    <?php include "blockly/system.php"; ?>
-</xml>
-
 <script>
 setTimeout(()=>$("body").addClass("sidebar-collapse"), 10);
 
-var api = "http://<?=$_SERVER['SERVER_NAME']?>:3141/";
-$.get(api+'isgrx', function(data) {
-    if (data=='1') {
-        $('#toolbox category[name=Motors]').remove();
-        $('#toolbox category[name=Sensors]').remove();
-        $('#toolbox category[name=Grove]').attr('name', 'Sensors');
-        $('#toolbox category[name=Buttons]').remove();
-        $('#toolbox category[name=Buttons_GRX]').attr('name', 'Buttons');
-        $('#toolbox category[name=LED]').remove();
-        $('#toolbox category[name=LED_GRX]').attr('name', 'LED');
-    } else {
-        $('#toolbox category[name=Servos]').remove();
-        $('#toolbox category[name=Grove]').remove();
-        $('#toolbox category[name=Buttons_GRX]').remove();
-        $('#toolbox category[name=LED_GRX]').remove();
-    }
-});
 </script>
 
 <script src="assets/ace/ace.js"></script>
@@ -328,6 +297,26 @@ var workspace = null;
 
 var edittype = "";
 
+
+var toolbox_string = "";
+$.get(api+'isgrx', function(data) {
+    <?php include "blockly/standard.js"; ?>
+    <?php include "blockly/screen.js"; ?>
+    <?php include "blockly/system.js"; ?>
+    if (data=='1') {
+        <?php include "blockly/servos.js"; ?>
+        <?php include "blockly/grove.js"; ?>
+        <?php include "blockly/led_grx.js"; ?>
+        <?php include "blockly/buttons_grx.js"; ?>
+    } else {
+        <?php include "blockly/motors.js"; ?>
+        <?php include "blockly/sensors.js"; ?>
+        <?php include "blockly/led.js"; ?>
+        <?php include "blockly/buttons.js"; ?>
+    }
+    toolbox_string = "<xml>" + standard + motors + sensors + screen + led + buttons + system + "</xml>";
+});
+
 function blocklyedit(filename, location, id, content) {
     var stored = content.split('--START BLOCKS--\n')[1].split('\n--END BLOCKS--')[0].split("\n");
     var broken = stored.length != 2;
@@ -344,8 +333,7 @@ function blocklyedit(filename, location, id, content) {
     $(".aceeditor-row").hide();
     $(".blocklyeditor-row").show();
     if (workspace != null) {workspace.dispose();}
-    workspace = Blockly.inject('blocklyeditor',
-      {toolbox: document.getElementById('toolbox')});
+    workspace = Blockly.inject('blocklyeditor', {toolbox: toolbox_string});
     var xml = Blockly.Xml.textToDom(xml_text);
     Blockly.Xml.domToWorkspace(xml, workspace);
 }
