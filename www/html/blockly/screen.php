@@ -599,7 +599,7 @@ Blockly.Python['screen_checkbutton'] = function(block) {
   Blockly.Python.definitions_.from_PiStorms_import_PiStorms = "from PiStorms import PiStorms";
   Blockly.Python.definitions_.psm_PiStorms = "psm = PiStorms()";
   var code = 'psm.screen.checkButton(' + value_x + ', ' + value_y + ', ' + value_width + ', ' + value_height + ')';
-  return [code, Blockly.Python.ORDER_NONE];
+  return [code, Blockly.Python.ORDER_ATOMIC];
 };
 
 
@@ -646,7 +646,7 @@ Blockly.Python['screen_istouched'] = function(block) {
   Blockly.Python.definitions_.from_PiStorms_import_PiStorms = "from PiStorms import PiStorms";
   Blockly.Python.definitions_.psm_PiStorms = "psm = PiStorms()";
   code = "psm.screen.isTouched()";
-  return [code, Blockly.Python.ORDER_NONE];
+  return [code, Blockly.Python.ORDER_ATOMIC];
 };
 
 
@@ -668,7 +668,7 @@ Blockly.Python['screen_gettouchcoord'] = function(block) {
   Blockly.Python.definitions_.from_PiStorms_import_PiStorms = "from PiStorms import PiStorms";
   Blockly.Python.definitions_.psm_PiStorms = "psm = PiStorms()";
   code = "psm.screen.TS_" + dropdown_mode_selector + "()";
-  return [code, Blockly.Python.ORDER_NONE];
+  return [code, Blockly.Python.ORDER_ATOMIC];
 };
 
 
@@ -712,7 +712,7 @@ Blockly.Python['screen_getwidthheight'] = function(block) {
   Blockly.Python.definitions_.from_PiStorms_import_PiStorms = "from PiStorms import PiStorms";
   Blockly.Python.definitions_.psm_PiStorms = "psm = PiStorms()";
   code = "psm.screen.screen" + dropdown_mode_selector + "()";
-  return [code, Blockly.Python.ORDER_NONE];
+  return [code, Blockly.Python.ORDER_ATOMIC];
 };
 
 
@@ -757,7 +757,7 @@ Blockly.Python['screen_askyesnoquestion'] = function(block) {
   Blockly.Python.definitions_.from_PiStorms_import_PiStorms = "from PiStorms import PiStorms";
   Blockly.Python.definitions_.psm_PiStorms = "psm = PiStorms()";
   var code = 'psm.screen.askYesOrNoQuestion([' + value_text + '])';
-  return [code, Blockly.Python.ORDER_NONE];
+  return [code, Blockly.Python.ORDER_ATOMIC];
 };
 
 

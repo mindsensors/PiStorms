@@ -39,7 +39,7 @@ import time
 psm = PiStorms()
 
 
-while not (bool(psm.isKeyPressed())):
+while not bool(psm.isKeyPressed()):
   psm.BAM1.setSpeed(50)
   time.sleep(1)
   psm.BAM1.setSpeed(0)

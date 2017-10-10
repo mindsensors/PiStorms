@@ -42,11 +42,11 @@ psm = PiStorms()
 
 psm.screen.clearScreen(True)
 # Draws a green rectangle and waits for 10 clicks.
-psm.screen.fillRect(10, 10, ((psm.screen.screenWidth()) - 20), ((psm.screen.screenHeight()) - 20), (0, 102, 0), display = True)
+psm.screen.fillRect(10, 10, (psm.screen.screenWidth() - 20), (psm.screen.screenHeight() - 20), (0, 102, 0), display = True)
 for count in range(10):
-  while not (psm.screen.isTouched()):
+  while not psm.screen.isTouched():
     pass
-  psm.screen.fillCircle(((psm.screen.screenWidth()) - (psm.screen.TS_X())), (psm.screen.TS_Y()), 5, (255, 0, 0), display = True)
+  psm.screen.fillCircle((psm.screen.screenWidth() - psm.screen.TS_X()), psm.screen.TS_Y(), 5, (255, 0, 0), display = True)
 time.sleep(1)
 psm.screen.clearScreen(True)
 

@@ -51,7 +51,7 @@ Blockly.Python['system_keypressed'] = function(block) {
   Blockly.Python.definitions_.from_PiStorms_import_PiStorms = "from PiStorms import PiStorms";
   Blockly.Python.definitions_.psm_PiStorms = "psm = PiStorms()";
   var code = 'bool(psm.isKeyPressed())';
-  return [code, Blockly.Python.ORDER_NONE];
+  return [code, Blockly.Python.ORDER_ATOMIC];
 };
 
 
@@ -70,7 +70,7 @@ Blockly.Python['system_getkeypresscount'] = function(block) {
   Blockly.Python.definitions_.from_PiStorms_import_PiStorms = "from PiStorms import PiStorms";
   Blockly.Python.definitions_.psm_PiStorms = "psm = PiStorms()";
   var code = 'psm.getKeyPressCount()';
-  return [code, Blockly.Python.ORDER_NONE];
+  return [code, Blockly.Python.ORDER_ATOMIC];
 };
 
 

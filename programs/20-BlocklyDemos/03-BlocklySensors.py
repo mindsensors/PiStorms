@@ -55,12 +55,12 @@ time.sleep(1)
 # This section requires two touch sensors. Connect them to Bank 1
 # and press one by one to turn LED green. If they are both pressed at
 # the same time, the LED will turn purple and the program will stop.
-while not (((nxttouch_BAS1).isPressed()) and ((ev3touch_BAS2).isPressed())):
-  if (nxttouch_BAS1).isPressed():
+while not (nxttouch_BAS1.isPressed() and ev3touch_BAS2.isPressed()):
+  if nxttouch_BAS1.isPressed():
     psm.led(1, 51, 255, 51)
   else:
     psm.led(1, 255, 0, 0)
-  if (ev3touch_BAS2).isPressed():
+  if ev3touch_BAS2.isPressed():
     psm.led(2, 51, 255, 51)
   else:
     psm.led(2, 255, 0, 0)
@@ -73,7 +73,7 @@ psm.led(2, 0, 0, 0)
 
 # Scans the distance 5 times
 psm.screen.termPrintln('Starting distance sensor')
-(ev3ultrasonic_BBS1).setMode(LegoDevices.PS_SENSOR_MODE_EV3_ULTRASONIC_DIST_IN)
+ev3ultrasonic_BBS1.setMode(LegoDevices.PS_SENSOR_MODE_EV3_ULTRASONIC_DIST_IN)
 for count in range(5):
-  psm.screen.termPrintln((str((ev3ultrasonic_BBS1).getDistance()) + str(' in')))
+  psm.screen.termPrintln((str(ev3ultrasonic_BBS1.getDistance()) + str(' in')))
   time.sleep(1)

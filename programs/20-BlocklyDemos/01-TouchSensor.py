@@ -46,7 +46,7 @@ psm = PiStorms()
 # This demo requires a EV3 touch sensor.
 # Connect your EV3 Touch Sensor to BAS1 port.
 touchSensor = ev3touch_BAS1
-while not (bool(psm.isKeyPressed())):
+while not bool(psm.isKeyPressed()):
   if touchSensor.isPressed():
     # If sensor is pressed, draw a Red circle.
     # else draw a Yellow circle.

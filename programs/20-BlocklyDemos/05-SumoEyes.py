@@ -50,7 +50,7 @@ sumoeyes_BAS1 = MsDevices.SumoEyes(psm.BAS1)
 # Browser and press GO button to terminate.
 sumosensor = sumoeyes_BAS1
 sumosensor.setRange(sumosensor.LONG_RANGE)
-while not (bool(psm.isKeyPressed())):
+while not bool(psm.isKeyPressed()):
   old_zone = str1
   str1 = sumosensor.detectObstactleZone(True)
   if str1 != old_zone:

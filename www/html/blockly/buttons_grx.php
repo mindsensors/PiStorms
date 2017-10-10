@@ -51,7 +51,7 @@ Blockly.Python['system_keypressed'] = function(block) {
   Blockly.Python.definitions_.import_PiStorms_GRX = "from PiStorms_GRX import PiStorms_GRX";
   Blockly.Python.definitions_.grx_PiStorms_GRX = "grx = PiStorms_GRX()";
   var code = 'grx.isKeyPressed()';
-  return [code, Blockly.Python.ORDER_NONE];
+  return [code, Blockly.Python.ORDER_ATOMIC];
 };
 
 
@@ -70,7 +70,7 @@ Blockly.Python['system_getkeypresscount'] = function(block) {
   Blockly.Python.definitions_.import_PiStorms_GRX = "from PiStorms_GRX import PiStorms_GRX";
   Blockly.Python.definitions_.grx_PiStorms_GRX = "grx = PiStorms_GRX()";
   var code = 'grx.getKeyPressCount()';
-  return [code, Blockly.Python.ORDER_NONE];
+  return [code, Blockly.Python.ORDER_ATOMIC];
 };
 
 
