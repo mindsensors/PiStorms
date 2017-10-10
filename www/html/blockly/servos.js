@@ -1,4 +1,3 @@
-<?php
 /*
 # Copyright (c) 2016 mindsensors.com
 #
@@ -23,8 +22,9 @@
 # Date           Author          Comments
 # July 2017      Seth Tenembaum  Split into multiple files
 */
-?>
 
+
+var motors = `
 <category name="Servos" colour="240">
   <block type="servo_init"></block>
   <sep gap="50"></sep>
@@ -43,10 +43,9 @@
   <block type="servo_setSpeed_value"></block>
   <block type="servo_setPulse_value"></block>
 </category>
+`;
 
 
-
-<script>
 function makeBlock(identifier, parameters, generateCode) {
     Blockly.Blocks[identifier] = {init: parameters};
     Blockly.Python[identifier] = generateCode;
@@ -275,4 +274,3 @@ makeBlock('servo_setPulse_value',
         return `${servo}.setPulse(${pulse})\n`;
     }
 );
-</script>

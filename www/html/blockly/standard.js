@@ -1,4 +1,3 @@
-<?php
 /*
 # Copyright (c) 2016 mindsensors.com
 #
@@ -23,8 +22,9 @@
 # Date           Author          Comments
 # July 2017      Seth Tenembaum  Split into multiple files
 */
-?>
 
+
+var standard = `
 <category name="Logic" colour="210">
   <block type="controls_if"></block>
   <block type="logic_compare"></block>
@@ -333,3 +333,4 @@
 <category name="Custom Vars" colour="330" custom="VARIABLE"></category>
 <category name="Functions" colour="290" custom="PROCEDURE"></category>
 <sep></sep>
+`;

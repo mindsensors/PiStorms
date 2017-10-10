@@ -1,4 +1,3 @@
-<?php
 /*
 # Copyright (c) 2016 mindsensors.com
 #
@@ -23,13 +22,15 @@
 # Date           Author          Comments
 # July 2017      Seth Tenembaum  Split into multiple files
 */
-?>
 
-<category name="LED_GRX" colour="140">
+
+var led = `
+<category name="LED" colour="140">
   <block type="led_control"></block>
 </category>
+`;
 
-<script>
+
 Blockly.Blocks['led_control'] = {
   init: function() {
     this.appendDummyInput()
@@ -69,4 +70,3 @@ function hexToRgb(hex) {
         b: parseInt(result[3], 16)
     } : null;
 }
-</script>
