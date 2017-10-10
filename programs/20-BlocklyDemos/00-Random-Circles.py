@@ -39,7 +39,7 @@ import random
 psm = PiStorms()
 
 
-while not (bool(psm.isKeyPressed())):
+while not bool(psm.isKeyPressed()):
   psm.screen.fillCircle((random.randint(30, 200)), (random.randint(30, 200)), (random.randint(30, 75)), (255, 0, 0), display = True)
   psm.screen.fillCircle((random.randint(30, 250)), (random.randint(30, 250)), (random.randint(30, 100)), (255, 255, 0), display = True)
   psm.screen.fillCircle((random.randint(30, 300)), (random.randint(30, 300)), (random.randint(30, 60)), (51, 255, 51), display = True)

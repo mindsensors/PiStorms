@@ -47,5 +47,5 @@ item = 0
 for i in range(1, 11):
   item = item + i * 5
   psm.screen.fillCircle(item, item, 5, (255, 0, 0), display = True)
-while not (bool(psm.isKeyPressed())):
+while not bool(psm.isKeyPressed()):
   pass

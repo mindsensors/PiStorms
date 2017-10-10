@@ -163,7 +163,7 @@ Blockly.Python['sensors_nxttouch'] = function(block) {
   Blockly.Python.definitions_.import_LegoDevices = "import LegoDevices";
   Blockly.Python.definitions_["nxttouch_" + dropdown_sensor_selector] = 'nxttouch_' + dropdown_sensor_selector + ' = LegoDevices.NXTTouchSensor("' + dropdown_sensor_selector + '")';
   var code = 'nxttouch_' + dropdown_sensor_selector;
-  return [code, Blockly.Python.ORDER_NONE];
+  return [code, Blockly.Python.ORDER_ATOMIC];
 };
 
 Blockly.Blocks['sensors_ev3touch'] = {
@@ -183,7 +183,7 @@ Blockly.Python['sensors_ev3touch'] = function(block) {
   Blockly.Python.definitions_.import_LegoDevices = "import LegoDevices";
   Blockly.Python.definitions_["ev3touch_" + dropdown_sensor_selector] = 'ev3touch_' + dropdown_sensor_selector + ' = LegoDevices.EV3TouchSensor("' + dropdown_sensor_selector + '")';
   var code = 'ev3touch_' + dropdown_sensor_selector;
-  return [code, Blockly.Python.ORDER_NONE];
+  return [code, Blockly.Python.ORDER_ATOMIC];
 };
 
 Blockly.Blocks['sensors_istouchpressed'] = {
@@ -203,7 +203,7 @@ Blockly.Blocks['sensors_istouchpressed'] = {
 Blockly.Python['sensors_istouchpressed'] = function(block) {
   var value_sensor = Blockly.Python.valueToCode(block, 'sensor', Blockly.Python.ORDER_ATOMIC);
   code = value_sensor + ".isPressed()";
-  return [code, Blockly.Python.ORDER_NONE];
+  return [code, Blockly.Python.ORDER_ATOMIC];
 };
 
 Blockly.Blocks['sensors_gettouchbumpcount'] = {
@@ -221,7 +221,7 @@ Blockly.Blocks['sensors_gettouchbumpcount'] = {
 Blockly.Python['sensors_gettouchbumpcount'] = function(block) {
   var value_sensor = Blockly.Python.valueToCode(block, 'sensor', Blockly.Python.ORDER_ATOMIC);
   code = value_sensor + ".getBumpCount()";
-  return [code, Blockly.Python.ORDER_NONE];
+  return [code, Blockly.Python.ORDER_ATOMIC];
 };
 
 Blockly.Blocks['sensors_resettouchbumpcount'] = {
@@ -262,7 +262,7 @@ Blockly.Python['sensors_nxtlight'] = function(block) {
   Blockly.Python.definitions_.import_LegoDevices = "import LegoDevices";
   Blockly.Python.definitions_["nxtlight_" + dropdown_sensor_selector] = 'nxtlight_' + dropdown_sensor_selector + ' = LegoDevices.NXTLightSensor("' + dropdown_sensor_selector + '")';
   var code = 'nxtlight_' + dropdown_sensor_selector;
-  return [code, Blockly.Python.ORDER_NONE];
+  return [code, Blockly.Python.ORDER_ATOMIC];
 };
 
 Blockly.Blocks['sensors_nxtlightgetvalue'] = {
@@ -280,7 +280,7 @@ Blockly.Blocks['sensors_nxtlightgetvalue'] = {
 Blockly.Python['sensors_nxtlightgetvalue'] = function(block) {
   var value_sensor = Blockly.Python.valueToCode(block, 'sensor', Blockly.Python.ORDER_ATOMIC);
   code = value_sensor + ".getValue()";
-  return [code, Blockly.Python.ORDER_NONE];
+  return [code, Blockly.Python.ORDER_ATOMIC];
 };
 
 Blockly.Blocks['sensors_nxtlightsetmode'] = {
@@ -325,7 +325,7 @@ Blockly.Python['sensors_nxtcolor'] = function(block) {
   Blockly.Python.definitions_.import_LegoDevices = "import LegoDevices";
   Blockly.Python.definitions_["nxtcolor_" + dropdown_sensor_selector] = 'nxtcolor_' + dropdown_sensor_selector + ' = LegoDevices.NXTColorSensor("' + dropdown_sensor_selector + '")';
   var code = 'nxtcolor_' + dropdown_sensor_selector;
-  return [code, Blockly.Python.ORDER_NONE];
+  return [code, Blockly.Python.ORDER_ATOMIC];
 };
 
 Blockly.Blocks['sensors_nxtcolorgetcolor'] = {
@@ -343,7 +343,7 @@ Blockly.Blocks['sensors_nxtcolorgetcolor'] = {
 Blockly.Python['sensors_nxtcolorgetcolor'] = function(block) {
   var value_sensor = Blockly.Python.valueToCode(block, 'sensor', Blockly.Python.ORDER_ATOMIC);
   code = value_sensor + ".getColor()";
-  return [code, Blockly.Python.ORDER_NONE];
+  return [code, Blockly.Python.ORDER_ATOMIC];
 };
 
 Blockly.Blocks['sensors_nxtcolorsetmode'] = {
@@ -388,7 +388,7 @@ Blockly.Python['sensors_ev3color'] = function(block) {
   Blockly.Python.definitions_.import_LegoDevices = "import LegoDevices";
   Blockly.Python.definitions_["ev3color_" + dropdown_sensor_selector] = 'ev3color_' + dropdown_sensor_selector + ' = LegoDevices.EV3ColorSensor("' + dropdown_sensor_selector + '")';
   var code = 'ev3color_' + dropdown_sensor_selector;
-  return [code, Blockly.Python.ORDER_NONE];
+  return [code, Blockly.Python.ORDER_ATOMIC];
 };
 
 Blockly.Blocks['sensors_ev3colorgetvalue'] = {
@@ -406,7 +406,7 @@ Blockly.Blocks['sensors_ev3colorgetvalue'] = {
 Blockly.Python['sensors_ev3colorgetvalue'] = function(block) {
   var value_sensor = Blockly.Python.valueToCode(block, 'sensor', Blockly.Python.ORDER_ATOMIC);
   code = value_sensor + ".getValue()";
-  return [code, Blockly.Python.ORDER_NONE];
+  return [code, Blockly.Python.ORDER_ATOMIC];
 };
 
 Blockly.Blocks['sensors_ev3colorsetmode'] = {
@@ -451,7 +451,7 @@ Blockly.Python['sensors_ev3gyro'] = function(block) {
   Blockly.Python.definitions_.import_LegoDevices = "import LegoDevices";
   Blockly.Python.definitions_["ev3gyro_" + dropdown_sensor_selector] = 'ev3gyro_' + dropdown_sensor_selector + ' = LegoDevices.EV3GyroSensor("' + dropdown_sensor_selector + '")';
   var code = 'ev3gyro_' + dropdown_sensor_selector;
-  return [code, Blockly.Python.ORDER_NONE];
+  return [code, Blockly.Python.ORDER_ATOMIC];
 };
 
 Blockly.Blocks['sensors_ev3gyrogetvalue'] = {
@@ -469,7 +469,7 @@ Blockly.Blocks['sensors_ev3gyrogetvalue'] = {
 Blockly.Python['sensors_ev3gyrogetvalue'] = function(block) {
   var value_sensor = Blockly.Python.valueToCode(block, 'sensor', Blockly.Python.ORDER_ATOMIC);
   code = value_sensor + ".readValue()";
-  return [code, Blockly.Python.ORDER_NONE];
+  return [code, Blockly.Python.ORDER_ATOMIC];
 };
 
 Blockly.Blocks['sensors_ev3gyrosetmode'] = {
@@ -514,7 +514,7 @@ Blockly.Python['sensors_ev3ultrasonic'] = function(block) {
   Blockly.Python.definitions_.import_LegoDevices = "import LegoDevices";
   Blockly.Python.definitions_["ev3ultrasonic_" + dropdown_sensor_selector] = 'ev3ultrasonic_' + dropdown_sensor_selector + ' = LegoDevices.EV3UltrasonicSensor("' + dropdown_sensor_selector + '")';
   var code = 'ev3ultrasonic_' + dropdown_sensor_selector;
-  return [code, Blockly.Python.ORDER_NONE];
+  return [code, Blockly.Python.ORDER_ATOMIC];
 };
 
 Blockly.Blocks['sensors_ev3ultrasonicgetvalue'] = {
@@ -532,7 +532,7 @@ Blockly.Blocks['sensors_ev3ultrasonicgetvalue'] = {
 Blockly.Python['sensors_ev3ultrasonicgetvalue'] = function(block) {
   var value_sensor = Blockly.Python.valueToCode(block, 'sensor', Blockly.Python.ORDER_ATOMIC);
   code = value_sensor + ".getDistance()";
-  return [code, Blockly.Python.ORDER_NONE];
+  return [code, Blockly.Python.ORDER_ATOMIC];
 };
 
 Blockly.Blocks['sensors_ev3ultrasonicdetect'] = {
@@ -550,7 +550,7 @@ Blockly.Blocks['sensors_ev3ultrasonicdetect'] = {
 Blockly.Python['sensors_ev3ultrasonicdetect'] = function(block) {
   var value_sensor = Blockly.Python.valueToCode(block, 'sensor', Blockly.Python.ORDER_ATOMIC);
   code = value_sensor + ".detect()";
-  return [code, Blockly.Python.ORDER_NONE];
+  return [code, Blockly.Python.ORDER_ATOMIC];
 };
 
 Blockly.Blocks['sensors_ev3ultrasonicsetmode'] = {
@@ -595,7 +595,7 @@ Blockly.Python['sensors_ev3infrared'] = function(block) {
   Blockly.Python.definitions_.import_LegoDevices = "import LegoDevices";
   Blockly.Python.definitions_["ev3infrared_" + dropdown_sensor_selector] = 'ev3infrared_' + dropdown_sensor_selector + ' = LegoDevices.EV3InfraredSensor("' + dropdown_sensor_selector + '")';
   var code = 'ev3infrared_' + dropdown_sensor_selector;
-  return [code, Blockly.Python.ORDER_NONE];
+  return [code, Blockly.Python.ORDER_ATOMIC];
 };
 
 Blockly.Blocks['sensors_ev3infraredgetproximity'] = {
@@ -613,7 +613,7 @@ Blockly.Blocks['sensors_ev3infraredgetproximity'] = {
 Blockly.Python['sensors_ev3infraredgetproximity'] = function(block) {
   var value_sensor = Blockly.Python.valueToCode(block, 'sensor', Blockly.Python.ORDER_ATOMIC);
   code = value_sensor + ".readProximity()";
-  return [code, Blockly.Python.ORDER_NONE];
+  return [code, Blockly.Python.ORDER_ATOMIC];
 };
 
 Blockly.Blocks['sensors_ev3infraredchannelheading'] = {
@@ -635,7 +635,7 @@ Blockly.Python['sensors_ev3infraredchannelheading'] = function(block) {
   var value_sensor = Blockly.Python.valueToCode(block, 'sensor', Blockly.Python.ORDER_ATOMIC);
   var value_channel = Blockly.Python.valueToCode(block, 'channel', Blockly.Python.ORDER_ATOMIC);
   code = value_sensor + ".readChannelHeading(" + value_channel + ")";
-  return [code, Blockly.Python.ORDER_NONE];
+  return [code, Blockly.Python.ORDER_ATOMIC];
 };
 
 Blockly.Blocks['sensors_ev3infraredchannelproximity'] = {
@@ -657,7 +657,7 @@ Blockly.Python['sensors_ev3infraredchannelproximity'] = function(block) {
   var value_sensor = Blockly.Python.valueToCode(block, 'sensor', Blockly.Python.ORDER_ATOMIC);
   var value_channel = Blockly.Python.valueToCode(block, 'channel', Blockly.Python.ORDER_ATOMIC);
   code = value_sensor + ".readChannelProximity(" + value_channel + ")";
-  return [code, Blockly.Python.ORDER_NONE];
+  return [code, Blockly.Python.ORDER_ATOMIC];
 };
 
 Blockly.Blocks['sensors_ev3infraredgetremote'] = {
@@ -679,7 +679,7 @@ Blockly.Python['sensors_ev3infraredgetremote'] = function(block) {
   var value_sensor = Blockly.Python.valueToCode(block, 'sensor', Blockly.Python.ORDER_ATOMIC);
   var value_channel = Blockly.Python.valueToCode(block, 'channel', Blockly.Python.ORDER_ATOMIC);
   code = value_sensor + ".readRemote(" + value_channel + ")";
-  return [code, Blockly.Python.ORDER_NONE];
+  return [code, Blockly.Python.ORDER_ATOMIC];
 };
 
 Blockly.Blocks['sensors_ev3infraredsetmode'] = {
@@ -726,7 +726,7 @@ Blockly.Python['sensors_absoluteimu'] = function(block) {
   Blockly.Python.definitions_.import_MsDevices = "import MsDevices";
   Blockly.Python.definitions_["absoluteimu_" + dropdown_sensor_selector] = 'absoluteimu_' + dropdown_sensor_selector + ' = MsDevices.AbsoluteIMU(psm.' + dropdown_sensor_selector + ')';
   var code = 'absoluteimu_' + dropdown_sensor_selector;
-  return [code, Blockly.Python.ORDER_NONE];
+  return [code, Blockly.Python.ORDER_ATOMIC];
 };
 
 Blockly.Blocks['sensors_absoluteimugettilt'] = {
@@ -748,7 +748,7 @@ Blockly.Python['sensors_absoluteimugettilt'] = function(block) {
   var dropdown_axis_selector = block.getFieldValue('axis_selector');
   var value_sensor = Blockly.Python.valueToCode(block, 'sensor', Blockly.Python.ORDER_ATOMIC);
   code = value_sensor + ".get_tilt" + dropdown_axis_selector + "()";
-  return [code, Blockly.Python.ORDER_NONE];
+  return [code, Blockly.Python.ORDER_ATOMIC];
 };
 
 Blockly.Blocks['sensors_absoluteimugetacceleration'] = {
@@ -770,7 +770,7 @@ Blockly.Python['sensors_absoluteimugetacceleration'] = function(block) {
   var dropdown_axis_selector = block.getFieldValue('axis_selector');
   var value_sensor = Blockly.Python.valueToCode(block, 'sensor', Blockly.Python.ORDER_ATOMIC);
   code = value_sensor + ".get_accel" + dropdown_axis_selector + "()";
-  return [code, Blockly.Python.ORDER_NONE];
+  return [code, Blockly.Python.ORDER_ATOMIC];
 };
 
 Blockly.Blocks['sensors_absoluteimugetmagnetometer'] = {
@@ -792,7 +792,7 @@ Blockly.Python['sensors_absoluteimugetmagnetometer'] = function(block) {
   var dropdown_axis_selector = block.getFieldValue('axis_selector');
   var value_sensor = Blockly.Python.valueToCode(block, 'sensor', Blockly.Python.ORDER_ATOMIC);
   code = value_sensor + ".get_mag" + dropdown_axis_selector + "()";
-  return [code, Blockly.Python.ORDER_NONE];
+  return [code, Blockly.Python.ORDER_ATOMIC];
 };
 
 Blockly.Blocks['sensors_absoluteimugetgyro'] = {
@@ -814,7 +814,7 @@ Blockly.Python['sensors_absoluteimugetgyro'] = function(block) {
   var dropdown_axis_selector = block.getFieldValue('axis_selector');
   var value_sensor = Blockly.Python.valueToCode(block, 'sensor', Blockly.Python.ORDER_ATOMIC);
   code = value_sensor + ".get_gyro" + dropdown_axis_selector + "()";
-  return [code, Blockly.Python.ORDER_NONE];
+  return [code, Blockly.Python.ORDER_ATOMIC];
 };
 
 Blockly.Blocks['sensors_absoluteimugetheading'] = {
@@ -833,7 +833,7 @@ Blockly.Blocks['sensors_absoluteimugetheading'] = {
 Blockly.Python['sensors_absoluteimugetheading'] = function(block) {
   var value_sensor = Blockly.Python.valueToCode(block, 'sensor', Blockly.Python.ORDER_ATOMIC);
   code = value_sensor + ".get_heading()";
-  return [code, Blockly.Python.ORDER_NONE];
+  return [code, Blockly.Python.ORDER_ATOMIC];
 };
 
 Blockly.Blocks['sensors_absoluteimusetaccel'] = {
@@ -918,7 +918,7 @@ Blockly.Python['sensors_sumoeyes'] = function(block) {
   Blockly.Python.definitions_.import_MsDevices = "import MsDevices";
   Blockly.Python.definitions_["sumoeyes_" + dropdown_sensor_selector] = 'sumoeyes_' + dropdown_sensor_selector + ' = MsDevices.SumoEyes(psm.' + dropdown_sensor_selector + ')';
   var code = 'sumoeyes_' + dropdown_sensor_selector;
-  return [code, Blockly.Python.ORDER_NONE];
+  return [code, Blockly.Python.ORDER_ATOMIC];
 };
 
 Blockly.Blocks['sensors_sumoeyesgetvalue'] = {
@@ -937,7 +937,7 @@ Blockly.Blocks['sensors_sumoeyesgetvalue'] = {
 Blockly.Python['sensors_sumoeyesgetvalue'] = function(block) {
   var value_sensor = Blockly.Python.valueToCode(block, 'sensor', Blockly.Python.ORDER_ATOMIC);
   code = value_sensor + ".detectObstactleZone(True)";
-  return [code, Blockly.Python.ORDER_NONE];
+  return [code, Blockly.Python.ORDER_ATOMIC];
 };
 
 Blockly.Blocks['sensors_sumoeyessetmode'] = {
@@ -984,7 +984,7 @@ Blockly.Python['sensors_lineleader'] = function(block) {
   Blockly.Python.definitions_.import_MsDevices = "import MsDevices";
   Blockly.Python.definitions_["lineleader_" + dropdown_sensor_selector] = 'lineleader_' + dropdown_sensor_selector + ' = MsDevices.LineLeader(psm.' + dropdown_sensor_selector + ')';
   var code = 'lineleader_' + dropdown_sensor_selector;
-  return [code, Blockly.Python.ORDER_NONE];
+  return [code, Blockly.Python.ORDER_ATOMIC];
 };
 
 Blockly.Blocks['sensors_lineleadergetsteering'] = {
@@ -1003,7 +1003,7 @@ Blockly.Blocks['sensors_lineleadergetsteering'] = {
 Blockly.Python['sensors_lineleadergetsteering'] = function(block) {
   var value_sensor = Blockly.Python.valueToCode(block, 'sensor', Blockly.Python.ORDER_ATOMIC);
   code = value_sensor + ".steering()";
-  return [code, Blockly.Python.ORDER_NONE];
+  return [code, Blockly.Python.ORDER_ATOMIC];
 };
 
 Blockly.Blocks['sensors_lineleadergetaverage'] = {
@@ -1022,7 +1022,7 @@ Blockly.Blocks['sensors_lineleadergetaverage'] = {
 Blockly.Python['sensors_lineleadergetaverage'] = function(block) {
   var value_sensor = Blockly.Python.valueToCode(block, 'sensor', Blockly.Python.ORDER_ATOMIC);
   code = value_sensor + ".average()";
-  return [code, Blockly.Python.ORDER_NONE];
+  return [code, Blockly.Python.ORDER_ATOMIC];
 };
 
 Blockly.Blocks['sensors_lineleadergetresult'] = {
@@ -1041,7 +1041,7 @@ Blockly.Blocks['sensors_lineleadergetresult'] = {
 Blockly.Python['sensors_lineleadergetresult'] = function(block) {
   var value_sensor = Blockly.Python.valueToCode(block, 'sensor', Blockly.Python.ORDER_ATOMIC);
   code = value_sensor + ".result()";
-  return [code, Blockly.Python.ORDER_NONE];
+  return [code, Blockly.Python.ORDER_ATOMIC];
 };
 
 Blockly.Blocks['sensors_lineleadergetrawcalibrated'] = {
@@ -1060,7 +1060,7 @@ Blockly.Blocks['sensors_lineleadergetrawcalibrated'] = {
 Blockly.Python['sensors_lineleadergetrawcalibrated'] = function(block) {
   var value_sensor = Blockly.Python.valueToCode(block, 'sensor', Blockly.Python.ORDER_ATOMIC);
   code = value_sensor + ".ReadRaw_Calibrated()";
-  return [code, Blockly.Python.ORDER_NONE];
+  return [code, Blockly.Python.ORDER_ATOMIC];
 };
 
 
@@ -1084,7 +1084,7 @@ Blockly.Python['sensors_lsa'] = function(block) {
   Blockly.Python.definitions_.import_MsDevices = "import MsDevices";
   Blockly.Python.definitions_["lsa_" + dropdown_sensor_selector] = 'lsa_' + dropdown_sensor_selector + ' = MsDevices.LightSensorArray(psm.' + dropdown_sensor_selector + ')';
   var code = 'lsa_' + dropdown_sensor_selector;
-  return [code, Blockly.Python.ORDER_NONE];
+  return [code, Blockly.Python.ORDER_ATOMIC];
 };
 
 Blockly.Blocks['sensors_lsagetrawcalibrated'] = {
@@ -1103,6 +1103,6 @@ Blockly.Blocks['sensors_lsagetrawcalibrated'] = {
 Blockly.Python['sensors_lsagetrawcalibrated'] = function(block) {
   var value_sensor = Blockly.Python.valueToCode(block, 'sensor', Blockly.Python.ORDER_ATOMIC);
   code = value_sensor + ".ReadRaw_Calibrated()";
-  return [code, Blockly.Python.ORDER_NONE];
+  return [code, Blockly.Python.ORDER_ATOMIC];
 };
 </script>
