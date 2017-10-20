@@ -23,11 +23,8 @@
 # Date      Author      Comments
 # July 2015  Henry     Initial Authoring from SensorShield import SensorShield
 
-import os,sys,inspect,time,thread
+import time
 
-currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
-parentdir = os.path.dirname(currentdir)
-sys.path.insert(0,parentdir)
 from PiStorms import PiStorms
 psm = PiStorms()
 version = float(psm.GetFirmwareVersion()[1:5])
@@ -71,4 +68,3 @@ while(not exit):
         psm.led(2,0,0,0)
         time.sleep(1)
         exit = True
-

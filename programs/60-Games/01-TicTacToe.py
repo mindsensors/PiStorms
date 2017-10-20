@@ -21,13 +21,8 @@
 
 # Tic Tac Toe
 
-import random
-import os,sys,inspect,time,thread
-import socket,fcntl,struct
+import time, random
 
-currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
-parentdir = os.path.dirname(currentdir)
-sys.path.insert(0,parentdir)
 from PiStorms import PiStorms
 
 psm = PiStorms()

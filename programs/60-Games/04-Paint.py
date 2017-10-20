@@ -19,10 +19,6 @@
 #please support mindsensors.com  by purchasing products from mindsensors.com!
 #Learn more product option visit us @  http://www.mindsensors.com/
 
-import os,sys,inspect,time,thread,random
-currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
-parentdir = os.path.dirname(currentdir)
-
 from PiStorms import PiStorms
 psm = PiStorms()
 

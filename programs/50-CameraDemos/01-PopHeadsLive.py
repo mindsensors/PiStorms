@@ -26,12 +26,10 @@
 
 from picamera.array import PiRGBArray
 from picamera import PiCamera
-import os,sys,inspect,time#thread
+import os, inspect, time
 import cv2
 import imutils
 currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
-parentdir = os.path.dirname(currentdir)
-sys.path.insert(0,parentdir)
 from PiStorms import PiStorms
 psm = PiStorms()
 
@@ -130,7 +128,3 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
         break
     #if key == ord("q"):
     #    break
-
-
-
-

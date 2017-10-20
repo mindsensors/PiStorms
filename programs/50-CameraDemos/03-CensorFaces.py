@@ -25,13 +25,11 @@
 
 from picamera.array import PiRGBArray
 from picamera import PiCamera
-import os,sys,inspect,time#thread
+import os, inspect, time
 from subprocess import call
 import cv2
 import imutils
 currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
-parentdir = os.path.dirname(currentdir)
-sys.path.insert(0,parentdir)
 from PiStorms import PiStorms
 psm = PiStorms()
 
@@ -81,5 +79,3 @@ while not exitNow:
 			psm.screen.termPrintAt(9,"Exiting to menu")
 			time.sleep(0.5)
 			exitNow = True
-
-

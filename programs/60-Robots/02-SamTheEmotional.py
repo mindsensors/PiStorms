@@ -29,10 +29,8 @@ from PiStorms import PiStorms
 #Demo Code for the PiStorms and Raspberry Pi
 
 #initial setup code
-import os,sys,inspect,time,thread, random,time
+import os, inspect, time, random
 currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
-parentdir = os.path.dirname(currentdir)
-#sys.path.insert(0,parentdir)
 
 #starts an instance of PiStorms
 psm = PiStorms()

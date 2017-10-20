@@ -24,19 +24,15 @@
 # 2010       Kevin Chabowski  Initial Pygame implementation
 # Sept 2016  Seth  Tenembaum  Initial PiStorms adaptation
 
-import os,sys,inspect,time,thread
-import socket,fcntl,struct
+import sys, time
 
-currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
-parentdir = os.path.dirname(currentdir)
-sys.path.insert(0,parentdir)
 from PiStorms import PiStorms
 
 psm = PiStorms(rotation = 2)
 
 
 from random import randrange as rand
-import pygame, sys
+import pygame
 
 # The configuration
 cell_size = 18

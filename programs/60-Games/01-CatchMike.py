@@ -25,9 +25,7 @@
 #Demo Code for the PiStorms and Raspberry Pi
 # initial setup code
 
-import os,sys,inspect,time,thread,random
-currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
-parentdir = os.path.dirname(currentdir)
+import time, random
 from PiStorms import PiStorms
 
 # starts an instance of PiStorms
@@ -49,7 +47,7 @@ psm.led(2,0,0,0)
 psm.screen.fillRect(0, 0, 320, 240)
 
 # initial loading screen
-psm.screen.fillBmp(110, 20, 100, 100, path = currentdir+'/'+"faceAwesome.png")
+psm.screen.fillBmp(110, 20, 100, 100, path = "faceAwesome.png")
 psm.screen.drawAutoText("Hi I am Mike!", 15, 140, fill=(0, 0, 0), size = 30)
 psm.screen.drawAutoText("Catch me if you can!!", 15, 170, fill=(0, 0, 0), size = 30)
 psm.screen.drawAutoText("(Press Go button to quit)", 15, 210, fill=(0, 0, 0), size = 15)
@@ -89,7 +87,7 @@ while(not exit):
     randY = random.randint(0, 115)  # selects a random y coordinate for Mike
                                     # max of 115 so he will not appear off the screen (screen y value is 240, but the score display starts at yvalue of 190, so 190 - Mike's height (75) = 115)
 
-    psm.screen.fillBmp(randX, randY, 95-score, 95-score, path = currentdir+'/'+"faceAwesome.png") # display Mike at the random coordinates
+    psm.screen.fillBmp(randX, randY, 95-score, 95-score, path = "faceAwesome.png") # display Mike at the random coordinates
     miliseconds = int(round(time.time()*1000))
     while (int(round(time.time()*1000)) - miliseconds)< (150+1000/score):
         if(psm.screen.checkButton(randX - (score), randY - (score), 95-score, 95-score)): # if an invisible box drawn around Mike's position is tapped, then:

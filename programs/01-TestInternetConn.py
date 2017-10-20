@@ -23,13 +23,6 @@
 # Date          Author          Comments
 # March 2016    Roman Bohuk     Initial Authoring
 
-# Setup (to be present in all programs)
-import os,sys,inspect,time,thread
-import socket,fcntl,struct
-currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
-parentdir = os.path.dirname(currentdir)
-sys.path.insert(0,parentdir)
-
 from PiStorms import PiStorms
 import socket
 
@@ -48,7 +41,7 @@ def available():
 psm.screen.fillRect(0, 0, 320, 240, fill = (0,0,0), display = False)
 psm.screen.drawAutoText("Testing internet connection", 20, 30, fill = (255,255,255), size = 23, display = False)
 psm.screen.fillRect(20, 80, 320, 240, fill = (0,0,0), display = False)
-psm.screen.fillBmp(110, 110, 100, 100, path = currentdir+'/'+'load.png', display = False)
+psm.screen.fillBmp(110, 110, 100, 100, path = 'load.png', display = False)
 psm.screen.fillRect(0, 0, 1, 1, fill = (0,0,0), display = True)
 
 
@@ -57,11 +50,11 @@ psm.screen.fillRect(0, 0, 320, 240, fill = (0,0,0), display = False)
 if test:
     psm.screen.drawAutoText("You are connected", 35, 20, fill = (0,255,0), size = 25, display = False)
     psm.screen.drawAutoText("to the internet!", 35, 50, fill = (0,255,0), size = 25, display = False)
-    psm.screen.fillBmp(120, 85, 80, 80, path = currentdir+'/'+'wifi_green.png', display = False)
+    psm.screen.fillBmp(120, 85, 80, 80, path = 'wifi_green.png', display = False)
 else:
     psm.screen.drawAutoText("You are not connected", 35, 20, fill = (255,0,0), size = 25, display = False)
     psm.screen.drawAutoText("to the internet!", 35, 50, fill = (255,0,0), size = 25, display = False)
-    psm.screen.fillBmp(130, 95, 60, 60, path = currentdir+'/'+'x_red.png', display = False)
+    psm.screen.fillBmp(130, 95, 60, 60, path = 'x_red.png', display = False)
 
 psm.screen.drawButton(35, 170, width = 250, height = 40, text="Continue", display=False)
 psm.screen.fillRect(0, 0, 1, 1, fill = (0,0,0), display = True)

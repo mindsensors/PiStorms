@@ -23,13 +23,7 @@
 # Date          Author          Comments
 # March 2016    Roman Bohuk     Initial Authoring
 
-# Setup (to be present in all programs)
-import os,sys,inspect,time,thread
-import socket,fcntl,struct
-currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
-parentdir = os.path.dirname(currentdir)
-sys.path.insert(0,parentdir)
-
+import sys, time
 from PiStorms import PiStorms
 from TouchScreenInput import TouchScreenInput
 from wireless import Wireless
@@ -183,7 +177,7 @@ def draw_connections(ssid_lst, page):
         # Identify whether the network is secured or not with a lock
         img = "ulock.png"
         if i[1]: img = "lock.png"
-        psm.screen.fillBmp(25, ystart + ind * 40 + 5, 30, 30, path = currentdir+'/'+img, display = False)
+        psm.screen.fillBmp(25, ystart + ind * 40 + 5, 30, 30, path = img, display = False)
         psm.screen.drawButton(60, ystart + ind * 40, width = 260, height = 40, text="Hidden Network" if i[0] == "" else i[0], display=False)
         ind += 1
     # Finally display all options
@@ -196,10 +190,10 @@ def show_loading(up=False):
     # If fullscreen
     if up:
         psm.screen.fillRect(0, 0, 320, 240, fill = (0,0,0), display = False)
-        psm.screen.fillBmp(110, 70, 100, 100, path = currentdir+'/'+'load.png', display = False)
+        psm.screen.fillBmp(110, 70, 100, 100, path = 'load.png', display = False)
     else:
         psm.screen.fillRect(20, 80, 320, 240, fill = (0,0,0), display = False)
-        psm.screen.fillBmp(110, 110, 100, 100, path = currentdir+'/'+'load.png', display = False)
+        psm.screen.fillBmp(110, 110, 100, 100, path = 'load.png', display = False)
     # Finally display
     psm.screen.fillRect(0, 0, 1, 1, fill = (0,0,0), display = True)
 
