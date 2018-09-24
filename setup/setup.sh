@@ -77,7 +77,7 @@ echo "Updating pip..."
 sudo pip -qq install --upgrade pip
 echo "Downloading and installing 7 required Python packages..."
 sudo pip -qq install --upgrade mindsensors-i2c
-sudo pip -qq install RPi.GPIO wireless wifi ws4py flask imutils
+sudo pip -qq install RPi.GPIO wireless wifi ws4py flask imutils python-imaging
 
 
 echo "Copying files..."
