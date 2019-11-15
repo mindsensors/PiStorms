@@ -24,17 +24,11 @@
 # March 2016    Roman Bohuk     Initial Authoring
 # July 2017     Seth Tenembaum  Update for GRX
 
-import os, sys, time, re, subprocess
+import sys, time, re, subprocess
 from PiStorms_GRX import PiStorms_GRX
 from TouchScreenInput import TouchScreenInput
 from wireless import Wireless
 from wifi import Cell
-import ConfigParser
-
-config = ConfigParser.RawConfigParser()
-config.read("/usr/local/mindsensors/conf/msdev.cfg")
-homefolder = config.get("msdev", "homefolder")
-currentdir = os.path.join(homefolder, "programs")
 
 # Globals
 config_file = "/etc/wpa_supplicant/wpa_supplicant.conf" # Config file for Wi-Fi
@@ -183,7 +177,7 @@ def draw_connections(ssid_lst, page):
         # Identify whether the network is secured or not with a lock
         img = "ulock.png"
         if i[1]: img = "lock.png"
-        psm.screen.fillBmp(25, ystart + ind * 40 + 5, 30, 30, path = currentdir+'/'+img, display = False)
+        psm.screen.fillBmp(25, ystart + ind * 40 + 5, 30, 30, path = img, display = False)
         psm.screen.drawButton(60, ystart + ind * 40, width = 260, height = 40, text="Hidden Network" if i[0] == "" else i[0], display=False)
         ind += 1
     # Finally display all options
@@ -196,10 +190,10 @@ def show_loading(up=False):
     # If fullscreen
     if up:
         psm.screen.fillRect(0, 0, 320, 240, fill = (0,0,0), display = False)
-        psm.screen.fillBmp(110, 70, 100, 100, path = currentdir+'/'+'load.png', display = False)
+        psm.screen.fillBmp(110, 70, 100, 100, path = 'load.png', display = False)
     else:
         psm.screen.fillRect(20, 80, 320, 240, fill = (0,0,0), display = False)
-        psm.screen.fillBmp(110, 110, 100, 100, path = currentdir+'/'+'load.png', display = False)
+        psm.screen.fillBmp(110, 110, 100, 100, path = 'load.png', display = False)
     # Finally display
     psm.screen.fillRect(0, 0, 1, 1, fill = (0,0,0), display = True)
 

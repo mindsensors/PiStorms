@@ -23,11 +23,6 @@
 # Date      Author      Comments
 #  July 2015  Henry     Initial Authoring from SensorShield import SensorShield
 
-
-import os,sys,inspect,time
-currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
-parentdir = os.path.dirname(currentdir)
-sys.path.insert(0,parentdir)
 from PiStorms import PiStorms
 
 psm = PiStorms()
@@ -49,4 +44,3 @@ while(not exit):
         psm.screen.termPrintln(" ")
         psm.screen.termPrintln("Exiting .....")
         exit = True
-

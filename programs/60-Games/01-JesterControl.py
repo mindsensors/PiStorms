@@ -24,10 +24,8 @@
 #  Aug 2015  Andrew     Initial Authoring from SensorShield import SensorShield
 
 
-import os,sys,inspect,time,thread,random
-currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
-parentdir = os.path.dirname(currentdir)
-sys.path.insert(0,parentdir)
+import time
+
 from PiStorms import PiStorms
 
 # starts an instance of PiStorms
@@ -41,7 +39,7 @@ exit = False
 psm.screen.fillRect(0, 0, 320, 240)
 
 # initial loading screen
-psm.screen.fillBmp(50, 20, 100, 100, path = currentdir+'/'+"faceClown.png")
+psm.screen.fillBmp(50, 20, 100, 100, path = "faceClown.png")
 psm.screen.drawAutoText("Hi There!", 15, 140, fill=(0, 0, 0), size = 30)
 psm.screen.drawAutoText("poke my eyes or tap my nose", 15, 170, fill=(0, 0, 0), size = 20)
 time.sleep(.5)
@@ -65,22 +63,22 @@ psm.screen.fillRect(0, 0, 320, 240)
 while(not exit):
     #plain face
     if(currFace != 0):
-        psm.screen.fillBmp(40, 0, 240, 240, path = currentdir+'/'+"faceClown.png")
+        psm.screen.fillBmp(40, 0, 240, 240, path = "faceClown.png")
         currFace = 0
 
     #right eye
     if(psm.screen.checkButton(106, 68, 44, 53)):
-        psm.screen.fillBmp(40,0,240,240, path = currentdir+'/'+"faceClown_eyeRight.png")
+        psm.screen.fillBmp(40,0,240,240, path = "faceClown_eyeRight.png")
         currFace = 1
 
     #left eye
     if(psm.screen.checkButton(175, 68, 44, 53)):
-        psm.screen.fillBmp(40,0,240,240, path = currentdir+'/'+"faceClown_eyeLeft.png")
+        psm.screen.fillBmp(40,0,240,240, path = "faceClown_eyeLeft.png")
         currFace = 1
 
     #nose
     if(psm.screen.checkButton(130, 122, 70, 60)):
-        psm.screen.fillBmp(40,0,240,240, path = currentdir+'/'+"faceClown_nose.png")
+        psm.screen.fillBmp(40,0,240,240, path = "faceClown_nose.png")
         currFace = 1
 
     if(psm.isKeyPressed() == True): # if the GO button is pressed

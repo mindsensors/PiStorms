@@ -25,13 +25,6 @@
 
 # This program demonstrates some more advanced on-screen keyboard usage
 
-# Standard setup for every PiStorms program
-import os,sys,inspect,time,thread
-import socket,fcntl,struct
-currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
-parentdir = os.path.dirname(currentdir)
-sys.path.insert(0,parentdir)
-
 # Import the PiStorms class and the class for the on-screen keyboard
 from PiStorms import PiStorms
 from TouchScreenInput import TouchScreenInput

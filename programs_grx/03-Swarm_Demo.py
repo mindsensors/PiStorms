@@ -24,7 +24,6 @@
 # 01/01/16   Deepak     Initial development.
 #
 import json, time, os, sys, inspect, thread
-import ConfigParser
 from ws4py.client.threadedclient import WebSocketClient
 from swarmclient import *
 from PiStorms_GRX import PiStorms_GRX
@@ -32,18 +31,11 @@ from PiStorms_GRX import PiStorms_GRX
 #
 # message sender
 #
-currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
-parentdir = os.path.dirname(currentdir)
-sys.path.insert(0,parentdir)
 psm = PiStorms_GRX()
 doExit = False
 bmpw = 60
 old_x = 110
 old_y = 80
-config = ConfigParser.RawConfigParser()
-config.read("/usr/local/mindsensors/conf/msdev.cfg")
-homefolder = config.get("msdev", "homefolder")
-currentdir = os.path.join(homefolder, "programs")
 
 psm.screen.clearScreen()
 if __name__ == '__main__':
@@ -66,8 +58,8 @@ if __name__ == '__main__':
             if (msg['action'] == "move"):
                 smiley_x = msg['x']
                 smiley_y = msg['y']
-                psm.screen.fillBmp(old_x, old_y, bmpw, bmpw, path = currentdir+'/'+"black-square.png")
-                psm.screen.fillBmp(smiley_x, smiley_y, bmpw, bmpw, path = currentdir+'/'+"smiley.png")
+                psm.screen.fillBmp(old_x, old_y, bmpw, bmpw, path = "black-square.png")
+                psm.screen.fillBmp(smiley_x, smiley_y, bmpw, bmpw, path = "smiley.png")
                 old_x = smiley_x
                 old_y = smiley_y
         else:
@@ -90,7 +82,7 @@ if __name__ == '__main__':
         psm.screen.askQuestion(m,["OK"])
 
     psm.screen.clearScreen()
-    psm.screen.fillBmp(old_x, old_y, bmpw, bmpw, path = currentdir+'/'+"smiley.png")
+    psm.screen.fillBmp(old_x, old_y, bmpw, bmpw, path = "smiley.png")
     peers = len(nbrs_list)
     psm.screen.drawAutoText( str(peers) + " neighbor(s) found", 15, 200, fill=(255, 255, 255), size = 18)
     psm.screen.drawAutoText("Press Go to Exit", 15, 218, fill=(255, 255, 255), size = 18)
@@ -149,8 +141,8 @@ if __name__ == '__main__':
 
                     sys.stdout.flush()
                     # move my own smiley too.
-                    psm.screen.fillBmp(old_x, old_y, bmpw, bmpw, path = currentdir+'/'+"black-square.png")
-                    psm.screen.fillBmp(image_x, image_y, bmpw, bmpw, path = currentdir+'/'+"smiley.png")
+                    psm.screen.fillBmp(old_x, old_y, bmpw, bmpw, path = "black-square.png")
+                    psm.screen.fillBmp(image_x, image_y, bmpw, bmpw, path = "smiley.png")
                     old_x = image_x
                     old_y = image_y
 

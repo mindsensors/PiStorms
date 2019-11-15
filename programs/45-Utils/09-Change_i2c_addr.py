@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 #
 # Copyright (c) 2015 mindsensors.com
-# 
+#
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 2 as
 # published by the Free Software Foundation.
@@ -15,7 +15,7 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 #
-#mindsensors.com invests time and resources providing this open source code, 
+#mindsensors.com invests time and resources providing this open source code,
 #please support mindsensors.com  by purchasing products from mindsensors.com!
 #Learn more product option visit us @  http://www.mindsensors.com/
 #
@@ -23,12 +23,9 @@
 # Date      Author      Comments
 # Oct 2015  Michael     Initial Authoring
 
-import os,sys,inspect,time,thread
-import socket,fcntl,struct,ms_explorerlib,subprocess    
+import time
+import ms_explorerlib, subprocess    
 
-currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
-parentdir = os.path.dirname(currentdir)
-sys.path.insert(0,parentdir) 
 from PiStorms import PiStorms
 import ConfigParser
 
@@ -47,15 +44,15 @@ exit = False
 lastled = 0
 
 def explore():
-    psm.screen.termPrintAt(5, "Searching for i2c device...")        
+    psm.screen.termPrintAt(5, "Searching for i2c device...")
     psm.BAS1.activateCustomSensorI2C()
     time.sleep(3)
     addr = 0x00     # DO NOT change this address!!!
     i2c = ms_explorerlib.Explorer(addr)
-    found = i2c.ping(0x00)  
+    found = i2c.ping(0x00)
     # Checks for connection on all I2C addresses until connection is found
-    count = 0 
-    while found == -1:     
+    count = 0
+    while found == -1:
         if (addr < 0xef):
             addr = addr + 1
             count = count + 1
@@ -65,7 +62,7 @@ def explore():
             if (count > 2000):
                 found = 5
         else:
-            addr = 0x00         
+            addr = 0x00
     if (found == 5):
         psm.screen.termPrintAt(5, "No Device found!")
         psm.screen.termPrintAt(6, "Click Exit to return to main menu")
@@ -75,8 +72,8 @@ def explore():
     else:
         global currAddr
         currAddr = addr
-        #psm.screen.termPrintAt(5, "8 bit address: " + str(hex(addr)))      
-        
+        #psm.screen.termPrintAt(5, "8 bit address: " + str(hex(addr)))
+
 def selectAddress():
     psm.screen.clearScreen()
     psm.screen.drawDisplay("PiStorms")
@@ -91,42 +88,41 @@ def selectAddress():
     psm.screen.termPrintAt(6, "New Address: ")
     psm.screen.termPrintAt(7, "       " + str(hex(nextAddr)))
     check = psm.screen.checkButton(75, 95,width=85,height=40)
-    while(check == False): 
+    while(check == False):
         check = psm.screen.checkButton(75, 95,width=85,height=40)
-        bye = psm.screen.checkButton(175, 95,width=60,height=40)         
+        bye = psm.screen.checkButton(175, 95,width=60,height=40)
         if(psm.screen.checkArrows() == (False, True)):
             nextAddr = nextAddr + 2
         if(psm.screen.checkArrows() == (True, False)):
-            nextAddr = nextAddr - 2        
+            nextAddr = nextAddr - 2
         if(bye == True):
             psm.screen.termPrintAt(9, "Exiting to menu")
             global exit
-            exit = True   
-            check = True            
-        psm.screen.termPrintAt(7, "       " + str(hex(nextAddr)))        
+            exit = True
+            check = True
+        psm.screen.termPrintAt(7, "       " + str(hex(nextAddr)))
         #time.sleep(.25)
-    
+
 def changeAddress():
     psm.screen.termPrintAt(8, "Changing Address...")
     command = homefolder + "/programs/addresschange " + str(hex(currAddr)) + " " + str(hex(nextAddr))
     #psm.screen.termPrintAt(9, command)
     psm.screen.termPrintAt(9, "Successful! Exiting to Main Menu")
-    #os.system
-    subprocess.call(command, shell=True)  
+    subprocess.call(command, shell=True)
     time.sleep(2)
     global exit
     exit = True
-    
+
 while(not exit):
     action = psm.screen.checkButton(75, 95,width=85,height=40)
     bye = psm.screen.checkButton(175, 95,width=60,height=40)
-    if(action == True): 
+    if(action == True):
         explore()
         if(exit == False):
             selectAddress()
             time.sleep(.25)
             if(exit == False):
-                changeAddress()            
+                changeAddress()
     if(bye == True):
         psm.screen.termPrintAt(9, "Exiting to menu")
         exit = True

@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 #
 # Copyright (c) 2015 mindsensors.com
-# 
+#
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 2 as
 # published by the Free Software Foundation.
@@ -14,7 +14,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-#mindsensors.com invests time and resources providing this open source code, 
+#mindsensors.com invests time and resources providing this open source code,
 #please support mindsensors.com  by purchasing products from mindsensors.com!
 #Learn more product option visit us @  http://www.mindsensors.com/
 # History:
@@ -25,14 +25,10 @@
 
 
 #initial setup code
-import os,sys,inspect,time,thread, random
+import time
 from mindsensors_i2c import mindsensors_i2c
 from PiStorms import PiStorms
 from mindsensors import ABSIMU
-
-currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
-parentdir = os.path.dirname(currentdir)
-sys.path.insert(0,parentdir) 
 
 #starts an instance of PiStorms
 
@@ -51,8 +47,8 @@ psm.led(2, 0,0,0)
 
 psm.BBS1.activateCustomSensorI2C() #Connect the I2C sensor on the port BBS1
 #main loop
-# This test program will print IMU data on Terminal 
-# Compass heading is represented on Red LED on BANKB 
+# This test program will print IMU data on Terminal
+# Compass heading is represented on Red LED on BANKB
 # Program will exit when someone touch the screen or Go Button
 
 while(not exit):
@@ -67,20 +63,20 @@ while(not exit):
     except:
         psm.led(2,0, 0,0)
         psm.screen.termPrintAt(6,"connect AbsImu on port BBS1 ")
-     
+
     print " Accelerometer: " + str(accl)
     print " Magnetometer" + str(mag)
     print " Gyroscope: " + str(gyro)
     print " Compass: " + str(heading)
-    
-    time.sleep(.1)    
-       
-        
+
+    time.sleep(.1)
+
+
     if(psm.isKeyPressed() == True): # if the GO button is pressed
         psm.screen.clearScreen()
-        psm.screen.termPrintln("") 
+        psm.screen.termPrintln("")
         psm.screen.termPrintln("Exiting to menu")
-        time.sleep(0.5) 
+        time.sleep(0.5)
         psm.led(1, 0,0,0)
         psm.led(2, 0,0,0)
-        exit = True 
+        exit = True

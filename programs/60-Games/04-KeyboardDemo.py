@@ -23,13 +23,6 @@
 # Date          Author          Comments
 # May 2016    Deepak            Initial authoring
 
-# Setup (to be present in all programs)
-import os,sys,inspect,time,thread
-import socket,fcntl,struct
-currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
-parentdir = os.path.dirname(currentdir)
-sys.path.insert(0,parentdir)
-
 # PiStorms and Input classes
 from PiStorms import PiStorms
 from TouchScreenInput import TouchScreenInput

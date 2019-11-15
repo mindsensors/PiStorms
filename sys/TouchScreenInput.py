@@ -24,12 +24,7 @@
 # March 2016    Roman Bohuk     Initial Authoring
 # May 2016      Deepak Patil    make this library independent of device.
 
-import os,sys,inspect,time,thread
-import socket,fcntl,struct
-
-currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
-parentdir = os.path.dirname(currentdir)
-sys.path.insert(0,parentdir)
+import time
 
 ## Create a TextBox with virtual keyboard for user Input.
 # Use in your program as:
