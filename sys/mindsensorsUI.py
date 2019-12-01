@@ -32,7 +32,7 @@
 from PiStormsCom import PiStormsCom
 from PiStormsCom_GRX import GRXCom
 import time, os, sys, math
-import Image, ImageDraw, ImageFont
+form PIL import Image, ImageDraw, ImageFont
 import textwrap
 import MS_ILI9341 as TFT
 from Adafruit_ILI9341 import ILI9341_INVOFF
