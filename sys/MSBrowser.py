@@ -32,7 +32,7 @@ from mindsensors_i2c import mindsensors_i2c
 from mindsensorsUI import mindsensorsUI
 from PiStormsCom import PiStormsCom
 from PiStormsCom_GRX import GRXCom
-import Image, ImageDraw, ImageFont
+from PIL import Image, ImageDraw, ImageFont
 from datetime import datetime
 from fcntl import flock, LOCK_EX, LOCK_UN, LOCK_NB
 import ConfigParser
