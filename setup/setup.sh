@@ -72,7 +72,7 @@ sudo apt-get -qq -y update
 echo "Downloading and installing 15 required packages..."
 sudo apt-get -qq -y install build-essential git nmap mpg123 apache2 php7.3 libapache2-mod-php7.3 libapache2-mod-php\
                             python-numpy python-matplotlib python-scipy python-opencv \
-                            python-dev python-smbus python-pip  pillow &> /dev/null
+                            python-dev python-smbus python-pip pillow &> /dev/null
 echo "Updating pip..."
 sudo pip -qq install --upgrade pip
 echo "Downloading and installing 7 required Python packages..."
