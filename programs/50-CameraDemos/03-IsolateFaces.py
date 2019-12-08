@@ -28,7 +28,7 @@ from picamera import PiCamera
 import os,sys,inspect,time#thread
 from subprocess import call
 import numpy as np
-import Image
+from PIL import Image
 import cv2
 import imutils
 currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
@@ -64,7 +64,7 @@ while not exitNow:
 		img = cv2.imread('/tmp/pic.jpg')
 		(imh, imw) = img.shape[:2]
 		grayimg = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-		faces = faceCascade.detectMultiScale(grayimg, scaleFactor=1.1, minNeighbors=5, minSize=(30, 30), flags = cv2.cv.CV_HAAR_SCALE_IMAGE)
+		faces = faceCascade.detectMultiScale(grayimg, scaleFactor=1.1, minNeighbors=5, minSize=(30, 30), flags = cv2.CASCADE_SCALE_IMAGE)
 		print imw, imh, faces
 		mask = np.zeros(img.shape,dtype = np.uint8)
 		for (x,y,w,h) in faces:
