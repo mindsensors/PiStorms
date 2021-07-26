@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 #
 # Copyright (c) 2016 mindsensors.com
 #
@@ -67,7 +67,7 @@ if (isConnected == False):
     psm.screen.askQuestion(m,["OK"])
     sys.exit(-1)
 
-print "running software_update.py"
+print ("running software_update.py")
 
 try:
     f = open(version_json_file, 'r')

@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 #
 # Copyright (c) 2015 mindsensors.com
 #
@@ -26,15 +26,15 @@
 import time
 
 from PiStormsCom import PiStormsCom
-print ""
-print "Running program 5 times, press Ctrl-C to terminate"
-print ""
+print ("")
+print ("Running program 5 times, press Ctrl-C to terminate")
+print ("")
 psm_comm = PiStormsCom()
 
 exit = False
 a = 0
 while(a < 5):
     voltVal = psm_comm.battVoltage()
-    print "PiStorms voltage: " + str(voltVal)
+    print ("PiStorms voltage: " + str(voltVal))
     time.sleep(2)
     a = a + 1

@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 #
 # Copyright (c) 2016 mindsensors.com
 #
@@ -66,7 +66,7 @@ if (isConnected == False):
     psm.screen.askQuestion(m,["OK"])
     sys.exit(-1)
 
-print "running hardware_update.py"
+print ("running hardware_update.py")
 
 # find hw version on this pi.
 try:
@@ -78,10 +78,10 @@ try:
 except:
     hw_version = "0.000"
 
-print "hw_version from file: " + str(hw_version)
+print ("hw_version from file: " + str(hw_version))
 
 if ( hw_version < "1.7"):
-    print "Firmware unknown or too old for auto update"
+    print ("Firmware unknown or too old for auto update")
     m = ["Firmware Updater", "Current Firmware unkown or too old.",
       "Can not auto update."]
     psm.screen.askQuestion(m,["OK"])
@@ -164,5 +164,5 @@ else:
 
     # screen calibration required after firmware change
     # force calibrations
-    os.system("sudo python " +  homefolder + "/programs/utils/01-Calibrate.py force")
+    os.system("sudo python3 " +  homefolder + "/programs/utils/01-Calibrate.py force")
     sys.exit(0)

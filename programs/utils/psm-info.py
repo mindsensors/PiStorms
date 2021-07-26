@@ -22,7 +22,7 @@
 # History:
 # Date      Author      Comments
 
-import os,sys,inspect,time,thread
+import os,sys,inspect,time,threading
 import socket,fcntl,struct
 
 
@@ -34,22 +34,21 @@ def get_ip_address(ifname):
         struct.pack('256s', ifname[:15])
     )[20:24])
 
-
-
 from PiStormsCom import PiStormsCom
-print "running psm-info.py"
+
+print ("running psm-info.py")
 psm_comm = PiStormsCom()
 
-print " Version : "+ str(psm_comm.GetFirmwareVersion() )[:5]
-print " Vendor  : "+ str(psm_comm.GetVendorName() )
-print " Device : "+ str(psm_comm.GetDeviceId() )
-print " HostName :     "   + socket.gethostname()
+print (" Version :  {0}".format(str(psm_comm.GetFirmwareVersion() )[:5]))
+print (" Vendor  :  {0}".format(str(psm_comm.GetVendorName() )))
+print (" Device :   {0}".format(str(psm_comm.GetDeviceId() )))
+print (" HostName : {0}".format(socket.gethostname()))
 
 try:
-    print " eth0 :     "   + get_ip_address('eth0')
+    print (" eth0 :    {0} ".format(get_ip_address('eth0')))
 except:
-    print " eth0 : not present"
+    print (" eth0 : not present")
 try:
-    print " wlan0 :    "+ get_ip_address('wlan0')
+    print (" wlan0 :   {0} ".format(get_ip_address('wlan0')))
 except:
-    print " wlan0 : not present"
+    print (" wlan0 : not present")

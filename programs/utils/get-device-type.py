@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 #
 # Copyright (c) 2016 mindsensors.com
 #
@@ -30,8 +30,8 @@
 from PiStormsCom import PiStormsCom
 comm = PiStormsCom()
 
-import ConfigParser
-config = ConfigParser.RawConfigParser()
+import configparser
+config = configparser.RawConfigParser()
 config.read("/usr/local/mindsensors/conf/msdev.cfg")
 
 if "GRX" in comm.GetDeviceFeatures().upper():
@@ -39,5 +39,5 @@ if "GRX" in comm.GetDeviceFeatures().upper():
 else:
     config.set('msdev', 'device', 'PiStorms')
 
-with open("/usr/local/mindsensors/conf/msdev.cfg", 'wb') as configfile:
+with open("/usr/local/mindsensors/conf/msdev.cfg", 'w') as configfile:
     config.write(configfile)

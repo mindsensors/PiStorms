@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 #
 # Copyright (c) 2017 mindsensors.com
 #
@@ -24,7 +24,7 @@
 
 from Adafruit_ILI9341 import ILI9341 as TFT
 from Adafruit_GPIO import SPI
-import Image
+from PIL import Image
 
 disp = TFT(24, rst=25, spi=SPI.SpiDev(0,0,max_speed_hz=64000000))
 disp.display(Image.open("/usr/local/mindsensors/images/ms-logo-w320-h240.png").transpose(Image.ROTATE_90))
