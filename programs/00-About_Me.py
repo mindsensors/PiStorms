@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 #
 # Copyright (c) 2015 mindsensors.com
 #
@@ -20,11 +20,11 @@
 #Learn more product option visit us @  http://www.mindsensors.com/
 
 import os, socket
-import ConfigParser
+import configparser
 from PiStorms import PiStorms
 psm = PiStorms()
 
-config = ConfigParser.RawConfigParser()
+config = configparser.RawConfigParser()
 config.read("/usr/local/mindsensors/conf/msdev.cfg")
 homefolder = config.get("msdev", "homefolder")
 try:

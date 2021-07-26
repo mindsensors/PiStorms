@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 #
 # Copyright (c) 2014 OpenElectrons.com
 #
@@ -57,7 +57,7 @@ try:
     time.sleep(.5)
 except NameError:
     #pass
-    print "Did not send Ready"
+    print ("Did not send Ready")
 
 doExit = False
 # Handles messages received from Scratch
@@ -96,7 +96,7 @@ while doExit == False:
         for cmd in command_array1:
             command_array.append(cmd.upper())
         if(debug) :
-            print  command_array ,string_message,"DT = ",int(round(time.time() * 1000)) -lasttime
+            print  (command_array ,string_message,"DT = ",int(round(time.time() * 1000)) -lasttime)
             lasttime = int(round(time.time() * 1000))
         # Split message into words
         for cmd in command_array:
@@ -143,7 +143,7 @@ while doExit == False:
                         if newvar not in read_dict[split_cmd[1]]:
                             read_dict[split_cmd[1]].append(newvar)
                         if(debug) :
-                            print read_dict[split_cmd[1]]
+                            print (read_dict[split_cmd[1]])
                         # Reads data and updates to Scratch
                         '''    if split_cmd[1] in read_dict:
                             if (str(split_cmd[1])+'_'+str(split_cmd[2]) in read_dict[split_cmd[1]]):
@@ -164,7 +164,7 @@ while doExit == False:
             # Writes data to sensor
             elif (split_cmd[0] in device_dict):
                 if(debug) :
-                    print split_cmd
+                    print (split_cmd)
                 if device_dict[split_cmd[0]].run_command(split_cmd, string_message) == True:
                     s.sensorupdate({"RMAP Status" : 1})
                 else:

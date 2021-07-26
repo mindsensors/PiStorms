@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 #
 # Copyright (c) 2016 mindsensors.com
 #
@@ -66,7 +66,7 @@ if __name__ == '__main__':
                 old_x = smiley_x
                 old_y = smiley_y
         else:
-            print "System Message: ", msg_array['message']
+            print ("System Message: {0}".format(msg_array['message']))
 
         sys.stdout.flush()
 
@@ -159,4 +159,3 @@ if __name__ == '__main__':
 
     except KeyboardInterrupt:
         ws.close()
-

@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 #
 # Copyright (c) 2016 mindsensors.com
 #
@@ -24,7 +24,7 @@
 # March 2016    Roman Bohuk     Initial Authoring
 
 # Setup (to be present in all programs)
-import os,sys,inspect,time,thread
+import os,sys,inspect,time,threading
 import socket,fcntl,struct
 currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
 parentdir = os.path.dirname(currentdir)
@@ -135,9 +135,9 @@ def reload_adapter():
     # Clear the screen and show the loading image
     show_loading(up=True)
     # Turn off and back on the wlan interface
-    subprocess.call(["sudo","ifdown",wlan_interface])
-    time.sleep(2)
-    subprocess.call(["sudo","ifup",wlan_interface])
+    subprocess.call(["sudo","ip", "link", "set",wlan_interface,"down"])
+    time.sleep(2),
+    subprocess.call(["sudo","ip", "link", "set",wlan_interface,"up"])
     # Refresh the currently connected network
     time.sleep(2)
     update_current_connection()
@@ -172,7 +172,7 @@ def draw_connections(ssid_lst, page):
     # Sort networks by name
     ssid_lst.sort(key=lambda x: x[0].lower())
     # Get the current page number to fit within index
-    page = page % ((len(ssid_lst)-1) / 4 + 1)
+    page = int(page % ((len(ssid_lst)-1) / 4 + 1))
     # Get the 4 networks to display
     toBeShown = ssid_lst[page*4::]
     if len(toBeShown) > 4: toBeShown = toBeShown[:4:]
@@ -336,6 +336,7 @@ def get_available():
 page = 0 # Current page
 ssids = get_available() # Available ssid's
 draw_options() # Displays UI options
+#print(ssids)
 shown = draw_connections(ssids, page) # Displays a page of available networks
 exit = False
 

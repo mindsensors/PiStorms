@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 #
 # Copyright (c) 2016 mindsensors.com
 #
@@ -24,7 +24,7 @@
 # March 2016    Roman Bohuk     Initial Authoring
 
 # Setup (to be present in all programs)
-import os,sys,inspect,time,thread
+import os,sys,inspect,time,threading
 import socket,fcntl,struct
 currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
 parentdir = os.path.dirname(currentdir)

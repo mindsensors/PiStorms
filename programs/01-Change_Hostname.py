@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 #
 # Copyright (c) 2017 mindsensors.com
 #
@@ -31,9 +31,10 @@ psm = PiStorms()
 keyboard = TouchScreenInput(psm.screen)
 
 def setHostname(hostname):
-    subprocess.call("sudo sed -i 's/^127\.0\.1\.1.*$/127\.0\.1\.1       \"%s\"/' /etc/hosts" % hostname, shell=True)
+    
+    subprocess.call("sudo sed -i 's/^127\.0\.1\.1.*$/127\.0\.1\.1       %s/' /etc/hosts" % hostname, shell=True)
     subprocess.call("echo \"%s\" | sudo tee /etc/hostname > /dev/null" % hostname, shell=True)
-    return subprocess.call("sudo /etc/init.d/hostname.sh", shell=True) == 0
+    return  subprocess.call("sudo /etc/init.d/hostname.sh %s"% hostname, shell=True) == 0
 
 message = ["Change Hostname",
            "Would you like to set the system hostname?",
