@@ -114,9 +114,9 @@ class SwarmClient(WebSocketClient):
 
     def tempHandler(self, msg_array):
         if ('type' in msg_array) and (msg_array['type'] == 'peermessage'):
-            print "> Peer says: ", msg_array['message']
+            print ("> Peer says: {0}".format(msg_array['message']))
         else:
-            print "> System Message: ", msg_array['message']
+            print ("> System Message: {0}".format(msg_array['message']))
 
 
     def opened(self):
@@ -129,7 +129,7 @@ class SwarmClient(WebSocketClient):
         self.Send('credentials', msg_array)
 
     def closed(self, code, reason=None):
-        print "Closed down", code, reason
+        print ("Closed down {0} {1}".format(code, reason))
 
     def received_message(self, m):
         data = json.loads(str(m))
@@ -144,13 +144,13 @@ class SwarmClient(WebSocketClient):
 
 if __name__ == '__main__':
     def myHandler(message):
-        print "**myHandler** received:", message
+        print ("**myHandler** received: {0}".format(message))
 
     try:
-        print "creating SwarmClient"
+        print ("creating SwarmClient")
         ws = SwarmClient(myHandler, 'ws://127.0.0.1:9000/')
         if not ( ws.isRegistered ):
-            print "registration failed"
+            print ("registration failed")
             exit()
 
         ws.SendMessage("second message")

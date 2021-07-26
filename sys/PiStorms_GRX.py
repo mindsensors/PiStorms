@@ -25,7 +25,7 @@
 
 from PiStormsCom_GRX import GRXCom
 from mindsensorsUI import mindsensorsUI
-import ConfigParser
+import configparser
 import time
 
 
@@ -123,7 +123,7 @@ class RCServo():
                     " and # is the servo number: 1, 2 or 3." \
                     " For example: BBS3 is Bank B, Motor 3.")
         if neutralPoint == None:
-            config = ConfigParser.RawConfigParser()
+            config = configparser.RawConfigParser()
             config.read("/usr/local/mindsensors/conf/msdev.cfg")
             if config.has_section('neutralpoint') and config.has_option('neutralpoint', port.upper()):
                 neutralPoint = config.get('neutralpoint', port.upper())

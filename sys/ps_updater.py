@@ -24,16 +24,16 @@
 # 10/02/15    Deepak            Initial authoring.
 
 import urllib, json
-import commands
+import subprocess
 from datetime import datetime, timedelta
 import time
-import ConfigParser
+import configparser
 
 version_json_file = '/var/tmp/ps_versions.json'
 hw_version_file = '/var/tmp/.hw_version'
 cfg_file = '/usr/local/mindsensors/conf/msdev.cfg'
 
-config = ConfigParser.RawConfigParser()
+config = configparser.RawConfigParser()
 config.read(cfg_file)
 
 message_server = config.get('servers', 'message_server')
@@ -41,12 +41,12 @@ home_folder = config.get('msdev', 'homefolder')
 sw_version_file = home_folder+'/.version'
 
 link = message_server + "/versions.php"
-print "gathering info from: ", link
+print ("gathering info from: {0}".format(link))
 
 cmd = 'cat /proc/cpuinfo | grep Revision | cut -d":" -f2 |awk \'{$1=$1};1\''
-rev = commands.getstatusoutput(cmd)[1]
+rev = subprocess.getstatusoutput(cmd)[1]
 cmd = 'cat /proc/cpuinfo | grep Serial | cut -d":" -f2 |awk \'{$1=$1};1\''
-serial = commands.getstatusoutput(cmd)[1]
+serial = subprocess.getstatusoutput(cmd)[1]
 
 try:
     f = open(version_json_file, 'r')
@@ -80,7 +80,7 @@ try:
 except:
     sw_version = "0.000"
 
-#print "sw_version: " + str(sw_version)
+#print ("sw_version: {0}".format(str(sw_version)))
 
 # find hw version on this pi.
 try:
@@ -93,7 +93,7 @@ try:
 except:
     hw_version = "V0.00"
 
-#print "hw_version: " + str(hw_version)
+#print ("hw_version: {0}".format(str(hw_version)))
 #
 # connect to server and get the message
 # and save the json file.
@@ -134,5 +134,5 @@ try:
     json.dump(new_json, f)
     f.close()
 except:
-    print "ps_updater.py connection failed"
+    print ("ps_updater.py connection failed")
     exit()

@@ -69,18 +69,16 @@ sudo cp /tmp/config.txt /boot/config.txt
 echo "Depending on your internet connection, the following few steps may take several minutes."
 echo "Updating package lists..."
 sudo apt-get -qq -y update
-
-sudo apt-get -qq -y install build-essential git nmap mpg123 apache2 php7.3 libapache2-mod-php7.3 libapache2-mod-php7.3\
+echo "Downloading and installing 15 required packages..."
+sudo apt-get -qq -y install build-essential git nmap mpg123 apache2 php7.3 libapache2-mod-php7.3 libapache2-mod-php\
                             python3-numpy python3-matplotlib python3-scipy python3-opencv \
-                            python3-dev python3-smbus python3-pip  &> /dev/null
-sudo pip3 install pillow
-
+                            python3-dev python3-smbus python3-pip python3-imaging &> /dev/null
 echo "Updating pip..."
-#sudo pip3 -qq install --upgrade pip3
-
+sudo pip3 -qq install --upgrade pip3
 echo "Downloading and installing 7 required Python packages..."
-#sudo pip3 -qq install --upgrade mindsensors-i2c
-sudo pip3 -qq install RPi.GPIO wireless wifi ws4py flask imutils 
+sudo pip3 -qq install --upgrade mindsensors-i2c
+sudo pip3 -qq install RPi.GPIO wireless wifi ws4py flask imutils python-imaging
+
 
 echo "Copying files..."
 # clean up renamed legacy files.
@@ -90,6 +88,7 @@ sudo update-rc.d -f PiStormsDriver.sh remove
 sudo update-rc.d -f PiStormsBrowser.sh remove
 sudo rm -f /etc/init.d/PiStormsDriver.sh
 sudo rm -f /etc/init.d/PiStormsBrowser.sh
+
 # copy startup scripts
 sudo cp -p ../sys/MSDriver.py /usr/local/bin/
 sudo cp -p ../sys/MSBrowser.py /usr/local/bin/
@@ -104,9 +103,9 @@ else
 fi
 sleep 2
 sudo cp -p ../sys/swarmserver /usr/local/bin/
-PY3_PATH="/usr/local/lib/python3.7"
 
-sudo cp -p ../sys/mindsensors_i2c.py $PY3_PATH/dist-packages/mindsensors_i2c.py
+PY3_PATH="/usr/local/lib/python3.5"
+
 # copy Python library files
 sudo cp -p ../sys/rmap.py $PY3_PATH/dist-packages/
 sudo cp -p ../sys/rmapcfg.py $PY3_PATH/dist-packages/
@@ -139,7 +138,7 @@ if [ ! -f /usr/local/mindsensors/conf/msdev.cfg ]
 then
     sudo cp -p ../sys/msdev.cfg /usr/local/mindsensors/conf/
 fi
-      
+
 # copy icons for MSBrowser
 sudo rm -rf /usr/local/mindsensors_images
 sudo mkdir -p /usr/local/mindsensors/images
@@ -160,6 +159,7 @@ sudo cp -p ../programs/refresharrow.png /usr/local/mindsensors/images/
 sudo cp -p ../programs/returnarrow.png /usr/local/mindsensors/images/
 sudo cp -p ../programs/missing.png /usr/local/mindsensors/images/
 sudo cp -p ../artwork/* /usr/local/mindsensors/images/
+
 # copy desktop background
 sudo cp -p ../artwork/* /usr/share/raspberrypi-artwork
 
@@ -167,19 +167,20 @@ sudo cp -p ../artwork/* /usr/share/raspberrypi-artwork
 mkdir -p /home/pi/Documents/Scratch\ Projects/PiStorms
 sudo cp -p ../scratch/* /home/pi/Documents/Scratch\ Projects/PiStorms
 
+
 echo "Setting up services..."
 # copy service scripts
 sudo cp -p MSDriver.sh /etc/init.d
 sudo cp -p MSBrowser.sh /etc/init.d
 sudo cp -p MSWeb.sh /etc/init.d
 sudo cp -p SwarmServer.sh /etc/init.d
-
 mkdir -p /home/pi/.config/autostart
 # set these scripts to run at startup
 sudo update-rc.d MSDriver.sh defaults 95 05
 sudo update-rc.d MSBrowser.sh defaults 96 04
 sudo update-rc.d MSWeb.sh defaults 96 04
 sudo update-rc.d SwarmServer.sh defaults 94 06
+
 # setup messenger and updaters, a system to check for updates and notices
 sudo cp -p ../sys/ps_messenger_check.py /usr/local/bin
 sudo cp -p ../sys/ps_updater.py /usr/local/bin
@@ -203,19 +204,20 @@ if [ $? != 0 ]
 then
     (sudo crontab -l -u root 2>/dev/null; echo "2 */2 * * * python /usr/local/bin/ps_updater.py") | sudo crontab - -u root
 fi
-
 # run messenger and updater once
-python3 /usr/local/bin/ps_messenger_check.py > /dev/null
-python3 /usr/local/bin/ps_updater.py > /dev/null
+python /usr/local/bin/ps_messenger_check.py > /dev/null
+python /usr/local/bin/ps_updater.py > /dev/null
+
 
 echo "Installing display libraries..."
 # setup Adafruit GFX library requirement
 cd ~
 git clone -qq https://github.com/adafruit/Adafruit_Python_ILI9341.git
 cd Adafruit_Python_ILI9341
-sudo python3 setup.py install &> /dev/null
+sudo python setup.py install &> /dev/null
 cd ..
 sudo rm -rf Adafruit_Python_ILI9341
+
 
 echo "Performing a few last configurations..."
 # enable kernel modules
@@ -231,6 +233,7 @@ if [ $? != 0 ]
 then
     sudo sed -i -e '$i \i2c-dev\n' /etc/modules
 fi
+
 # configure wifi for pistormsclassroom
 ff=/etc/wpa_supplicant/wpa_supplicant.conf
 if [ -f $ff ]
@@ -270,5 +273,3 @@ fi
 echo "
 Install completed!
 Please reboot your Raspberry Pi for changes to take effect."
-
-      

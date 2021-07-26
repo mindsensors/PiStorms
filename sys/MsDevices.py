@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 #
 # Copyright (c) 2015 mindsensors.com
 #
@@ -83,7 +83,7 @@ class AbsoluteIMU(mindsensors_i2c):
         try:
             return self.readByteSigned(self.TILT_X)
         except:
-            print "Error: Could not read tilt along x-axis"
+            print ("Error: Could not read tilt along x-axis")
             return ""
 
     ## Reads the tilt value along the y-axis
@@ -92,7 +92,7 @@ class AbsoluteIMU(mindsensors_i2c):
         try:
             return self.readByteSigned(self.TILT_Y)
         except:
-            print "Error: Could not read tilt along y-axis"
+            print ("Error: Could not read tilt along y-axis")
             return ""
 
     ## Reads the tilt value along the z-axis
@@ -101,7 +101,7 @@ class AbsoluteIMU(mindsensors_i2c):
         try:
             return self.readByteSigned(self.TILT_Z)
         except:
-            print "Error: Could not read tilt along z-axis"
+            print ("Error: Could not read tilt along z-axis")
             return ""
 
     ## Reads the tilt values
@@ -113,7 +113,7 @@ class AbsoluteIMU(mindsensors_i2c):
                     self.get_tiltz())]
             return res
         except:
-            print "Error: Could not read tilt values"
+            print ("Error: Could not read tilt values")
             return ""
 
     ## Reads acceleromter value along the x-axis
@@ -122,7 +122,7 @@ class AbsoluteIMU(mindsensors_i2c):
         try:
             return self.readIntegerSigned(self.ACCEL_X)
         except:
-            print "Error: Could not read accelerometer value along x-axis"
+            print ("Error: Could not read accelerometer value along x-axis")
             return ""
 
     ## Reads acceleromter value along the y-axis
@@ -131,7 +131,7 @@ class AbsoluteIMU(mindsensors_i2c):
         try:
             return self.readIntegerSigned(self.ACCEL_Y)
         except:
-            print "Error: Could not read accelerometer value along y-axis"
+            print ("Error: Could not read accelerometer value along y-axis")
             return ""
 
     ## Reads acceleromter value along the z-axis
@@ -140,7 +140,7 @@ class AbsoluteIMU(mindsensors_i2c):
         try:
             return self.readIntegerSigned(self.ACCEL_Z)
         except:
-            print "Error: Could not read accelerometer value along z-axis"
+            print ("Error: Could not read accelerometer value along z-axis")
             return ""
 
     ## Reads the accelerometer values
@@ -152,7 +152,7 @@ class AbsoluteIMU(mindsensors_i2c):
                     self.get_accelz())]
             return res
         except:
-            print "Error: Could not read accelerometer values"
+            print ("Error: Could not read accelerometer values")
             return ""
 
     ## Reads compass heading
@@ -164,7 +164,7 @@ class AbsoluteIMU(mindsensors_i2c):
                 head = self.readInteger(self.CMPS)
             return head
         except:
-            print "Error: Could not read compass heading"
+            print ("Error: Could not read compass heading")
             return ""
 
     ## Reads magnetometer value along the x-axis
@@ -173,7 +173,7 @@ class AbsoluteIMU(mindsensors_i2c):
         try:
             return self.readIntegerSigned(self.MAG_X)
         except:
-            print "Error: Could not read magnetometer value along x-axis"
+            print ("Error: Could not read magnetometer value along x-axis")
             return ""
 
     ## Reads magnetometer value along the y-axis
@@ -182,7 +182,7 @@ class AbsoluteIMU(mindsensors_i2c):
         try:
             return self.readIntegerSigned(self.MAG_Y)
         except:
-            print "Error: Could not read magnetometer value along y-axis"
+            print ("Error: Could not read magnetometer value along y-axis")
             return ""
 
     ## Reads magnetometer value along the z-axis
@@ -191,7 +191,7 @@ class AbsoluteIMU(mindsensors_i2c):
         try:
             return self.readIntegerSigned(self.MAG_Z)
         except:
-            print "Error: Could not read magnetometer value along z-axis"
+            print ("Error: Could not read magnetometer value along z-axis")
             return ""
 
     ## Reads the magnetometer values
@@ -203,7 +203,7 @@ class AbsoluteIMU(mindsensors_i2c):
                     self.get_magz())]
             return res
         except:
-            print "Error: Could not read magnetometer values"
+            print ("Error: Could not read magnetometer values")
             return ""
 
     ## Reads gyroscope value along the x-axis
@@ -212,7 +212,7 @@ class AbsoluteIMU(mindsensors_i2c):
         try:
             return self.readIntegerSigned(self.GYRO_X)
         except:
-            print "Error: Could not read gyroscope value along x-axis"
+            print ("Error: Could not read gyroscope value along x-axis")
             return ""
 
     ## Reads gyroscope value along the y-axis
@@ -221,7 +221,7 @@ class AbsoluteIMU(mindsensors_i2c):
         try:
             return self.readIntegerSigned(self.GYRO_Y)
         except:
-            print "Error: Could not read gyroscope value along y-axis"
+            print ("Error: Could not read gyroscope value along y-axis")
             return ""
 
     ## Reads gyroscope value along the z-axis
@@ -230,7 +230,7 @@ class AbsoluteIMU(mindsensors_i2c):
         try:
             return self.readIntegerSigned(self.GYRO_Z)
         except:
-            print "Error: Could not read gyroscope value along z-axis"
+            print ("Error: Could not read gyroscope value along z-axis")
             return ""
 
     ## Reads the tilt values
@@ -242,7 +242,7 @@ class AbsoluteIMU(mindsensors_i2c):
                     self.get_gyroz())]
             return res
         except:
-            print "Error: Could not read gyroscope values"
+            print ("Error: Could not read gyroscope values")
             return ""
 
     ## Starts the compass calibration process
@@ -251,7 +251,7 @@ class AbsoluteIMU(mindsensors_i2c):
         try:
             self.command(67)
         except:
-            print "Error: Could not start compass calibration process"
+            print ("Error: Could not start compass calibration process")
             return ""
 
     ## Stops the compass calibration process
@@ -260,7 +260,7 @@ class AbsoluteIMU(mindsensors_i2c):
         try:
             self.command(99)
         except:
-            print "Error: Could not stop compass calibration process"
+            print ("Error: Could not stop compass calibration process")
             return ""
 
     ## Sets accelerometer sensitivity to 2G
@@ -269,7 +269,7 @@ class AbsoluteIMU(mindsensors_i2c):
         try:
             self.command(49)
         except:
-            print "Error: Could not change accelerometer sensitivity"
+            print ("Error: Could not change accelerometer sensitivity")
             return ""
 
     ## Sets accelerometer sensitivity to 4G
@@ -278,7 +278,7 @@ class AbsoluteIMU(mindsensors_i2c):
         try:
             self.command(50)
         except:
-            print "Error: Could not change accelerometer sensitivity"
+            print ("Error: Could not change accelerometer sensitivity")
             return ""
 
     ## Sets accelerometer sensitivity to 8G
@@ -287,7 +287,7 @@ class AbsoluteIMU(mindsensors_i2c):
         try:
             self.command(51)
         except:
-            print "Error: Could not change accelerometer sensitivity"
+            print ("Error: Could not change accelerometer sensitivity")
             return ""
 
     ## Sets accelerometer sensitivity to 16G
@@ -296,7 +296,7 @@ class AbsoluteIMU(mindsensors_i2c):
         try:
             self.command(52)
         except:
-            print "Error: Could not change accelerometer sensitivity"
+            print ("Error: Could not change accelerometer sensitivity")
             return ""
 
 
@@ -374,7 +374,7 @@ class LineLeader(mindsensors_i2c):
         try:
             return self.readArray(self.LL_CALIBRATED, 8)
         except:
-            print "Error: Could not read Lineleader"
+            print ("Error: Could not read Lineleader")
             return ""
 
     ## Reads the eight(8) uncalibrated light sensor values of the LineLeader
@@ -392,7 +392,7 @@ class LineLeader(mindsensors_i2c):
             array = [s1, s2, s3, s4, s5, s6, s7, s8]
             return array
         except:
-            print "Error: Could not read Lineleader"
+            print ("Error: Could not read Lineleader")
             return ""
 
     ## Read the steering value from the Lineleader (add or subtract this value to the motor speed)
@@ -401,7 +401,7 @@ class LineLeader(mindsensors_i2c):
         try:
             return self.readByteSigned(self.LL_STEERING)
         except:
-            print "Error: Could not read Lineleader"
+            print ("Error: Could not read Lineleader")
             return ""
 
     ## Read the average weighted value of the current line from position from the Lineleader
@@ -410,7 +410,7 @@ class LineLeader(mindsensors_i2c):
         try:
             return self.readByte(self.LL_AVERAGE)
         except:
-            print "Error: Could not read Lineleader"
+            print ("Error: Could not read Lineleader")
             return ""
 
     ## Reads the result of all 8 light sensors form the LineLeader as 1 byte (1 bit for each sensor)
@@ -419,7 +419,7 @@ class LineLeader(mindsensors_i2c):
         try:
             return self.readByte(self.LL_RESULT)
         except:
-            print "Error: Could not read Lineleader"
+            print ("Error: Could not read Lineleader")
             return ""
 
     ## Reads the setpoint register.
@@ -428,7 +428,7 @@ class LineLeader(mindsensors_i2c):
         try:
             return self.readByte(self.LL_SETPOINT)
         except:
-            print "Error: Could not read Lineleader"
+            print ("Error: Could not read Lineleader")
             return ""
 
     ## Writes the Setpoint register.
@@ -437,7 +437,7 @@ class LineLeader(mindsensors_i2c):
         try:
             return self.writeByte(self.LL_SETPOINT)
         except:
-            print "Error: Could not write to Lineleader"
+            print ("Error: Could not write to Lineleader")
             return ""
 
     ## Write the Kp value to the Lineleader
@@ -446,7 +446,7 @@ class LineLeader(mindsensors_i2c):
         try:
             return self.writeByte(self.LL_KP)
         except:
-            print "Error: Could not write to Lineleader"
+            print ("Error: Could not write to Lineleader")
             return ""
 
     ## Write the Ki value to the Lineleader
@@ -455,7 +455,7 @@ class LineLeader(mindsensors_i2c):
         try:
             return self.writeByte(self.LL_KI)
         except:
-            print "Error: Could not write to Lineleader"
+            print ("Error: Could not write to Lineleader")
             return ""
 
     ## Write the Kd value to the Lineleader
@@ -464,7 +464,7 @@ class LineLeader(mindsensors_i2c):
         try:
             return self.writeByte(self.LL_KD)
         except:
-            print "Error: Could not write to Lineleader"
+            print ("Error: Could not write to Lineleader")
             return ""
 
     ## Write the Kp factor value to the Lineleader
@@ -473,7 +473,7 @@ class LineLeader(mindsensors_i2c):
         try:
             return self.writeByte(self.LL_KPfactor)
         except:
-            print "Error: Could not write to Lineleader"
+            print ("Error: Could not write to Lineleader")
             return ""
 
     ## Write the Ki factor value to the Lineleader
@@ -482,7 +482,7 @@ class LineLeader(mindsensors_i2c):
         try:
             return self.writeByte(self.LL_KIfactor)
         except:
-            print "Error: Could not write to Lineleader"
+            print ("Error: Could not write to Lineleader")
             return ""
 
     ## Write the Kd factor value to the Lineleader
@@ -491,7 +491,7 @@ class LineLeader(mindsensors_i2c):
         try:
             return self.writeByte(self.LL_KDfactor)
         except:
-            print "Error: Could not write to Lineleader"
+            print ("Error: Could not write to Lineleader")
             return ""
 
     ## Read the Kp value from the Lineleader
@@ -500,7 +500,7 @@ class LineLeader(mindsensors_i2c):
         try:
             return self.readByte(self.LL_KP)
         except:
-            print "Error: Could not read Lineleader"
+            print ("Error: Could not write to Lineleader")
             return ""
 
     ## Read the Ki value from the Lineleader
@@ -509,7 +509,7 @@ class LineLeader(mindsensors_i2c):
         try:
             return self.readByte(self.LL_KI)
         except:
-            print "Error: Could not read Lineleader"
+            print ("Error: Could not write to Lineleader")
             return ""
 
     ## Read the Kd value from the Lineleader
@@ -518,7 +518,7 @@ class LineLeader(mindsensors_i2c):
         try:
             return self.readByte(self.LL_KD)
         except:
-            print "Error: Could not read Lineleader"
+            print ("Error: Could not write to Lineleader")
             return ""
 
     ## Read the Kp factor value to the Lineleader
@@ -527,7 +527,7 @@ class LineLeader(mindsensors_i2c):
         try:
             return self.readByte(self.LL_KPfactor)
         except:
-            print "Error: Could not read Lineleader"
+            print ("Error: Could not write to Lineleader")
             return ""
 
     ## Read the Ki factor value to the Lineleader
@@ -536,7 +536,7 @@ class LineLeader(mindsensors_i2c):
         try:
             return self.readByte(self.LL_KIfactor)
         except:
-            print "Error: Could not read Lineleader"
+            print ("Error: Could not write to Lineleader")
             return ""
 
     ## Read the Kd factor value to the Lineleader
@@ -545,7 +545,7 @@ class LineLeader(mindsensors_i2c):
         try:
             return self.readByte(self.LL_KDfactor)
         except:
-            print "Error: Could not read Lineleader"
+            print ("Error: Could not write to Lineleader")
             return ""
 
 ## LightSensorArray: this class provides PiStorms specific interface for LightSensorArray
@@ -601,7 +601,7 @@ class LightSensorArray(mindsensors_i2c):
         try:
             return self.readArray(self.LSA_CALIBRATED, 8)
         except:
-            print "Error: Could not read LSArray"
+            print ("Error: Could not read LSArray")
             return ""
 
     ## Reads the eight(8) uncalibrated light sensor values of the LightSensorArray
@@ -619,7 +619,7 @@ class LightSensorArray(mindsensors_i2c):
             array = [s1, s2, s3, s4, s5, s6, s7, s8]
             return array
         except:
-            print "Error: Could not read LSArray"
+            print ("Error: Could not read LSArray")
             return ""
 
 
@@ -816,7 +816,7 @@ class NXTCam5(mindsensors_i2c):
         try:
             self.command(76)
         except:
-            print "Error: couldn't write command to Cam."
+            print ("Error: couldn't write command to Cam.")
             return ""
 
     ## Track Object (this is default mode of NXTCam5)
@@ -825,7 +825,7 @@ class NXTCam5(mindsensors_i2c):
         try:
             self.command(79)
         except:
-            print "Error: couldn't write command to Cam."
+            print ("Error: couldn't write command to Cam.")
             return ""
 
     ## Track Face
@@ -834,7 +834,7 @@ class NXTCam5(mindsensors_i2c):
         try:
             self.command(70)
         except:
-            print "Error: couldn't write command to Cam."
+            print ("Error: couldn't write command to Cam.")
             return ""
 
     ## Track Eye
@@ -843,7 +843,7 @@ class NXTCam5(mindsensors_i2c):
         try:
             self.command(101)
         except:
-            print "Error: couldn't write command to Cam."
+            print ("Error: couldn't write command to Cam.")
             return ""
 
     ## Capture Image
@@ -854,7 +854,7 @@ class NXTCam5(mindsensors_i2c):
         try:
             self.command(80)
         except:
-            print "Error: couldn't write command to Cam."
+            print ("Error: couldn't write command to Cam.")
             return ""
 
     ## Capture Short Video
@@ -867,7 +867,7 @@ class NXTCam5(mindsensors_i2c):
         try:
             self.command(77)
         except:
-            print "Error: couldn't write command to Cam."
+            print ("Error: couldn't write command to Cam.")
             return ""
 
     ## Capture Continuous Video
@@ -881,7 +881,7 @@ class NXTCam5(mindsensors_i2c):
         try:
             self.command(82)
         except:
-            print "Error: couldn't write command to Cam."
+            print ("Error: couldn't write command to Cam.")
             return ""
 
     ## Read the number of objects detected (0-8)
@@ -890,7 +890,7 @@ class NXTCam5(mindsensors_i2c):
         try:
             return self.readByte(self.NumberObjects)
         except:
-            print "Error: Could not read from Cam."
+            print ("Error: Could not read from Cam.")
             return ""
 
     ## Reads data of the tracked object(s)
@@ -918,7 +918,7 @@ class NXTCam5(mindsensors_i2c):
             blobs = self.getNumberObjects()
             i = blobNum - 1
             if (blobNum > blobs):
-                print "blobNum is greater than amount of blobs tracked."
+                print ("blobNum is greater than amount of blobs tracked.")
                 return 0
             else:
                 #while(i < blobs):
@@ -929,7 +929,7 @@ class NXTCam5(mindsensors_i2c):
                 data[4] = bottom = self.readByte(self.Y_Bottom + (i*5))
                 return BLOB(color,left,top,right,bottom)
         except:
-            print "Error: Could not read from Cam."
+            print ("Error: Could not read from Cam.")
             return ""
 
 

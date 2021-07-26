@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 #
 # Copyright (c) 2016 mindsensors.com
 #
@@ -76,7 +76,7 @@ class LegoSensor(PiStormsCom):
             self.bank = self.bankB
             self.sensornum = 2
         else:
-            print "no such port???"
+            print ("no such port???")
         self.type = self.PS_SENSOR_TYPE_NONE
         self.EV3Cache = [ 0, [0]*16, 0, 0, [0]*32 ] # ready, ID[16], mode, length, data[32]
 

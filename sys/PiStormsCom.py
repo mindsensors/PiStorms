@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 #
 # Copyright (c) 2015 mindsensors.com
 #
@@ -25,7 +25,7 @@
 
 from mindsensors_i2c import mindsensors_i2c
 import time, numpy
-import ConfigParser
+import configparser
 
 class PSSensor():
     PS_SENSOR_TYPE_NONE = 0
@@ -412,11 +412,12 @@ class PSMotor():
                PiStormsCom.PS_CONTROL_GO
         if(brakeOnCompletion):
             ctrl |= PiStormsCom.PS_CONTROL_BRK
-        b4 = (degs/0x1000000)
-        b3 = ((degs%0x1000000)/0x10000)
-        b2 = (((degs%0x1000000)%0x10000)/0x100)
+        b4 = (degs//0x1000000)
+        b3 = ((degs%0x1000000)//0x10000)
+        b2 = (((degs%0x1000000)%0x10000)//0x100)
         b1 = (((degs%0x1000000)%0x10000)%0x100)
         array = [b1, b2, b3, b4, speed, 0, 0, ctrl]
+
         if(self.motornum == 1):
             self.bank.writeArray(PiStormsCom.PS_SetPoint_M1, array)
         if(self.motornum == 2):
@@ -434,21 +435,21 @@ class PSMotor():
             b7 = self.bank.readByte(PiStormsCom.PS_PassTolerance)
             return [b0, b1, b2, b3, b4, b5, b6, b7]
         except:
-            print "Error: Could not read PID values"
+            print ("Error: Could not read PID values")
             return []
     def SetPerformanceParameters(self, Kp_tacho, Ki_tacho, Kd_tacho, Kp_speed, Ki_speed, Kd_speed, passcount, tolerance): # untested
-        Kp_t1 = Kp_tacho%0x100
-        Kp_t2 = Kp_tacho/0x100
-        Ki_t1 = Ki_tacho%0x100
-        Ki_t2 = Ki_tacho/0x100
-        Kd_t1 = Kd_tacho%0x100
-        Kd_t2 = Kd_tacho/0x100
-        Kp_s1 = Kp_speed%0x100
-        Kp_s2 = Kp_speed/0x100
-        Ki_s1 = Ki_speed%0x100
-        Ki_s2 = Ki_speed/0x100
-        Kd_s1 = Kd_speed%0x100
-        Kd_s2 = Kd_speed/0x100
+        Kp_t1 = int(Kp_tacho%0x100)
+        Kp_t2 = int(Kp_tacho/0x100)
+        Ki_t1 = int(Ki_tacho%0x100)
+        Ki_t2 = int(Ki_tacho/0x100)
+        Kd_t1 = int(Kd_tacho%0x100)
+        Kd_t2 = int(Kd_tacho/0x100)
+        Kp_s1 = int(Kp_speed%0x100)
+        Kp_s2 = int(Kp_speed/0x100)
+        Ki_s1 = int(Ki_speed%0x100)
+        Ki_s2 = int(Ki_speed/0x100)
+        Kd_s1 = int(Kd_speed%0x100)
+        Kd_s2 = int(Kd_speed/0x100)
         passcount = passcount
         tolerance = tolerance
         array = [Kp_t1, Kp_t2, Ki_t1, Ki_t2, \
@@ -634,13 +635,14 @@ class PiStormsCom(object):
         try:
             self.bankA.readByte(self.PS_BattV)
         except:
-            print "Could not connect to PiStorms."
+            print ("Could not connect to PiStorms.")
         else:
             self.bankA.writeByte(self.PS_Command,self.R)
             self.bankB.writeByte(self.PS_Command,self.R)
 
-        config = ConfigParser.RawConfigParser()
+        config = configparser.RawConfigParser()
         config.read("/usr/local/mindsensors/conf/msdev.cfg")
+        
         if "GRX" in config.get('msdev', 'device'):
             self.PS_BattV = 0xC1
             self.PS_R = 0xB6
@@ -648,7 +650,7 @@ class PiStormsCom(object):
             self.PS_B = 0xB8
             self.PS_KeyPress = 0xBF
             self.PS_Key1Count = 0xC0
-
+        
     def Shutdown(self):
         self.bankA.writeByte(self.PS_Command,self.H)
 
@@ -707,7 +709,7 @@ class PiStormsCom(object):
         try:
             x, y = self.getTouchscreenCoordinates()
             if x > 300 and y > 0:
-                return [8, 16, 24, 40][(y-1)/(240/4)]
+                return [8, 16, 24, 40][int((y-1)/(240/4))]
             else:
                 return 0
         except:
@@ -738,7 +740,7 @@ class PiStormsCom(object):
                 x[i] = self.bankA.readInteger(self.PS_TSX)
                 y[i] = self.bankA.readInteger(self.PS_TSY)
         except:
-            print "Failed to read touchscreen"
+            print ("Failed to read touchscreen")
             return (0, 0)
         if (numpy.std(x) < tolerance and numpy.std(y) < tolerance):
             return (int(numpy.mean(x)), int(numpy.mean(y)))
@@ -747,15 +749,15 @@ class PiStormsCom(object):
 
 if __name__ == '__main__':
     psc = PiStormsCom()
-    print "Version = "+ str(psc.GetFirmwareVersion())
-    print "Vendor = "+ str(psc.GetVendorName())
-    print "Device = "+ str(psc.GetDeviceId())
+    print ("Version = {0}".format(str(psc.GetFirmwareVersion())))
+    print ("Vendor = {0}".format(str(psc.GetVendorName())))
+    print ("Device = {0}".format(str(psc.GetDeviceId())))
     try:
         while(True):
-            print psc.battVoltage()
-            print psc.BAS1.SumoEyes(True)
-            print psc.BAS2.colorSensorNXT()
-            print psc.BBS1.lightSensorNXT(True)
+            print ("{0}".format(psc.battVoltage()))
+            print ("{0}".format(psc.BAS1.SumoEyes(True)))
+            print ("{0}".format(psc.BAS2.colorSensorNXT()))
+            print ("{0}".format(psc.BBS1.lightSensorNXT(True)))
             psc.BAM1.runSecs(1,100,True)
             psc.BBM1.runSecs(1,100,True)
             psc.BAM2.runSecs(1,100,True)

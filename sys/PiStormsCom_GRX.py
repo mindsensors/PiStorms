@@ -133,7 +133,7 @@ class GRXCom():
                 x[i] = self.I2C.A.readInteger(self.REGISTER.TOUCHSCREEN_X)
                 y[i] = self.I2C.A.readInteger(self.REGISTER.TOUCHSCREEN_Y)
         except:
-            print "Failed to read touchscreen"
+            print ("Failed to read touchscreen")
             return (0, 0)
         if (numpy.std(x) < tolerance and numpy.std(y) < tolerance):
             mx = int(numpy.mean(x))

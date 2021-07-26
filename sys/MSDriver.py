@@ -25,8 +25,8 @@
 from mindsensors_i2c import mindsensors_i2c
 import sys,os,time
 
-import ConfigParser
-config = ConfigParser.RawConfigParser()
+import configparser
+config = configparser.RawConfigParser()
 config.read("/usr/local/mindsensors/conf/msdev.cfg")
 if "GRX" in config.get('msdev', 'device'):
     KEY_COUNT = 0xC0
@@ -35,7 +35,7 @@ else:
 
 lckfile = "/tmp/.psm_shutdown.lck"
 
-print "starting..."
+print ("starting...")
 driver = mindsensors_i2c(0x34 >> 1)
 count = 0
 while (True):

@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 #
 # Copyright (c) 2015 mindsensors.com
 #
@@ -84,7 +84,7 @@ class ABSIMU(mindsensors_i2c):
         try:
             return self.readByteSigned(self.TILT_X)
         except:
-            print "Error: Could not read tilt along x-axis"
+            print ("Error: Could not read tilt along x-axis")
             return ""
 
     ## Reads the tilt value along the y-axis
@@ -93,7 +93,7 @@ class ABSIMU(mindsensors_i2c):
         try:
             return self.readByteSigned(self.TILT_Y)
         except:
-            print "Error: Could not read tilt along y-axis"
+            print ("Error: Could not read tilt along y-axis")
             return ""
 
     ## Reads the tilt value along the z-axis
@@ -102,7 +102,7 @@ class ABSIMU(mindsensors_i2c):
         try:
             return self.readByteSigned(self.TILT_Z)
         except:
-            print "Error: Could not read tilt along z-axis"
+            print ("Error: Could not read tilt along z-axis")
             return ""
 
     ## Reads the tilt values
@@ -114,7 +114,7 @@ class ABSIMU(mindsensors_i2c):
                     self.get_tiltz())]
             return res
         except:
-            print "Error: Could not read tilt values"
+            print ("Error: Could not read tilt values")
             return ""
 
     ## Reads acceleromter value along the x-axis
@@ -123,7 +123,7 @@ class ABSIMU(mindsensors_i2c):
         try:
             return self.readIntegerSigned(self.ACCEL_X)
         except:
-            print "Error: Could not read accelerometer value along x-axis"
+            print ("Error: Could not read accelerometer value along x-axis")
             return ""
 
     ## Reads acceleromter value along the y-axis
@@ -132,7 +132,7 @@ class ABSIMU(mindsensors_i2c):
         try:
             return self.readIntegerSigned(self.ACCEL_Y)
         except:
-            print "Error: Could not read accelerometer value along y-axis"
+            print ("Error: Could not read accelerometer value along y-axis")
             return ""
 
     ## Reads acceleromter value along the z-axis
@@ -141,7 +141,7 @@ class ABSIMU(mindsensors_i2c):
         try:
             return self.readIntegerSigned(self.ACCEL_Z)
         except:
-            print "Error: Could not read accelerometer value along z-axis"
+            print ("Error: Could not read accelerometer value along z-axis")
             return ""
 
     ## Reads the accelerometer values
@@ -153,7 +153,7 @@ class ABSIMU(mindsensors_i2c):
                     self.get_accelz())]
             return res
         except:
-            print "Error: Could not read accelerometer values"
+            print ("Error: Could not read accelerometer values")
             return ""
 
     ## Reads compass heading
@@ -165,7 +165,7 @@ class ABSIMU(mindsensors_i2c):
                 head = self.readInteger(self.CMPS)
             return head
         except:
-            print "Error: Could not read compass heading"
+            print ("Error: Could not read compass heading")
             return ""
 
     ## Reads magnetometer value along the x-axis
@@ -174,7 +174,7 @@ class ABSIMU(mindsensors_i2c):
         try:
             return self.readIntegerSigned(self.MAG_X)
         except:
-            print "Error: Could not read magnetometer value along x-axis"
+            print ("Error: Could not read magnetometer value along x-axis")
             return ""
 
     ## Reads magnetometer value along the y-axis
@@ -183,7 +183,7 @@ class ABSIMU(mindsensors_i2c):
         try:
             return self.readIntegerSigned(self.MAG_Y)
         except:
-            print "Error: Could not read magnetometer value along y-axis"
+            print ("Error: Could not read magnetometer value along y-axis")
             return ""
 
     ## Reads magnetometer value along the z-axis
@@ -192,7 +192,7 @@ class ABSIMU(mindsensors_i2c):
         try:
             return self.readIntegerSigned(self.MAG_Z)
         except:
-            print "Error: Could not read magnetometer value along z-axis"
+            print ("Error: Could not read magnetometer value along z-axis")
             return ""
 
     ## Reads the magnetometer values
@@ -204,7 +204,7 @@ class ABSIMU(mindsensors_i2c):
                     self.get_magz())]
             return res
         except:
-            print "Error: Could not read magnetometer values"
+            print ("Error: Could not read magnetometer values")
             return ""
 
     ## Reads gyroscope value along the x-axis
@@ -213,7 +213,7 @@ class ABSIMU(mindsensors_i2c):
         try:
             return self.readIntegerSigned(self.GYRO_X)
         except:
-            print "Error: Could not read gyroscope value along x-axis"
+            print ("Error: Could not read gyroscope value along x-axis")
             return ""
 
     ## Reads gyroscope value along the y-axis
@@ -222,7 +222,7 @@ class ABSIMU(mindsensors_i2c):
         try:
             return self.readIntegerSigned(self.GYRO_Y)
         except:
-            print "Error: Could not read gyroscope value along y-axis"
+            print ("Error: Could not read gyroscope value along y-axis")
             return ""
 
     ## Reads gyroscope value along the z-axis
@@ -231,7 +231,7 @@ class ABSIMU(mindsensors_i2c):
         try:
             return self.readIntegerSigned(self.GYRO_Z)
         except:
-            print "Error: Could not read gyroscope value along z-axis"
+            print ("Error: Could not read gyroscope value along z-axis")
             return ""
 
     ## Reads the tilt values
@@ -243,7 +243,7 @@ class ABSIMU(mindsensors_i2c):
                     self.get_gyroz())]
             return res
         except:
-            print "Error: Could not read gyroscope values"
+            print ("Error: Could not read gyroscope values")
             return ""
 
     ## Starts the compass calibration process
@@ -252,7 +252,7 @@ class ABSIMU(mindsensors_i2c):
         try:
             self.command(67)
         except:
-            print "Error: Could not start compass calibration process"
+            print ("Error: Could not start compass calibration process")
             return ""
 
     ## Stops the compass calibration process
@@ -261,7 +261,7 @@ class ABSIMU(mindsensors_i2c):
         try:
             self.command(99)
         except:
-            print "Error: Could not stop compass calibration process"
+            print ("Error: Could not stop compass calibration process")
             return ""
 
     ## Sets accelerometer sensitivity to 2G
@@ -270,7 +270,7 @@ class ABSIMU(mindsensors_i2c):
         try:
             self.command(49)
         except:
-            print "Error: Could not change accelerometer sensitivity"
+            print ("Error: Could not change accelerometer sensitivity")
             return ""
 
     ## Sets accelerometer sensitivity to 4G
@@ -279,7 +279,7 @@ class ABSIMU(mindsensors_i2c):
         try:
             self.command(50)
         except:
-            print "Error: Could not change accelerometer sensitivity"
+            print ("Error: Could not change accelerometer sensitivity")
             return ""
 
     ## Sets accelerometer sensitivity to 8G
@@ -288,7 +288,7 @@ class ABSIMU(mindsensors_i2c):
         try:
             self.command(51)
         except:
-            print "Error: Could not change accelerometer sensitivity"
+            print ("Error: Could not change accelerometer sensitivity")
             return ""
 
     ## Sets accelerometer sensitivity to 16G
@@ -297,7 +297,7 @@ class ABSIMU(mindsensors_i2c):
         try:
             self.command(52)
         except:
-            print "Error: Could not change accelerometer sensitivity"
+            print ("Error: Could not change accelerometer sensitivity")
             return ""
 
 ## Angle: this class provides functions for GlideWheel-AngleSensor from mindsensors.com
@@ -334,7 +334,7 @@ class ANGLE(mindsensors_i2c):
         try:
             return self.readLongSigned(self.ANGLE)
         except:
-            print "Error: Could not read angle"
+            print ("Error: Could not read angle")
             return ""
 
     ## Reads the raw angle value, raw = angle x 2
@@ -343,7 +343,7 @@ class ANGLE(mindsensors_i2c):
         try:
             return self.readLongSigned(self.RAW)
         except:
-            print "Error: Could not read raw angle"
+            print ("Error: Could not read raw angle")
             return ""
 
     ## Reads the rotations per minute
@@ -352,7 +352,7 @@ class ANGLE(mindsensors_i2c):
         try:
             return self.readIntegerSigned(self.RPM)
         except:
-            print "Error: Could not read rpm"
+            print ("Error: Could not read rpm")
             return ""
 
 ## CURRENT: this class provides functions for NXTCurrentMeter from mindsensors.com
@@ -389,7 +389,7 @@ class CURRENT(mindsensors_i2c):
         try:
             return self.readIntegerSigned(self.CAL)
         except:
-            print "Error: Could not read calibrated current"
+            print ("Error: Could not read calibrated current")
             return ""
 
     ## Reads the relative current value in milliAmps
@@ -398,7 +398,7 @@ class CURRENT(mindsensors_i2c):
         try:
             return self.readIntegerSigned(self.REL)
         except:
-            print "Error: Could not read relative current"
+            print ("Error: Could not read relative current")
             return ""
 
     ## Reads the reference current value in milliAmps
@@ -407,7 +407,7 @@ class CURRENT(mindsensors_i2c):
         try:
             return self.readIntegerSigned(self.REF)
         except:
-            print "Error: Could not read reference current"
+            print ("Error: Could not read reference current")
             return ""
 
     ## Sets the reference current equal to the absolute current value
@@ -416,7 +416,7 @@ class CURRENT(mindsensors_i2c):
         try:
             self.command(68)
         except:
-            print "Error: Could not set reference current"
+            print ("Error: Could not set reference current")
             return ""
 
 ## DIST: this class provides functions for DISTNx from mindsensors.com
@@ -452,7 +452,7 @@ class DIST(mindsensors_i2c):
         try:
             return self.readInteger(self.DISTANCE)
         except:
-            print "Error: Could not read distance"
+            print ("Error: Could not read distance")
             return ""
 
     ## Reads the distance in inches
@@ -462,7 +462,7 @@ class DIST(mindsensors_i2c):
             d = self.get_distance()
             return d/25
         except:
-            print "Error: Could not read distance"
+            print ("Error: Could not read distance")
             return ""
 
     ## Reads the voltage of the Dist-Nx
@@ -471,7 +471,7 @@ class DIST(mindsensors_i2c):
         try:
             return self.readInteger(self.VOLTAGE)
         except:
-            print "Error: Could not read voltage"
+            print ("Error: Could not read voltage")
             return ""
 
 ## EV3SensAdapt: this class provides functions for EV3 Sensor Adapter and EV3 Sensor Multiplexor from mindsensors.com
@@ -520,7 +520,7 @@ class EV3SensAdapt(mindsensors_i2c):
             if(self.readByte(self.DATA1) == 1):
                 return self.readByte(self.DATA1) == 1
         except:
-            print "Error: Could not read EV3 Touch Sensor from Adapter"
+            print ("Error: Could not read EV3 Touch Sensor from Adapter")
             return ""
 
     def numTouchesEV3(self):
@@ -528,7 +528,7 @@ class EV3SensAdapt(mindsensors_i2c):
             self.setMode(15)
             return self.readByte(self.DATA2)
         except:
-            print "Error: Could not read EV3 Touch Sensor from Adapter"
+            print ("Error: Could not read EV3 Touch Sensor from Adapter")
             return ""
 
     def resetTouchesEV3(self):
@@ -536,7 +536,7 @@ class EV3SensAdapt(mindsensors_i2c):
             self.setMode(15)
             return self.writeByte(self.DATA2, 0)
         except:
-            print "Error: Could not read EV3 Touch Sensor from Adapter"
+            print ("Error: Could not read EV3 Touch Sensor from Adapter")
             return ""
 
     def distanceIREV3(self):
@@ -544,7 +544,7 @@ class EV3SensAdapt(mindsensors_i2c):
             self.setMode(0)
             return self.readByte(self.DATA1)
         except:
-            print "Error: Could not read EV3 Infrared Sensor from Adapter"
+            print ("Error: Could not read EV3 Infrared Sensor from Adapter")
             return ""
 
     def headingIREV3(self,channel):
@@ -552,7 +552,7 @@ class EV3SensAdapt(mindsensors_i2c):
             self.setMode(1)
             return self.readByteSigned(self.DATA1 + ((channel-1)*2))
         except:
-            print "Error: Could not read EV3 Infrared Sensor from Adapter"
+            print ("Error: Could not read EV3 Infrared Sensor from Adapter")
             return ""
 
     def distanceRemoteIREV3(self,channel):
@@ -560,7 +560,7 @@ class EV3SensAdapt(mindsensors_i2c):
             self.setMode(1)
             return self.readByte(self.DATA1 + (((channel-1)*2)+1))
         except:
-            print "Error: Could not read EV3 Infrared Sensor from Adapter"
+            print ("Error: Could not read EV3 Infrared Sensor from Adapter")
             return ""
 
     def remoteLeft(self,channel):
@@ -574,7 +574,7 @@ class EV3SensAdapt(mindsensors_i2c):
             if(remote == 2 or remote == 7 or remote == 8):
                 return -1
         except:
-            print "Error: Could not read EV3 Infrared Sensor from Adapter"
+            print ("Error: Could not read EV3 Infrared Sensor from Adapter")
             return ""
 
     def remoteRight(self,channel):
@@ -588,7 +588,7 @@ class EV3SensAdapt(mindsensors_i2c):
             if(remote == 4 or remote == 6 or remote == 8):
                 return -1
         except:
-            print "Error: Could not read EV3 Infrared Sensor from Adapter"
+            print ("Error: Could not read EV3 Infrared Sensor from Adapter")
             return ""
 
     def distanceUSEV3(self):
@@ -596,7 +596,7 @@ class EV3SensAdapt(mindsensors_i2c):
             self.setMode(0)
             return self.readInteger(self.DATA1)
         except:
-            print "Error: Could not read EV3 Ultrasonic Sensor from Adapter"
+            print ("Error: Could not read EV3 Ultrasonic Sensor from Adapter")
             return ""
 
     def distanceUSEV3in(self):
@@ -604,7 +604,7 @@ class EV3SensAdapt(mindsensors_i2c):
             self.setMode(1)
             return self.readInteger(self.DATA1)
         except:
-            print "Error: Could not read EV3 Ultrasonic Sensor from Adapter"
+            print ("Error: Could not read EV3 Ultrasonic Sensor from Adapter")
             return ""
 
     def presenceUSEV3(self):
@@ -612,7 +612,7 @@ class EV3SensAdapt(mindsensors_i2c):
             self.setMode(2)
             return self.readByte(self.DATA1) == 1
         except:
-            print "Error: Could not read EV3 Ultrasonic Sensor from Adapter"
+            print ("Error: Could not read EV3 Ultrasonic Sensor from Adapter")
             return ""
 
     def gyroAngleEV3(self):
@@ -620,7 +620,7 @@ class EV3SensAdapt(mindsensors_i2c):
             self.setMode(0)
             return self.readIntegerSigned(self.DATA1)
         except:
-            print "Error: Could not read EV3 Gyro Sensor from Adapter"
+            print ("Error: Could not read EV3 Gyro Sensor from Adapter")
             return ""
 
     def gyroRateEV3(self):
@@ -628,7 +628,7 @@ class EV3SensAdapt(mindsensors_i2c):
             self.setMode(1)
             return self.readIntegerSigned(self.DATA1)
         except:
-            print "Error: Could not read EV3 Gyro Sensor from Adapter"
+            print ("Error: Could not read EV3 Gyro Sensor from Adapter")
             return ""
 
     def reflectedLightSensorEV3(self):
@@ -636,7 +636,7 @@ class EV3SensAdapt(mindsensors_i2c):
             self.setMode(0)
             return self.readInteger(self.DATA1)
         except:
-            print "Error: Could not read EV3 Color Sensor from Adapter"
+            print ("Error: Could not read EV3 Color Sensor from Adapter")
             return ""
 
     def ambientLightSensorEV3(self):
@@ -644,7 +644,7 @@ class EV3SensAdapt(mindsensors_i2c):
             self.setMode(1)
             return self.readInteger(self.DATA1)
         except:
-            print "Error: Could not read EV3 Color Sensor from Adapter"
+            print ("Error: Could not read EV3 Color Sensor from Adapter")
             return ""
 
     def colorSensorEV3(self):
@@ -652,7 +652,7 @@ class EV3SensAdapt(mindsensors_i2c):
             self.setMode(2)
             return self.readInteger(self.DATA1)
         except:
-            print "Error: Could not read EV3 Color Sensor from Adapter"
+            print ("Error: Could not read EV3 Color Sensor from Adapter")
             return ""
 
 
@@ -727,7 +727,7 @@ class LINELEADER(mindsensors_i2c):
         try:
             return self.readArray(self.LL_CALIBRATED, 8)
         except:
-            print "Error: Could not read Lineleader"
+            print ("Error: Could not read Lineleader")
             return ""
 
     ## Reads the eight(8) uncalibrated light sensor values of the LightSensorArray
@@ -745,7 +745,7 @@ class LINELEADER(mindsensors_i2c):
             array = [s1, s2, s3, s4, s5, s6, s7, s8]
             return array
         except:
-            print "Error: Could not read Lineleader"
+            print ("Error: Could not read Lineleader")
             return ""
 
     ## Read the steering value from the Lineleader (add or subtract this value to the motor speed)
@@ -754,7 +754,7 @@ class LINELEADER(mindsensors_i2c):
         try:
             return self.readByteSigned(self.LL_STEERING)
         except:
-            print "Error: Could not read Lineleader"
+            print ("Error: Could not read Lineleader")
             return ""
 
     ## Read the average weighted value of the current line from position from the Lineleader
@@ -763,7 +763,7 @@ class LINELEADER(mindsensors_i2c):
         try:
             return self.readByte(self.LL_AVERAGE)
         except:
-            print "Error: Could not read Lineleader"
+            print ("Error: Could not read Lineleader")
             return ""
 
     ## Reads the result of all 8 light sensors form the LineLeader as 1 byte (1 bit for each sensor)
@@ -772,7 +772,7 @@ class LINELEADER(mindsensors_i2c):
         try:
             return self.readByte(self.LL_RESULT)
         except:
-            print "Error: Could not read Lineleader"
+            print ("Error: Could not read Lineleader")
             return ""
 
     ## Reads the eight(8) calibrated light sensor values of the LightSensorArray
@@ -781,7 +781,7 @@ class LINELEADER(mindsensors_i2c):
         try:
             return self.readByte(self.LL_SETPOINT)
         except:
-            print "Error: Could not read Lineleader"
+            print ("Error: Could not read Lineleader")
             return ""
 
     ## Reads the eight(8) calibrated light sensor values of the LightSensorArray
@@ -790,7 +790,7 @@ class LINELEADER(mindsensors_i2c):
         try:
             return self.writeByte(self.LL_SETPOINT)
         except:
-            print "Error: Could not write to Lineleader"
+            print ("Error: Could not write to Lineleader")
             return ""
 
     ## Write the Kp value to the Lineleader
@@ -799,7 +799,7 @@ class LINELEADER(mindsensors_i2c):
         try:
             return self.writeByte(self.LL_KP)
         except:
-            print "Error: Could not write to Lineleader"
+            print ("Error: Could not write to Lineleader")
             return ""
 
     ## Write the Ki value to the Lineleader
@@ -808,7 +808,7 @@ class LINELEADER(mindsensors_i2c):
         try:
             return self.writeByte(self.LL_KI)
         except:
-            print "Error: Could not write to Lineleader"
+            print ("Error: Could not write to Lineleader")
             return ""
 
     ## Write the Kd value to the Lineleader
@@ -817,7 +817,7 @@ class LINELEADER(mindsensors_i2c):
         try:
             return self.writeByte(self.LL_KD)
         except:
-            print "Error: Could not write to Lineleader"
+            print ("Error: Could not write to Lineleader")
             return ""
 
     ## Write the Kp factor value to the Lineleader
@@ -826,7 +826,7 @@ class LINELEADER(mindsensors_i2c):
         try:
             return self.writeByte(self.LL_KPfactor)
         except:
-            print "Error: Could not write to Lineleader"
+            print ("Error: Could not write to Lineleader")
             return ""
 
     ## Write the Ki factor value to the Lineleader
@@ -835,7 +835,7 @@ class LINELEADER(mindsensors_i2c):
         try:
             return self.writeByte(self.LL_KIfactor)
         except:
-            print "Error: Could not write to Lineleader"
+            print ("Error: Could not write to Lineleader")
             return ""
 
     ## Write the Kd factor value to the Lineleader
@@ -844,7 +844,7 @@ class LINELEADER(mindsensors_i2c):
         try:
             return self.writeByte(self.LL_KDfactor)
         except:
-            print "Error: Could not write to Lineleader"
+            print ("Error: Could not write to Lineleader")
             return ""
 
     ## Read the Kp value from the Lineleader
@@ -853,7 +853,7 @@ class LINELEADER(mindsensors_i2c):
         try:
             return self.readByte(self.LL_KP)
         except:
-            print "Error: Could not read Lineleader"
+            print ("Error: Could not read Lineleader")
             return ""
 
     ## Read the Ki value from the Lineleader
@@ -862,7 +862,7 @@ class LINELEADER(mindsensors_i2c):
         try:
             return self.readByte(self.LL_KI)
         except:
-            print "Error: Could not read Lineleader"
+            print ("Error: Could not read Lineleader")
             return ""
 
     ## Read the Kd value from the Lineleader
@@ -871,7 +871,7 @@ class LINELEADER(mindsensors_i2c):
         try:
             return self.readByte(self.LL_KD)
         except:
-            print "Error: Could not read Lineleader"
+            print ("Error: Could not read Lineleader")
             return ""
 
     ## Read the Kp factor value to the Lineleader
@@ -880,7 +880,7 @@ class LINELEADER(mindsensors_i2c):
         try:
             return self.readByte(self.LL_KPfactor)
         except:
-            print "Error: Could not read Lineleader"
+            print ("Error: Could not read Lineleader")
             return ""
 
     ## Read the Ki factor value to the Lineleader
@@ -889,7 +889,7 @@ class LINELEADER(mindsensors_i2c):
         try:
             return self.readByte(self.LL_KIfactor)
         except:
-            print "Error: Could not read Lineleader"
+            print ("Error: Could not read Lineleader")
             return ""
 
     ## Read the Kd factor value to the Lineleader
@@ -898,7 +898,7 @@ class LINELEADER(mindsensors_i2c):
         try:
             return self.readByte(self.LL_KDfactor)
         except:
-            print "Error: Could not read Lineleader"
+            print ("Error: Could not read Lineleader")
             return ""
 
 ## LSA: this class provides functions for LightSensorArray from mindsensors.com
@@ -953,7 +953,7 @@ class LSA(mindsensors_i2c):
         try:
             return self.readArray(self.LSA_CALIBRATED, 8)
         except:
-            print "Error: Could not read LSArray"
+            print ("Error: Could not read LSArray")
             return ""
 
     ## Reads the eight(8) uncalibrated light sensor values of the LightSensorArray
@@ -971,7 +971,7 @@ class LSA(mindsensors_i2c):
             array = [s1, s2, s3, s4, s5, s6, s7, s8]
             return array
         except:
-            print "Error: Could not read LSArray"
+            print ("Error: Could not read LSArray")
             return ""
 
 ## MMX: this class provides motor control functions for use with NXTMMX
@@ -1111,7 +1111,7 @@ class MMX(mindsensors_i2c):
         try:
             return self.readByte(self.MMX_COMMAND) * self.MMX_VOLTAGE_MULTIPLIER #37
         except:
-            print "Error: Could not read voltage"
+            print ("Error: Could not read voltage")
             return ""
 
     ## Reads the encoder position of the specified motor
@@ -1124,7 +1124,7 @@ class MMX(mindsensors_i2c):
             if motor_number == 2 :
                 return self.readLongSigned(self.MMX_POSITION_M2)
         except:
-            print "Error: Could not read encoder position"
+            print ("Error: Could not read encoder position")
             return ""
 
     ## Run the motor(s) at a set speed for an unlimited duration
@@ -1305,10 +1305,12 @@ class MMX(mindsensors_i2c):
         ctrl |= self.MMX_CONTROL_RELATIVE
 
         d = degs
-        t4 = (d/0x1000000)
-        t3 = ((d%0x1000000)/0x10000)
-        t2 = (((d%0x1000000)%0x10000)/0x100)
+        t4 = (d//0x1000000)
+        t3 = ((d%0x1000000)//0x10000)
+        t2 = (((d%0x1000000)%0x10000)//0x100)
         t1 = (((d%0x1000000)%0x10000)%0x100)
+
+        #print("mindsensors.py runDegs {0}".format(degs))
 
         if ( brakeOnCompletion == True ):
             ctrl |= self.MMX_CONTROL_BRK
@@ -1345,9 +1347,9 @@ class MMX(mindsensors_i2c):
 
         d = rotations * 360
 
-        t4 = (d/0x1000000)
-        t3 = ((d%0x1000000)/0x10000)
-        t2 = (((d%0x1000000)%0x10000)/0x100)
+        t4 = (d//0x1000000)
+        t3 = ((d%0x1000000)//0x10000)
+        t2 = (((d%0x1000000)%0x10000)//0x100)
         t1 = (((d%0x1000000)%0x10000)%0x100)
 
         if ( brakeOnCompletion == True ):
@@ -1383,9 +1385,9 @@ class MMX(mindsensors_i2c):
         ctrl |= self.MMX_CONTROL_TACHO
         d = pos
 
-        t4 = (d/0x1000000)
-        t3 = ((d%0x1000000)/0x10000)
-        t2 = (((d%0x1000000)%0x10000)/0x100)
+        t4 = (d//0x1000000)
+        t3 = ((d%0x1000000)//0x10000)
+        t2 = (((d%0x1000000)%0x10000)//0x100)
         t1 = (((d%0x1000000)%0x10000)%0x100)
 
         if ( brakeOnCompletion == True ):
@@ -1451,29 +1453,29 @@ class MMX(mindsensors_i2c):
     #  @param tolerance The tolerance (in ticks) for encoder positioning .
     def SetPerformanceParameters(self, Kp_tacho, Ki_tacho, Kd_tacho, Kp_speed, Ki_speed, Kd_speed, passcount, tolerance):
         Kp_t1 = Kp_tacho%0x100
-        Kp_t2 = Kp_tacho/0x100
+        Kp_t2 = Kp_tacho//0x100
         Ki_t1 = Ki_tacho%0x100
-        Ki_t2 = Ki_tacho/0x100
+        Ki_t2 = Ki_tacho//0x100
         Kd_t1 = Kd_tacho%0x100
-        Kd_t2 = Kd_tacho/0x100
+        Kd_t2 = Kd_tacho//0x100
         Kp_s1 = Kp_speed%0x100
-        Kp_s2 = Kp_speed/0x100
+        Kp_s2 = Kp_speed//0x100
         Ki_s1 = Ki_speed%0x100
-        Ki_s2 = Ki_speed/0x100
+        Ki_s2 = Ki_speed//0x100
         Kd_s1 = Kd_speed%0x100
-        Kd_s2 = Kd_speed/0x100
-        print "Kp_t1: " + str(Kp_t1)
-        print "Kp_t2: " + str(Kp_t2)
-        print "Ki_t1: " + str(Ki_t1)
-        print "Ki_t2: " + str(Ki_t2)
-        print "Kd_t1: " + str(Kd_t1)
-        print "Kd_t2: " + str(Kd_t2)
-        print "Kp_s1: " + str(Kp_s1)
-        print "Kp_s2: " + str(Kp_s2)
-        print "Ki_s1: " + str(Ki_s1)
-        print "Ki_s2: " + str(Ki_s2)
-        print "Kd_s1: " + str(Kd_s1)
-        print "Kd_s2: " + str(Kd_s2)
+        Kd_s2 = Kd_speed//0x100
+        print ("Kp_t1: {0}".format(str(Kp_t1)))
+        print ("Ki_t1: {0}".format(str(Ki_t1)))
+        print ("Kp_t2: {0}".format(str(Kp_t2)))
+        print ("Ki_t2: {0}".format(str(Ki_t2)))
+        print ("Kd_t1: {0}".format(str(Kd_t1)))
+        print ("Kd_t2: {0}".format(str(Kd_t2)))
+        print ("Kp_s2: {0}".format(str(Kp_s2)))
+        print ("Kp_s1: {0}".format(str(Kp_s1)))
+        print ("Ki_s1: {0}".format(str(Ki_s1)))
+        print ("Ki_s2: {0}".format(str(Ki_s2)))
+        print ("Kd_s2: {0}".format(str(Kd_s2)))
+        print ("Kd_s1: {0}".format(str(Kd_s1)))
         passcount = passcount
         tolerance = tolerance
         array = [Kp_t1 , Kp_t2 , Ki_t1, Ki_t2, Kd_t1, Kd_t2, Kp_s1, Kp_s2, Ki_s1, Ki_s2, Kd_s1, Kd_s2, passcount, tolerance]
@@ -1483,16 +1485,16 @@ class MMX(mindsensors_i2c):
     #  @param self The object pointer.
     def ReadPerformanceParameters(self):
         try:
-            print "Pkp: " + str(self.readInteger(self.MMX_P_Kp))
-            print "Pki: " + str(self.readInteger(self.MMX_P_Ki))
-            print "Pkd: " + str(self.readInteger(self.MMX_P_Kd))
-            print "Skp: " + str(self.readInteger(self.MMX_S_Kp))
-            print "Ski: " + str(self.readInteger(self.MMX_S_Ki))
-            print "Skd: " + str(self.readInteger(self.MMX_S_Kd))
-            print "Passcount: " + str(self.MMX_PASSCOUNT)
-            print "Tolerance: " + str(self.MMX_PASSTOLERANCE)
+            print ("Pkp: {0}".format(str(self.readInteger(self.MMX_P_Kp))))
+            print ("Pki: {0}".format(str(self.readInteger(self.MMX_P_Ki))))
+            print ("Pkd: {0}".format(str(self.readInteger(self.MMX_P_Kd))))
+            print ("Skp: {0}".format(str(self.readInteger(self.MMX_S_Kp))))
+            print ("Ski: {0}".format(str(self.readInteger(self.MMX_S_Ki))))
+            print ("Skd: {0}".format(str(self.readInteger(self.MMX_S_Kd))))
+            print ("Passcount: {0}".format(str(self.MMX_PASSCOUNT)))
+            print ("Tolerance: {0}".format(str(self.MMX_PASSTOLERANCE)))
         except:
-            print "Error: Could not read PID values"
+            print ("Error: Could not read PID values")
             return ""
 
 
@@ -1554,7 +1556,7 @@ class NXTCAM(mindsensors_i2c):
         try:
             self.command(65)
         except:
-            print "Error: couldn't write command to Cam."
+            print ("Error: couldn't write command to Cam.")
             return ""
 
     ## Track detected colors as objects
@@ -1563,7 +1565,7 @@ class NXTCAM(mindsensors_i2c):
         try:
             self.command(66)
         except:
-            print "Error: couldn't write command to Cam."
+            print ("Error: couldn't write command to Cam.")
             return ""
 
     ## Write to image sensor registers
@@ -1572,7 +1574,7 @@ class NXTCAM(mindsensors_i2c):
         try:
             self.command(67)
         except:
-            print "Error: couldn't write command to Cam."
+            print ("Error: couldn't write command to Cam.")
             return ""
 
     ## Disable tracking
@@ -1581,7 +1583,7 @@ class NXTCAM(mindsensors_i2c):
         try:
             self.command(68)
         except:
-            print "Error: couldn't write command to Cam."
+            print ("Error: couldn't write command to Cam.")
             return ""
 
     ## Enable tracking
@@ -1590,7 +1592,7 @@ class NXTCAM(mindsensors_i2c):
         try:
             self.command(69)
         except:
-            print "Error: couldn't write command to Cam."
+            print ("Error: couldn't write command to Cam.")
             return ""
 
     ## Get the color map from NXTCAM
@@ -1599,7 +1601,7 @@ class NXTCAM(mindsensors_i2c):
         try:
             self.command(71)
         except:
-            print "Error: couldn't write command to Cam."
+            print ("Error: couldn't write command to Cam.")
             return ""
 
     ## Turn on illumination
@@ -1608,7 +1610,7 @@ class NXTCAM(mindsensors_i2c):
         try:
             self.command(73)
         except:
-            print "Error: couldn't write command to Cam."
+            print ("Error: couldn't write command to Cam.")
             return ""
 
     ## Read to image sensor registers
@@ -1617,7 +1619,7 @@ class NXTCAM(mindsensors_i2c):
         try:
             self.command(72)
         except:
-            print "Error: couldn't write command to Cam."
+            print  ("Error: couldn't write command to Cam.")
             return ""
 
     ## Track detected colors as lines
@@ -1626,7 +1628,7 @@ class NXTCAM(mindsensors_i2c):
         try:
             self.command(76)
         except:
-            print "Error: couldn't write command to Cam."
+            print ("Error: couldn't write command to Cam.")
             return ""
 
     ## Ping the NXTCAM
@@ -1635,7 +1637,7 @@ class NXTCAM(mindsensors_i2c):
         try:
             self.command(80)
         except:
-            print "Error: couldn't write command to Cam."
+            print ("Error: couldn't write command to Cam.")
             return ""
 
     ## Reset the NXTCAM
@@ -1644,7 +1646,7 @@ class NXTCAM(mindsensors_i2c):
         try:
             self.command(82)
         except:
-            print "Error: couldn't write command to Cam."
+            print ("Error: couldn't write command to Cam.")
             return ""
 
     ## Send ColorMap to NXTCAM
@@ -1653,7 +1655,7 @@ class NXTCAM(mindsensors_i2c):
         try:
             self.command(83)
         except:
-            print "Error: couldn't write command to Cam."
+            print ("Error: couldn't write command to Cam.")
             return ""
 
     ## Turn off illumination
@@ -1662,7 +1664,7 @@ class NXTCAM(mindsensors_i2c):
         try:
             self.command(84)
         except:
-            print "Error: couldn't write command to Cam."
+            print ("Error: couldn't write command to Cam.")
             return ""
 
     ## Sort tracked objects by color
@@ -1671,7 +1673,7 @@ class NXTCAM(mindsensors_i2c):
         try:
             self.command(85)
         except:
-            print "Error: couldn't write command to Cam."
+            print ("Error: couldn't write command to Cam.")
             return ""
 
     ## Get the firmware version of the NXTCAM
@@ -1680,7 +1682,7 @@ class NXTCAM(mindsensors_i2c):
         try:
             self.command(86)
         except:
-            print "Error: couldn't write command to Cam."
+            print ("Error: couldn't write command to Cam.")
             return ""
 
     ## Do not sort tracked objects
@@ -1689,7 +1691,7 @@ class NXTCAM(mindsensors_i2c):
         try:
             self.command(88)
         except:
-            print "Error: couldn't write command to Cam."
+            print ("Error: couldn't write command to Cam.")
             return ""
 
     ## Read the number of objects detected (0-8)
@@ -1698,7 +1700,7 @@ class NXTCAM(mindsensors_i2c):
         try:
             return self.readByte(self.NumberObjects)
         except:
-            print "Error: Could not read from Cam."
+            print ("Error: couldn't write command to Cam.")
             return ""
 
     ## Reads data of the tracked object(s)
@@ -1726,7 +1728,7 @@ class NXTCAM(mindsensors_i2c):
             blobs = self.getNumberObjects()
             i = blobNum - 1
             if (blobNum > blobs):
-                print "blobNum is greater than amount of blobs tracked."
+                print ("blobNum is greater than amount of blobs tracked.")
                 return 0
             else:
                 #while(i < blobs):
@@ -1737,7 +1739,7 @@ class NXTCAM(mindsensors_i2c):
                 data[4] = bottom = self.readByte(self.Y_Bottom + (i*5))
                 return BLOB(color,left,top,right,bottom)
         except:
-            print "Error: Could not read from Cam."
+            print  ("Error: couldn't write command to Cam.")
             return ""
 
 
@@ -1775,7 +1777,7 @@ class NXTSERVO(mindsensors_i2c):
         try:
             return self.readByte(self.NXTSERVO_VBATT) * self.NXTSERVO_VBATT_SCALER
         except:
-            print "Error: Could not read battery voltage"
+            print ("Error: Could not read battery voltage")
             return ""
 
     ## Sets the speed of a servo
@@ -1994,7 +1996,7 @@ class PPS58(mindsensors_i2c):
         try:
             return self.readByte(self.UNIT)
         except:
-            print "Error: Could not read unit value"
+            print ("Error: Could not read unit value")
             return ""
 
     ## Reads the absolute pressure of the PPS58
@@ -2003,7 +2005,7 @@ class PPS58(mindsensors_i2c):
         try:
             return self.readIntegerSigned(self.ABS)
         except:
-            print "Error: Could not read absolute pressure"
+            print ("Error: Could not read absolute pressure")
             return ""
 
     ## Reads the gauge, or relative, pressure of the PPS58
@@ -2012,7 +2014,7 @@ class PPS58(mindsensors_i2c):
         try:
             return self.readIntegerSigned(self.GAUGE)
         except:
-            print "Error: Could not read gauge pressure"
+            print ("Error: Could not read gauge pressure")
             return ""
 
     ## Reads the reference pressure of the PPS58
@@ -2021,7 +2023,7 @@ class PPS58(mindsensors_i2c):
         try:
             return self.readIntegerSigned(self.REF)
         except:
-            print "Error: Could not read reference pressure"
+            print ("Error: Could not read reference pressure")
             return ""
 
     ## Reads the raw pressure value of the PPS58
@@ -2030,7 +2032,7 @@ class PPS58(mindsensors_i2c):
         try:
             return self.readLongSigned(self.RAW)
         except:
-            print "Error: Could not read raw pressure"
+            print ("Error: Could not read raw pressure")
             return ""
 
     ## Sets the reference pressure to the current absolute pressure value
@@ -2039,7 +2041,7 @@ class PPS58(mindsensors_i2c):
         try:
             self.command(68)
         except:
-            print "Error: Could not set reference pressure"
+            print ("Error: Could not set reference pressure")
             return ""
 
     ## Sets the unit of measure to pounds per square inch
@@ -2048,7 +2050,7 @@ class PPS58(mindsensors_i2c):
         try:
             self.command(80)
         except:
-            print "Error: Could not set PSI as unit"
+            print ("Error: Could not set PSI as unit")
             return ""
 
     ## Sets the unit of measure to millibar
@@ -2057,7 +2059,7 @@ class PPS58(mindsensors_i2c):
         try:
             self.command(98)
         except:
-            print "Error: Could not set millibar as unit"
+            print ("Error: Could not set millibar as unit")
             return ""
 
     ## Sets the unit of measure to kilopascal
@@ -2066,7 +2068,7 @@ class PPS58(mindsensors_i2c):
         try:
             self.command(107)
         except:
-            print "Error: Could not set kilopascal as unit"
+            print ("Error: Could not set kilopascal as unit")
             return ""
 
 ## Volt: this class provides functions for NXTVoltMeter from mindsensors.com
@@ -2103,7 +2105,7 @@ class VOLT(mindsensors_i2c):
         try:
             return self.readIntegerSigned(self.CAL)
         except:
-            print "Error: Could not read calibrated voltage"
+            print ("Error: Could not read calibrated voltage")
             return ""
 
     ## Reads the relative voltage of the NXTVoltMeter
@@ -2112,7 +2114,7 @@ class VOLT(mindsensors_i2c):
         try:
             return self.readIntegerSigned(self.REL)
         except:
-            print "Error: Could not read relative voltage"
+            print ("Error: Could not read relative voltage")
             return ""
 
     ## Reads the reference voltage of the NXTVoltMeter
@@ -2121,7 +2123,7 @@ class VOLT(mindsensors_i2c):
         try:
             return self.readIntegerSigned(self.REF)
         except:
-            print "Error: Could not read reference voltage"
+            print ("Error: Could not read reference voltage")
             return ""
 
     ## Sets the reference voltage to the current absolute voltage value
@@ -2130,7 +2132,7 @@ class VOLT(mindsensors_i2c):
         try:
             self.command(68)
         except:
-            print "Error: Could not set reference voltage"
+            print ("Error: Could not set reference voltage")
             return ""
 
 ## EV3Lights: this class provides functions to control RGB LEDs using EV3Lights

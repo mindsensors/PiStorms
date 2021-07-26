@@ -15,7 +15,7 @@ PATH=/sbin:/usr/sbin:/bin:/usr/bin
 
 do_start () {
     sleep 1
-    sudo python /var/www/web_api/MSWeb.py >/var/tmp/webapi.out 2>&1 &
+    sudo python3 /var/www/web_api/MSWeb.py >/var/tmp/webapi.out 2>&1 &
     sleep 1
 }
 

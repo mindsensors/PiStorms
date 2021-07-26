@@ -24,7 +24,7 @@
 # March 2016    Roman Bohuk     Initial Authoring
 # May 2016      Deepak Patil    make this library independent of device.
 
-import os,sys,inspect,time,thread
+import os,sys,inspect,time,threading
 import socket,fcntl,struct
 
 currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
@@ -125,7 +125,7 @@ class TouchScreenInput:
         self.scrn.drawButton(self.lm + self.w * 4, 195, width = self.w, height = 45, text=used[(start+3)%len(used)], display=False, align="xcenter")
         self.scrn.fillRect(0, 0, 1, 1, fill = (0,0,0), display = True)
         # Return the list of current keys
-        return [used[(start+i)%len(used)] for i in xrange(4)]
+        return [used[(start+i)%len(used)] for i in range(4)]
 
     ## Call this function to get input from the user.
     # @returns a tuple containing 'submitted' & 'response'\n
@@ -211,7 +211,7 @@ class TouchScreenInput:
             # Input buttons
             if bsp:
                 if len(usr_input) == 0:
-                    for i in xrange(3):
+                    for i in range(3):
                         #self.psm.led(2,255,0,0) # flash LED 1 red
                         if (self.led_on_func != None and self.led_off_func != None):
                             self.led_on_func()

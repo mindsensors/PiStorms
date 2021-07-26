@@ -158,9 +158,9 @@ class Scratch(object):
         while total_sent < length:
             try:
                 sent = self.socket.send(data[total_sent:])
-            except socket.error as (err, msg):
+            except socket.error as err:  #, msg
                 self.connected = False
-                raise ScratchError("[Errno %d] %s" % (err, msg))
+                raise ScratchError("[Errno %d] %s" % err)  #, msg
             if sent == 0:
                 self.connected = False
                 raise ScratchConnectionError("Connection broken")
@@ -180,9 +180,9 @@ class Scratch(object):
         while len(data) < size:
             try:
                 chunk = self.socket.recv(size-len(data))
-            except socket.error as (err, msg):
+            except socket.error as err:
                 self.connected = False
-                raise ScratchError("[Errno %d] %s" % (err, msg))
+                raise ScratchError("[Errno %d] %s" % err)
             if chunk == '':
                 self.connected = False
                 raise ScratchConnectionError("Connection broken")
@@ -204,9 +204,9 @@ class Scratch(object):
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         try:
             self.socket.connect((self.host, self.port))
-        except socket.error as (err, msg):
+        except socket.error as err:
             self.connected = False
-            raise ScratchError("[Errno %d] %s" % (err, msg))
+            raise ScratchError("[Errno %d] %s" % err)
         self.connected = True
 
     def disconnect(self):

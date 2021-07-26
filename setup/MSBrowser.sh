@@ -31,17 +31,17 @@ do_start () {
     #
     # query the hardware for its version
     chmod a+rw /dev/i2c* > /dev/null 2>&1
-    sudo python $homefolder/programs/utils/print-hw-version.py >/var/tmp/.hw_version
+    sudo python3 $homefolder/programs/utils/print-hw-version.py >/var/tmp/.hw_version
 
     # do not delete the json, as it may have user's choice about updates.
     #sudo rm -f /var/tmp/ps_versions.json
     #
     # start the browser
-    sudo python /usr/local/bin/MSBrowser.py $homefolder/programs >/var/tmp/psmb.out 2>&1 &
+    sudo python3 /usr/local/bin/MSBrowser.py $homefolder/programs >/var/tmp/psmb.out 2>&1 &
     sleep 1
-    sudo python /usr/local/bin/ps_messenger_check.py >> /var/tmp/ps_m 2>&1
+    sudo python3 /usr/local/bin/ps_messenger_check.py >> /var/tmp/ps_m 2>&1
     sleep 1
-    sudo python /usr/local/bin/ps_updater.py >> /var/tmp/ps_u 2>&1
+    sudo python3 /usr/local/bin/ps_updater.py >> /var/tmp/ps_u 2>&1
     sleep 1
     #
     # run diagnostics

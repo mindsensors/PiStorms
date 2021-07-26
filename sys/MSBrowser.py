@@ -35,10 +35,10 @@ from PiStormsCom_GRX import GRXCom
 from PIL import Image, ImageDraw, ImageFont
 from datetime import datetime
 from fcntl import flock, LOCK_EX, LOCK_UN, LOCK_NB
-import ConfigParser
+import configparser
 
 def getConfig():
-    config = ConfigParser.RawConfigParser()
+    config = configparser.RawConfigParser()
     config.read(configFile)
     return config
 def getProgramDir():
@@ -75,7 +75,7 @@ def listPrograms(directory):
     beginsWithNum = filter(lambda i: i[:2].isdigit(), allFiles)
     onlyPythonFiles = filter(lambda i: os.path.isdir(os.path.join(directory, i)) or i.endswith(".py"), beginsWithNum)
     sortedFiles = sorted(onlyPythonFiles)
-    withoutPy = map(lambda i: i if not i.endswith(".py") else i[:-3], sortedFiles)
+    withoutPy = list(map(lambda i: i if not i.endswith(".py") else i[:-3], sortedFiles))
     return withoutPy
 def updateNeeded():
     try:
@@ -93,7 +93,7 @@ def newMessageExists():
         return False
 def runProgram(program):
     scrn.clearScreen()
-    exitStatus = os.system("sudo python {}".format(program))
+    exitStatus = os.system("sudo python3 {}".format(program))
     # stop (float) motors, if they are still running after the program finishes
     if psc == GRXCom:
         for s in GRXCom.SERVO:
@@ -129,7 +129,7 @@ def promptUpdate():
                     ["Software Update", message[data["update"]], "Install updates?"],
                     ["Yes", "Later", "Never"], wrapText=True)
             if response == 0:
-                exitCode = os.system("sudo python {} {}"
+                exitCode = os.system("sudo python3 {} {}"
                         .format(os.path.join(PROGRAM_DIRECTORY, "utils", "updater.py"), data["update"]))
                 if exitCode == 0:
                     data["status"] = "Done"
@@ -214,7 +214,7 @@ def itemButtonPressed(folder, files, index, filesPerPage):
             return os.path.join(folder, files[i])
     return False
 def getPageOfItems(files, index, filesPerPage):
-    if (index+filesPerPage-1 > len(files)-1):
+    if (index+filesPerPage-1 > len((files))-1):
         return range(index, len(files))
     else:
         return range(index, index+filesPerPage)

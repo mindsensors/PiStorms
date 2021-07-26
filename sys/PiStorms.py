@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 #
 # Copyright (c) 2015 mindsensors.com
 #
@@ -38,6 +38,7 @@
 #    - Raspberry Pi 1 Model B+
 #    - Raspberry Pi 2 model B
 #    - Raspberry Pi 3 model B
+#    - Raspberry Pi 4 
 #
 #  @section shortcuts  Quick Links
 #  Here are some shortcuts to common documentation you might be looking for:
@@ -1137,17 +1138,17 @@ if __name__ == '__main__':
     psm = PiStorms("PiStorms",rotation =3)
     buttonCount = 0
     psm.BBS1.resetTouchesEV3()
-    print "Version = "+ str(psm.GetFirmwareVersion())
-    print "Vendor = "+ str(psm.GetVendorName())
-    print "Device = "+ str(psm.GetDeviceId())
+    print ("Version = {0}".format(str(psm.GetFirmwareVersion())))
+    print ("Vendor = {0}".format(str(psm.GetVendorName())))
+    print ("Device = {0}".format(str(psm.GetDeviceId())))
     psm.screen.termPrintAt(3," Version is  "+ str(psm.GetFirmwareVersion() )[:5])
     psm.screen.termPrintAt(4," Vendor is  "+ str(psm.GetVendorName() ))
     psm.screen.termPrintAt(5," Device is  "+ str(psm.GetDeviceId() ))
 
     while(True):
         time.sleep(.300)
-        print ' Touched at ( '+str(psm.screen.TS_X())+' , '+str(psm.screen.TS_Y())+')'
+        print (" Touched at ({0}, {1})".format(str(psm.screen.TS_X()),str(psm.screen.TS_Y())))
         psm.screen.termPrintAt(6,' Touched at  ('+str(psm.screen.TS_X())+' , '+str(psm.screen.TS_Y())+')')
-        print " Voltage = "+str( psm.battVoltage())
+        print (" Voltage = {0}".format(str(psm.battVoltage())))
         psm.screen.termPrintAt(7," Voltage = "+str( psm.battVoltage()))
 ### @endcond

@@ -461,7 +461,7 @@ class rmap_PISTORMS(PiStorms.PiStorms):
             else:
                 speed = 100
             if ( 'BAM1' in cmd_string ):
-                #print "self.BAM1.setSpeed(speed)", speed
+                #print ("self.BAM1.setSpeed(speed) {0}".format(speed)))
                 self.BAM1.setSpeed(speed)
             if ( 'BAM2' in cmd_string ):
                 self.BAM2.setSpeed(speed)
@@ -580,8 +580,8 @@ def save_read_data(command_string):
             x = x + 1
 
 def rmap_print(message):
-    print str(time.strftime("%d/%m/%Y-"))+str(time.strftime("%H:%M:%S"))+":"+message
+    print ("{0}{1}:{2}".format(str(time.strftime("%d/%m/%Y-")),str(time.strftime("%H:%M:%S")),message))
     sys.stdout.flush()
 
 def print_dict():
-    print dict
+    print (dict)

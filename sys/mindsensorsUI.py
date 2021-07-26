@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 #
 # Copyright (c) 2015 mindsensors.com
 #
@@ -32,13 +32,15 @@
 from PiStormsCom import PiStormsCom
 from PiStormsCom_GRX import GRXCom
 import time, os, sys, math
-from PIL import Image, ImageDraw, ImageFont
+from PIL import Image
+from PIL import ImageDraw
+from PIL import ImageFont
 import textwrap
 import MS_ILI9341 as TFT
 from Adafruit_ILI9341 import ILI9341_INVOFF
 import Adafruit_GPIO as GPIO
 import Adafruit_GPIO.SPI as SPI
-import ConfigParser
+import configparser
 
 ## @package mindsensorsUI
 #  This module contains classes and functions necessary for use of LCD touchscreen on mindsensors.com products
@@ -111,7 +113,7 @@ class mindsensorsUI():
     #  screen = mindsensorsUI()
     #  @endcode
     def __init__(self, name = "PiStorms", rotation = 3):
-        config = ConfigParser.RawConfigParser()
+        config = configparser.RawConfigParser()
         config.read("/usr/local/mindsensors/conf/msdev.cfg")
         if "GRX" in config.get('msdev', 'device'):
             self.comm = GRXCom
@@ -453,7 +455,7 @@ class mindsensorsUI():
         else:
             image = Image.open("/usr/local/mindsensors/images/missing.png")
 
-        image = image.resize((width,height), Image.ANTIALIAS)
+        image = image.resize((int(width),int(height)), Image.ANTIALIAS)
 
         cr = self.currentRotation
         if(cr == 1):
@@ -467,7 +469,7 @@ class mindsensorsUI():
             acty -= width
             image = image.transpose(Image.ROTATE_90)
 
-        buff.paste(image, (actx,acty))
+        buff.paste(image, (int(actx),int(acty)))
         if(display):
             self.disp.display()
 
@@ -492,7 +494,7 @@ class mindsensorsUI():
 
         image = Image.fromarray(image)
 
-        image = image.resize((width,height), Image.ANTIALIAS)
+        image = image.resize((int(width),int(height)), Image.ANTIALIAS)
 
         cr = self.currentRotation
         if(cr == 1):
@@ -591,7 +593,7 @@ class mindsensorsUI():
 
         angletemp = -90*self.currentRotation
 
-        self.draw_rotated_text(self.disp.buffer, text, (tempx,tempy), angletemp, font, fill, display = display)
+        self.draw_rotated_text(self.disp.buffer, text, (int(tempx),int(tempy)), angletemp, font, fill, display = display)
 
     ## Set the cursor to a specific line of the of the screen
     #  @param self The object pointer.
@@ -772,7 +774,7 @@ class mindsensorsUI():
         if self.isTouched():
             tsx = self.TS_To_ImageCoords_X(self.x, self.y)
             tsy = self.TS_To_ImageCoords_Y(self.x, self.y)
-            if tsx in range(x, x+width) and tsy in range(y, y+height):
+            if tsx in range(int(x), int(x+width)) and tsy in range(int(y), int(y+height)):
                 return True
         return False
 
@@ -846,9 +848,9 @@ class mindsensorsUI():
         oldMode = self.currentMode
         self.setMode(self.PS_MODE_POPUP)
         if(len(options)>=4):
-            print "warning!, buttons may be too small to read"
+            print ("warning!, buttons may be too small to read")
         if(len(options)<=0 and not goBtn):
-            print "warning!, no options will leave this pop-up stuck"
+            print ("warning!, no options will leave this pop-up stuck")
         if goBtn:
             keyPressCount = self.comm.getKeyPressCount()
         while(True):
@@ -1036,7 +1038,7 @@ if __name__ == '__main__':
                 time.sleep(2)
                 psb.dumpTerminal()
     except KeyboardInterrupt:
-        print "\nQuitting..."
+        print ("\nQuitting...")
         psb.setMode(psb.PS_MODE_TERMINAL)
         psb.termPrintln("Exiting Program...")
         sys.exit(0)

@@ -24,13 +24,13 @@
 # 10/02/15    Deepak            Initial authoring.
 
 import urllib, json
-import commands
-import ConfigParser
+import subprocess
+import configparser
 
 json_file = '/var/tmp/ps_data.json'
 cfg_file = '/usr/local/mindsensors/conf/msdev.cfg'
 
-config = ConfigParser.RawConfigParser()
+config = configparser.RawConfigParser()
 config.read(cfg_file)
 
 message_server = config.get('servers', 'message_server')
@@ -38,7 +38,7 @@ link = message_server + "/messenger.php"
 
 cmd = 'cat /proc/cpuinfo | grep Serial | cut -d":" -f2 |awk \'{$1=$1};1\''
 
-serial = commands.getstatusoutput(cmd)[1]
+serial = subprocess.getstatusoutput(cmd)[1]
 
 #
 # connect to server and get the message
@@ -48,7 +48,7 @@ try:
     h = urllib.urlopen(link2)
     new_json = json.loads(h.readline())
 except:
-    #print "connection failed, exiting"
+    #print ("connection failed, exiting")
     exit()
 
 # open the local file and read the message to comapre

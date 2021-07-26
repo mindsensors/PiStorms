@@ -1,0 +1,50 @@
+#!/bin/bash
+# Copyright (c) 2015 mindsensors.com
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License version 2 as
+# published by the Free Software Foundation.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.    See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+#mindsensors.com invests time and resources providing this open source code,
+#please support mindsensors.com  by purchasing products from mindsensors.com!
+#Learn more product option visit us @  http://www.mindsensors.com/
+# History:
+# Date      Author      Comments
+# 05/31/16  Deepak      Initial authoring
+
+usage() {
+  echo "psm_shutdown [options] [time] [wall]"
+  echo "options and parameters are same as 'shutdown' command"
+  exit -1
+}
+
+if [ x$1 == "x" ]
+then
+    usage
+fi
+
+arg1=$1
+
+lckfile=/tmp/.psm_shutdown.lck
+cp /dev/null $lckfile
+rm -f $lckfile
+# only when halting machine, power off PiStorms
+if [[ $arg1 == "-H" || $arg1 == "-h" || $arg1 == "--halt" || $arg1 == "-P" || $arg1 == "--poweroff" ]]
+then
+    echo "halt the PiStorms"
+    echo "halt" > $lckfile
+    chmod a+rw $lckfile
+else
+    cp /dev/null $lckfile
+    sudo rm -f $lckfile
+fi
+
+/sbin/shutdown $*

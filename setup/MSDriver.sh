@@ -22,7 +22,7 @@ psm_shutdown() {
     echo "config file is missing"
     homefolder=/home/pi/PiStorms
   fi
-  python $homefolder/programs/utils/psm_shutdown.py
+  python3 $homefolder/programs/utils/psm_shutdown.py
 
 }
 
@@ -34,7 +34,7 @@ show_logo() {
     echo "config file is missing"
     homefolder=/home/pi/PiStorms
   fi
-  python $homefolder/programs/utils/show-logo.py
+  python3 $homefolder/programs/utils/show-logo.py
 
 }
 
@@ -49,10 +49,10 @@ do_start () {
       echo "config file is missing"
       homefolder=/home/pi/PiStorms
     fi
-    sudo python $homefolder/programs/utils/get-device-type.py
+    sudo python3 $homefolder/programs/utils/get-device-type.py
 
     sleep 1
-    sudo python /usr/local/bin/MSDriver.py >/var/tmp/psmd.out 2>&1 &
+    sudo python3 /usr/local/bin/MSDriver.py >/var/tmp/psmd.out 2>&1 &
     chmod a+rw /dev/i2c* > /dev/null 2>&1
     sleep 1
 }
