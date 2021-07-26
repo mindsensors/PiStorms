@@ -23,17 +23,17 @@
 # Date      Author      Comments
 # Oct 2015  Michael     Initial Authoring
 
-import os,sys,inspect,time,thread
+import os,sys,inspect,time,threading
 import socket,fcntl,struct,ms_explorerlib,subprocess    
 
 currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
 parentdir = os.path.dirname(currentdir)
 sys.path.insert(0,parentdir) 
 from PiStorms import PiStorms
-import ConfigParser
+import configparser
 
 cfg_file = '/usr/local/mindsensors/conf/msdev.cfg'
-config = ConfigParser.RawConfigParser()
+config = configparser.RawConfigParser()
 config.read(cfg_file)
 homefolder = config.get('msdev', 'homefolder')
 

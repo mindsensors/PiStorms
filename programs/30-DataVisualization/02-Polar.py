@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 #
 # Copyright (c) 2017 mindsensors.com
 #
@@ -61,4 +61,3 @@ while psm.getKeyPressCount() < 1:
     plt.plot(data, r, color="blue")
     plt.savefig(image.name, format="png")
     psm.screen.fillBmp(0,0, 320,240, image.name)
-

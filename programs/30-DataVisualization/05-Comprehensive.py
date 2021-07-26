@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 #
 # Copyright (c) 2017 mindsensors.com
 #
@@ -58,7 +58,7 @@ data = np.zeros([3,DATA_SIZE], dtype="int_")
 plt.plot(data.T) # transpose
 axis = plt.gca() # get current axis
 axis.set_xticklabels([]) # hide x-axis tick labels
-axis.set_color_cycle(['red', 'green', 'blue'])
+#axis.set_color_cycle(['red', 'green', 'blue'])
 smooth_x = np.linspace(0, DATA_SIZE-1, 247) # the x-axis for the smoothed lines
 
 imu = ABSIMU()

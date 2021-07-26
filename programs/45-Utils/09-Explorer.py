@@ -35,14 +35,14 @@ psm.BAS1.activateCustomSensorI2C()
 psm.BAS2.activateCustomSensorI2C()
 
 i2c_all = []
-for addr in range(0x00,0x34,2) + range(0x38,0xEF,2):
+for addr in [*range(0x00,0x34,2), *range(0x38,0xEF,2)]:
     i2c_all.append(mindsensors_i2c(addr>>1))
 
 def ping(i2c):
     return i2c.readByte(0x00) != None
 
 while not psm.isKeyPressed():
-    found = filter(ping, i2c_all)
+    found = list(filter(ping, i2c_all))
 
     psm.screen.terminalBuffer = [""]*20
     psm.screen.terminalBuffer[0] = "Found {} I2C device{}." \

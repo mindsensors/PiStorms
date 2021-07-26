@@ -23,7 +23,7 @@
 # Date      Author      Comments
 #  July 2015  Henry     Initial Authoring from SensorShield import SensorShield
 
-import os,sys,inspect,time,thread
+import os,sys,inspect,time,threading
 
 currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
 parentdir = os.path.dirname(currentdir)

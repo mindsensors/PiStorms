@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 #
 # Copyright (c) 2017 mindsensors.com
 #
@@ -60,4 +60,3 @@ while psm.getKeyPressCount() < 1:
     plt.tight_layout() # make sure the entire plot fits on screen
     plt.savefig(image.name, format="png") # save it
     psm.screen.fillBmp(0,0, 320,240, image.name) # show it on screen
-

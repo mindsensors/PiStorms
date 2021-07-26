@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 #
 # Copyright (c) 2017 mindsensors.com
 #
@@ -78,7 +78,7 @@ def captureData():
             answer = psm.screen.askQuestion(["AbsoluteIMU not found!", "Please connect an AbsoluteIMU sensor", "to BAS1."], ["OK", "Cancel"], goBtn=True)
             if answer != 0: break
         except ValueError as e:
-            print "Error: " + e.args[0]
+            print ("Error: " + e.args[0])
         time.sleep(0.01) # take a short break to let the Pi do the other things it needs to (like draw the screen)
     stop = True
 
