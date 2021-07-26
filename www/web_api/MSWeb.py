@@ -35,10 +35,10 @@ import json
 def crossdomain(origin=None, methods=None, headers=None, max_age=21600, attach_to_all=True, automatic_options=True):
     if methods is not None:
         methods = ', '.join(sorted(x.upper() for x in methods))
-    if headers is not None and not isinstance(headers, basestring):
-        headers = ', '.join(x.upper() for x in headers)
-    if not isinstance(origin, basestring):
-        origin = ', '.join(origin)
+    #if headers is not None and not isinstance(headers, basestring):
+    #    headers = ', '.join(x.upper() for x in headers)
+    #if not isinstance(origin, basestring):
+    #    origin = ', '.join(origin)
     if isinstance(max_age, timedelta):
         max_age = max_age.total_seconds()
 
@@ -84,8 +84,8 @@ app = Flask(__name__)
 from PiStormsCom import PiStormsCom
 from PiStormsCom_GRX import GRXCom
 
-import ConfigParser
-config = ConfigParser.RawConfigParser()
+import configparser
+config = configparser.RawConfigParser()
 config.read("/usr/local/mindsensors/conf/msdev.cfg")
 if "GRX" in config.get('msdev', 'device'):
     psc = GRXCom
@@ -97,6 +97,7 @@ import Adafruit_GPIO.SPI as SPI
 disp = MS_ILI9341.ILI9341(24, rst=25, spi=SPI.SpiDev(0,0,max_speed_hz=64000000))
 
 import socket,fcntl,struct
+'''
 def get_ip_address(ifname):
     try:
         s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -108,7 +109,14 @@ def get_ip_address(ifname):
     except:
         return "not present"
 
+'''
+def get_ip_address(iface):
+    ip = os.popen("ifconfig {} | tail +2 | awk '/inet / {{print $2}}'".format(iface)).read()
+    return ip if ip != '' else "not present"
+    
 
+
+    
 home_folder = config.get("msdev","homefolder")
 if "GRX" in config.get('msdev', 'device'):
     programs_folder = os.path.join(home_folder, "programs_grx")
@@ -257,10 +265,10 @@ def browserrunning():
 @crossdomain(origin='*')
 def startbrowser():
     if browserrunning() == "1":
-        print "Browser Already Running"
+        print ("Browser Already Running")
         return "0"
     os.system("sudo /etc/init.d/MSBrowser.sh start")
-    print "Started Browser"
+    print ("Started Browser")
     return "1"
 
 @app.route("/getapacheerrors", methods=['GET', 'OPTIONS'])
