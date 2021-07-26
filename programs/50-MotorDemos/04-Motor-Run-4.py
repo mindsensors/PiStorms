@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 #
 # Copyright (c) 2016 mindsensors.com
 #
@@ -26,6 +26,12 @@
 
 from PiStorms import PiStorms
 psm = PiStorms()
+
+print("This demo causes my Raspberry PI B+ to crash and restart")
+print("I think too much current is being drawn when the motors start,")
+print("more than 3 amps at 8 volts")
+input("Press Enter to continue...")
+
 
 m = ["Motors-Synchronised", "Connect 4 motors.",
   "And click OK to continue"]

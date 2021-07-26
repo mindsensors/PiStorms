@@ -24,7 +24,7 @@
 #  Aug 2015  Andrew     Initial Authoring from SensorShield import SensorShield
 
 
-import os,sys,inspect,time,thread,random
+import os,sys,inspect,time,threading,random
 currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
 parentdir = os.path.dirname(currentdir)
 sys.path.insert(0,parentdir)

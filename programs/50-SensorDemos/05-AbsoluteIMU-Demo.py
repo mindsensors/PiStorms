@@ -25,7 +25,7 @@
 
 
 #initial setup code
-import os,sys,inspect,time,thread, random
+import os,sys,inspect,time,threading, random
 from mindsensors_i2c import mindsensors_i2c
 from PiStorms import PiStorms
 from mindsensors import ABSIMU
@@ -67,10 +67,10 @@ while(not doExit):
         psm.led(2,0, 0,0)
         psm.screen.termPrintAt(6,"connect AbsImu on BAS1 ")
 
-    print " Accelerometer: " + str(accl)
-    print " Magnetometer" + str(mag)
-    print " Gyroscope: " + str(gyro)
-    print " Compass: " + str(heading)
+    print (" Accelerometer: " + str(accl))
+    print (" Magnetometer" + str(mag))
+    print (" Gyroscope: " + str(gyro))
+    print (" Compass: " + str(heading))
 
     time.sleep(.1)
 

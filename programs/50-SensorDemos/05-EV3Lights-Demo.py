@@ -25,7 +25,7 @@
 
 
 #initial setup code
-import os,sys,inspect,time,thread, random
+import os,sys,inspect,time,threading, random
 from mindsensors_i2c import mindsensors_i2c
 from PiStorms import PiStorms
 from mindsensors import EV3Lights

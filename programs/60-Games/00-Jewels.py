@@ -19,7 +19,7 @@
 #please support mindsensors.com  by purchasing products from mindsensors.com!
 #Learn more product option visit us @  http://www.mindsensors.com/
 
-import os,sys,inspect,time,thread,random
+import os,sys,inspect,time,threading,random
 currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
 parentdir = os.path.dirname(currentdir)
 
@@ -36,7 +36,7 @@ def generate_board():
 			rand = random.randint(1,4)
 			row[i] = rand
 			i += 1
-		print board[j]
+		print( board[j])
 		j += 1
 	return board
 
@@ -86,7 +86,7 @@ def triplets(board):
 					h += 1
 			column += 1
 		row += 1
-	print "Triplets:", tripletCount
+	print ("Triplets:", tripletCount)
 	return board, tripletCount
 
 def switch(board, x1, y1, x2, y2):
@@ -95,16 +95,16 @@ def switch(board, x1, y1, x2, y2):
 		second = board[y2][x2]
 		board[y1][x1] = second
 		board[y2][x2] = first
-		print "Switched", x1, y1, "and", x2, y2
+		print ("Switched", x1, y1, "and", x2, y2)
 		return True
 	else:
-		print "*****Invalid switch*****"
+		print ("*****Invalid switch*****")
 		return False
 
 	#make it normal color
 	j = 0
 	for row in board:
-		print board[j]
+		print (board[j])
 		j += 1
 
 
@@ -185,7 +185,7 @@ psm.screen.termPrintAt(9, "Touch a jewel")
 
 doExit = False
 touches = [[0,0]] #[[r1, p1], [r2, p2]] <-> [[y1, x1], [y2, x2]]
-print "start loop"
+print ("start loop")
 while (not doExit):
 	a = 0
 	touch = checkButton(board)
@@ -199,7 +199,7 @@ while (not doExit):
 		didSwitch = switch(board, touches[1][1], touches[1][0], touches[2][1], touches[2][0])
 		#printBoard(board)
 		if didSwitch:
-			print""
+			print("")
 			time.sleep(0.2)
 			p = touches[1][1]
 			r = touches[1][0]
@@ -233,7 +233,7 @@ while (not doExit):
 			psm.screen.fillBmp((p*48), (r*40), width = 40, height = 48, path = currentdir+'/'+img)
 		touches = [[0,0]]
 		tripReturn = triplets(board)
-		print tripReturn
+		print (tripReturn)
 		board = tripReturn[0]
 		score += 5 * tripReturn[1]
 		scoreMessage = "Score:" + str(score)
@@ -246,7 +246,7 @@ while (not doExit):
 		psm.screen.termPrintAt(9, "Touch a jewel")
 		j = 0
 		for row in board:
-			print board[j]
+			print (board[j])
 			j += 1
 	if(psm.isKeyPressed()):
 			psm.screen.clearScreen()

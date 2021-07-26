@@ -35,8 +35,8 @@ psm.screen.termPrintAt(2, "PiStorms ")
 psm.screen.termPrintAt(3, "GO button test:")
 
 exit = False
-print "Running Button Test"
-print "press anywhere in PiStorms Screen to exit"
+print ("Running Button Test")
+print ("press anywhere in PiStorms Screen to exit")
 psm.screen.termPrintAt(8, "Touch Display to Exit")
 psm.screen.termPrintln(" ")
 while(not exit):

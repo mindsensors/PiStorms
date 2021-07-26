@@ -24,7 +24,7 @@
 # 2010       Kevin Chabowski  Initial Pygame implementation
 # Sept 2016  Seth  Tenembaum  Initial PiStorms adaptation
 
-import os,sys,inspect,time,thread
+import os,sys,inspect,time,threading
 import socket,fcntl,struct
 
 currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))

@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 #
 # Copyright (c) 2016 mindsensors.com
 #
@@ -65,4 +65,3 @@ while (doExit == False):
         # if scren was touched,
         psm.BAM1.resetPos()
         time.sleep(.001)
-

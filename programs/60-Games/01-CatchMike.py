@@ -25,7 +25,7 @@
 #Demo Code for the PiStorms and Raspberry Pi
 # initial setup code
 
-import os,sys,inspect,time,thread,random
+import os,sys,inspect,time,threading,random
 currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
 parentdir = os.path.dirname(currentdir)
 from PiStorms import PiStorms
@@ -110,7 +110,7 @@ while(not exit):
             psm.screen.drawAutoText(str(score-1), 100, 190, fill=(0, 0, 0), size = 25) # draw the player's score
             dispScore = score # log the change of score to the variable "dispScore"
 
-    #print psm.isKeyPressed()
+    #print (psm.isKeyPressed())
     #if(psm.isKeyPressed() == True): # if the GO button is pressed
     if(psm.isKeyPressed() == 1): # if the GO button is pressed
         time.sleep(0.5)

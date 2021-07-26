@@ -22,7 +22,7 @@
 # Tic Tac Toe
 
 import random
-import os,sys,inspect,time,thread
+import os,sys,inspect,time,threading
 import socket,fcntl,struct
 
 currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))

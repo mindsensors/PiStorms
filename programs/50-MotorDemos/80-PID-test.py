@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 #
 # Copyright (c) 2016 mindsensors.com
 #
@@ -40,7 +40,7 @@ go_for = 360
 encoder_pos = psm.BAM1.pos()
 #default values: [7000, 0, 37500, 15000, 300, 7500, 5, 80]
 aa = psm.BAM1.ReadPerformanceParameters()
-print "params: " + str(aa)
+print ("params: {0}".format(str(aa)))
 aa[7] = 5
 psm.BAM1.SetPerformanceParameters(aa[0], aa[1], aa[2], aa[3], aa[4], aa[5], aa[6], aa[7])
 msg = "Motor encoder before:  " + str(encoder_pos)
@@ -65,4 +65,3 @@ while (doExit == False):
         psm.screen.termPrintln("")
         psm.screen.termPrintln("Exiting to menu")
         doExit = True
-

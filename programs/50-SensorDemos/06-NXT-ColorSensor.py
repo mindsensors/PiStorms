@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 #
 # Copyright (c) 2016 mindsensors.com
 #
@@ -70,5 +70,3 @@ while(not doExit):
         psm.screen.clearScreen()
         psm.screen.termPrintAt(8, "Exiting to menu")
         doExit = True
-
-

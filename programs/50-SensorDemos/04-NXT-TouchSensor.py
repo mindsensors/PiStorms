@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 #
 # Copyright (c) 2016 mindsensors.com
 #
@@ -77,5 +77,3 @@ while(not doExit):
         # if scren was touched,
         # reset BAS1 touch count
         psm.BAS1.resetTouchesNXT()
-
-
