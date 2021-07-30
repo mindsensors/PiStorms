@@ -26,7 +26,7 @@ do_start () {
     else
         homefolder=/home/pi/PiStorms
     fi
-    python $homefolder/programs/utils/msg-to-screen.py "Loading PiStorms" "Please wait"
+    python3 $homefolder/programs/utils/msg-to-screen.py "Loading PiStorms" "Please wait"
 
     #
     # query the hardware for its version

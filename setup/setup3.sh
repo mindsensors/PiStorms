@@ -70,15 +70,16 @@ echo "Depending on your internet connection, the following few steps may take se
 echo "Updating package lists..."
 sudo apt-get -qq -y update
 echo "Downloading and installing 15 required packages..."
-sudo apt-get -qq -y install build-essential git nmap mpg123 apache2 php7.3 libapache2-mod-php7.3 libapache2-mod-php\
+sudo apt-get -qq -y install build-essential git nmap mpg123 apache2 php7.3 libapache2-mod-php7.3 libapache2-mod-php7.3\
                             python3-numpy python3-matplotlib python3-scipy python3-opencv \
-                            python3-dev python3-smbus python3-pip python3-imaging &> /dev/null
+                            python3-dev python3-smbus python3-pip  &> /dev/null
 echo "Updating pip..."
-sudo pip3 -qq install --upgrade pip3
+#sudo pip3 -qq install --upgrade pip3
 echo "Downloading and installing 7 required Python packages..."
-sudo pip3 -qq install --upgrade mindsensors-i2c
-sudo pip3 -qq install RPi.GPIO wireless wifi ws4py flask imutils python-imaging
-
+#sudo pip3 -qq install --upgrade mindsensors-i2c
+sudo pip3 -qq install RPi.GPIO wireless wifi ws4py flask imutils #python-imaging
+sudo pip3   uninstall --yes Adafruit_GPIO
+sudo pip3   install  Adafruit_GPIO
 
 echo "Copying files..."
 # clean up renamed legacy files.
@@ -93,6 +94,7 @@ sudo rm -f /etc/init.d/PiStormsBrowser.sh
 sudo cp -p ../sys/MSDriver.py /usr/local/bin/
 sudo cp -p ../sys/MSBrowser.py /usr/local/bin/
 sudo cp -p ../sys/psm_shutdown /usr/local/bin/
+sudo chmod 766 /usr/local/bin/psm_shutdown
 sudo cp -p ../sys/pistorms-diag.sh /usr/local/bin/
 # stop swarmserver (if it's already running) before copying it
 if [ -f /etc/init.d/SwarmServer.sh ]
@@ -103,8 +105,10 @@ else
 fi
 sleep 2
 sudo cp -p ../sys/swarmserver /usr/local/bin/
+sudo chmod 766 /usr/local/bin/swarmserver
+PY3_PATH="/usr/local/lib/python3.7"
 
-PY3_PATH="/usr/local/lib/python3.5"
+sudo cp -p ../sys/mindsensors_i2c.py $PY3_PATH/dist-packages/mindsensors_i2c.py
 
 # copy Python library files
 sudo cp -p ../sys/rmap.py $PY3_PATH/dist-packages/
@@ -174,6 +178,7 @@ sudo cp -p MSDriver.sh /etc/init.d
 sudo cp -p MSBrowser.sh /etc/init.d
 sudo cp -p MSWeb.sh /etc/init.d
 sudo cp -p SwarmServer.sh /etc/init.d
+
 mkdir -p /home/pi/.config/autostart
 # set these scripts to run at startup
 sudo update-rc.d MSDriver.sh defaults 95 05
@@ -205,8 +210,8 @@ then
     (sudo crontab -l -u root 2>/dev/null; echo "2 */2 * * * python /usr/local/bin/ps_updater.py") | sudo crontab - -u root
 fi
 # run messenger and updater once
-python /usr/local/bin/ps_messenger_check.py > /dev/null
-python /usr/local/bin/ps_updater.py > /dev/null
+python3 /usr/local/bin/ps_messenger_check.py > /dev/null
+python3 /usr/local/bin/ps_updater.py > /dev/null
 
 
 echo "Installing display libraries..."
@@ -214,7 +219,7 @@ echo "Installing display libraries..."
 cd ~
 git clone -qq https://github.com/adafruit/Adafruit_Python_ILI9341.git
 cd Adafruit_Python_ILI9341
-sudo python setup.py install &> /dev/null
+sudo python3 setup.py install &> /dev/null
 cd ..
 sudo rm -rf Adafruit_Python_ILI9341
 
