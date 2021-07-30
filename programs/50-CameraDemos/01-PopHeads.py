@@ -28,7 +28,7 @@ from picamera import PiCamera
 import os,sys,inspect,time#thread
 import cv2
 import imutils
-import ConfigParser
+import configparser
 cfg_file = '/usr/local/mindsensors/conf/msdev.cfg'
 currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
 parentdir = os.path.dirname(currentdir)
@@ -36,7 +36,7 @@ sys.path.insert(0,parentdir)
 from PiStorms import PiStorms
 psm = PiStorms()
 
-config = ConfigParser.RawConfigParser()
+config = configparser.RawConfigParser()
 config.read(cfg_file)
 
 homefolder = config.get('msdev', 'homefolder')
@@ -84,7 +84,7 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
     scaleFactor=1.1,
     minNeighbors=5,
     minSize=(30, 30),
-    flags = cv2.cv.CV_HAAR_SCALE_IMAGE
+    flags = cv2.CASCADE_SCALE_IMAGE
     )
 
     #print benchmarking information on Console
@@ -98,13 +98,13 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
 
     for (x, y, w, h) in faces:
         # for displaying on exported display
-        cv2.circle(image, (x+w/2, y+h/2), int((w+h)/3), (255, 255, 255), 1)
+        cv2.circle(image, (int(x+w/2), int(y+h/2)), int((w+h)/3), (255, 255, 255), 1)
 
         # for showing on PiStorms screen
         psm.screen.fillCircle(imw-(x+w), y+h, int((w+h)/3), fill = (255,255,255),display = False)
         psm.screen.fillCircle(imw-(x+w), y+h, int(-2+(w+h)/3), fill = (0,0,0),display = False)
-        psm.screen.fillCircle(imw-(x+w)+w/4, y+h-h/4, 4, fill = (255,255,255),display = False)
-        psm.screen.fillCircle(imw-(x+w)-w/4, y+h-h/4, 4, fill = (255,255,255),display = True)
+        psm.screen.fillCircle(imw-(x+w)+ w/4, y+h-h/4, 4, fill = (255,255,255),display = False)
+        psm.screen.fillCircle(imw-(x+w)- w/4, y+h-h/4, 4, fill = (255,255,255),display = True)
 
 
     # show the frame use this if you are setup for Display export on your pc or VNC
