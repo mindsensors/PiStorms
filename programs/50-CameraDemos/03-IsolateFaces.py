@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 #
 # Copyright (c) 2015 mindsensors.com
 #
@@ -65,10 +65,10 @@ while not exitNow:
 		(imh, imw) = img.shape[:2]
 		grayimg = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 		faces = faceCascade.detectMultiScale(grayimg, scaleFactor=1.1, minNeighbors=5, minSize=(30, 30), flags = cv2.CASCADE_SCALE_IMAGE)
-		print imw, imh, faces
+		print (imw, imh, faces)
 		mask = np.zeros(img.shape,dtype = np.uint8)
 		for (x,y,w,h) in faces:
-			cv2.circle(mask, (x+(w/2), y+(h/2)), int((w+h)/4), (255,255,255), -1)
+			cv2.circle(mask, (x+int((w/2)), y+int((h/2))), int((w+h)/4), (255,255,255), -1)
 			# psm.screen.fillCircle(x-(w/4), y, int((w+h)/6), fill = (255,255,255),display = False)
 			# psm.screen.fillCircle(x-(w/4), y, int(-2+(w+h)/6), fill = (0,0,0),display = False)
 			# psm.screen.fillCircle(x-(w/4)+w/6, y-h/6, 4, fill = (255,255,255),display = False)
@@ -91,5 +91,3 @@ while not exitNow:
 			psm.screen.termPrintAt(9,"Exiting to menu")
 			time.sleep(0.5)
 			exitNow = True
-
-

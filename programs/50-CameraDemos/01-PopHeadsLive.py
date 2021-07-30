@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 #
 # Copyright (c) 2015 mindsensors.com
 #
@@ -94,7 +94,7 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
     )
 
     #print benchmarking information on Console
-    print time.time()*1000.0-lastTime," Found {0} faces!".format(len(faces))
+    print ("{0}, Found {1} faces!".format(time.time()*1000.0-lastTime,len(faces)))
     lastTime = time.time()*1000.0
 
     psm.screen.fillImgArray(0, 0, 320, 240, image)
@@ -106,7 +106,7 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
 
     for (x, y, w, h) in faces:
         # for displaying on exported display
-        cv2.circle(image, (x+w/2, y+h/2), int((w+h)/3), (255, 255, 255), 1)
+        cv2.circle(image, (int(x+w/2), int(y+h/2)), int((w+h)/3), (255, 255, 255), 1)
 
         # for showing on PiStorms screen
         psm.screen.fillCircle((x+w)-w/2, y+h-h/2, int((w+h)/3), fill = (255,255,255),display = False)
@@ -130,7 +130,3 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
         break
     #if key == ord("q"):
     #    break
-
-
-
-
