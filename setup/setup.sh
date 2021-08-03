@@ -77,6 +77,7 @@ echo "Updating pip..."
 #sudo pip3 -qq install --upgrade pip3
 echo "Downloading and installing 7 required Python packages..."
 #sudo pip3 -qq install --upgrade mindsensors-i2c
+sudo pip3 install packaging
 sudo pip3 -qq install RPi.GPIO wireless wifi ws4py flask imutils #python-imaging
 sudo pip3   uninstall --yes Adafruit_GPIO
 sudo pip3   install  Adafruit_GPIO
