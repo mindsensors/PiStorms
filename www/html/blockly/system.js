@@ -63,7 +63,7 @@ Blockly.Blocks['system_print'] = {
   init: function() {
     this.appendValueInput("TEXT")
         .setCheck(null)
-        .appendField("print");
+        .appendField(Blockly.Msg.PRINT);
     this.setInputsInline(true);
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
@@ -83,7 +83,7 @@ Blockly.Blocks['system_sleep'] = {
   init: function() {
     this.appendValueInput("TIME")
         .setCheck("Number")
-        .appendField("pause for");
+        .appendField(Blockly.Msg.PAUSE_FOR);
     this.appendDummyInput()
         .appendField("seconds");
     this.setInputsInline(true);
@@ -162,7 +162,7 @@ Blockly.Python['system_shutdown'] = function(block) {
 Blockly.Blocks['system_getbattery'] = {
   init: function() {
     this.appendDummyInput()
-        .appendField("get battery voltage");
+        .appendField(Blockly.Msg.GET_BATTERY_VOLTAGE);
     this.setInputsInline(true);
     this.setOutput(true, "Number");
     this.setColour(5);

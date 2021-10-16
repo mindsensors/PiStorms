@@ -43,7 +43,7 @@
     <script src="assets/blockly/blockly_compressed.js"></script>
   <script src="assets/blockly/blocks_compressed.js"></script>
   <script src="assets/blockly/python_compressed.js"></script>
-  <script src="assets/blockly/msg/js/en.js"></script>
+  <script src="assets/ps_en.js"></script>
   <style>
     .right-pad {
         margin-right:0.5em;

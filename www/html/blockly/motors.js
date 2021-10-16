@@ -140,11 +140,11 @@ var motors = `
 Blockly.Blocks['motors_setspeed'] = {
   init: function() {
     this.appendDummyInput()
-        .appendField("set speed of motor")
+        .appendField(Blockly.Msg.SET_SPEED_OF_MOTOR)
         .appendField(new Blockly.FieldDropdown([["BAM1", "BAM1"], ["BAM2", "BAM2"], ["BBM1", "BBM1"], ["BBM2", "BBM2"]]), "motor_selector");
     this.appendValueInput("SPEED")
         .setCheck("Number")
-        .appendField("to");
+        .appendField(Blockly.Msg.TO);
     this.setInputsInline(true);
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
@@ -166,7 +166,7 @@ Blockly.Python['motors_setspeed'] = function(block) {
 Blockly.Blocks['motors_getposition'] = {
   init: function() {
     this.appendDummyInput()
-        .appendField("get position of")
+        .appendField(Blockly.Msg.GET_POSITION_OF)
         .appendField(new Blockly.FieldDropdown([["BAM1", "BAM1"], ["BAM2", "BAM2"], ["BBM1", "BBM1"], ["BBM2", "BBM2"]]), "motor_selector");
     this.setInputsInline(true);
     this.setOutput(true, "Number");
@@ -187,7 +187,7 @@ Blockly.Python['motors_getposition'] = function(block) {
 Blockly.Blocks['motors_resetposition'] = {
   init: function() {
     this.appendDummyInput()
-        .appendField("reset position of")
+        .appendField(Blockly.Msg.RESET_POSITION_OF)
         .appendField(new Blockly.FieldDropdown([["BAM1", "BAM1"], ["BAM2", "BAM2"], ["BBM1", "BBM1"], ["BBM2", "BBM2"]]), "motor_selector");
     this.setInputsInline(true);
     this.setPreviousStatement(true, null);
@@ -209,9 +209,9 @@ Blockly.Python['motors_resetposition'] = function(block) {
 Blockly.Blocks['motors_brake'] = {
   init: function() {
     this.appendDummyInput()
-        .appendField("set motor")
+        .appendField(Blockly.Msg.SET_MOTOR)
         .appendField(new Blockly.FieldDropdown([["BAM1", "BAM1"], ["BAM2", "BAM2"], ["BBM1", "BBM1"], ["BBM2", "BBM2"]]), "motor_selector")
-        .appendField("to brake");
+        .appendField(Blockly.Msg.TO_BRAKE);
     this.setInputsInline(true);
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
@@ -232,9 +232,9 @@ Blockly.Python['motors_brake'] = function(block) {
 Blockly.Blocks['motors_float'] = {
   init: function() {
     this.appendDummyInput()
-        .appendField("set motor")
+        .appendField(Blockly.Msg.SET_MOTOR)
         .appendField(new Blockly.FieldDropdown([["BAM1", "BAM1"], ["BAM2", "BAM2"], ["BBM1", "BBM1"], ["BBM2", "BBM2"]]), "motor_selector")
-        .appendField("to float");
+        .appendField(Blockly.Msg.TO_FLOAT);
     this.setInputsInline(true);
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
@@ -255,9 +255,9 @@ Blockly.Python['motors_float'] = function(block) {
 Blockly.Blocks['motors_hold'] = {
   init: function() {
     this.appendDummyInput()
-        .appendField("set motor")
+        .appendField(Blockly.Msg.SET_MOTOR)
         .appendField(new Blockly.FieldDropdown([["BAM1", "BAM1"], ["BAM2", "BAM2"], ["BBM1", "BBM1"], ["BBM2", "BBM2"]]), "motor_selector")
-        .appendField("to hold");
+        .appendField(Blockly.Msg.TO_HOLD);
     this.setInputsInline(true);
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
@@ -278,11 +278,11 @@ Blockly.Python['motors_hold'] = function(block) {
 Blockly.Blocks['motors_syncspeed'] = {
   init: function() {
     this.appendDummyInput()
-        .appendField("sync speed of bank")
+        .appendField(Blockly.Msg.SYNC_SPEED_OF_BANK)
         .appendField(new Blockly.FieldDropdown([["A", "BAM1"], ["B", "BBM1"]]), "bank_selector");
     this.appendValueInput("SPEED")
         .setCheck("Number")
-        .appendField("motors to");
+        .appendField(Blockly.Msg.MOTORS_TO);
     this.setInputsInline(true);
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
@@ -304,9 +304,9 @@ Blockly.Python['motors_syncspeed'] = function(block) {
 Blockly.Blocks['motors_syncfloat'] = {
   init: function() {
     this.appendDummyInput()
-        .appendField("float bank")
+        .appendField(Blockly.Msg.FLOAT_BANK)
         .appendField(new Blockly.FieldDropdown([["A", "BAM1"], ["B", "BBM1"]]), "bank_selector")
-        .appendField("motors");
+        .appendField(Blockly.Msg.MOTORS);
     this.setInputsInline(true);
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
@@ -327,9 +327,9 @@ Blockly.Python['motors_syncfloat'] = function(block) {
 Blockly.Blocks['motors_syncbrake'] = {
   init: function() {
     this.appendDummyInput()
-        .appendField("brake bank")
+        .appendField(Blockly.Msg.BRAKE_BANK)
         .appendField(new Blockly.FieldDropdown([["A", "BAM1"], ["B", "BBM1"]]), "bank_selector")
-        .appendField("motors");
+        .appendField(Blockly.Msg.MOTORS);
     this.setInputsInline(true);
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
@@ -350,19 +350,19 @@ Blockly.Python['motors_syncbrake'] = function(block) {
 Blockly.Blocks['motors_runsecs'] = {
   init: function() {
     this.appendDummyInput()
-        .appendField("run motor")
+        .appendField(Blockly.Msg.RUN_MOTOR)
         .appendField(new Blockly.FieldDropdown([["BAM1", "BAM1"], ["BAM2", "BAM2"], ["BBM1", "BBM1"], ["BBM2", "BBM2"]]), "motor_selector");
     this.appendValueInput("TIME")
         .setCheck("Number")
-        .appendField("for");
+        .appendField(Blockly.Msg.FOR);
     this.appendDummyInput()
-        .appendField("seconds at speed");
+        .appendField(Blockly.Msg.SECONDS_AT_SPEED);
     this.appendValueInput("SPEED")
         .setCheck("Number");
     this.appendDummyInput()
-        .appendField("and")
-        .appendField(new Blockly.FieldDropdown([["brake", "True"], ["don't brake", "False"]]), "brake_selector")
-        .appendField("when done");
+        .appendField(Blockly.Msg.AND)
+        .appendField(new Blockly.FieldDropdown([[Blockly.Msg.BRAKE, "True"], [Blockly.Msg.DON_T_BRAKE, "False"]]), "brake_selector")
+        .appendField(Blockly.Msg.WHEN_DONE);
     this.setInputsInline(true);
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
@@ -386,19 +386,19 @@ Blockly.Python['motors_runsecs'] = function(block) {
 Blockly.Blocks['motors_rundegrees'] = {
   init: function() {
     this.appendDummyInput()
-        .appendField("run motor")
+        .appendField(Blockly.Msg.RUN_MOTOR)
         .appendField(new Blockly.FieldDropdown([["BAM1", "BAM1"], ["BAM2", "BAM2"], ["BBM1", "BBM1"], ["BBM2", "BBM2"]]), "motor_selector");
     this.appendValueInput("DEG")
         .setCheck("Number")
-        .appendField("for");
+        .appendField(Blockly.Msg.FOR);
     this.appendDummyInput()
-        .appendField("degrees at speed");
+        .appendField(Blockly.Msg.DEGREES_AT_SPEED);
     this.appendValueInput("SPEED")
         .setCheck("Number");
     this.appendDummyInput()
-        .appendField("and")
-        .appendField(new Blockly.FieldDropdown([["brake", "True"], ["hold", "hold"], ["don't brake", "False"]]), "brake_selector")
-        .appendField("when done");
+        .appendField(Blockly.Msg.AND)
+        .appendField(new Blockly.FieldDropdown([[Blockly.Msg.BRAKE, "True"], [Blockly.Msg.HOLD, "hold"], [Blockly.Msg.DON_T_BRAKE, "False"]]), "brake_selector")
+        .appendField(Blockly.Msg.WHEN_DONE);
     this.setInputsInline(true);
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
@@ -423,9 +423,9 @@ Blockly.Python['motors_rundegrees'] = function(block) {
 Blockly.Blocks['motors_isbusy'] = {
   init: function() {
     this.appendDummyInput()
-        .appendField("check if motor")
+        .appendField(Blockly.Msg.CHECK_IF_MOTOR)
         .appendField(new Blockly.FieldDropdown([["BAM1", "BAM1"], ["BAM2", "BAM2"], ["BBM1", "BBM1"], ["BBM2", "BBM2"]]), "motor_selector")
-        .appendField("is busy");
+        .appendField(Blockly.Msg.IS_BUSY);
     this.setInputsInline(true);
     this.setOutput(true, "Boolean");
     this.setColour(240);
@@ -445,9 +445,9 @@ Blockly.Python['motors_isbusy'] = function(block) {
 Blockly.Blocks['motors_isstalled'] = {
   init: function() {
     this.appendDummyInput()
-        .appendField("check if motor")
+        .appendField(Blockly.Msg.CHECK_IF_MOTOR)
         .appendField(new Blockly.FieldDropdown([["BAM1", "BAM1"], ["BAM2", "BAM2"], ["BBM1", "BBM1"], ["BBM2", "BBM2"]]), "motor_selector")
-        .appendField("is stalled");
+        .appendField(Blockly.Msg.IS_STALLED);
     this.setInputsInline(true);
     this.setOutput(true, "Boolean");
     this.setColour(240);
@@ -467,9 +467,9 @@ Blockly.Python['motors_isstalled'] = function(block) {
 Blockly.Blocks['motors_isoverloaded'] = {
   init: function() {
     this.appendDummyInput()
-        .appendField("check if motor")
+        .appendField(Blockly.Msg.CHECK_IF_MOTOR)
         .appendField(new Blockly.FieldDropdown([["BAM1", "BAM1"], ["BAM2", "BAM2"], ["BBM1", "BBM1"], ["BBM2", "BBM2"]]), "motor_selector")
-        .appendField("is overloaded");
+        .appendField(Blockly.Msg.IS_OVERLOADED);
     this.setInputsInline(true);
     this.setOutput(true, "Boolean");
     this.setColour(240);
@@ -489,9 +489,9 @@ Blockly.Python['motors_isoverloaded'] = function(block) {
 Blockly.Blocks['motors_waituntilnotbusy'] = {
   init: function() {
     this.appendDummyInput()
-        .appendField("wait until motor")
+        .appendField(Blockly.Msg.WAIT_UNTIL_MOTOR)
         .appendField(new Blockly.FieldDropdown([["BAM1", "BAM1"], ["BAM2", "BAM2"], ["BBM1", "BBM1"], ["BBM2", "BBM2"]]), "motor_selector")
-        .appendField("stops");
+        .appendField(Blockly.Msg.STOPS);
     this.setInputsInline(true);
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
@@ -512,7 +512,7 @@ Blockly.Python['motors_waituntilnotbusy'] = function(block) {
 Blockly.Blocks['motors_setparams'] = {
   init: function() {
     this.appendDummyInput()
-        .appendField("set performance parameters for bank")
+        .appendField(Blockly.Msg.SET_PERFORMANCE_PARAMETERS_FOR_BANK)
         .appendField(new Blockly.FieldDropdown([["A", "BAM1"], ["B", "BBM1"]]), "motor_selector");
     this.appendValueInput("Kp_tacho")
         .setCheck("Number")
